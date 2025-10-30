@@ -6,7 +6,7 @@
       "location": "Cambridge, USA",
       "programs": 200,
       "rating": 4.9,
-      "image": "/placeholder.svg?height=250&width=300"
+      "image": "https://i.imgur.com/VkULgCM.png"
     },
     {
       "id": 2,
@@ -14,7 +14,7 @@
       "location": "Oxford, UK",
       "programs": 180,
       "rating": 4.8,
-      "image": "/placeholder.svg?height=250&width=300"
+      "image": "https://i.imgur.com/bGB0rLT.png"
     },
     {
       "id": 3,
@@ -22,7 +22,7 @@
       "location": "Zurich, Switzerland",
       "programs": 150,
       "rating": 4.7,
-      "image": "/placeholder.svg?height=250&width=300"
+      "image": "https://i.imgur.com/8uU2ieF.png"
     },
     {
       "id": 4,
@@ -30,7 +30,7 @@
       "location": "Singapore",
       "programs": 170,
       "rating": 4.6,
-      "image": "/placeholder.svg?height=250&width=300"
+      "image": "https://i.imgur.com/VkULgCM.png"
     },
     {
       "id": 5,
@@ -38,7 +38,7 @@
       "location": "Stanford, USA",
       "programs": 210,
       "rating": 4.9,
-      "image": "/placeholder.svg?height=250&width=300"
+      "image": "https://i.imgur.com/VkULgCM.png"
     },
     {
       "id": 6,
@@ -46,7 +46,7 @@
       "location": "Cambridge, USA",
       "programs": 190,
       "rating": 4.8,
-      "image": "/placeholder.svg?height=250&width=300"
+      "image": "https://i.imgur.com/VkULgCM.png"
     },
     {
       "id": 7,
@@ -54,7 +54,7 @@
       "location": "Cambridge, UK",
       "programs": 175,
       "rating": 4.8,
-      "image": "/placeholder.svg?height=250&width=300"
+      "image": "https://i.imgur.com/VkULgCM.png"
     },
     {
       "id": 8,
@@ -62,7 +62,7 @@
       "location": "Tokyo, Japan",
       "programs": 160,
       "rating": 4.7,
-      "image": "/placeholder.svg?height=250&width=300"
+      "image": "https://i.imgur.com/VkULgCM.png"
     }
   ]
 }

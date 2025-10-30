@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import universities from "@/data/universities.json";
+import universities from "../../../public/data/universities.json";
 
 export default function FeaturedUniversities() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -25,7 +25,7 @@ export default function FeaturedUniversities() {
 
   return (
     <section className="w-full bg-gray-50 py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with Navigation */}
         <div className="flex items-center justify-between mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
@@ -69,14 +69,14 @@ export default function FeaturedUniversities() {
 
               {/* Card Content */}
               <div className="p-4">
-                <h3 className="text-lg font-bold text-gray-900 mb-1">
+                <h3 className="text-lg font-semibold text-[#002B5B] mb-1">
                   {uni.name}
                 </h3>
-                <p className="text-sm text-gray-600 mb-3">{uni.location}</p>
+                <p className="text-sm text-[#374151] mb-3">{uni.location}</p>
 
                 {/* Programs and Rating */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">
+                  <span className="text-sm text-[#6B7280]">
                     {uni.programs} Programs
                   </span>
                   <div className="flex items-center gap-1">
