@@ -1,5 +1,5 @@
 "use client"
-
+import background from "../../assets/images/background2.png";
 import { useState } from "react"
 
 export default function Newsletter() {
@@ -16,7 +16,7 @@ export default function Newsletter() {
   }
 
   return (
-    <section className="w-full bg-[#002B5B] py-16 md:py-24">
+    <section className="w-full bg-[#002B5B] py-16 md:py-24 bg-cover bg-center" style={{ backgroundImage: `url(${background})` }}>
       <div className="max-w-4xl mx-auto px-4 md:px-6">
         {/* Content Container */}
         <div className="text-center">
@@ -26,7 +26,7 @@ export default function Newsletter() {
           </h2>
 
           {/* Subtitle */}
-          <p className="text-gray-200 text-base md:text-lg mb-8 max-w-2xl mx-auto">
+          <p className="text-[#BFDBFE] text-base md:text-lg mb-8 max-w-2xl mx-auto">
             Subscribe to our newsletter and receive the latest news about universities, scholarships, and exclusive
             events directly to your inbox.
           </p>
@@ -38,12 +38,12 @@ export default function Newsletter() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Your email address"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-[#CCCCCC] focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
             <button
               type="submit"
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors duration-200"
+              className="px-6 py-3 bg-[#0047E9] text-white font-semibold rounded-lg transition-colors duration-200"
             >
               Subscribe
             </button>
@@ -53,7 +53,7 @@ export default function Newsletter() {
           {subscribed && <p className="text-green-300 text-sm mb-4">Thank you for subscribing!</p>}
 
           {/* Privacy Notice */}
-          <p className="text-gray-300 text-sm">
+          <p className="text-[#BFDBFE] text-sm">
             We respect your privacy and will never share your information. You can unsubscribe at any time.
           </p>
         </div>
