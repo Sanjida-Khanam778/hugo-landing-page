@@ -60,7 +60,7 @@ export default function Testimonial() {
 
   return (
     <section
-      className="w-full py-16 md:py-20 bg-contain bg-center"
+      className="w-full py-10 md:py-20 bg-contain bg-center relative -top-6 z-50 rounded-t-3xl bg-[#F3F4F6]"
       style={{ backgroundImage: `url(${background})` }}
     >
       <div className="max-w-6xl mx-auto px-4 md:px-6">
@@ -79,11 +79,11 @@ export default function Testimonial() {
         <div className="bg-white rounded-lg shadow-lg p-8 md:p-12 xl:px-16 mb-8 relative">
           <div className="flex flex-col">
             {/* Quote Section */}
-            <div className="absolute left-2 top-4">
-              <img src={comment} alt="" />
+            <div className="absolute left-2 top-2 sm:top-4">
+              <img className="h-8 sm:h-auto" src={comment} alt="" />
             </div>
             <div className="">
-              <p className="text-gray-700 text-lg leading-relaxed mb-6">
+              <p className="text-gray-700 sm:text-lg leading-relaxed mb-6">
                 " {story.quote} "
               </p>
             </div>
@@ -91,7 +91,7 @@ export default function Testimonial() {
             {/* Student Info */}
             <div className="flex flex-col gap-4 md:gap-0 md:flex-row md:items-end md:justify-between">
               <div className="flex items-center gap-6 justify-start">
-                <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-200">
+                <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-gray-200">
                   <img
                     src={story.image}
                     alt={story.name}

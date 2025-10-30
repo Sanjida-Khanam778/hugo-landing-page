@@ -16,7 +16,7 @@ export default function Newsletter() {
   }
 
   return (
-    <section className="w-full bg-[#002B5B] py-16 md:py-24 bg-cover bg-center" style={{ backgroundImage: `url(${background})` }}>
+    <section className="w-full bg-[#002B5B] py-16 md:py-24 bg-cover bg-center z-0" style={{ backgroundImage: `url(${background})` }}>
       <div className="max-w-4xl mx-auto px-4 md:px-6">
         {/* Content Container */}
         <div className="text-center">
