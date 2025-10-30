@@ -4,6 +4,8 @@ import Hero from "../../components/Hero/Hero";
 import FeaturedUniversities from "../../components/FeaturedUniversities/FeaturedUniversities";
 import OurServices from "../../components/OurServices/OurServices";
 import Newsletter from "../../components/Newsletter/Newsletter";
+import Testimonial from "../../components/Testimonial/Testimonial";
+import Footer from "../../components/Footer/Footer";
 
 export default function Home() {
   return (
@@ -12,6 +14,8 @@ export default function Home() {
       <FeaturedUniversities />
       <OurServices />
       <Newsletter />
+      <Testimonial />
+      <Footer />
     </div>
   );
 }
