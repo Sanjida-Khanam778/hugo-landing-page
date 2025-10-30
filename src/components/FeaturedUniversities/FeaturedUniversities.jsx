@@ -52,7 +52,8 @@ export default function FeaturedUniversities() {
   );
 
   return (
-    <section className="w-full bg-gray-50 py-16">
+ <div className="relative">
+     <section className="w-full bg-[#F3F4F6] py-16 rounded-t-3xl absolute -top-10">
       <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with Navigation */}
         <div className="flex items-center justify-between mb-12">
@@ -127,5 +128,6 @@ export default function FeaturedUniversities() {
         </div>
       </div>
     </section>
+ </div>
   );
 }
