@@ -1,41 +1,58 @@
-import React, { useState } from 'react';
-import { Facebook, Twitter, Instagram, Linkedin, Send } from 'lucide-react';
+import React, { useState } from "react";
+import { Facebook, Twitter, Instagram, Linkedin, Send, MessageSquare } from "lucide-react";
+import background from "../../assets/images/background4.png";
 
 export default function Footer() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
 
   const handleSubmit = () => {
-    console.log('Email submitted:', email);
-    setEmail('');
+    console.log("Email submitted:", email);
+    setEmail("");
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSubmit();
     }
   };
 
   return (
-    <footer className="bg-slate-900 text-white">
-      <div className="max-w-7xl mx-auto px-8 py-12">
+    <footer
+      className="text-white bg-cover"
+      style={{ backgroundImage: `url(${background})` }}
+    >
+      <div className="w-10/12 mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
           <div>
             <h2 className="text-xl font-semibold mb-4">EduConnect</h2>
             <p className="text-slate-400 text-sm mb-4">
-              Connecting students with the best educational opportunities worldwide.
+              Connecting students with the best educational opportunities
+              worldwide.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-slate-400 hover:text-white transition-colors">
+              <a
+                href="#"
+                className="text-slate-400 hover:text-white transition-colors"
+              >
                 <Facebook size={18} />
               </a>
-              <a href="#" className="text-slate-400 hover:text-white transition-colors">
+              <a
+                href="#"
+                className="text-slate-400 hover:text-white transition-colors"
+              >
                 <Twitter size={18} />
               </a>
-              <a href="#" className="text-slate-400 hover:text-white transition-colors">
+              <a
+                href="#"
+                className="text-slate-400 hover:text-white transition-colors"
+              >
                 <Instagram size={18} />
               </a>
-              <a href="#" className="text-slate-400 hover:text-white transition-colors">
+              <a
+                href="#"
+                className="text-slate-400 hover:text-white transition-colors"
+              >
                 <Linkedin size={18} />
               </a>
             </div>
@@ -46,27 +63,42 @@ export default function Footer() {
             <h3 className="text-sm font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <a
+                  href="#"
+                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                >
                   Home
                 </a>
               </li>
               <li>
-                <a href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <a
+                  href="#"
+                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                >
                   Universities
                 </a>
               </li>
               <li>
-                <a href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <a
+                  href="#"
+                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                >
                   Programs
                 </a>
               </li>
               <li>
-                <a href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <a
+                  href="#"
+                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                >
                   Events
                 </a>
               </li>
               <li>
-                <a href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <a
+                  href="#"
+                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                >
                   Jobs
                 </a>
               </li>
@@ -78,17 +110,26 @@ export default function Footer() {
             <h3 className="text-sm font-semibold mb-4">Resources</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <a
+                  href="#"
+                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                >
                   About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <a
+                  href="#"
+                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                >
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <a
+                  href="#"
+                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                >
                   Terms of Service
                 </a>
               </li>
@@ -114,14 +155,14 @@ export default function Footer() {
                 onClick={handleSubmit}
                 className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-r transition-colors"
               >
-                <Send size={18} />
+                <MessageSquare size={18} />
               </button>
             </div>
           </div>
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-slate-800 pt-6 text-center">
+        <div className="border-t border-[#374151] py-4 text-center">
           <p className="text-slate-400 text-sm">
             © 2025 EduConnect. All rights reserved.
           </p>

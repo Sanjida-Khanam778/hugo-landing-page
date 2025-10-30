@@ -89,7 +89,7 @@ export default function Testimonial() {
             </div>
 
             {/* Student Info */}
-            <div className="flex items-end justify-between">
+            <div className="flex flex-col gap-4 md:gap-0 md:flex-row md:items-end md:justify-between">
               <div className="flex items-center gap-6 justify-start">
                 <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-200">
                   <img
