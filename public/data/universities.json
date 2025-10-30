@@ -1,0 +1,68 @@
+{
+  "universities": [
+    {
+      "id": 1,
+      "name": "Harvard University",
+      "location": "Cambridge, USA",
+      "programs": 200,
+      "rating": 4.9,
+      "image": "/placeholder.svg?height=250&width=300"
+    },
+    {
+      "id": 2,
+      "name": "University of Oxford",
+      "location": "Oxford, UK",
+      "programs": 180,
+      "rating": 4.8,
+      "image": "/placeholder.svg?height=250&width=300"
+    },
+    {
+      "id": 3,
+      "name": "ETH Zurich",
+      "location": "Zurich, Switzerland",
+      "programs": 150,
+      "rating": 4.7,
+      "image": "/placeholder.svg?height=250&width=300"
+    },
+    {
+      "id": 4,
+      "name": "National University of Singapore",
+      "location": "Singapore",
+      "programs": 170,
+      "rating": 4.6,
+      "image": "/placeholder.svg?height=250&width=300"
+    },
+    {
+      "id": 5,
+      "name": "Stanford University",
+      "location": "Stanford, USA",
+      "programs": 210,
+      "rating": 4.9,
+      "image": "/placeholder.svg?height=250&width=300"
+    },
+    {
+      "id": 6,
+      "name": "MIT",
+      "location": "Cambridge, USA",
+      "programs": 190,
+      "rating": 4.8,
+      "image": "/placeholder.svg?height=250&width=300"
+    },
+    {
+      "id": 7,
+      "name": "University of Cambridge",
+      "location": "Cambridge, UK",
+      "programs": 175,
+      "rating": 4.8,
+      "image": "/placeholder.svg?height=250&width=300"
+    },
+    {
+      "id": 8,
+      "name": "Tokyo University",
+      "location": "Tokyo, Japan",
+      "programs": 160,
+      "rating": 4.7,
+      "image": "/placeholder.svg?height=250&width=300"
+    }
+  ]
+}
