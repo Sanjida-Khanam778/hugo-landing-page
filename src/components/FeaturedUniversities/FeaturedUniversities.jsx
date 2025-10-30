@@ -1,10 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import universities from "../../../public/data/universities.json";
 
 export default function FeaturedUniversities() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerPage = 4;
+
+  // responsive items per page: mobile=1, tablet=2, laptop+ = 4
+  const getItemsPerPage = () => {
+    if (typeof window === "undefined") return 4;
+    // check largest breakpoints first (desktop/laptop -> 4)
+    if (window.matchMedia("(min-width: 1024px)").matches) return 4; // lg and up
+    if (window.matchMedia("(min-width: 640px)").matches) return 2; // tablet
+    return 1; // mobile
+  };
+
+  const [itemsPerPage, setItemsPerPage] = useState(() => getItemsPerPage());
+
+  useEffect(() => {
+    const update = () => setItemsPerPage(getItemsPerPage());
+    // initial set
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  // ensure currentIndex remains valid if itemsPerPage changes
+  useEffect(() => {
+    setCurrentIndex((prev) =>
+      Math.min(
+        prev,
+        Math.max(0, universities.universities.length - itemsPerPage)
+      )
+    );
+  }, [itemsPerPage]);
 
   const handlePrevious = () => {
     setCurrentIndex((prev) =>
