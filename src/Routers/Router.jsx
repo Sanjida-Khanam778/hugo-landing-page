@@ -1,20 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
 import Dashboard from "../Layouts/Dashboard";
 import Home from "../Pages/Home/Home";
+import UniversityDirectory from "../Pages/UniversityDirectory/UniversityDirectory";
+import MainLayout from "../Layouts/MainLayout";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <MainLayout />,
     errorElement: <h1>404</h1>,
     children: [
       {
         path: "/",
-        element: <h1>Home</h1>,
+        element: <Home />,
       },
       {
-        path: "/about",
-        element: <h1>Home</h1>,
+        path: "/universities",
+        element: <UniversityDirectory />,
       },
     ],
   },

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import universities from "../../../public/data/universities.json";
+import { Link } from "react-router-dom";
 
 export default function FeaturedUniversities() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -120,11 +121,11 @@ export default function FeaturedUniversities() {
         </div>
 
         {/* View All Button */}
-        <div className="flex justify-center">
+        <Link to={'/universities'} className="flex justify-center">
           <button className="px-8 py-3 border-2 border-blue-500 text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors duration-200">
             View All Universities
           </button>
-        </div>
+        </Link>
       </div>
     </section>
   );
