@@ -1,14 +1,17 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
-import Navbar from '../components/Navbar/Navbar'
-import Footer from '../components/Footer/Footer'
+import React, { use } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import Navbar from "../components/Navbar/Navbar";
+import Footer from "../components/Footer/Footer";
 
 export default function MainLayout() {
+  const location = useLocation();
+  console.log(location.pathname.includes("/"));
   return (
-    <div>
-        <Navbar />
-        <Outlet />
-        <Footer />
+    <div className="font-rubik">
+      {location.pathname === "/" ? null : <Navbar />}
+
+      <Outlet />
+      <Footer />
     </div>
-  )
+  );
 }

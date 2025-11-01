@@ -26,34 +26,34 @@ export default function Footer() {
           {/* Brand Section */}
           <div>
             <h2 className="text-xl font-semibold mb-4">EduConnect</h2>
-            <p className="text-slate-400 text-sm mb-4">
+            <p className="text-[#CCCCCC] text-sm mb-4">
               Connecting students with the best educational opportunities
               worldwide.
             </p>
             <div className="flex space-x-4">
               <a
                 href="#"
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-white hover:text-white transition-colors"
               >
-                <Facebook size={18} />
+                <Facebook size={22} />
               </a>
               <a
                 href="#"
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-white hover:text-white transition-colors"
               >
-                <Twitter size={18} />
+                <Twitter size={22} />
               </a>
               <a
                 href="#"
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-white hover:text-white transition-colors"
               >
-                <Instagram size={18} />
+                <Instagram size={22} />
               </a>
               <a
                 href="#"
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-white hover:text-white transition-colors"
               >
-                <Linkedin size={18} />
+                <Linkedin size={22} />
               </a>
             </div>
           </div>
@@ -65,7 +65,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
                 >
                   Home
                 </a>
@@ -73,7 +73,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
                 >
                   Universities
                 </a>
@@ -81,7 +81,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
                 >
                   Programs
                 </a>
@@ -89,7 +89,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
                 >
                   Events
                 </a>
@@ -97,7 +97,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
                 >
                   Jobs
                 </a>
@@ -112,7 +112,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
                 >
                   About Us
                 </a>
@@ -120,7 +120,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
                 >
                   Privacy Policy
                 </a>
@@ -128,7 +128,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-slate-400 text-sm hover:text-white transition-colors"
+                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
                 >
                   Terms of Service
                 </a>
@@ -139,7 +139,7 @@ export default function Footer() {
           {/* Newsletter */}
           <div>
             <h3 className="text-sm font-semibold mb-4">Newsletter</h3>
-            <p className="text-slate-400 text-sm mb-4">
+            <p className="text-[#CCCCCC] text-sm mb-4">
               Subscribe to our newsletter for the latest updates.
             </p>
             <div className="flex">
@@ -163,7 +163,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-[#374151] py-4 text-center">
-          <p className="text-slate-400 text-sm">
+          <p className="text-white text-sm">
             © 2025 EduConnect. All rights reserved.
           </p>
         </div>

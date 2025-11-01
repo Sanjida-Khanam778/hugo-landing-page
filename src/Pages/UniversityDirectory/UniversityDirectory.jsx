@@ -1,80 +1,74 @@
-import React, { useState } from 'react';
-import { MapPin, BookOpen, Star, ChevronDown } from 'lucide-react';
+import React, { useState } from "react";
+import { MapPin, BookOpen, Star, ChevronDown } from "lucide-react";
+import background from "../../assets/images/uniBanner.png";
 
 export default function UniversityDirectory() {
-  const [selectedCountry, setSelectedCountry] = useState('all');
-  const [selectedLevel, setSelectedLevel] = useState('all');
-  const [selectedField, setSelectedField] = useState('all');
+  const [selectedCountry, setSelectedCountry] = useState("all");
+  const [selectedLevel, setSelectedLevel] = useState("all");
+  const [selectedField, setSelectedField] = useState("all");
 
   const universities = [
     {
       id: 1,
-      name: 'Harvard University',
-      location: 'Cambridge, USA',
+      name: "Harvard University",
+      location: "Cambridge, USA",
       programs: 201,
       rating: 4.9,
-      badges: ['Top Ranked']
+      badges: ["Top Ranked"],
     },
     {
       id: 2,
-      name: 'Stanford University',
-      location: 'Stanford, USA',
+      name: "Stanford University",
+      location: "Stanford, USA",
       programs: 231,
       rating: 4.8,
-      badges: ['Top Rated Average']
+      badges: ["Top Rated Average"],
     },
     {
       id: 3,
-      name: 'Oxford University',
-      location: 'Oxford, UK',
+      name: "Oxford University",
+      location: "Oxford, UK",
       programs: 180,
       rating: 4.8,
-      badges: ['Top Rated Average']
+      badges: ["Top Rated Average"],
     },
     {
       id: 4,
-      name: 'MIT',
-      location: 'Cambridge, USA',
+      name: "MIT",
+      location: "Cambridge, USA",
       programs: 150,
       rating: 4.8,
-      badges: ['Top Rated Average']
+      badges: ["Top Rated Average"],
     },
     {
       id: 5,
-      name: 'University of Tokyo',
-      location: 'Tokyo, Japan',
+      name: "University of Tokyo",
+      location: "Tokyo, Japan",
       programs: 90,
       rating: 4.6,
-      badges: ['Top Rated Average']
+      badges: ["Top Rated Average"],
     },
     {
       id: 6,
-      name: 'ETH Zurich',
-      location: 'Zurich, Switzerland',
+      name: "ETH Zurich",
+      location: "Zurich, Switzerland",
       programs: 130,
       rating: 4.8,
-      badges: ['Top Rated Average']
-    }
+      badges: ["Top Rated Average"],
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-16 px-8 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="flex items-center mb-4">
-            <div className="w-10 h-10 border-2 border-white rounded-full mr-4"></div>
-          </div>
-          <h1 className="text-4xl font-bold mb-4">University Directory</h1>
-          <p className="text-blue-100 max-w-2xl">
-            Explore our comprehensive directory of top universities worldwide. Filter by location, programs, and more to find your perfect match.
+      <div   style={{ backgroundImage: `url(${background})` }} className="text-white flex items-center justify-center relative overflow-hidden bg-cover bg-no-repeat h-[50vh]">
+        <div className="max-w-7xl mx-auto relative z-10 w-full">
+          <h1 className="text-4xl font-bold mb-8">University Directory</h1>
+          <p className="text-[#BFDBFE] max-w-3xl text-xl">
+            Explore our comprehensive directory of top universities worldwide.
+            Filter by location, programs, and more to find your perfect match.
           </p>
         </div>
-        {/* Decorative elements */}
-        <div className="absolute top-10 right-20 w-64 h-64 border-2 border-white/20 rounded-full"></div>
-        <div className="absolute bottom-10 right-10 w-32 h-1 bg-white/30"></div>
-        <div className="absolute bottom-12 right-10 w-32 h-1 bg-white/30"></div>
-        <div className="absolute bottom-14 right-10 w-32 h-1 bg-white/30"></div>
       </div>
 
       {/* Search and Sort Bar */}
@@ -99,29 +93,55 @@ export default function UniversityDirectory() {
           <div className="w-64 flex-shrink-0">
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <h3 className="font-semibold mb-4">Filters</h3>
-              
+
               {/* Country Filter */}
               <div className="mb-6">
                 <h4 className="text-sm font-medium mb-3">Country</h4>
                 <div className="space-y-2">
                   <label className="flex items-center">
-                    <input type="radio" name="country" className="mr-2" checked={selectedCountry === 'all'} onChange={() => setSelectedCountry('all')} />
+                    <input
+                      type="radio"
+                      name="country"
+                      className="mr-2"
+                      checked={selectedCountry === "all"}
+                      onChange={() => setSelectedCountry("all")}
+                    />
                     <span className="text-sm">All Countries</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="country" className="mr-2" onChange={() => setSelectedCountry('us')} />
+                    <input
+                      type="radio"
+                      name="country"
+                      className="mr-2"
+                      onChange={() => setSelectedCountry("us")}
+                    />
                     <span className="text-sm">United States</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="country" className="mr-2" onChange={() => setSelectedCountry('uk')} />
+                    <input
+                      type="radio"
+                      name="country"
+                      className="mr-2"
+                      onChange={() => setSelectedCountry("uk")}
+                    />
                     <span className="text-sm">United Kingdom</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="country" className="mr-2" onChange={() => setSelectedCountry('canada')} />
+                    <input
+                      type="radio"
+                      name="country"
+                      className="mr-2"
+                      onChange={() => setSelectedCountry("canada")}
+                    />
                     <span className="text-sm">Canada</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="country" className="mr-2" onChange={() => setSelectedCountry('australia')} />
+                    <input
+                      type="radio"
+                      name="country"
+                      className="mr-2"
+                      onChange={() => setSelectedCountry("australia")}
+                    />
                     <span className="text-sm">Australia</span>
                   </label>
                 </div>
@@ -132,23 +152,49 @@ export default function UniversityDirectory() {
                 <h4 className="text-sm font-medium mb-3">Study Level</h4>
                 <div className="space-y-2">
                   <label className="flex items-center">
-                    <input type="radio" name="level" className="mr-2" checked={selectedLevel === 'all'} onChange={() => setSelectedLevel('all')} />
+                    <input
+                      type="radio"
+                      name="level"
+                      className="mr-2"
+                      checked={selectedLevel === "all"}
+                      onChange={() => setSelectedLevel("all")}
+                    />
                     <span className="text-sm">All Levels</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="level" className="mr-2" onChange={() => setSelectedLevel('bachelor')} />
+                    <input
+                      type="radio"
+                      name="level"
+                      className="mr-2"
+                      onChange={() => setSelectedLevel("bachelor")}
+                    />
                     <span className="text-sm">Bachelor's</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="level" className="mr-2" onChange={() => setSelectedLevel('master')} />
+                    <input
+                      type="radio"
+                      name="level"
+                      className="mr-2"
+                      onChange={() => setSelectedLevel("master")}
+                    />
                     <span className="text-sm">Master's</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="level" className="mr-2" onChange={() => setSelectedLevel('doctorate')} />
+                    <input
+                      type="radio"
+                      name="level"
+                      className="mr-2"
+                      onChange={() => setSelectedLevel("doctorate")}
+                    />
                     <span className="text-sm">Doctorate</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="level" className="mr-2" onChange={() => setSelectedLevel('certificate')} />
+                    <input
+                      type="radio"
+                      name="level"
+                      className="mr-2"
+                      onChange={() => setSelectedLevel("certificate")}
+                    />
                     <span className="text-sm">Certificate</span>
                   </label>
                 </div>
@@ -159,35 +205,76 @@ export default function UniversityDirectory() {
                 <h4 className="text-sm font-medium mb-3">Field of Study</h4>
                 <div className="space-y-2">
                   <label className="flex items-center">
-                    <input type="radio" name="field" className="mr-2" checked={selectedField === 'all'} onChange={() => setSelectedField('all')} />
+                    <input
+                      type="radio"
+                      name="field"
+                      className="mr-2"
+                      checked={selectedField === "all"}
+                      onChange={() => setSelectedField("all")}
+                    />
                     <span className="text-sm">All Fields</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="field" className="mr-2" onChange={() => setSelectedField('business')} />
+                    <input
+                      type="radio"
+                      name="field"
+                      className="mr-2"
+                      onChange={() => setSelectedField("business")}
+                    />
                     <span className="text-sm">Business</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="field" className="mr-2" onChange={() => setSelectedField('engineering')} />
+                    <input
+                      type="radio"
+                      name="field"
+                      className="mr-2"
+                      onChange={() => setSelectedField("engineering")}
+                    />
                     <span className="text-sm">Engineering</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="field" className="mr-2" onChange={() => setSelectedField('medicine')} />
+                    <input
+                      type="radio"
+                      name="field"
+                      className="mr-2"
+                      onChange={() => setSelectedField("medicine")}
+                    />
                     <span className="text-sm">Medicine</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="field" className="mr-2" onChange={() => setSelectedField('cs')} />
+                    <input
+                      type="radio"
+                      name="field"
+                      className="mr-2"
+                      onChange={() => setSelectedField("cs")}
+                    />
                     <span className="text-sm">Computer Science</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="field" className="mr-2" onChange={() => setSelectedField('law')} />
+                    <input
+                      type="radio"
+                      name="field"
+                      className="mr-2"
+                      onChange={() => setSelectedField("law")}
+                    />
                     <span className="text-sm">Law</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="field" className="mr-2" onChange={() => setSelectedField('arts')} />
+                    <input
+                      type="radio"
+                      name="field"
+                      className="mr-2"
+                      onChange={() => setSelectedField("arts")}
+                    />
                     <span className="text-sm">Arts</span>
                   </label>
                   <label className="flex items-center">
-                    <input type="radio" name="field" className="mr-2" onChange={() => setSelectedField('humanities')} />
+                    <input
+                      type="radio"
+                      name="field"
+                      className="mr-2"
+                      onChange={() => setSelectedField("humanities")}
+                    />
                     <span className="text-sm">Humanities</span>
                   </label>
                 </div>
@@ -200,24 +287,27 @@ export default function UniversityDirectory() {
             <div className="mb-4">
               <p className="text-sm text-gray-600">Showing 6 universities</p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {universities.map((uni) => (
-                <div key={uni.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                <div
+                  key={uni.id}
+                  className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                >
                   {/* Image Placeholder */}
                   <div className="h-40 bg-gradient-to-br from-blue-400 to-blue-600 relative">
                     <div className="absolute bottom-4 left-4 w-12 h-12 bg-white rounded-full"></div>
                   </div>
-                  
+
                   {/* Card Content */}
                   <div className="p-4">
                     <h3 className="font-semibold text-lg mb-2">{uni.name}</h3>
-                    
+
                     <div className="flex items-center text-sm text-gray-600 mb-2">
                       <MapPin size={14} className="mr-1" />
                       <span>{uni.location}</span>
                     </div>
-                    
+
                     <div className="flex items-center justify-between text-sm mb-3">
                       <div className="flex items-center text-gray-600">
                         <BookOpen size={14} className="mr-1" />
@@ -225,10 +315,12 @@ export default function UniversityDirectory() {
                       </div>
                       <div className="flex items-center text-yellow-500">
                         <Star size={14} className="mr-1 fill-current" />
-                        <span className="text-gray-900 font-medium">{uni.rating}</span>
+                        <span className="text-gray-900 font-medium">
+                          {uni.rating}
+                        </span>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                       <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
                         {uni.badges[0]}
