@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         rubik: ["Rubik", "serif"],
+        inter: ["Inter", "serif"],
       },
       colors: {
         primary: "#002B5B",

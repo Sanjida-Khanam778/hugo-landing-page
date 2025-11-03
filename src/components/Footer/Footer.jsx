@@ -21,7 +21,7 @@ export default function Footer() {
       className="text-white bg-cover"
       style={{ backgroundImage: `url(${background})` }}
     >
-      <div className="w-10/12 mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+      <div className="w-10/12 md:w-full lg:w-10/12 mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
           <div>
@@ -149,7 +149,7 @@ export default function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="flex-1 px-4 py-2 bg-white text-slate-900 text-sm rounded-l focus:outline-none"
+                className="flex-1 px-4 py-2 bg-white text-slate-900 text-sm rounded-l w-24 focus:outline-none"
               />
               <button
                 onClick={handleSubmit}
