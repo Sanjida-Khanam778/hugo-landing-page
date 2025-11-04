@@ -9,6 +9,9 @@ export default {
       },
       colors: {
         primary: "#002B5B",
+        base: "#F2F2F2",
+        grey: "#6B7280",
+        blue: "#0047E9"
       }
     },
   },

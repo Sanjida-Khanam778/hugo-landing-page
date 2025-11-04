@@ -266,8 +266,10 @@ export default function UniversityDirectory() {
         style={{ backgroundImage: `url(${background})` }}
         className="text-white flex items-center justify-center relative overflow-hidden bg-cover bg-no-repeat h-[50vh]"
       >
-        <div className="w-11/12 mx-auto relative z-10">
-          <h1 className="text-2xl md:text-4xl font-bold mb-8">University Directory</h1>
+        <div className="w-11/12 mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
+          <h1 className="text-2xl md:text-4xl font-bold mb-8">
+            University Directory
+          </h1>
           <p className="text-[#BFDBFE] max-w-3xl md:text-xl">
             Explore our comprehensive directory of top universities worldwide.
             Filter by location, programs, and more to find your perfect match.
