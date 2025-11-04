@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import speakerImg from "../../assets/images/speaker.png";
+import event from "../../assets/icons/event.png";
+import uni_logo from "../../assets/icons/uni_logo.png";
+
 import {
   MapPin,
   Calendar,
@@ -11,6 +15,7 @@ import {
   Mail,
   Car,
   Coffee,
+  Check,
 } from "lucide-react";
 import background from "../../assets/images/uniBanner.png";
 import backgroundBanner from "../../assets/images/uni_directory.png";
@@ -242,10 +247,19 @@ export default function UniversityEvents() {
               {selectedEvent.speakers && (
                 <div className="bg-white rounded-lg p-6">
                   <h2 className="text-2xl font-semibold mb-4">Speakers</h2>
-                  <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-6">
                     {selectedEvent.speakers.map((speaker, index) => (
-                      <div key={index} className="flex gap-4">
-                        <div className="w-12 h-12 bg-gray-300 rounded-full flex-shrink-0"></div>
+                      <div
+                        key={index}
+                        className="flex gap-6 border border-[#CCCCCC] p-4 rounded-lg"
+                      >
+                        <div className="w-16 h-16 flex-shrink-0">
+                          <img
+                            src={speakerImg}
+                            className="w-full h-full"
+                            alt=""
+                          />
+                        </div>
                         <div>
                           <h3 className="font-semibold">{speaker.name}</h3>
                           <p className="text-sm text-gray-600">
@@ -263,50 +277,46 @@ export default function UniversityEvents() {
 
               {/* Venue Information */}
               {selectedEvent.venue && (
-                <div className="bg-white rounded-lg p-6">
+                <div className="rounded-lg p-6">
                   <h2 className="text-xl font-bold mb-4">Venue Information</h2>
-                  <h3 className="font-semibold mb-2">
-                    {selectedEvent.venue.name}
-                  </h3>
-                  <p className="text-sm text-gray-700 mb-4">
-                    {selectedEvent.venue.address}
-                  </p>
+                  <div className="bg-[#F3F4F6] p-4 rounded-lg">
+                    <h3 className="font-semibold mb-2">
+                      {selectedEvent.venue.name}
+                    </h3>
+                    <p className="text-sm text-gray-700 mb-4">
+                      {selectedEvent.venue.address}
+                    </p>
 
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-2">
-                      <Car
-                        size={16}
-                        className="text-gray-600 mt-1 flex-shrink-0"
-                      />
-                      <div>
-                        <p className="text-sm font-medium">Parking:</p>
-                        <p className="text-sm text-gray-600">
-                          {selectedEvent.venue.parking}
-                        </p>
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-2">
+                        <Check className="text-[#16A34A]" size={22} />
+                        <div>
+                          <p className="text-sm font-medium">Parking:</p>
+                          <p className="text-sm text-gray-600">
+                            {selectedEvent.venue.parking}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle
-                        size={16}
-                        className="text-gray-600 mt-1 flex-shrink-0"
-                      />
-                      <div>
-                        <p className="text-sm font-medium">Accessibility:</p>
-                        <p className="text-sm text-gray-600">
-                          {selectedEvent.venue.accessibility}
-                        </p>
+                      <div className="flex items-start gap-2">
+                        <Check className="text-[#16A34A]" size={22} />
+
+                        <div>
+                          <p className="text-sm font-medium">Accessibility:</p>
+                          <p className="text-sm text-gray-600">
+                            {selectedEvent.venue.accessibility}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <MapPin
-                        size={16}
-                        className="text-gray-600 mt-1 flex-shrink-0"
-                      />
-                      <div>
-                        <p className="text-sm font-medium">Public Transport:</p>
-                        <p className="text-sm text-gray-600">
-                          {selectedEvent.venue.transport}
-                        </p>
+                      <div className="flex items-start gap-2">
+                        <Check className="text-[#16A34A]" size={22} />
+                        <div>
+                          <p className="text-sm font-medium">
+                            Public Transport:
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            {selectedEvent.venue.transport}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -330,11 +340,13 @@ export default function UniversityEvents() {
               {/* Event Registration */}
               <div className="bg-white rounded-lg p-6">
                 <h3 className="font-semibold mb-4">Event Registration</h3>
-                <p className="text-sm text-gray-600 mb-4">
+                <img src={event} className="mx-auto" alt="" />
+                <p className="font-medium text-center my-4">Event Ended</p>
+                <p className="text-sm text-gray-600 mb-4 text-center">
                   This event has already taken place. Check out our upcoming
                   events.
                 </p>
-                <button className="w-full bg-white border-2 border-blue-600 text-blue-600 py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors">
+                <button className="w-full bg-white text-blue py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors">
                   Browse Events
                 </button>
               </div>
@@ -343,7 +355,9 @@ export default function UniversityEvents() {
               <div className="bg-white rounded-lg p-6">
                 <h3 className="font-semibold mb-4">About the Host</h3>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-blue-600 rounded-full flex-shrink-0"></div>
+                  <div className="">
+                    <img src={uni_logo} className="h-full w-full" alt="" />
+                  </div>
                   <div>
                     <p className="font-medium">Harvard University</p>
                   </div>
@@ -352,7 +366,7 @@ export default function UniversityEvents() {
                   Learn more about programs, admissions, and life as a Harvard
                   student at University.
                 </p>
-                <button className="text-blue-600 text-sm font-medium">
+                <button className="text-blue-600 bg-base w-full p-3 rounded-lg text-sm">
                   Visit University Profile
                 </button>
               </div>
@@ -360,8 +374,8 @@ export default function UniversityEvents() {
               {/* Related Events */}
               <div className="bg-white rounded-lg p-6">
                 <h3 className="font-semibold mb-4">Related Events</h3>
-                <button className="text-blue-600 text-sm font-medium">
-                  See All Events
+                <button className="text-blue text-center w-full text-sm font-medium">
+                  View All Events
                 </button>
               </div>
             </div>
