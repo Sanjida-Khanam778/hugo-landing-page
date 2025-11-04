@@ -1,5 +1,8 @@
 import { useState } from "react";
 import speakerImg from "../../assets/images/speaker.png";
+import event1 from "../../assets/images/event1.png";
+import event2 from "../../assets/images/event2.png";
+import event3 from "../../assets/images/event3.png";
 import event from "../../assets/icons/event.png";
 import uni_logo from "../../assets/icons/uni_logo.png";
 
@@ -9,16 +12,12 @@ import {
   Users,
   ChevronDown,
   Clock,
-  CheckCircle,
-  User,
-  Phone,
-  Mail,
-  Car,
-  Coffee,
   Check,
+  Clock1,
 } from "lucide-react";
 import background from "../../assets/images/uniBanner.png";
 import backgroundBanner from "../../assets/images/uni_directory.png";
+import { FiCalendar } from "react-icons/fi";
 
 export default function UniversityEvents() {
   const [view, setView] = useState("list"); // 'list' or 'detail'
@@ -34,7 +33,8 @@ export default function UniversityEvents() {
       location: "Harvard Business School, Boston, MA",
       attendees: "200 Students",
       category: "Open Day",
-      badge: "Popular",
+      badge: "In-person",
+      image: event1,
       description:
         "Explore the Harvard Business School campus and learn about our MBA programs.",
       fullDescription:
@@ -79,7 +79,7 @@ export default function UniversityEvents() {
           description: "Open forum for questions with admissions team",
         },
       ],
-      speakers: [
+      events: [
         {
           name: "Dr. James Wilson",
           title: "Dean of Harvard Business School",
@@ -114,7 +114,8 @@ export default function UniversityEvents() {
       location: "Online",
       attendees: "500 Students",
       category: "Webinar",
-      badge: null,
+      badge: "Online",
+      image: event2,
       description:
         "Join us for an online webinar to learn about studying at Stanford for international students.",
       fullDescription:
@@ -129,7 +130,8 @@ export default function UniversityEvents() {
       location: "MIT Campus",
       attendees: "150 Students",
       category: "Info Session",
-      badge: "New",
+      badge: "Online",
+      image: event3,
       description:
         "Learn about MIT's graduate programs in engineering, including application requirements and research opportunities.",
       fullDescription:
@@ -230,7 +232,7 @@ export default function UniversityEvents() {
                         </div>
 
                         <div key={index} className="pl-4 pb-6">
-                          <p className="text-base font-medium text-[#111827]">
+                          <p className="font-medium text-[#111827]">
                             {item.title}
                           </p>
                           <p className="text-sm text-[#374151] mt-2">
@@ -254,11 +256,7 @@ export default function UniversityEvents() {
                         className="flex gap-6 border border-[#CCCCCC] p-4 rounded-lg"
                       >
                         <div className="w-16 h-16 flex-shrink-0">
-                          <img
-                            src={speakerImg}
-                            className="w-full h-full"
-                            alt=""
-                          />
+                          <img src={event} className="w-full h-full" alt="" />
                         </div>
                         <div>
                           <h3 className="font-semibold">{speaker.name}</h3>
@@ -386,54 +384,61 @@ export default function UniversityEvents() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-base">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-12 px-8 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <h1 className="text-3xl font-bold mb-2">University Directory</h1>
-          <p className="text-blue-100">
+      <div
+        className="bg-cover bg-no-repeat h-[50vh] text-white py-12 px-8 relative overflow-hidden flex items-center justify-center"
+        style={{ backgroundImage: `url(${backgroundBanner})` }}
+      >
+        <div className="w-11/12 mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl xl:text-5xl font-bold mb-2">
+            University Directory
+          </h1>
+          <p className="text-sky xl:text-xl mt-10">
             Explore our comprehensive directory of top universities worldwide.
             Filter by location, programs, and more to find your perfect match.
           </p>
         </div>
-        <div className="absolute top-6 right-20 w-16 h-16 border-2 border-white/30 rounded-full"></div>
       </div>
 
       {/* Tabs */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="flex gap-8">
-            <button className="py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-900">
-              <Users size={18} className="inline mr-2" />
-              Provided
-              <span className="ml-2 text-xs bg-gray-200 px-2 py-1 rounded">
-                1234
-              </span>
-            </button>
-            <button className="py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-900">
-              <Calendar size={18} className="inline mr-2" />
-              Campaigns
-            </button>
-            <button className="py-4 border-b-2 border-blue-600 text-blue-600 font-medium">
-              <Users size={18} className="inline mr-2" />
-              Students
-              <span className="ml-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
-                14,567
-              </span>
-            </button>
-            <button className="py-4 border-b-2 border-transparent text-gray-600 hover:text-gray-900">
-              <User size={18} className="inline mr-2" />
-              Faculty
-              <span className="ml-2 text-xs bg-gray-200 px-2 py-1 rounded">
-                2,456
-              </span>
-            </button>
+      <div className="bg-white border-b border-gray-200 p-6">
+        <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between gap-8">
+            <div className="grid place-items-center gap-2">
+              <div className="flex items-center gap-3">
+                <Users size={18} className="text-blue-600" />
+                <p className="text-dark font-medium text-lg">Founded</p>
+              </div>
+              <p className="text-sm text-[#374151]">1636</p>
+            </div>
+            <div className="grid place-items-center gap-2">
+              <div className="flex items-center gap-3">
+                <Users size={18} className="text-blue-600" />
+                <p className="text-dark font-medium text-lg">Campuses</p>
+              </div>
+              <p className="text-sm text-[#374151]">3</p>
+            </div>
+            <div className="grid place-items-center gap-2">
+              <div className="flex items-center gap-3">
+                <Users size={18} className="text-blue-600" />
+                <p className="text-dark font-medium text-lg">Students</p>
+              </div>
+              <p className="text-sm text-[#374151]">23,000</p>
+            </div>
+            <div className="grid place-items-center gap-2">
+              <div className="flex items-center gap-3">
+                <Users size={18} className="text-blue-600" />
+                <p className="text-dark font-medium text-lg">Faculty</p>
+              </div>
+              <p className="text-sm text-[#374151]">2,400</p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-8 py-8">
+      <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex gap-8">
           {/* Filters Sidebar */}
           <div className="w-56 flex-shrink-0">
@@ -510,10 +515,14 @@ export default function UniversityEvents() {
               {events.map((event) => (
                 <div
                   key={event.id}
-                  className="bg-white rounded-lg overflow-hidden flex"
+                  className={`${
+                    event.id % 2 === 0 ? "bg-[#EEEAE6]" : "bg-[#DFF0EC]"
+                  } rounded-lg overflow-hidden flex`}
                 >
                   {/* Image Placeholder */}
-                  <div className="w-48 h-48 bg-gradient-to-br from-orange-400 to-red-500 flex-shrink-0"></div>
+                  <div className=" flex-shrink-0">
+                    <img src={event.image} className="h-full" alt="" />
+                  </div>
 
                   {/* Content */}
                   <div className="flex-1 p-4 flex flex-col justify-between">
@@ -521,7 +530,9 @@ export default function UniversityEvents() {
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <div className="w-5 h-5 bg-red-500 rounded-full"></div>
+                            <div className="">
+                              <img src={uni_logo} alt="" />
+                            </div>
                             <span className="text-xs text-gray-600">
                               {event.university}
                             </span>
@@ -532,10 +543,10 @@ export default function UniversityEvents() {
                         </div>
                         {event.badge && (
                           <span
-                            className={`text-xs px-3 py-1 rounded-full ${
-                              event.badge === "Popular"
-                                ? "bg-purple-100 text-purple-700"
-                                : "bg-green-100 text-green-700"
+                            className={`text-xs px-3 py-1 rounded-md ${
+                              event.badge === "In-person"
+                                ? "bg-[#BFDBFE] text-[#1E40AF]"
+                                : "bg-[#DCFCE7] text-[#16A34A]"
                             }`}
                           >
                             {event.badge}
@@ -543,15 +554,19 @@ export default function UniversityEvents() {
                         )}
                       </div>
 
-                      <div className="flex items-center gap-4 text-xs text-gray-600 mb-2">
+                      <div className="flex items-center gap-4 text-xs text-[#374151] mb-2">
                         <span className="flex items-center">
-                          <Calendar size={12} className="mr-1" />
+                          <Calendar size={16} className="mr-1 text-dark" />
                           {event.date}
                         </span>
                         <span className="flex items-center">
-                          <MapPin size={12} className="mr-1" />
-                          {event.location}
+                          <Clock size={16} className="mr-1 text-dark" />
+                          {event.time}
                         </span>
+                      </div>
+                      <div className="flex items-center text-xs text-[#374151] mb-4">
+                        <MapPin size={16} className="mr-1 text-dark" />
+                        {event.location}
                       </div>
 
                       <p className="text-sm text-gray-700">
@@ -560,12 +575,12 @@ export default function UniversityEvents() {
                     </div>
 
                     <div className="flex items-center justify-between mt-3">
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-dark bg-[#F3F4F6] px-2 py-1 rounded-md">
                         {event.category}
                       </span>
                       <button
                         onClick={() => handleViewDetails(event)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded text-sm font-medium transition-colors"
+                        className="bg-blue text-white px-4 py-2 rounded text-sm transition-colors"
                       >
                         View Details
                       </button>

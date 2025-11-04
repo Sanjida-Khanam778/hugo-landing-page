@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Search, User, Menu, X } from "lucide-react";
 import logo from "../../assets/images/logo.png";
+import { Link } from "react-router-dom";
 export default function Navbar() {
   const [searchValue, setSearchValue] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -15,13 +16,18 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className={`w-full bg-[#F3F4F5] opacity-70 border-b border-gray-200 sticky top-0 z-50`}>
+    <nav
+      className={`w-full bg-[#F3F4F5] opacity-70 border-b border-gray-200 sticky top-0 z-50`}
+    >
+      
       <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
-          <div>
-            <img src={logo} className="h-10 xl:h-auto" alt="" />
-          </div>
+          <Link to={"/"}>
+            <div>
+              <img src={logo} className="h-10 xl:h-auto" alt="" />
+            </div>
+          </Link>
 
           {/* Desktop Navigation Links */}
           <div className="hidden lg:flex items-center gap-4 xl:gap-8">

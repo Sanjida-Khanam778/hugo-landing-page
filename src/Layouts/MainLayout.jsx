@@ -11,7 +11,7 @@ export default function MainLayout() {
       {location.pathname === "/" ? null : <Navbar />}
 
       <Outlet />
-      <Footer />
+      {location.pathname === "/" ? null : <Footer />}
     </div>
   );
 }
