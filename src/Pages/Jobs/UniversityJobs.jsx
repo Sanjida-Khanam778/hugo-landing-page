@@ -1,8 +1,8 @@
 import { useState } from "react";
-import JobList from "./components/JobList";
-import JobDetails from "./components/JobDetails";
-import uni_logo from "../../../assets/icons/uni_logo.png";
-import background from "../../../assets/images/uni_directory.png";
+import JobList from "./JobList";
+import JobDetails from "./JobDetails";
+import uni_logo from "../../assets/icons/uni_logo.png";
+import background from "../../assets/images/uni_directory.png";
 
 export default function UniversityJobs() {
   const [view, setView] = useState("list");

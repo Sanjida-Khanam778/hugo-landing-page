@@ -1,13 +1,11 @@
-import Navbar from "../components/Navbar/Navbar";
-import banner from "../assets/video/uni_banner.mp4";
+import banner from "../../assets/video/uni_banner.mp4";
 import { BookOpen, Calendar, Info, MapPin, Search } from "lucide-react";
 import { useState } from "react";
-import uni_logo from "../assets/icons/harvard.png";
+import uni_logo from "../../assets/icons/harvard.png";
 
-export default function UniDashboard() {
-  const [searchQuery, setSearchQuery] = useState("");
+export default function UniBanner() {
   return (
-    <div className="relative overflow-hidden h-[50vh]">
+   <div className="relative overflow-hidden h-[50vh]">
       {/* Video Background Container */}
       <div className="absolute inset-0 w-full h-full">
         <video
@@ -44,5 +42,5 @@ export default function UniDashboard() {
         </div>
       </div>
     </div>
-  );
+  )
 }
