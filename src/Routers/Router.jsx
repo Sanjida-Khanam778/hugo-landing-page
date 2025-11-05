@@ -1,10 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
-import Dashboard from "../Layouts/Dashboard";
 import Home from "../Pages/Home/Home";
 import UniversityDirectory from "../Pages/UniversityDirectory/UniversityDirectory";
 import MainLayout from "../Layouts/MainLayout";
 import UniversityEvents from "../Pages/Events/UniversityEvents";
 import UniversityJobs from "../Pages/Events/Jobs/UniversityJobs";
+import UniDashboard from "../Layouts/UniDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +19,11 @@ export const router = createBrowserRouter([
       {
         path: "/universities",
         element: <UniversityDirectory />,
+        
+      },
+      {
+        path: "/universities/:id",
+        element: <UniDashboard />
       },
       {
         path: "/events",

@@ -6,7 +6,6 @@ import Navbar from "../Navbar/Navbar";
 
 export default function Hero() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchType, setSearchType] = useState("University");
 
   return (
     <div className="relative overflow-hidden h-screen">

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { MapPin, BookOpen, Star, ChevronDown, X } from "lucide-react";
 import background from "../../assets/images/uniBanner.png";
 import { PiBookOpenBold, PiGlobeSimpleBold } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 export default function UniversityDirectory() {
   const [selectedCountry, setSelectedCountry] = useState("all");
@@ -387,9 +388,9 @@ export default function UniversityDirectory() {
                       <span className="text-xs bg-[#BFDBFE] text-[#1E40AF] px-3 py-1 rounded-[4px]">
                         {uni.badges[0]}
                       </span>
-                      <button className="text-[#002B5B] text-sm font-medium">
+                      <Link to={`/universities/${uni.id}`}><button className="text-[#002B5B] text-sm font-medium">
                         View Details
-                      </button>
+                      </button></Link>
                     </div>
                   </div>
                 </div>

@@ -20,6 +20,10 @@ export default function JobDetails({
   background,
   uni_logo,
 }) {
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const [selectedType, setSelectedType] = useState("All Types");
+  const [showTypeDropdown, setShowTypeDropdown] = useState(false);
   return (
     <div className="min-h-screen bg-base font-inter">
       {/* Header */}
@@ -67,15 +71,120 @@ export default function JobDetails({
             placeholder="Search for job title, company, keywords..."
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           />
-          <div className="ml-4 flex gap-3">
-            <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 flex items-center gap-2">
-              All Types
-              <ChevronDown size={16} />
-            </button>
-            <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 flex items-center gap-2">
-              All Categories
-              <ChevronDown size={16} />
-            </button>
+          <div className="ml-4 flex gap-3 relative text-[#111827]">
+            {/* Job Type Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setShowTypeDropdown(!showTypeDropdown);
+                  setShowCategoryDropdown(false);
+                }}
+                className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 flex items-center gap-2"
+              >
+                {selectedType}
+                <ChevronDown size={16} />
+              </button>
+
+              {showTypeDropdown && (
+                <div className="absolute top-full mt-2 left-0 bg-white rounded-lg shadow-lg border border-gray-200 py-4 px-6 min-w-[280px] z-50">
+                  <div className="space-y-3">
+                    <button
+                      onClick={() => {
+                        setSelectedType("All Types");
+                        setShowTypeDropdown(false);
+                      }}
+                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
+                    >
+                      All Types
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedType("Internship");
+                        setShowTypeDropdown(false);
+                      }}
+                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
+                    >
+                      Internship
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedType("Full Time");
+                        setShowTypeDropdown(false);
+                      }}
+                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
+                    >
+                      Full Time
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Category Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setShowCategoryDropdown(!showCategoryDropdown);
+                  setShowTypeDropdown(false);
+                }}
+                className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 flex items-center gap-2"
+              >
+                {selectedCategory}
+                <ChevronDown size={16} />
+              </button>
+
+              {showCategoryDropdown && (
+                <div className="absolute top-full mt-2 left-0 bg-white rounded-lg shadow-lg border border-gray-200 py-4 px-6 min-w-[280px] z-50">
+                  <div className="space-y-3">
+                    <button
+                      onClick={() => {
+                        setSelectedCategory("Technology");
+                        setShowCategoryDropdown(false);
+                      }}
+                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
+                    >
+                      Technology
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedCategory("Marketing");
+                        setShowCategoryDropdown(false);
+                      }}
+                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
+                    >
+                      Marketing
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedCategory("Finance");
+                        setShowCategoryDropdown(false);
+                      }}
+                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
+                    >
+                      Finance
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedCategory("Research");
+                        setShowCategoryDropdown(false);
+                      }}
+                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
+                    >
+                      Research
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedCategory("Education");
+                        setShowCategoryDropdown(false);
+                      }}
+                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
+                    >
+                      Education
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
