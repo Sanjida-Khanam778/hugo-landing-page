@@ -193,7 +193,7 @@ export default function UniversityEvents() {
 
                 <div className="grid grid-cols-3 gap-4">
                   <div className="flex items-start gap-3 bg-[#EFF6FF] p-4 rounded-lg">
-                    <Calendar className="text-blue mt-1" size={20} />
+                    <Calendar className="text-blue mt-2" size={20} />
                     <div>
                       <p className="text-xs text-grey">Date</p>
                       <p className="text-sm font-medium">
@@ -202,7 +202,7 @@ export default function UniversityEvents() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3 bg-[#EFF6FF] p-4 rounded-lg">
-                    <Clock className="text-blue mt-1" size={20} />
+                    <Clock className="text-blue mt-2" size={20} />
                     <div>
                       <p className="text-xs text-grey">Time</p>
                       <p className="text-sm font-medium">
@@ -211,9 +211,9 @@ export default function UniversityEvents() {
                     </div>
                   </div>
                   <div className="flex items-start gap-3 bg-[#EFF6FF] p-4 rounded-lg">
-                    <MapPin className="text-blue mt-1" size={20} />
+                    <Users className="text-blue mt-2" size={20} />
                     <div>
-                      <p className="text-xs text-grey">Location</p>
+                      <p className="text-xs text-grey">Category</p>
                       <p className="text-sm font-medium">Open Day</p>
                     </div>
                   </div>

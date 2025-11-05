@@ -4,6 +4,7 @@ import Home from "../Pages/Home/Home";
 import UniversityDirectory from "../Pages/UniversityDirectory/UniversityDirectory";
 import MainLayout from "../Layouts/MainLayout";
 import UniversityEvents from "../Pages/Events/UniversityEvents";
+import UniversityJobs from "../Pages/Events/Jobs/UniversityJobs";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
       {
         path: "/events",
         element: <UniversityEvents />
+      },
+      {
+        path: "/jobs",
+        element: <UniversityJobs />
       }
     ],
   },

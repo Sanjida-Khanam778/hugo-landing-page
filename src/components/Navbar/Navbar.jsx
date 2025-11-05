@@ -11,7 +11,7 @@ export default function Navbar() {
   const navLinks = [
     { label: "Universities", href: "/universities" },
     { label: "Events", href: "/events" },
-    { label: "Jobs", href: "#" },
+    { label: "Jobs", href: "/jobs" },
     { label: "About us", href: "#" },
   ];
 
