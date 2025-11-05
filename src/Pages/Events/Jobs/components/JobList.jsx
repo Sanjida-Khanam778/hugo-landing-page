@@ -44,12 +44,10 @@ export default function JobList({
           />
           <div className="ml-4 flex gap-3">
             <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 flex items-center gap-2">
-              <Building size={16} />
               All Types
               <ChevronDown size={16} />
             </button>
             <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 flex items-center gap-2">
-              <Briefcase size={16} />
               All Categories
               <ChevronDown size={16} />
             </button>
@@ -185,7 +183,7 @@ export default function JobList({
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-start gap-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex-shrink-0">
+                      <div className="w-12 h-12 rounded-lg flex-shrink-0">
                         <img src={uni_logo} alt="" />
                       </div>
                       <div>
