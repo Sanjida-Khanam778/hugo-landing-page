@@ -7,44 +7,47 @@ import {
   Bookmark,
   CheckCircle,
   FileText,
+  GraduationCap,
+  Building,
 } from "lucide-react";
 
 
 export default function JobDetails({ job, onBackClick, getBadgeColor, background, uni_logo }) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 font-inter">
       {/* Header */}
       <div
         style={{ backgroundImage: `url(${background})` }}
-        className="bg-cover bg-no-repeat h-[50vh] text-white py-12 px-8 relative overflow-hidden"
+        className="bg-cover bg-no-repeat h-[50vh] text-white py-12 px-8 relative overflow-hidden flex items-center justify-center"
       >
-        <div className=" mx-auto relative z-10">
+        <div className="w-11/12 mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
           <button
             onClick={onBackClick}
-            className="mb-4 text-white/80 hover:text-white text-sm flex items-center"
+            className="mb-10 text-white/80 hover:text-white text-sm flex items-center"
           >
             ← Back to Jobs
           </button>
-          <h1 className="text-3xl font-bold mb-3">{job.title}</h1>
-          <div className="flex items-center gap-4 text-sm">
-            <span
-              className={`px-3 py-1 rounded-full ${getBadgeColor(
-                job.badgeColor
-              )}`}
-            >
-              {job.badge}
+          <h1 className="text-3xl font-bold mb-6">{job.title}</h1>
+          <div className="flex items-center gap-8 text-sm text-sky">
+           
+            <span className="flex items-center">
+              <Building size={22} className="mr-1" />
+           Microsoft
             </span>
             <span className="flex items-center">
-              <MapPin size={16} className="mr-1" />
+              <GraduationCap size={22} className="mr-2" />
+              Harvard University
+            </span>
+            <span className="flex items-center">
+              <MapPin size={20} className="mr-1" />
               {job.location}
             </span>
-            <span className="flex items-center">
-              <DollarSign size={16} className="mr-1" />
-              {job.salary}
-            </span>
-            <span className="flex items-center">
-              <Calendar size={16} className="mr-1" />
-              {job.posted}
+          </div>
+          <div className="mt-6">
+             <span
+              className={`px-4 text-sm py-2 rounded-full bg-white/20 text-white`}
+            >
+              {job.badge}
             </span>
           </div>
         </div>
