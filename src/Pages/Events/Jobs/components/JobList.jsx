@@ -5,6 +5,9 @@ import {
   Building,
   ChevronDown,
 } from "lucide-react";
+import { BiDollarCircle } from "react-icons/bi";
+import { GrLocation } from "react-icons/gr";
+import { MdOutlineWatchLater } from "react-icons/md";
 
 export default function JobList({
   jobs,
@@ -14,7 +17,7 @@ export default function JobList({
   uni_logo,
 }) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-base">
       <div
         style={{ backgroundImage: `url(${background})` }}
         className="text-white flex items-center justify-center relative overflow-hidden bg-cover bg-no-repeat h-[50vh] px-8"
@@ -55,11 +58,11 @@ export default function JobList({
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-8 py-8">
+      <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex gap-8">
           {/* Filters Sidebar */}
           <div className="w-48 flex-shrink-0">
-            <div className="bg-gray-100 rounded p-4">
+            <div className="bg-[#ECF5FF] rounded p-6">
               <h3 className="font-semibold mb-4 text-sm">Filters</h3>
 
               {/* Job Type */}
@@ -172,10 +175,6 @@ export default function JobList({
               <p className="text-sm text-gray-600">
                 Showing {jobs.length} jobs
               </p>
-              <button className="text-sm text-gray-600 flex items-center">
-                Sort by: Latest
-                <ChevronDown size={14} className="ml-1" />
-              </button>
             </div>
 
             <div className="space-y-4">
@@ -197,7 +196,7 @@ export default function JobList({
                       </div>
                     </div>
                     <span
-                      className={`text-xs px-3 py-1 rounded-full ${getBadgeColor(
+                      className={`text-xs px-3 py-1 rounded-md ${getBadgeColor(
                         job.badgeColor
                       )}`}
                     >
@@ -207,15 +206,15 @@ export default function JobList({
 
                   <div className="flex items-center gap-4 text-xs text-gray-600 mb-3">
                     <span className="flex items-center">
-                      <MapPin size={12} className="mr-1" />
+                      <GrLocation className="mr-1 text-dark text-lg" />
                       {job.location}
                     </span>
                     <span className="flex items-center">
-                      <Briefcase size={12} className="mr-1" />
+                      <MdOutlineWatchLater className="mr-1 text-dark text-lg" />
                       {job.type}
                     </span>
                     <span className="flex items-center">
-                      <DollarSign size={12} className="mr-1" />
+                      <BiDollarCircle className="mr-1 text-dark text-lg" />
                       {job.salary}
                     </span>
                   </div>
@@ -226,12 +225,15 @@ export default function JobList({
 
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-500">{job.posted}</span>
-                    <button
-                      onClick={() => onViewDetails(job)}
-                      className="bg-blue text-white px-4 py-2 rounded text-sm transition-colors"
-                    >
-                      View Details
-                    </button>
+                    <div>
+                      <span className="text-xs text-gray-500 mr-4">Apply by: Jul 30, 2023</span>
+                      <button
+                        onClick={() => onViewDetails(job)}
+                        className="bg-blue text-white px-4 py-2 rounded text-sm transition-colors"
+                      >
+                        View Details
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}

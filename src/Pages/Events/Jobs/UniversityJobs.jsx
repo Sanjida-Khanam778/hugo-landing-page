@@ -20,13 +20,13 @@ export default function UniversityJobs() {
 
   const getBadgeColor = (color) => {
     const colors = {
-      green: "bg-green-100 text-green-800",
-      blue: "bg-blue-100 text-blue-800",
-      yellow: "bg-yellow-100 text-yellow-800",
+      green: "bg-[#DCFCE7] text-[#16A34A]",
+      blue: "bg-[#BFDBFE] text-[#1E40AF]",
+      yellow: "bg-[#FEF9C3] text-[#854D0E]",
       red: "bg-red-100 text-red-800",
-      purple: "bg-purple-100 text-purple-800",
+      purple: "bg-[#F3E8FF] text-[#6B21A8]",
     };
-    return colors[color] || "bg-gray-100 text-gray-800";
+    return colors[color] || "bg-[#F3F4F6] text-[#111827]";
   };
 
   const jobs = [
