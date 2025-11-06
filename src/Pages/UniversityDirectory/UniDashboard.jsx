@@ -1,13 +1,14 @@
 import React from "react";
 import UniBanner from "./UniBanner";
 import { Award, Building, Calendar, Users } from "lucide-react";
+import UniversityTab from "./Universitytab";
 
 export default function UniDashboard() {
   return (
-    <div>
+    <div className="bg-base">
       <UniBanner />
       {/* Tabs */}
-      <div className="bg-white rounded-t-3xl relative -top-6 p-6">
+      <div className="bg-white rounded-t-3xl relative -top-6 p-6 shadow-lg">
         <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between gap-8">
             <div className="grid place-items-center gap-2">
@@ -41,6 +42,7 @@ export default function UniDashboard() {
           </div>
         </div>
       </div>
+      <UniversityTab />
     </div>
   );
 }
