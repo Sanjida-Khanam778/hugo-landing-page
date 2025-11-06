@@ -3,6 +3,7 @@ import { MapPin, X } from "lucide-react";
 import banner from "../../assets/video/banner.mp4";
 import shape from "../../assets/images/shape.png";
 import Program from "./Program";
+import Events from "./Events";
 export default function UniversityTab() {
   const [activeTab, setActiveTab] = useState("overview");
   const [showRequestForm, setShowRequestForm] = useState(false);
@@ -172,12 +173,7 @@ export default function UniversityTab() {
             )}
 
             {activeTab === "events" && (
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <h2 className="text-2xl font-bold mb-4">Events</h2>
-                <p className="text-gray-600">
-                  Events content will be added here...
-                </p>
-              </div>
+             <Events />
             )}
 
             {activeTab === "testimonials" && (
