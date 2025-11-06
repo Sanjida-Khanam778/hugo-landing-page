@@ -40,8 +40,8 @@ export default function Hero() {
           </p>
 
           {/* Search Bar */}
-          <div className="bg-white rounded-lg p-3 sm:p-4 mb-8 flex flex-col sm:flex-row gap-3 shadow-lg">
-            <div className="flex-1 flex items-center gap-2 bg-gray-50 rounded px-3 py-2">
+          <div className="bg-white rounded-lg p-2 mb-8 flex flex-col sm:flex-row gap-3 shadow-lg">
+            <div className="flex-1 flex items-center gap-2 rounded px-3 py-3">
               <Search className="w-5 h-5 text-gray-400" />
               <input
                 type="text"
@@ -52,9 +52,9 @@ export default function Hero() {
               />
             </div>
 
-            <div className="text-black my-auto">University</div>
+            <div className="text-black my-auto px-4 h-full border-l border-[#CCCCCC] py-3">University</div>
 
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded transition-colors text-sm sm:text-base">
+            <button className="bg-blue text-white font-semibold px-6  rounded transition-colors text-sm sm:text-base">
               Search
             </button>
           </div>

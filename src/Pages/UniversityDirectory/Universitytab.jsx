@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { MapPin, X } from "lucide-react";
 import banner from "../../assets/video/banner.mp4";
 import shape from "../../assets/images/shape.png";
+import Program from "./Program";
 export default function UniversityTab() {
   const [activeTab, setActiveTab] = useState("overview");
   const [showRequestForm, setShowRequestForm] = useState(false);
@@ -33,7 +34,7 @@ export default function UniversityTab() {
   };
 
   return (
-    <div className="min-h-screen bg-base">
+    <div className="bg-base">
       {/* Navigation Tabs */}
       <div className="">
         <div className="max-w-7xl mx-auto px-8">
@@ -99,17 +100,18 @@ export default function UniversityTab() {
           <div className="col-span-2 space-y-6">
             {activeTab === "overview" && (
               <>
-                <div className="h-[450px] inset-0 flex gap-6">
-                  <div className="w-1/2 h-full">
+                <div className="inset-0 flex gap-6">
+                  <div className="w-1/2 h-full space-y-4">
                     <video
                       autoPlay
                       muted
                       loop
                       playsInline
+                      preload="auto"
                       className="w-full h-full object-cover rounded-lg"
                     >
                       <source src={banner} type="video/mp4" />
-                      Your browser does not support the video tag.
+                      {/* <source src={banner} type="video/mp4" /> */}
                     </video>
                     <img src={shape} alt="" />
                   </div>
@@ -139,26 +141,26 @@ export default function UniversityTab() {
                 </div>
 
                 {/* Rankings Section */}
-                <div className="rounded-lg p-6 shadow-sm">
-                  <h3 className="text-xl font-bold mb-4">Rankings</h3>
+                <div className="rounded-lg p-6">
+                  <h3 className="text-xl font-semibold mb-4">Rankings</h3>
                   <div className="space-y-3">
-                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                    <div className="flex justify-between items-center py-2 border-b border-[#CCCCCC]">
                       <span className="text-gray-700">
                         QS World University Rankings
                       </span>
-                      <span className="text-blue-600 font-semibold">#5</span>
+                      <span className="text-blue font-semibold">#5</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                    <div className="flex justify-between items-center py-2 border-b border-[#CCCCCC]">
                       <span className="text-gray-700">
                         Times Higher Education
                       </span>
-                      <span className="text-blue-600 font-semibold">#2</span>
+                      <span className="text-blue font-semibold">#2</span>
                     </div>
                     <div className="flex justify-between items-center py-2">
                       <span className="text-gray-700">
                         U.S. News & World Report
                       </span>
-                      <span className="text-blue-600 font-semibold">#1</span>
+                      <span className="text-blue font-semibold">#1</span>
                     </div>
                   </div>
                 </div>
@@ -166,12 +168,7 @@ export default function UniversityTab() {
             )}
 
             {activeTab === "programs" && (
-              <div className="bg-white rounded-lg p-6">
-                <h2 className="text-2xl font-bold mb-4">Programs</h2>
-                <p className="text-gray-600">
-                  Programs content will be added here...
-                </p>
-              </div>
+             <Program />
             )}
 
             {activeTab === "events" && (
