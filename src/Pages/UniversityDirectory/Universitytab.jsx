@@ -269,7 +269,7 @@ export default function UniversityTab() {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={handleSubmit}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition-colors"
+                  className="flex-1 bg-blue  text-white py-2.5 rounded-lg font-medium transition-colors"
                 >
                   Send Message
                 </button>

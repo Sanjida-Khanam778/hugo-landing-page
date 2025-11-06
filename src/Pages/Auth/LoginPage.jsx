@@ -1,7 +1,6 @@
 import banner from "../../assets/video/login.mp4";
 
 import { useState } from "react";
-import { Search, Info, BookOpen, Calendar } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
 
 export default function LoginPage() {

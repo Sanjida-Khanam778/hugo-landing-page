@@ -13,6 +13,7 @@ import TestimonialTab from "../Pages/UniversityDirectory/TestimonialTab";
 import Gallery from "../Pages/UniversityDirectory/Gallery";
 import ProgramDetails from "../components/ProgramDetails/ProgramDetails";
 import LoginPage from "../Pages/Auth/LoginPage";
+import SignIn from "../Pages/Auth/SignIn";
 
 export const router = createBrowserRouter([
   {
@@ -67,18 +68,19 @@ export const router = createBrowserRouter([
         path: "/jobs",
         element: <UniversityJobs />,
       },
+       {
+    path: "/login",
+    element: <SignIn />,
+  },
+  {
+    path: "/register",
+    element: <h1>Register</h1>,
+  },
     ],
   },
   {
     path: "/login-page",
     element: <LoginPage />
   },
-  {
-    path: "/login",
-    element: <h1>Login</h1>,
-  },
-  {
-    path: "/register",
-    element: <h1>Register</h1>,
-  },
+ 
 ]);
