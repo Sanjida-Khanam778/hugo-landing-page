@@ -1,6 +1,6 @@
 import React from "react";
-
-export default function Testimonial() {
+import comment from "../../assets/images/comment.png";
+export default function TestimonialTab() {
   return (
     <div>
       {/* Testimonials Section */}
@@ -10,7 +10,9 @@ export default function Testimonial() {
         {/* Testimonial 1 */}
         <div className="mb-8">
           <div className="flex gap-4 mb-4">
-            <div className="text-blue-600 text-5xl leading-none">"</div>
+            <div>
+              <img className="w-16" src={comment} alt="" />
+            </div>
             <p className="text-gray-700 text-base pt-2">
               My time at Harvard Business School transformed my career
               trajectory and provided me with an incredible network of peers and
@@ -29,7 +31,9 @@ export default function Testimonial() {
         {/* Testimonial 2 */}
         <div className="mb-6">
           <div className="flex gap-4 mb-4">
-            <div className="text-blue-600 text-5xl leading-none">"</div>
+            <div>
+              <img className="w-16" src={comment} alt="" />
+            </div>
             <p className="text-gray-700 text-base pt-2">
               The research opportunities and faculty mentorship at Harvard
               prepared me exceptionally well for my career in AI research.
@@ -48,7 +52,7 @@ export default function Testimonial() {
 
         {/* Add Testimonial Button */}
         <div className="flex justify-end mt-8">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors">
+          <button className="bg-blue hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-colors">
             Add your Testimonials
           </button>
         </div>
@@ -60,19 +64,22 @@ export default function Testimonial() {
 
         <div className="mb-6">
           <div className="flex gap-4">
-            <div className="text-blue-600 text-5xl leading-none">"</div>
-            <div className="flex-1">
+            <div className="flex-1 relative">
+
               <textarea
                 placeholder="My time at ..."
                 rows="6"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm"
+                className="w-full px-4 pl-16 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm"
               ></textarea>
+              <div className="absolute top-1 left-1">
+                <img src={comment} alt="" />
+              </div>
             </div>
           </div>
         </div>
 
         <div className="flex justify-end">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2.5 rounded-lg text-sm font-medium transition-colors">
+          <button className="bg-blue text-white px-8 py-2.5 rounded-lg text-sm font-medium transition-colors">
             Submit
           </button>
         </div>

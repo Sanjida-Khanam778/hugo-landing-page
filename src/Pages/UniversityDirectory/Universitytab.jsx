@@ -4,6 +4,8 @@ import banner from "../../assets/video/banner.mp4";
 import shape from "../../assets/images/shape.png";
 import Program from "./Program";
 import Events from "./Events";
+import Testimonial from "../../components/Testimonial/Testimonial";
+import TestimonialTab from "./TestimonialTab";
 export default function UniversityTab() {
   const [activeTab, setActiveTab] = useState("overview");
   const [showRequestForm, setShowRequestForm] = useState(false);
@@ -168,22 +170,11 @@ export default function UniversityTab() {
               </>
             )}
 
-            {activeTab === "programs" && (
-             <Program />
-            )}
+            {activeTab === "programs" && <Program />}
 
-            {activeTab === "events" && (
-             <Events />
-            )}
+            {activeTab === "events" && <Events />}
 
-            {activeTab === "testimonials" && (
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <h2 className="text-2xl font-bold mb-4">Testimonials</h2>
-                <p className="text-gray-600">
-                  Testimonials content will be added here...
-                </p>
-              </div>
-            )}
+            {activeTab === "testimonials" && <TestimonialTab />}
 
             {activeTab === "gallery" && (
               <div className="bg-white rounded-lg p-6 shadow-sm">
