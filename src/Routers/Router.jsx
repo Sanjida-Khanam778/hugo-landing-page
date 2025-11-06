@@ -11,6 +11,8 @@ import Program from "../Pages/UniversityDirectory/Program";
 import Events from "../Pages/UniversityDirectory/Events";
 import TestimonialTab from "../Pages/UniversityDirectory/TestimonialTab";
 import Gallery from "../Pages/UniversityDirectory/Gallery";
+import ProgramDetails from "../components/ProgramDetails/ProgramDetails";
+import LoginPage from "../Pages/Auth/LoginPage";
 
 export const router = createBrowserRouter([
   {
@@ -36,21 +38,25 @@ export const router = createBrowserRouter([
           },
           {
             path: "programs",
-            element: <Program />
+            element: <Program />,
           },
           {
             path: "events",
-            element: <Events />
+            element: <Events />,
           },
           {
             path: "testimonials",
-            element: <TestimonialTab />
+            element: <TestimonialTab />,
           },
           {
             path: "gallery",
-            element: <Gallery />
-          }
+            element: <Gallery />,
+          },
         ],
+      },
+      {
+        path: "/program-details",
+        element: <ProgramDetails />,
       },
 
       {
@@ -62,6 +68,10 @@ export const router = createBrowserRouter([
         element: <UniversityJobs />,
       },
     ],
+  },
+  {
+    path: "/login-page",
+    element: <LoginPage />
   },
   {
     path: "/login",
