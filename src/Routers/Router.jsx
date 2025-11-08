@@ -14,6 +14,8 @@ import Gallery from "../Pages/UniversityDirectory/Gallery";
 import ProgramDetails from "../components/ProgramDetails/ProgramDetails";
 import LoginPage from "../Pages/Auth/LoginPage";
 import SignIn from "../Pages/Auth/SignIn";
+import SignUp from "../Pages/Auth/SignUp";
+import About from "../Pages/About/About";
 
 export const router = createBrowserRouter([
   {
@@ -68,19 +70,22 @@ export const router = createBrowserRouter([
         path: "/jobs",
         element: <UniversityJobs />,
       },
-       {
-    path: "/login",
-    element: <SignIn />,
-  },
-  {
-    path: "/register",
-    element: <h1>Register</h1>,
-  },
+      {
+        path: "/login",
+        element: <SignIn />,
+      },
+      {
+        path: "/register",
+        element: <SignUp />,
+      },
+      {
+        path: "/about",
+        element: <About />,
+      },
     ],
   },
   {
     path: "/login-page",
-    element: <LoginPage />
+    element: <LoginPage />,
   },
- 
 ]);
