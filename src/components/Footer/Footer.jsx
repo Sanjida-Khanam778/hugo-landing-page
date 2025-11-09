@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Facebook, Twitter, Instagram, Linkedin, Send, MessageSquare } from "lucide-react";
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Send,
+  MessageSquare,
+} from "lucide-react";
 import background from "../../assets/images/background4.png";
 
 export default function Footer() {
@@ -153,7 +160,7 @@ export default function Footer() {
               />
               <button
                 onClick={handleSubmit}
-                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-r transition-colors"
+                className="bg-blue px-4 py-2 rounded-r transition-colors"
               >
                 <MessageSquare size={18} />
               </button>
