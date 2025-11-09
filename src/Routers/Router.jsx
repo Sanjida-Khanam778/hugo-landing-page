@@ -16,6 +16,7 @@ import LoginPage from "../Pages/Auth/LoginPage";
 import SignIn from "../Pages/Auth/SignIn";
 import SignUp from "../Pages/Auth/SignUp";
 import About from "../Pages/About/About";
+import UserDashboard from "../Pages/UserDashboard/UserDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -81,6 +82,10 @@ export const router = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
+      },
+      {
+        path: "/about",
+        element: <UserDashboard />,
       },
     ],
   },

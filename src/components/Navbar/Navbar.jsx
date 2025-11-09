@@ -12,7 +12,7 @@ export default function Navbar() {
     { label: "Universities", href: "/universities" },
     { label: "Events", href: "/events" },
     { label: "Jobs", href: "/jobs" },
-    { label: "About us", href: "#" },
+    { label: "About us", href: "/about" },
   ];
 
   return (
