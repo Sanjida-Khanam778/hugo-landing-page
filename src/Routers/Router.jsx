@@ -84,7 +84,7 @@ export const router = createBrowserRouter([
         element: <About />,
       },
       {
-        path: "/about",
+        path: "/user",
         element: <UserDashboard />,
       },
     ],
