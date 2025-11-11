@@ -17,6 +17,7 @@ import SignIn from "../Pages/Auth/SignIn";
 import SignUp from "../Pages/Auth/SignUp";
 import About from "../Pages/About/About";
 import UserDashboard from "../Pages/UserDashboard/UserDashboard";
+import MessageInterface from "../Pages/UserDashboard/MessageInterface";
 
 export const router = createBrowserRouter([
   {
@@ -87,6 +88,10 @@ export const router = createBrowserRouter([
         path: "/user",
         element: <UserDashboard />,
       },
+      {
+        path: "/message",
+        element: <MessageInterface />
+      }
     ],
   },
   {

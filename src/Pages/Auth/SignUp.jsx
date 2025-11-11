@@ -1,16 +1,33 @@
 import React, { useState } from "react";
 import background from "../../assets/images/uniBanner.png";
 import signup from "../../assets/images/signup.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 export default function SignUp() {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Sign up:", { fullName, phone, email, password });
+    // Validate all fields
+    if (fullName && phone && email && password) {
+      // Store login info in localStorage
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userName", fullName);
+      localStorage.setItem("userEmail", email);
+      localStorage.setItem("userPhone", phone);
+
+      console.log("Sign up:", { fullName, phone, email, password });
+
+      // Navigate to home
+      navigate("/");
+
+      // Refresh page to update Navbar state
+      window.location.reload();
+    }
   };
 
   return (
@@ -79,7 +96,7 @@ export default function SignUp() {
                   onClick={handleSubmit}
                   className="bg-blue px-8 text-white py-3 rounded font-medium"
                 >
-                  Sign In
+                  Sign Up
                 </button>
 
                 <div className="flex gap-4 justify-center items-center">

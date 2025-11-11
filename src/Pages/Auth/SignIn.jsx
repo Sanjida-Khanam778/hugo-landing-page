@@ -1,15 +1,35 @@
 import React, { useState } from "react";
 import background from "../../assets/images/uniBanner.png";
 import signin from "../../assets/images/signin.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Sign in:", { email, password, rememberMe });
+    console.log(email, password);
+    // Validate email and password
+    if (email && password) {
+      // Extract user name from email or you can add a name field
+      const userName = email.split("@")[0];
+
+      // Store login info in localStorage
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userName", userName);
+      localStorage.setItem("userEmail", email);
+
+      console.log("Sign in:", { email, password });
+
+      // Navigate to dashboard or home
+      navigate("/");
+
+      // Refresh page to update Navbar state
+      window.location.reload();
+    }
   };
 
   return (
@@ -52,7 +72,8 @@ export default function SignIn() {
                 </label>
                 <input
                   type="password"
-                  // value={password}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                   className="w-full px-4 py-3 bg-base border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -110,7 +131,7 @@ export default function SignIn() {
 
               <p className="text-sm text-gray-600">
                 Don't have an account?{" "}
-              <Link to={"/register"}>
+                <Link to={"/register"}>
                   <button className="text-blue-600 font-medium hover:underline ml-2">
                     Sign Up
                   </button>

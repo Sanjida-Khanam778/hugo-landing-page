@@ -1,12 +1,26 @@
 "use client";
 
-import { useState } from "react";
-import { Search, User, Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, User, Menu, X, LogOut } from "lucide-react";
 import logo from "../../assets/images/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 export default function Navbar() {
   const [searchValue, setSearchValue] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
+  const navigate = useNavigate();
+
+  // Check localStorage on component mount
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("isLoggedIn");
+    const name = localStorage.getItem("userName");
+    if (loggedIn === "true" && name) {
+      setIsLoggedIn(true);
+      setUserName(name);
+    }
+  }, []);
 
   const navLinks = [
     { label: "Universities", href: "/universities" },
@@ -15,10 +29,28 @@ export default function Navbar() {
     { label: "About us", href: "/about" },
   ];
 
+  const handleLogin = () => {
+    navigate("/login");
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUserName("");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userPhone");
+    navigate("/");
+  };
+
+  // Function to set user as logged in (call this from SignIn/SignUp pages)
+  const loginUser = (name) => {
+    setIsLoggedIn(true);
+    setUserName(name);
+  };
+
   return (
-    <nav
-      className={`w-full sticky top-0 bg-[#F3F4F5]/70 z-[9999]`}
-    >
+    <nav className={`w-full sticky top-0 bg-[#F3F4F5]/70 z-[9999]`}>
       <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
@@ -56,10 +88,29 @@ export default function Navbar() {
             </div>
 
             {/* Dashboard Button */}
-            <button className="flex items-center gap-2 bg-primary text-white font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap">
-              <User size={18} />
-              <span className="hidden sm:inline">Dashboard</span>
-            </button>
+            {isLoggedIn ? (
+              <div className="flex items-center gap-2">
+                <button className="flex items-center gap-2 bg-primary text-white font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700 transition-colors">
+                  <User size={18} />
+                  <span className="hidden sm:inline">Dashboard</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 bg-red-600 text-white font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-red-700 transition-colors"
+                >
+                  <LogOut size={18} />
+                  <span className="hidden sm:inline">Logout</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleLogin}
+                className="flex items-center gap-2 bg-primary text-white font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700 transition-colors"
+              >
+                <User size={18} />
+                <span className="hidden sm:inline">Login</span>
+              </button>
+            )}
 
             {/* Mobile Menu Button */}
             <button
