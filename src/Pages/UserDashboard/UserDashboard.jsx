@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function UserDashboard() {
   return (
@@ -22,9 +23,9 @@ export default function UserDashboard() {
                   </p>
                 </div>
               </div>
-              <button className="bg-blue text-white px-6 py-2 rounded text-sm font-medium hover:bg-blue-700">
+              <Link to={'/message'}><button className="bg-blue text-white px-6 py-2 rounded text-sm font-medium hover:bg-blue-700">
                 Message
-              </button>
+              </button></Link>
             </div>
           </div>
 

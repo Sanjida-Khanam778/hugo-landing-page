@@ -90,10 +90,12 @@ export default function Navbar() {
             {/* Dashboard Button */}
             {isLoggedIn ? (
               <div className="flex items-center gap-2">
-                <button className="flex items-center gap-2 bg-primary text-white font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700 transition-colors">
-                  <User size={18} />
-                  <span className="hidden sm:inline">Dashboard</span>
-                </button>
+                <Link to={'/user'}>
+                  <button className="flex items-center gap-2 bg-primary text-white font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700 transition-colors">
+                    <User size={18} />
+                    <span className="hidden sm:inline">Dashboard</span>
+                  </button>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="flex items-center gap-2 bg-red-600 text-white font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-red-700 transition-colors"
