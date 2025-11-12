@@ -2,6 +2,7 @@ import banner from "../../assets/video/login.mp4";
 
 import { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
+import { Link } from "react-router-dom";
 
 export default function LoginPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -48,9 +49,9 @@ export default function LoginPage() {
               essential staff communication tools.
             </p>
 
-            <button className="bg-blue text-white font-semibold w-full py-3 rounded transition-colors text-sm sm:text-base">
+           <Link to={'/university-login'}> <button className="bg-blue text-white font-semibold w-full py-3 rounded transition-colors text-sm sm:text-base">
               Log In as University User
-            </button>
+            </button></Link>
           </div>
           <div className="border text-center border-white border-opacity-40 bg-white/5 text-white font-medium p-4 md:p-6 lg:p-10 rounded-lg transition-colors backdrop-blur-md">
             {/* Heading */}
@@ -65,9 +66,9 @@ export default function LoginPage() {
               application tracking, and student services.
             </p>
 
-            <button className="bg-blue text-white font-semibold w-full py-3 rounded transition-colors text-sm sm:text-base">
+           <Link to={"/login"}> <button className="bg-blue text-white font-semibold w-full py-3 rounded transition-colors text-sm sm:text-base">
               Log In as Student User
-            </button>
+            </button></Link>
           </div>
         </div>
       </div>

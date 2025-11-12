@@ -30,7 +30,7 @@ export default function Navbar() {
   ];
 
   const handleLogin = () => {
-    navigate("/login");
+    navigate("/login-page");
   };
 
   const handleLogout = () => {

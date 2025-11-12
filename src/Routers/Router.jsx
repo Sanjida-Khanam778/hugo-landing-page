@@ -18,6 +18,8 @@ import SignUp from "../Pages/Auth/SignUp";
 import About from "../Pages/About/About";
 import UserDashboard from "../Pages/UserDashboard/UserDashboard";
 import MessageInterface from "../Pages/UserDashboard/MessageInterface";
+import UniSignUp from "../Pages/Auth/UniSignUp";
+import UniSignIn from "../Pages/Auth/UniSignIn";
 
 export const router = createBrowserRouter([
   {
@@ -90,12 +92,20 @@ export const router = createBrowserRouter([
       },
       {
         path: "/message",
-        element: <MessageInterface />
-      }
+        element: <MessageInterface />,
+      },
     ],
   },
   {
     path: "/login-page",
     element: <LoginPage />,
+  },
+  {
+    path: "/university-login",
+    element: <UniSignIn />,
+  },
+  {
+    path: "/university-register",
+    element: <UniSignUp />,
   },
 ]);
