@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import background from "../../assets/images/uniLogin.png";
+import { Link } from "react-router-dom";
 
 export default function UniSignIn() {
   const [currentPage, setCurrentPage] = useState("signup");
@@ -28,7 +29,6 @@ export default function UniSignIn() {
 
     if (user) {
       setIsLoggedIn(true);
-      alert(`Welcome ${user.firstName}!`);
     } else {
       setErrors({ signin: "Invalid email or password" });
     }
@@ -90,10 +90,7 @@ export default function UniSignIn() {
               />
               Remember me
             </label>
-            <button
-              type="button"
-              className="hover:text-blue text-sm"
-            >
+            <button type="button" className="hover:text-blue text-sm">
               Forgot your password?
             </button>
           </div>
@@ -107,13 +104,11 @@ export default function UniSignIn() {
 
           <p className="text-center text-blue-100">
             Don't have an account?{" "}
-            <button
-              type="button"
-              onClick={() => setCurrentPage("signup")}
-              className="text-blue-300 hover:text-blue"
-            >
-              Sign Up
-            </button>
+            <Link to={"/university-register"}>
+              <button type="button" className="text-blue-300 hover:text-blue">
+                Sign Up
+              </button>
+            </Link>
           </p>
         </div>
       </div>
