@@ -12,6 +12,7 @@ export default {
         base: "#F2F2F2",
         grey: "#6B7280",
         blue: "#0047E9",
+        green: "#16A34A",
         sky: "#BFDBFE",
         dark: "#111827"
       }

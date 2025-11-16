@@ -12,7 +12,7 @@ export default function UserDashboard() {
           {/* Profile Section */}
           <div className=" border-b border-[#CCCCCC] pb-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4">      
                 <div className="w-12 h-12 bg-[#BFDBFE] rounded-full flex items-center justify-center text-blue font-semibold">
                   JD
                 </div>

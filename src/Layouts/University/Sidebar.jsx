@@ -27,8 +27,8 @@ const menuItems = [
 
 export default function Sidebar({ activePage, setActivePage }) {
   return (
-    <div className="w-56 bg-white shadow-md h-screen fixed left-0 top-0 overflow-y-auto">
-      <div className="p-6 border-b">
+    <div className="w-56 bg-white shadow-md h-screen fixed left-0 top-0 overflow-y-auto z-20">
+      <div className="p-6">
         <h1 className="text-xl font-bold text-blue">University Admin</h1>
       </div>
       <nav className="p-4">

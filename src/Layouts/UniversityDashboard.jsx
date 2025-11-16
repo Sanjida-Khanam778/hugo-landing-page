@@ -1,7 +1,7 @@
-import EnrollmentChart from "./University/EnrollmentChart";
-import QuickActions from "./University/QuickActions";
-import RecentActivity from "./University/RecentActivity";
-import StatCard from "./University/StatCard";
+import EnrollmentChart from "./University/Dashboard/EnrollmentChart";
+import QuickActions from "./University/Dashboard/QuickActions";
+import RecentActivity from "./University/Dashboard/RecentActivity";
+import StatCard from "./University/Dashboard/StatCard";
 
 export default function UniversityDashboard() {
   const stats = [
@@ -36,7 +36,7 @@ export default function UniversityDashboard() {
   ];
 
   return (
-    <div className="ml-56 pt-20 p-8 min-h-screen bg-gray-100">
+    <div className="pt-20 p-8 min-h-screen bg-base">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
 
       {/* Stats Grid */}

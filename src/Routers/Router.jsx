@@ -22,6 +22,7 @@ import UniSignUp from "../Pages/Auth/UniSignUp";
 import UniSignIn from "../Pages/Auth/UniSignIn";
 import UniversityDashboard from "../Layouts/UniversityDashboard";
 import UniMain from "../Layouts/University/UniMain";
+import UniversityProfile from "../Layouts/University/UniversityProfile/UniversityProfile";
 
 export const router = createBrowserRouter([
   {
@@ -113,5 +114,6 @@ export const router = createBrowserRouter([
   {
     path: "/university",
     element: <UniMain />
-  }
+  },
+  
 ]);
