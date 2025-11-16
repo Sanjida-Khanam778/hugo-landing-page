@@ -2,7 +2,7 @@ import { Bell, LogOut } from "lucide-react";
 
 export default function UniNavbar() {
   return (
-    <nav className="bg-white shadow-sm border-b fixed top-0 right-0 w-full z-10">
+    <nav className="bg-white shadow-sm border-b w-full">
       <div className="flex items-center justify-between px-8 py-4">
         <div></div>
         <div className="flex items-center gap-4">

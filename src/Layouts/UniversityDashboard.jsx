@@ -2,7 +2,10 @@ import EnrollmentChart from "./University/Dashboard/EnrollmentChart";
 import QuickActions from "./University/Dashboard/QuickActions";
 import RecentActivity from "./University/Dashboard/RecentActivity";
 import StatCard from "./University/Dashboard/StatCard";
-
+import events from "../assets/icons/events.png"
+import testimonials from "../assets/icons/testimonials.png"
+import applications from "../assets/icons/applications.png"
+import posting from "../assets/icons/posting.png"
 export default function UniversityDashboard() {
   const stats = [
     {
@@ -10,33 +13,33 @@ export default function UniversityDashboard() {
       value: "8",
       change: "+2 from last month",
       color: "bg-green-500",
-      icon: "📅",
+      icon: events,
     },
     {
       label: "Job Postings",
       value: "16",
       change: "+5 from last month",
       color: "bg-purple-500",
-      icon: "💼",
+      icon: posting,
     },
     {
       label: "Student Applications",
       value: "124",
       change: "+18 from last month",
       color: "bg-orange-500",
-      icon: "👥",
+      icon: applications,
     },
     {
       label: "Pending Testimonials",
       value: "7",
       change: "+3 from last month",
       color: "bg-pink-500",
-      icon: "📝",
+      icon: testimonials,
     },
   ];
 
   return (
-    <div className="pt-20 p-8 min-h-screen bg-base">
+    <div className="p-8 min-h-screen bg-base">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
 
       {/* Stats Grid */}
