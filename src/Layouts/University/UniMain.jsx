@@ -5,6 +5,7 @@ import UniNavbar from "./UniNavbar";
 import Sidebar from "./Sidebar";
 import UniversityDashboard from "../UniversityDashboard";
 import UniversityProfile from "./UniversityProfile/UniversityProfile";
+import Programs from "./Programs/Programs";
 
 export default function UniMain() {
   const [activePage, setActivePage] = useState("dashboard");
@@ -19,6 +20,7 @@ export default function UniMain() {
         <main className="overflow-auto">
           {activePage === "dashboard" && <UniversityDashboard />}
           {activePage === "profile" && <UniversityProfile />}
+          {activePage === "programs" && <Programs />}
         </main>
       </div>
     </div>

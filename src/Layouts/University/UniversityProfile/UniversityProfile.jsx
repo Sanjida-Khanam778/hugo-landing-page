@@ -124,19 +124,22 @@ export default function UniversityProfile() {
   };
 
   return (
-    <div className="space-y-6 p-8">
+    <div className=" p-8">
       {/* Header with Save Changes Button */}
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">University Profile</h1>
-        <button className="bg-blue text-white px-6 py-2 rounded-lg transition-colors">
+        <button
+          type="button"
+          className="bg-blue text-white px-6 py-2 rounded-lg transition-colors"
+        >
           Save Changes
         </button>
       </div>
 
-      <form action="">
+      <form onSubmit={(e) => e.preventDefault()}>
         {" "}
         {/* Branding Section */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-800 mb-6">Branding</h2>
           <div className="grid grid-cols-3 gap-6">
             {/* Logo Upload */}
@@ -149,6 +152,7 @@ export default function UniversityProfile() {
                     className="w-full h-full object-cover"
                   />
                   <button
+                    type="button"
                     onClick={handleRemoveLogo}
                     className="absolute top-2 right-2 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                   >
@@ -189,6 +193,7 @@ export default function UniversityProfile() {
                     controls
                   />
                   <button
+                    type="button"
                     onClick={handleRemoveSectionVideo}
                     className="absolute top-2 right-2 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                   >
@@ -229,6 +234,7 @@ export default function UniversityProfile() {
                     controls
                   />
                   <button
+                    type="button"
                     onClick={handleRemoveBannerVideo}
                     className="absolute top-2 right-2 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                   >
@@ -261,7 +267,7 @@ export default function UniversityProfile() {
           </div>
         </div>
         {/* University Information Section */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-800 mb-6">
             University Information
           </h2>
@@ -319,10 +325,11 @@ export default function UniversityProfile() {
           </div>
         </div>
         {/* Accreditations Section */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-6 mb-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-gray-800">Accreditations</h2>
             <button
+              type="button"
               onClick={() => setActiveModal("accreditation")}
               className="bg-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
             >
@@ -342,12 +349,14 @@ export default function UniversityProfile() {
                 </div>
                 <div>
                   <button
+                    type="button"
                     onClick={() => setActiveModal("accreditation")}
                     className="text-blue mr-4"
                   >
                     Edit
                   </button>
                   <button
+                    type="button"
                     onClick={() => handleDeleteAccreditation(acc.id)}
                     className="text-red"
                   >
@@ -359,10 +368,11 @@ export default function UniversityProfile() {
           </div>
         </div>
         {/* Rankings Section */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-6 mb-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-gray-800">Rankings</h2>
             <button
+              type="button"
               onClick={() => setActiveModal("ranking")}
               className="bg-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
             >
@@ -382,12 +392,14 @@ export default function UniversityProfile() {
                 </div>
                 <div>
                   <button
+                    type="button"
                     onClick={() => setActiveModal("ranking")}
                     className="text-blue mr-4"
                   >
                     Edit
                   </button>
                   <button
+                    type="button"
                     onClick={() => handleDeleteRanking(rank.id)}
                     className="text-red"
                   >
@@ -403,6 +415,7 @@ export default function UniversityProfile() {
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-gray-800">Location</h2>
             <button
+              type="button"
               onClick={() => setActiveModal("location")}
               className="bg-blue text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
             >
@@ -422,12 +435,14 @@ export default function UniversityProfile() {
                 </div>
                 <div>
                   <button
+                    type="button"
                     onClick={() => setActiveModal("location")}
                     className="text-blue mr-4"
                   >
                     Edit
                   </button>{" "}
                   <button
+                    type="button"
                     onClick={() => handleDeleteLocation(loc.id)}
                     className="text-red"
                   >

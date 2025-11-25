@@ -1,7 +1,6 @@
 import { useState } from "react"
-import ProgramsView from "../components/programs/ProgramsView"
-import ProgramForm from "../components/programs/ProgramForm"
-import DeleteProgramModal from "../components/modals/DeleteProgramModal"
+import ProgramForm from "./ProgramForm"
+import ProgramsView from "./ProgramView"
 
 export default function Programs() {
   const [view, setView] = useState("list") // list, add, edit
@@ -161,7 +160,7 @@ export default function Programs() {
     setView("list")
   }
 
-  if (view === "list") {
+
     return (
       <ProgramsView
         programs={programs}
@@ -170,7 +169,7 @@ export default function Programs() {
         onDelete={handleDeleteClick}
       />
     )
-  }
+
 
   if (view === "add" || view === "edit") {
     return (
@@ -183,5 +182,4 @@ export default function Programs() {
     )
   }
 
-  return null
 }
