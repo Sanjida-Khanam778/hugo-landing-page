@@ -23,6 +23,9 @@ import UniSignIn from "../Pages/Auth/UniSignIn";
 import UniversityDashboard from "../Layouts/UniversityDashboard";
 import UniMain from "../Layouts/University/UniMain";
 import UniversityProfile from "../Layouts/University/UniversityProfile/UniversityProfile";
+import Programs from "../Layouts/University/Programs/Programs";
+import ProgramDetailView from "../Layouts/University/Programs/ProgramDetailView";
+import ProgramDetailRoute from "../Layouts/University/Programs/ProgramDetailRoute";
 
 export const router = createBrowserRouter([
   {
@@ -113,7 +116,25 @@ export const router = createBrowserRouter([
   },
   {
     path: "/university",
-    element: <UniMain />
+    element: <UniMain />,
+    children: [
+      {
+        path: "dashboard",
+        index: true,
+        element: <UniversityDashboard />,
+      },
+      {
+        path: "profile",
+        element: <UniversityProfile />,
+      },
+      {
+        path: "programs",
+        element: <Programs />,
+      },
+      {
+        path: "program-details",
+        element: <ProgramDetailRoute />,
+      },
+    ],
   },
-  
 ]);

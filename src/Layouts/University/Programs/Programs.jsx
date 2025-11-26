@@ -1,9 +1,11 @@
 import { useState } from "react"
-import ProgramForm from "./ProgramForm"
 import ProgramsView from "./ProgramView"
+import ProgramDetailView from "./ProgramDetailView"
+import ProgramForm from "./ProgramForm"
 
 export default function Programs() {
   const [view, setView] = useState("list") // list, add, edit
+  const [viewingProgram, setViewingProgram] = useState(null)
   const [programs, setPrograms] = useState([
     {
       id: 1,
@@ -129,6 +131,10 @@ export default function Programs() {
     setView("edit")
   }
 
+  const handleViewClick = (program) => {
+    setViewingProgram(program)
+  }
+
   const handleDeleteClick = (program) => {
     setProgramToDelete(program)
     setShowDeleteModal(true)
@@ -160,16 +166,27 @@ export default function Programs() {
     setView("list")
   }
 
-
+  if (view === "list") {
     return (
-      <ProgramsView
-        programs={programs}
-        onAdd={handleAddClick}
-        onEdit={handleEditClick}
-        onDelete={handleDeleteClick}
-      />
+      <>
+        <ProgramsView
+          programs={programs}
+          onAdd={handleAddClick}
+          onEdit={handleEditClick}
+          onView={handleViewClick}
+          onDelete={handleDeleteClick}
+        />
+        
+        {viewingProgram && (
+          <ProgramDetailView
+            program={viewingProgram}
+            onEdit={handleEditClick}
+            onClose={() => setViewingProgram(null)}
+          />
+        )}
+      </>
     )
-
+  }
 
   if (view === "add" || view === "edit") {
     return (
@@ -182,4 +199,5 @@ export default function Programs() {
     )
   }
 
+  return null
 }

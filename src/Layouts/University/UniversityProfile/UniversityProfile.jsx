@@ -137,7 +137,6 @@ export default function UniversityProfile() {
       </div>
 
       <form onSubmit={(e) => e.preventDefault()}>
-        {" "}
         {/* Branding Section */}
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-800 mb-6">Branding</h2>
