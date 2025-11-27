@@ -1,11 +1,11 @@
-import { useState } from "react"
-import ProgramsView from "./ProgramView"
-import ProgramDetailView from "./ProgramDetailView"
-import ProgramForm from "./ProgramForm"
+import { useState } from "react";
+import ProgramsView from "./ProgramView";
+import ProgramDetailView from "./ProgramDetailView";
+import ProgramForm from "./ProgramForm";
 
 export default function Programs() {
-  const [view, setView] = useState("list") // list, add, edit
-  const [viewingProgram, setViewingProgram] = useState(null)
+  const [view, setView] = useState("list"); // list, add, edit
+  const [viewingProgram, setViewingProgram] = useState(null);
   const [programs, setPrograms] = useState([
     {
       id: 1,
@@ -20,7 +20,50 @@ export default function Programs() {
       description: "A comprehensive program in computer science",
       learningOutcomes: ["Outcome 1", "Outcome 2"],
       faculties: [{ name: "Dr. Jane Smith", expertise: "AI" }],
-      curriculum: { year1: [], year2: [], year3: [], year4: [] },
+      curriculum: {
+        years: [
+          {
+            title: "First Year",
+            courses: [
+              "Principles of Microeconomics",
+              "Principles of Macroeconomics",
+              "Calculus I & II",
+              "Statistics for Economists",
+              "Writing and Communication",
+            ],
+          },
+          {
+            title: "Second Year",
+            courses: [
+              "Intermediate Microeconomics",
+              "Intermediate Macroeconomics",
+              "Econometrics I",
+              "Economic History",
+              "Electives",
+            ],
+          },
+          {
+            title: "Third Year",
+            courses: [
+              "Advanced Microeconomics",
+              "Advanced Macroeconomics",
+              "Econometrics II",
+              "International Economics",
+              "Electives",
+            ],
+          },
+          {
+            title: "Fourth Year",
+            courses: [
+              "Senior Thesis",
+              "Economic Policy",
+              "Development Economics",
+              "Behavioral Economics",
+              "Electives",
+            ],
+          },
+        ],
+      },
       requirements: [],
       admissionReqs: [],
       appProcess: [],
@@ -38,7 +81,50 @@ export default function Programs() {
       description: "Advanced business management program",
       learningOutcomes: ["Outcome 1", "Outcome 2"],
       faculties: [{ name: "Prof. John Doe", expertise: "Finance" }],
-      curriculum: { year1: [], year2: [], year3: [], year4: [] },
+      curriculum: {
+        years: [
+          {
+            title: "First Year",
+            courses: [
+              "Principles of Microeconomics",
+              "Principles of Macroeconomics",
+              "Calculus I & II",
+              "Statistics for Economists",
+              "Writing and Communication",
+            ],
+          },
+          {
+            title: "Second Year",
+            courses: [
+              "Intermediate Microeconomics",
+              "Intermediate Macroeconomics",
+              "Econometrics I",
+              "Economic History",
+              "Electives",
+            ],
+          },
+          {
+            title: "Third Year",
+            courses: [
+              "Advanced Microeconomics",
+              "Advanced Macroeconomics",
+              "Econometrics II",
+              "International Economics",
+              "Electives",
+            ],
+          },
+          {
+            title: "Fourth Year",
+            courses: [
+              "Senior Thesis",
+              "Economic Policy",
+              "Development Economics",
+              "Behavioral Economics",
+              "Electives",
+            ],
+          },
+        ],
+      },
       requirements: [],
       admissionReqs: [],
       appProcess: [],
@@ -56,7 +142,50 @@ export default function Programs() {
       description: "Research-focused AI program",
       learningOutcomes: ["Outcome 1", "Outcome 2"],
       faculties: [{ name: "Dr. Sarah Wilson", expertise: "ML" }],
-      curriculum: { year1: [], year2: [], year3: [], year4: [] },
+      curriculum: {
+        years: [
+          {
+            title: "First Year",
+            courses: [
+              "Principles of Microeconomics",
+              "Principles of Macroeconomics",
+              "Calculus I & II",
+              "Statistics for Economists",
+              "Writing and Communication",
+            ],
+          },
+          {
+            title: "Second Year",
+            courses: [
+              "Intermediate Microeconomics",
+              "Intermediate Macroeconomics",
+              "Econometrics I",
+              "Economic History",
+              "Electives",
+            ],
+          },
+          {
+            title: "Third Year",
+            courses: [
+              "Advanced Microeconomics",
+              "Advanced Macroeconomics",
+              "Econometrics II",
+              "International Economics",
+              "Electives",
+            ],
+          },
+          {
+            title: "Fourth Year",
+            courses: [
+              "Senior Thesis",
+              "Economic Policy",
+              "Development Economics",
+              "Behavioral Economics",
+              "Electives",
+            ],
+          },
+        ],
+      },
       requirements: [],
       admissionReqs: [],
       appProcess: [],
@@ -74,7 +203,50 @@ export default function Programs() {
       description: "Data science and analytics program",
       learningOutcomes: ["Outcome 1", "Outcome 2"],
       faculties: [{ name: "Prof. Mike Johnson", expertise: "Statistics" }],
-      curriculum: { year1: [], year2: [], year3: [], year4: [] },
+      curriculum: {
+        years: [
+          {
+            title: "First Year",
+            courses: [
+              "Principles of Microeconomics",
+              "Principles of Macroeconomics",
+              "Calculus I & II",
+              "Statistics for Economists",
+              "Writing and Communication",
+            ],
+          },
+          {
+            title: "Second Year",
+            courses: [
+              "Intermediate Microeconomics",
+              "Intermediate Macroeconomics",
+              "Econometrics I",
+              "Economic History",
+              "Electives",
+            ],
+          },
+          {
+            title: "Third Year",
+            courses: [
+              "Advanced Microeconomics",
+              "Advanced Macroeconomics",
+              "Econometrics II",
+              "International Economics",
+              "Electives",
+            ],
+          },
+          {
+            title: "Fourth Year",
+            courses: [
+              "Senior Thesis",
+              "Economic Policy",
+              "Development Economics",
+              "Behavioral Economics",
+              "Electives",
+            ],
+          },
+        ],
+      },
       requirements: [],
       admissionReqs: [],
       appProcess: [],
@@ -92,7 +264,50 @@ export default function Programs() {
       description: "Business administration program",
       learningOutcomes: ["Outcome 1", "Outcome 2"],
       faculties: [{ name: "Dr. Emily Davis", expertise: "Management" }],
-      curriculum: { year1: [], year2: [], year3: [], year4: [] },
+      curriculum: {
+        years: [
+          {
+            title: "First Year",
+            courses: [
+              "Principles of Microeconomics",
+              "Principles of Macroeconomics",
+              "Calculus I & II",
+              "Statistics for Economists",
+              "Writing and Communication",
+            ],
+          },
+          {
+            title: "Second Year",
+            courses: [
+              "Intermediate Microeconomics",
+              "Intermediate Macroeconomics",
+              "Econometrics I",
+              "Economic History",
+              "Electives",
+            ],
+          },
+          {
+            title: "Third Year",
+            courses: [
+              "Advanced Microeconomics",
+              "Advanced Macroeconomics",
+              "Econometrics II",
+              "International Economics",
+              "Electives",
+            ],
+          },
+          {
+            title: "Fourth Year",
+            courses: [
+              "Senior Thesis",
+              "Economic Policy",
+              "Development Economics",
+              "Behavioral Economics",
+              "Electives",
+            ],
+          },
+        ],
+      },
       requirements: [],
       admissionReqs: [],
       appProcess: [],
@@ -110,61 +325,114 @@ export default function Programs() {
       description: "Public health program",
       learningOutcomes: ["Outcome 1", "Outcome 2"],
       faculties: [{ name: "Dr. Robert Brown", expertise: "Epidemiology" }],
-      curriculum: { year1: [], year2: [], year3: [], year4: [] },
+      curriculum: {
+        years: [
+          {
+            title: "First Year",
+            courses: [
+              "Principles of Microeconomics",
+              "Principles of Macroeconomics",
+              "Calculus I & II",
+              "Statistics for Economists",
+              "Writing and Communication",
+            ],
+          },
+          {
+            title: "Second Year",
+            courses: [
+              "Intermediate Microeconomics",
+              "Intermediate Macroeconomics",
+              "Econometrics I",
+              "Economic History",
+              "Electives",
+            ],
+          },
+          {
+            title: "Third Year",
+            courses: [
+              "Advanced Microeconomics",
+              "Advanced Macroeconomics",
+              "Econometrics II",
+              "International Economics",
+              "Electives",
+            ],
+          },
+          {
+            title: "Fourth Year",
+            courses: [
+              "Senior Thesis",
+              "Economic Policy",
+              "Development Economics",
+              "Behavioral Economics",
+              "Electives",
+            ],
+          },
+        ],
+      },
       requirements: [],
       admissionReqs: [],
       appProcess: [],
     },
-  ])
+  ]);
 
-  const [editingProgram, setEditingProgram] = useState(null)
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [programToDelete, setProgramToDelete] = useState(null)
+  const [editingProgram, setEditingProgram] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [programToDelete, setProgramToDelete] = useState(null);
 
   const handleAddClick = () => {
-    setEditingProgram(null)
-    setView("add")
-  }
+    setEditingProgram(null);
+    setView("add");
+  };
 
   const handleEditClick = (program) => {
-    setEditingProgram(program)
-    setView("edit")
-  }
+    setEditingProgram(program);
+    setView("edit");
+  };
 
   const handleViewClick = (program) => {
-    setViewingProgram(program)
-  }
+    setViewingProgram(program);
+  };
 
   const handleDeleteClick = (program) => {
-    setProgramToDelete(program)
-    setShowDeleteModal(true)
-  }
+    setProgramToDelete(program);
+    setShowDeleteModal(true);
+  };
 
   const confirmDelete = () => {
-    setPrograms(programs.filter(p => p.id !== programToDelete.id))
-    setShowDeleteModal(false)
-    setProgramToDelete(null)
-  }
+    setPrograms(programs.filter((p) => p.id !== programToDelete.id));
+    setShowDeleteModal(false);
+    setProgramToDelete(null);
+  };
 
   const handleSave = (programData) => {
     if (editingProgram) {
       // Edit existing
-      setPrograms(programs.map(p => p.id === editingProgram.id ? { ...p, ...programData, lastUpdated: new Date().toISOString().split('T')[0] } : p))
+      setPrograms(
+        programs.map((p) =>
+          p.id === editingProgram.id
+            ? {
+                ...p,
+                ...programData,
+                lastUpdated: new Date().toISOString().split("T")[0],
+              }
+            : p
+        )
+      );
     } else {
       // Add new
       const newProgram = {
-        id: Math.max(...programs.map(p => p.id), 0) + 1,
+        id: Math.max(...programs.map((p) => p.id), 0) + 1,
         ...programData,
-        lastUpdated: new Date().toISOString().split('T')[0],
-      }
-      setPrograms([...programs, newProgram])
+        lastUpdated: new Date().toISOString().split("T")[0],
+      };
+      setPrograms([...programs, newProgram]);
     }
-    setView("list")
-  }
+    setView("list");
+  };
 
   const handleBackToList = () => {
-    setView("list")
-  }
+    setView("list");
+  };
 
   if (view === "list") {
     return (
@@ -176,7 +444,7 @@ export default function Programs() {
           onView={handleViewClick}
           onDelete={handleDeleteClick}
         />
-        
+
         {viewingProgram && (
           <ProgramDetailView
             program={viewingProgram}
@@ -185,7 +453,7 @@ export default function Programs() {
           />
         )}
       </>
-    )
+    );
   }
 
   if (view === "add" || view === "edit") {
@@ -196,8 +464,8 @@ export default function Programs() {
         onCancel={handleBackToList}
         isEdit={view === "edit"}
       />
-    )
+    );
   }
 
-  return null
+  return null;
 }
