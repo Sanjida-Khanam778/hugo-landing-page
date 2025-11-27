@@ -1,99 +1,107 @@
-import { useState } from "react"
+import { useState } from "react";
 
 export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
-  const [formData, setFormData] = useState(program || {
-    name: "",
-    code: "",
-    status: "Draft",
-    level: "Bachelor",
-    duration: "",
-    language: "English",
-    description: "",
-    learningOutcomes: [],
-    faculties: [],
-    curriculum: { year1: [], year2: [], year3: [], year4: [] },
-    requirements: [],
-    admissionReqs: [],
-    appProcess: [],
-  })
+  const [formData, setFormData] = useState(
+    program || {
+      name: "",
+      code: "",
+      status: "Draft",
+      level: "Bachelor",
+      duration: "",
+      language: "English",
+      description: "",
+      learningOutcomes: [],
+      faculties: [],
+      curriculum: { year1: [], year2: [], year3: [], year4: [] },
+      requirements: [],
+      admissionReqs: [],
+      appProcess: [],
+    }
+  );
 
-  const [newOutcome, setNewOutcome] = useState("")
-  const [newFaculty, setNewFaculty] = useState({ name: "", expertise: "" })
-  const [newAppProcess, setNewAppProcess] = useState("")
+  const [newOutcome, setNewOutcome] = useState("");
+  const [newFaculty, setNewFaculty] = useState({ name: "", expertise: "" });
+  const [newAppProcess, setNewAppProcess] = useState("");
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleAddOutcome = () => {
     if (newOutcome.trim()) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        learningOutcomes: [...prev.learningOutcomes, newOutcome]
-      }))
-      setNewOutcome("")
+        learningOutcomes: [...prev.learningOutcomes, newOutcome],
+      }));
+      setNewOutcome("");
     }
-  }
+  };
 
   const handleRemoveOutcome = (index) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      learningOutcomes: prev.learningOutcomes.filter((_, i) => i !== index)
-    }))
-  }
+      learningOutcomes: prev.learningOutcomes.filter((_, i) => i !== index),
+    }));
+  };
 
   const handleAddFaculty = () => {
     if (newFaculty.name.trim()) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        faculties: [...prev.faculties, newFaculty]
-      }))
-      setNewFaculty({ name: "", expertise: "" })
+        faculties: [...prev.faculties, newFaculty],
+      }));
+      setNewFaculty({ name: "", expertise: "" });
     }
-  }
+  };
 
   const handleRemoveFaculty = (index) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      faculties: prev.faculties.filter((_, i) => i !== index)
-    }))
-  }
+      faculties: prev.faculties.filter((_, i) => i !== index),
+    }));
+  };
 
   const handleAddAppProcess = () => {
     if (newAppProcess.trim()) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        appProcess: [...prev.appProcess, newAppProcess]
-      }))
-      setNewAppProcess("")
+        appProcess: [...prev.appProcess, newAppProcess],
+      }));
+      setNewAppProcess("");
     }
-  }
+  };
 
   const handleRemoveAppProcess = (index) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      appProcess: prev.appProcess.filter((_, i) => i !== index)
-    }))
-  }
+      appProcess: prev.appProcess.filter((_, i) => i !== index),
+    }));
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    onSave(formData)
-  }
+    e.preventDefault();
+    onSave(formData);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">{isEdit ? "Edit Program" : "Add New Program"}</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">
+          {isEdit ? "Edit Program" : "Add New Program"}
+        </h1>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Program Description */}
           <div>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Program Description</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Program Description
+            </h2>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Program Name</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Program Name
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -104,7 +112,9 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Program Code</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Program Code
+                </label>
                 <input
                   type="text"
                   name="code"
@@ -115,7 +125,9 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Level</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Level
+                </label>
                 <select
                   name="level"
                   value={formData.level}
@@ -128,7 +140,9 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Duration</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Duration
+                </label>
                 <input
                   type="text"
                   name="duration"
@@ -139,7 +153,9 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Language</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Language
+                </label>
                 <input
                   type="text"
                   name="language"
@@ -150,7 +166,9 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Status
+                </label>
                 <select
                   name="status"
                   value={formData.status}
@@ -164,7 +182,9 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
             </div>
 
             <div className="mt-4">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Description
+              </label>
               <textarea
                 name="description"
                 value={formData.description}
@@ -178,10 +198,15 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
 
           {/* Learning Outcomes */}
           <div>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Learning Outcomes</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Learning Outcomes
+            </h2>
             <div className="space-y-2">
               {formData.learningOutcomes.map((outcome, index) => (
-                <div key={index} className="flex justify-between items-center bg-gray-100 p-3 rounded-lg">
+                <div
+                  key={index}
+                  className="flex justify-between items-center bg-gray-100 p-3 rounded-lg"
+                >
                   <span>{outcome}</span>
                   <button
                     type="button"
@@ -213,14 +238,18 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
 
           {/* Faculties */}
           <div>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Program Faculties</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Program Faculties
+            </h2>
             <div className="grid grid-cols-2 gap-4 mb-4">
               {formData.faculties.map((faculty, index) => (
                 <div key={index} className="bg-gray-100 p-4 rounded-lg">
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <p className="font-semibold">{faculty.name}</p>
-                      <p className="text-sm text-gray-600">{faculty.expertise}</p>
+                      <p className="text-sm text-gray-600">
+                        {faculty.expertise}
+                      </p>
                     </div>
                     <button
                       type="button"
@@ -237,14 +266,21 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
               <input
                 type="text"
                 value={newFaculty.name}
-                onChange={(e) => setNewFaculty(prev => ({ ...prev, name: e.target.value }))}
+                onChange={(e) =>
+                  setNewFaculty((prev) => ({ ...prev, name: e.target.value }))
+                }
                 placeholder="Faculty name..."
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
               />
               <input
                 type="text"
                 value={newFaculty.expertise}
-                onChange={(e) => setNewFaculty(prev => ({ ...prev, expertise: e.target.value }))}
+                onChange={(e) =>
+                  setNewFaculty((prev) => ({
+                    ...prev,
+                    expertise: e.target.value,
+                  }))
+                }
                 placeholder="Expertise..."
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
               />
@@ -260,11 +296,15 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
 
           {/* Curriculum */}
           <div>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Program Curriculum</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Program Curriculum
+            </h2>
             <div className="grid grid-cols-2 gap-4">
-              {['year1', 'year2', 'year3', 'year4'].map((year, idx) => (
+              {["year1", "year2", "year3", "year4"].map((year, idx) => (
                 <div key={year}>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Year {idx + 1}</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Year {idx + 1}
+                  </label>
                   <textarea
                     placeholder={`Year ${idx + 1} courses...`}
                     rows="4"
@@ -277,7 +317,9 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
 
           {/* Requirements */}
           <div>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Administrative Requirements</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Administrative Requirements
+            </h2>
             <textarea
               placeholder="List requirements..."
               rows="3"
@@ -287,12 +329,21 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
 
           {/* Application Process */}
           <div>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Application Process</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Application Process
+            </h2>
             <ol className="space-y-2 mb-4">
               {formData.appProcess.map((step, index) => (
-                <li key={index} className="flex items-center gap-3 bg-blue-50 p-3 rounded-lg">
-                  <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">{index + 1}</span>
-                  <span className="flex-1">{step}</span>
+                <li
+                  key={index}
+                  className="flex items-center gap-3 bg-blue-50 p-3 rounded-lg"
+                >
+                  <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
+                    {index + 1}
+                  </span>
+                  <span className="flex-1">
+                    {typeof step === "string" ? step : step.title}
+                  </span>
                   <button
                     type="button"
                     onClick={() => handleRemoveAppProcess(index)}
@@ -340,5 +391,5 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
         </form>
       </div>
     </div>
-  )
+  );
 }

@@ -64,9 +64,45 @@ export default function Programs() {
           },
         ],
       },
-      requirements: [],
+      requirements: {
+        deadlines: [
+          { intake: "September 2025", deadline: "January 1, 2025" },
+          { intake: "January 2026", deadline: "October 1, 2025" },
+        ],
+        req: [
+          "High school diploma or equivalent",
+          "Competitive GPA (typically 3.8 or higher)",
+          "SAT/ACT scores",
+          "Personal statement",
+          "Letters of recommendation",
+          "Demonstrated interest in economics or related fields",
+        ],
+      },
       admissionReqs: [],
-      appProcess: [],
+      appProcess: [
+        {
+          title: "Create an Account",
+          description: "Register on the university's application portal.",
+        },
+        {
+          title: "Complete the Application Form",
+          description:
+            "Fill in all required personal and academic information.",
+        },
+        {
+          title: "Upload Required Documents",
+          description:
+            "Submit transcripts, test scores, recommendations, and personal statement.",
+        },
+        {
+          title: "Pay Application Fee",
+          description: "Submit the non-refundable application fee.",
+        },
+        {
+          title: "Interview (if required)",
+          description: "Selected candidates may be invited for an interview.",
+        },
+      ],
     },
     {
       id: 2,
@@ -125,9 +161,45 @@ export default function Programs() {
           },
         ],
       },
-      requirements: [],
+      requirements: {
+        deadlines: [
+          { intake: "September 2025", deadline: "January 1, 2025" },
+          { intake: "January 2026", deadline: "October 1, 2025" },
+        ],
+        req: [
+          "High school diploma or equivalent",
+          "Competitive GPA (typically 3.8 or higher)",
+          "SAT/ACT scores",
+          "Personal statement",
+          "Letters of recommendation",
+          "Demonstrated interest in economics or related fields",
+        ],
+      },
       admissionReqs: [],
-      appProcess: [],
+      appProcess: [
+        {
+          title: "Create an Account",
+          description: "Register on the university's application portal.",
+        },
+        {
+          title: "Complete the Application Form",
+          description:
+            "Fill in all required personal and academic information.",
+        },
+        {
+          title: "Upload Required Documents",
+          description:
+            "Submit transcripts, test scores, recommendations, and personal statement.",
+        },
+        {
+          title: "Pay Application Fee",
+          description: "Submit the non-refundable application fee.",
+        },
+        {
+          title: "Interview (if required)",
+          description: "Selected candidates may be invited for an interview.",
+        },
+      ],
     },
     {
       id: 3,
@@ -186,9 +258,45 @@ export default function Programs() {
           },
         ],
       },
-      requirements: [],
+      requirements: {
+        deadlines: [
+          { intake: "September 2025", deadline: "January 1, 2025" },
+          { intake: "January 2026", deadline: "October 1, 2025" },
+        ],
+        req: [
+          "High school diploma or equivalent",
+          "Competitive GPA (typically 3.8 or higher)",
+          "SAT/ACT scores",
+          "Personal statement",
+          "Letters of recommendation",
+          "Demonstrated interest in economics or related fields",
+        ],
+      },
       admissionReqs: [],
-      appProcess: [],
+      appProcess: [
+        {
+          title: "Create an Account",
+          description: "Register on the university's application portal.",
+        },
+        {
+          title: "Complete the Application Form",
+          description:
+            "Fill in all required personal and academic information.",
+        },
+        {
+          title: "Upload Required Documents",
+          description:
+            "Submit transcripts, test scores, recommendations, and personal statement.",
+        },
+        {
+          title: "Pay Application Fee",
+          description: "Submit the non-refundable application fee.",
+        },
+        {
+          title: "Interview (if required)",
+          description: "Selected candidates may be invited for an interview.",
+        },
+      ],
     },
     {
       id: 4,
@@ -247,9 +355,45 @@ export default function Programs() {
           },
         ],
       },
-      requirements: [],
+      requirements: {
+        deadlines: [
+          { intake: "September 2025", deadline: "January 1, 2025" },
+          { intake: "January 2026", deadline: "October 1, 2025" },
+        ],
+        req: [
+          "High school diploma or equivalent",
+          "Competitive GPA (typically 3.8 or higher)",
+          "SAT/ACT scores",
+          "Personal statement",
+          "Letters of recommendation",
+          "Demonstrated interest in economics or related fields",
+        ],
+      },
       admissionReqs: [],
-      appProcess: [],
+      appProcess: [
+        {
+          title: "Create an Account",
+          description: "Register on the university's application portal.",
+        },
+        {
+          title: "Complete the Application Form",
+          description:
+            "Fill in all required personal and academic information.",
+        },
+        {
+          title: "Upload Required Documents",
+          description:
+            "Submit transcripts, test scores, recommendations, and personal statement.",
+        },
+        {
+          title: "Pay Application Fee",
+          description: "Submit the non-refundable application fee.",
+        },
+        {
+          title: "Interview (if required)",
+          description: "Selected candidates may be invited for an interview.",
+        },
+      ],
     },
     {
       id: 5,
@@ -308,9 +452,45 @@ export default function Programs() {
           },
         ],
       },
-      requirements: [],
+      requirements: {
+        deadlines: [
+          { intake: "September 2025", deadline: "January 1, 2025" },
+          { intake: "January 2026", deadline: "October 1, 2025" },
+        ],
+        req: [
+          "High school diploma or equivalent",
+          "Competitive GPA (typically 3.8 or higher)",
+          "SAT/ACT scores",
+          "Personal statement",
+          "Letters of recommendation",
+          "Demonstrated interest in economics or related fields",
+        ],
+      },
       admissionReqs: [],
-      appProcess: [],
+      appProcess: [
+        {
+          title: "Create an Account",
+          description: "Register on the university's application portal.",
+        },
+        {
+          title: "Complete the Application Form",
+          description:
+            "Fill in all required personal and academic information.",
+        },
+        {
+          title: "Upload Required Documents",
+          description:
+            "Submit transcripts, test scores, recommendations, and personal statement.",
+        },
+        {
+          title: "Pay Application Fee",
+          description: "Submit the non-refundable application fee.",
+        },
+        {
+          title: "Interview (if required)",
+          description: "Selected candidates may be invited for an interview.",
+        },
+      ],
     },
     {
       id: 6,
@@ -369,9 +549,45 @@ export default function Programs() {
           },
         ],
       },
-      requirements: [],
+      requirements: {
+        deadlines: [
+          { intake: "September 2025", deadline: "January 1, 2025" },
+          { intake: "January 2026", deadline: "October 1, 2025" },
+        ],
+        req: [
+          "High school diploma or equivalent",
+          "Competitive GPA (typically 3.8 or higher)",
+          "SAT/ACT scores",
+          "Personal statement",
+          "Letters of recommendation",
+          "Demonstrated interest in economics or related fields",
+        ],
+      },
       admissionReqs: [],
-      appProcess: [],
+      appProcess: [
+        {
+          title: "Create an Account",
+          description: "Register on the university's application portal.",
+        },
+        {
+          title: "Complete the Application Form",
+          description:
+            "Fill in all required personal and academic information.",
+        },
+        {
+          title: "Upload Required Documents",
+          description:
+            "Submit transcripts, test scores, recommendations, and personal statement.",
+        },
+        {
+          title: "Pay Application Fee",
+          description: "Submit the non-refundable application fee.",
+        },
+        {
+          title: "Interview (if required)",
+          description: "Selected candidates may be invited for an interview.",
+        },
+      ],
     },
   ]);
 

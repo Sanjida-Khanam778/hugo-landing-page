@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Edit3, ChevronDown, ChevronUp, X, CircleCheckBig } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  X,
+  CircleCheckBig,
+  Calendar,
+  CheckCircle2,
+} from "lucide-react";
 import program1 from "../../../assets/images/program1.png";
 export default function ProgramDetailView({ program, onEdit, onClose }) {
   if (!program) return null;
@@ -44,10 +51,10 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
   );
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 overflow-auto p-4">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-3xl my-8">
+    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 overflow-auto p-4 ">
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-3xl my-8 max-h-[80vh] overflow-y-auto">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#F5E6E3] to-[#DEF0EC] px-6 py-5 border-b border-gray-200 flex justify-between items-start">
+        <div className="bg-gradient-to-r from-[#F5E6E3] to-[#DEF0EC] px-6 py-5 border-b border-gray-200 flex justify-between items-start sticky top-0 w-full max-w-3xl">
           <div>Program Details</div>
           <button
             onClick={onClose}
@@ -125,7 +132,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
         </div>
 
         {/* Content */}
-        <div className="max-h-[60vh] overflow-y-auto">
+        <div className="">
           {/* Program Description */}
           <DetailSection title="Program Description" section="description">
             <p className="text-gray-700 leading-relaxed text-sm">
@@ -186,51 +193,78 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
           </DetailSection>
 
           {/* Program Curriculum */}
-        <DetailSection title="Program Curriculum" section="curriculum">
-          <div className="mb-6">
-            <p className="text-gray-700 leading-relaxed">
-              The curriculum is designed to provide a comprehensive understanding of economic principles and their applications. Students will progress through foundational courses to advanced topics and specialized areas.
-            </p>
-          </div>
-          {program.curriculum ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-              {program.curriculum.years.map((year, idx) => (
-                <div key={idx} className="border-l-4 border-blue pl-6">
-                  <h2 className="text-xl font-medium text-gray-900 mb-6">{year.title}</h2>
-                  <ul className="space-y-3">
-                    {year.courses.map((course, courseIdx) => (
-                      <li key={courseIdx} className="flex items-start">
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue/20 text-blue text-sm font-medium mr-3 flex-shrink-0">
-                          {courseIdx + 1}
-                        </span>
-                        <span className="text-gray-700">{course}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+          <DetailSection title="Program Curriculum" section="curriculum">
+            <div className="mb-6">
+              <p className="text-gray-700 leading-relaxed">
+                The curriculum is designed to provide a comprehensive
+                understanding of economic principles and their applications.
+                Students will progress through foundational courses to advanced
+                topics and specialized areas.
+              </p>
             </div>
-          ) : (
-            <p className="text-sm text-gray-500">No curriculum added</p>
-          )}
-        </DetailSection>
+            {program.curriculum ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                {program.curriculum.years.map((year, idx) => (
+                  <div key={idx} className="border-l-4 border-blue pl-6">
+                    <h2 className="text-xl font-medium text-gray-900 mb-6">
+                      {year.title}
+                    </h2>
+                    <ul className="space-y-3">
+                      {year.courses.map((course, courseIdx) => (
+                        <li key={courseIdx} className="flex items-start">
+                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue/20 text-blue text-sm font-medium mr-3 flex-shrink-0">
+                            {courseIdx + 1}
+                          </span>
+                          <span className="text-gray-700">{course}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500">No curriculum added</p>
+            )}
+          </DetailSection>
 
           {/* Administrative Requirements */}
           <DetailSection title="Admission Requirements" section="requirements">
-            {program.admissionReqs && program.admissionReqs.length > 0 ? (
-              <div className="space-y-2">
-                {program.admissionReqs.map((req, index) => (
-                  <div key={index} className="flex gap-3 items-start">
-                    <span className="text-emerald-500 font-bold flex-shrink-0">
-                      ✓
+            {program.requirements.deadlines ? (
+              <div className="bg-blue-50 border border-[#BFDBFE] rounded-lg p-6 bg-[#EFF6FF]">
+                <h3 className="text-lg font-semibold text-blue mb-4 flex items-center">
+                  Application Deadlines
+                </h3>
+
+                <div className="space-y-3 ">
+                  {program.requirements.deadlines.map((item, idx) => (
+                    <div key={idx} className="flex items-center text-gray-800 ">
+                      <Calendar
+                        strokeWidth={3.0}
+                        className="w-4 h-4 text-blue mr-3 flex-shrink-0"
+                      />
+                      <span className="text-blue-600">{item.intake}</span>
+                      <span className="mx-3">intake:</span>
+                      <span className="font-semibold">{item.deadline}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500">No requirements added</p>
+            )}
+            <div>
+              <h1 className="font-semibold my-6 text-black">Requirements</h1>
+              <div className="space-y-3">
+                {program.requirements.req.map((req, idx) => (
+                  <div key={idx} className="flex gap-3 items-start">
+                    <span className="text-[#16A34A]">
+                      <CircleCheckBig size={18} strokeWidth={2.5} />
                     </span>
                     <p className="text-sm text-gray-700">{req}</p>
                   </div>
                 ))}
               </div>
-            ) : (
-              <p className="text-sm text-gray-500">No requirements added</p>
-            )}
+            </div>
           </DetailSection>
 
           {/* Application Process */}
@@ -243,10 +277,19 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
               <ol className="space-y-3">
                 {program.appProcess.map((step, index) => (
                   <li key={index} className="flex gap-3 items-start">
-                    <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-semibold flex-shrink-0">
+                    <span className="bg-blue text-white rounded-full w-6 h-6 flex items-center justify-center text-xs flex-shrink-0">
                       {index + 1}
                     </span>
-                    <p className="text-sm text-gray-700 pt-0.5">{step}</p>
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-gray-900">
+                        {typeof step === "string" ? step : step.title}
+                      </p>
+                      {typeof step === "object" && step.description && (
+                        <p className="text-sm text-gray-600 mt-1">
+                          {step.description}
+                        </p>
+                      )}
+                    </div>
                   </li>
                 ))}
               </ol>
@@ -264,16 +307,16 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
             onClick={onClose}
             className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium text-sm text-gray-700"
           >
-            Close
+            Cancel
           </button>
           <button
             onClick={() => {
               onEdit(program);
               onClose();
             }}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium text-sm"
+            className="px-4 py-2 bg-blue text-white rounded-lg hover:bg-blue-700 transition font-medium text-sm"
           >
-            Edit Program
+            Save Changes
           </button>
         </div>
       </div>
