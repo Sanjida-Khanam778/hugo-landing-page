@@ -30,7 +30,7 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg max-w-md w-full mx-4 p-6">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-4 border-b pb-4">
           <h2 className="text-xl font-semibold text-gray-900">{isEdit ? "Edit Event" : "Create Event"}</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl">
             ×
@@ -133,7 +133,7 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+              className="flex-1 px-4 py-2 bg-blue text-white rounded-lg font-medium"
             >
               {isEdit ? "Save Changes" : "Create Event"}
             </button>

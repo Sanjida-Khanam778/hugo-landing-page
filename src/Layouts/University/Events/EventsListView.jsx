@@ -1,5 +1,6 @@
 "use client"
 
+import { Calendar, Dot, MapPin, Users, Video } from "lucide-react"
 import { useState } from "react"
 
 export default function EventsListView({ events, onEdit, onViewRegistrations }) {
@@ -23,22 +24,27 @@ export default function EventsListView({ events, onEdit, onViewRegistrations }) 
     .sort((a, b) => new Date(a.date) - new Date(b.date))
 
   const getEventTypeIcon = (type) => {
-    return type === "Online" ? "📡" : "📍"
+    return type === "Online" ? <Video size={20} strokeWidth={3.00} /> : <MapPin size={20} strokeWidth={3.00} />
   }
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       {/* Month Navigation */}
-      <div className="flex justify-between items-center mb-6">
-        <button onClick={handlePrevMonth} className="text-gray-600 hover:text-gray-900 text-lg">
+       <div className="flex justify-center items-center gap-4 mb-6">
+        <button
+          onClick={handlePrevMonth}
+          className="text-gray-600 hover:text-gray-900 text-lg"
+        >
           ‹
         </button>
         <h2 className="text-lg font-semibold text-gray-900">{monthName}</h2>
-        <button onClick={handleNextMonth} className="text-gray-600 hover:text-gray-900 text-lg">
+        <button
+          onClick={handleNextMonth}
+          className="text-gray-600 hover:text-gray-900 text-lg"
+        >
           ›
         </button>
       </div>
-
       {/* Events List */}
       <div className="space-y-4">
         {currentMonthEvents.length === 0 ? (
@@ -50,18 +56,19 @@ export default function EventsListView({ events, onEdit, onViewRegistrations }) 
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">{event.title}</h3>
                   <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
-                    <span>
-                      📅 {event.date} • {event.time}
+                    <span className="flex gap-2"> 
+                     <Calendar size={18} strokeWidth={3.00} />{event.date}
                     </span>
-                    <span className="flex items-center gap-1">
+                    <span className="flex items-center"> <Dot /> {event.time}</span>
+                  </div>
+                    <span className={`flex items-center gap-2 text-blue ${event.type === "Online" ? "text-[#1E40AF] py-1 rounded-full" : "text-green"}`}>
                       {getEventTypeIcon(event.type)} {event.type} Event
                     </span>
-                  </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <div className="text-sm text-gray-600">👥 {event.registrations} registrations</div>
-                    <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded mt-1">
+                  <div className="text-right flex gap-8 items-center">
+                    <div className="text-sm text-gray-600 flex gap-2"><Users size={18} strokeWidth={3.00} /> {event.registrations} registrations</div>
+                    <span className={`inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mt-1 ${event.status === "Upcoming" ? "bg-[#DCFCE7] text-[#166534]" : ""}`}>
                       {event.status}
                     </span>
                   </div>
@@ -69,17 +76,17 @@ export default function EventsListView({ events, onEdit, onViewRegistrations }) 
               </div>
 
               {/* Action Links */}
-              <div className="flex gap-3 text-sm">
-                <button onClick={() => onEdit(event)} className="text-blue-600 hover:text-blue-700 font-medium">
+              <div className="flex gap-3 text-sm border-t pt-4">
+                <button onClick={() => onEdit(event)} className="text-blue">
                   Edit Event
                 </button>
                 <button
                   onClick={() => onViewRegistrations(event)}
-                  className="text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-blue"
                 >
                   View Registrations
                 </button>
-                <button className="text-red-600 hover:text-red-700 font-medium">Cancel Event</button>
+                <button className="text-red">Cancel Event</button>
               </div>
             </div>
           ))
