@@ -161,12 +161,12 @@ export default function UniEvents() {
   };
 
   return (
-    <div>
+    <div className="p-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-900">Event Manager</h1>
         <button
           onClick={handleCreateEvent}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          className="bg-blue text-white px-4 py-2 rounded-lg flex items-center gap-2"
         >
           <span className="text-xl">+</span> Create Event
         </button>

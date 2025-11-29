@@ -47,7 +47,7 @@ export default function EventsCalendarView({ events, onEdit, onViewRegistrations
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       {/* Month Navigation */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-center items-center gap-4 mb-6 border-b pb-4">
         <button onClick={handlePrevMonth} className="text-gray-600 hover:text-gray-900 text-lg">
           ‹
         </button>
@@ -61,7 +61,7 @@ export default function EventsCalendarView({ events, onEdit, onViewRegistrations
       <div className="grid grid-cols-7 gap-2">
         {/* Day headers */}
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-          <div key={day} className="text-center font-semibold text-gray-700 py-3 bg-gray-50 rounded">
+          <div key={day} className="text-center font-semibold text-gray-700 py-3 bg-gradient-to-r from-[#F4E7E4] to-[#DFF0EC] rounded">
             {day}
           </div>
         ))}
@@ -76,7 +76,7 @@ export default function EventsCalendarView({ events, onEdit, onViewRegistrations
                   {getEventsForDate(day).map((event) => (
                     <div
                       key={event.id}
-                      className={`text-xs p-1 rounded cursor-pointer hover:opacity-80 ${getEventColor(event.type)}`}
+                      className={`text-xs p-1  bg-gradient-to-r from-[#F4E7E4] to-[#DFF0EC] rounded cursor-pointer hover:opacity-80 ${getEventColor(event.type)}`}
                     >
                       <div className="font-semibold text-gray-900 truncate">{event.title}</div>
                       <div className="text-gray-600 text-xs">{event.time}</div>
