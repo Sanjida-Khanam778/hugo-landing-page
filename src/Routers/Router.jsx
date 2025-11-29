@@ -26,6 +26,7 @@ import Programs from "../Layouts/University/Programs/Programs";
 import ProgramDetailRoute from "../Layouts/University/Programs/ProgramDetailRoute";
 import UniEvents from "../Layouts/University/Events/UniEvents";
 import UniGallery from "../Layouts/University/Gallery/UniGallery";
+import Chat from "../Layouts/University/Chat/Chat";
 
 export const router = createBrowserRouter([
   {
@@ -144,7 +145,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "chat",
-        element: <MessageInterface />,
+        element: <Chat />,
       },
     ],
   },
