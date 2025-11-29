@@ -5,7 +5,6 @@ import MainLayout from "../Layouts/MainLayout";
 import UniversityEvents from "../Pages/Events/UniversityEvents";
 import UniversityJobs from "../Pages/Jobs/UniversityJobs";
 import UniDashboard from "../Pages/UniversityDirectory/UniDashboard";
-import UniversityTab from "../Pages/UniversityDirectory/Universitytab";
 import Overview from "../Pages/UniversityDirectory/Overview";
 import Program from "../Pages/UniversityDirectory/Program";
 import Events from "../Pages/UniversityDirectory/Events";
@@ -24,8 +23,8 @@ import UniversityDashboard from "../Layouts/UniversityDashboard";
 import UniMain from "../Layouts/University/UniMain";
 import UniversityProfile from "../Layouts/University/UniversityProfile/UniversityProfile";
 import Programs from "../Layouts/University/Programs/Programs";
-import ProgramDetailView from "../Layouts/University/Programs/ProgramDetailView";
 import ProgramDetailRoute from "../Layouts/University/Programs/ProgramDetailRoute";
+import UniEvents from "../Layouts/University/Events/UniEvents";
 
 export const router = createBrowserRouter([
   {
@@ -134,6 +133,10 @@ export const router = createBrowserRouter([
       {
         path: "program-details",
         element: <ProgramDetailRoute />,
+      },
+      {
+        path: "events",
+        element: <UniEvents />,
       },
     ],
   },
