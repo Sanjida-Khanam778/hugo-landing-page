@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import background from "../../assets/images/uniLogin.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function UniSignIn() {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState("signup");
   const [users, setUsers] = useState([]);
   const [rememberMe, setRememberMe] = useState(false);
@@ -26,6 +27,7 @@ export default function UniSignIn() {
     const user = users.find(
       (u) => u.email === signinForm.email && u.password === signinForm.password
     );
+    navigate("/university/dashboard");
 
     if (user) {
       setIsLoggedIn(true);

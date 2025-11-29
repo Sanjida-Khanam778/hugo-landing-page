@@ -1,9 +1,11 @@
 "use client"
 
+import { Mail } from "lucide-react"
+
 export default function ViewRegistrationsModal({ event, onClose }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-96 overflow-hidden flex flex-col">
+      <div className="bg-white rounded-lg max-w-2xl w-full mx-4 max-h-122 overflow-hidden flex flex-col">
         <div className="flex justify-between items-center p-6 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900">Registrations for {event.title}</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl">
@@ -16,8 +18,8 @@ export default function ViewRegistrationsModal({ event, onClose }) {
             <div className="text-sm font-medium text-gray-900">
               Total registrations: <span className="font-bold">{event.registrationsList.length}</span>
             </div>
-            <button className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1">
-              ✉️ Email All
+            <button className="text-blue text-sm font-medium flex items-center gap-2">
+             <Mail size={20} strokeWidth={2.50} /> Email All
             </button>
           </div>
 
@@ -25,7 +27,7 @@ export default function ViewRegistrationsModal({ event, onClose }) {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200">
+                <tr className="border-b border-gray-200 bg-[#F9FAFB]">
                   <th className="text-left py-3 px-2 font-semibold text-gray-700">Name</th>
                   <th className="text-left py-3 px-2 font-semibold text-gray-700">Email</th>
                   <th className="text-left py-3 px-2 font-semibold text-gray-700">Program</th>
@@ -47,10 +49,10 @@ export default function ViewRegistrationsModal({ event, onClose }) {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 p-6 flex justify-end">
+        <div className="border-t border-gray-200 p-4 flex justify-end bg-[#F9FAFB]">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium"
+            className="px-4 py-2 bg-blue text-white rounded-lg"
           >
             Close
           </button>
