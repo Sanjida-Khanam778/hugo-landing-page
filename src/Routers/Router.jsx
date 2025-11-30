@@ -30,6 +30,7 @@ import Chat from "../Layouts/University/Chat/Chat";
 import Testimonials from "../Layouts/University/Testimonials/Testimonials";
 import JobsAndInternships from "../Layouts/University/JobsAndInternships/JobsAndInternships";
 import StudentApprovals from "../Layouts/University/StudentApprovals/StudentApprovals";
+import Settings from "../components/Settings/Settings";
 
 export const router = createBrowserRouter([
   {
@@ -162,6 +163,10 @@ export const router = createBrowserRouter([
       {
         path: "chat",
         element: <Chat />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
       },
     ],
   },
