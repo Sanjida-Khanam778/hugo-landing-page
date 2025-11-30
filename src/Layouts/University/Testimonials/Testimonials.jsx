@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import TestimonialDetailsModal from "../Modal/TestimonialDetailsModal";
-import { CircleCheckBig, CirclePlus } from "lucide-react";
+import { ArrowLeft, ArrowRight, CircleCheckBig, CirclePlus } from "lucide-react";
 
 export default function Testimonials() {
   const [viewingTestimonial, setViewingTestimonial] = useState(null);
@@ -124,14 +124,14 @@ export default function Testimonials() {
 
   if (showAllTestimonials) {
     return (
-      <div>
+      <div className="p-6">
         <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between w-full gap-4">
             <button
               onClick={() => setShowAllTestimonials(false)}
-              className="text-blue-600 hover:text-blue-700 font-medium"
+              className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2"
             >
-              ← Back
+              <ArrowLeft size={18} /> Back
             </button>
             <h1 className="text-3xl font-bold text-gray-900">
               All Testimonials
@@ -178,7 +178,7 @@ export default function Testimonials() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setViewingTestimonial(testimonial)}
-                  className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                  className="text-blue hover:text-blue-700 text-sm font-medium"
                 >
                   View Details
                 </button>
@@ -211,7 +211,7 @@ export default function Testimonials() {
         </h1>
         <button
           onClick={() => setShowAllTestimonials(true)}
-          className="text-blue-600 hover:text-blue-700 font-medium"
+          className="text-blue hover:text-blue-700 font-medium"
         >
           All Testimonials
         </button>
