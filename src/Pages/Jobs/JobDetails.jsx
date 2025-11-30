@@ -1,22 +1,16 @@
 import { useState } from "react";
 import {
   MapPin,
-  DollarSign,
   Calendar,
-  Share2,
-  Bookmark,
   CheckCircle,
-  FileText,
   GraduationCap,
   Building,
   ChevronDown,
-  Briefcase,
 } from "lucide-react";
 
 export default function JobDetails({
   job,
   onBackClick,
-  getBadgeColor,
   background,
   uni_logo,
 }) {
