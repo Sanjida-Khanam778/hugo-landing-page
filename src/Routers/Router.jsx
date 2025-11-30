@@ -31,6 +31,10 @@ import Testimonials from "../Layouts/University/Testimonials/Testimonials";
 import JobsAndInternships from "../Layouts/University/JobsAndInternships/JobsAndInternships";
 import StudentApprovals from "../Layouts/University/StudentApprovals/StudentApprovals";
 import Settings from "../components/Settings/Settings";
+import AdminMain from "../Layouts/Admin/AdminMain";
+import AdminSignIn from "../Pages/Auth/AdminSignin";
+import AdminDashboard from "../Layouts/Admin/AdminDashboard/AdminDashboard";
+import Universities from "../Layouts/Admin/Universities/Universities";
 
 export const router = createBrowserRouter([
   {
@@ -119,6 +123,10 @@ export const router = createBrowserRouter([
     element: <UniSignUp />,
   },
   {
+    path: "/admin",
+    element: <AdminSignIn />,
+  },
+  {
     path: "/university",
     element: <UniMain />,
     children: [
@@ -170,4 +178,23 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/admin",
+    element: <AdminMain />,
+    children: [
+      {
+        path: "dashboard",
+        index: true,
+        element: <AdminDashboard />,
+      },
+      {
+        path: "universities",
+        element: <Universities />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
+      },
+    ]
+  }
 ]);
