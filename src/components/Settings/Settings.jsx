@@ -1,14 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import {
+  LuAlignCenter,
+  LuAlignJustify,
+  LuAlignLeft,
+  LuAlignRight,
+} from "react-icons/lu";
+import { MdOutlineFormatAlignLeft } from "react-icons/md";
+import { useLocation } from "react-router-dom";
 
 export default function Settings() {
-  // Mock user role - in real app, this would come from auth context
-  const isAdmin = true;
+  const location = useLocation();
+  // Only allow editing if on /admin/settings route; view-only on /university/settings
+  const isAdmin = location.pathname === "/admin/settings";
 
   const [activeTab, setActiveTab] = useState("general");
-  // Start editing mode automatically for admins so fields are editable
-  const [isEditing, setIsEditing] = useState(isAdmin);
+  // Per-tab editing flags so editing state doesn't interfere across tabs
+  const [editingGeneral, setEditingGeneral] = useState(isAdmin);
+  const [editingPrivacy, setEditingPrivacy] = useState(isAdmin);
+  const [editingTerms, setEditingTerms] = useState(isAdmin);
 
   const [generalSettings, setGeneralSettings] = useState({
     platformName: "UniConnect",
@@ -45,6 +56,57 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
   const [tempTermsConditions, setTempTermsConditions] =
     useState(termsConditions);
 
+  // refs for rich text editors
+  const privacyRef = useRef(null);
+  const termsRef = useRef(null);
+
+  // helper to escape plain text -> html
+  const escapeHtml = (unsafe) =>
+    unsafe
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  const plainToHtml = (text) => text.split("\n").map(escapeHtml).join("<br/>");
+
+  useEffect(() => {
+    // initialize temp HTML values if they are plain text
+    if (!tempPrivacyPolicy.includes("<") && tempPrivacyPolicy.includes("\n")) {
+      setTempPrivacyPolicy(plainToHtml(tempPrivacyPolicy));
+    }
+    if (
+      !tempTermsConditions.includes("<") &&
+      tempTermsConditions.includes("\n")
+    ) {
+      setTempTermsConditions(plainToHtml(tempTermsConditions));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (editingPrivacy && privacyRef.current) {
+      privacyRef.current.innerHTML = tempPrivacyPolicy;
+    }
+  }, [editingPrivacy, tempPrivacyPolicy]);
+
+  useEffect(() => {
+    if (editingTerms && termsRef.current) {
+      termsRef.current.innerHTML = tempTermsConditions;
+    }
+  }, [editingTerms, tempTermsConditions]);
+
+  const exec = (ref, command, value = null) => {
+    if (!ref || !ref.current) return;
+    ref.current.focus();
+    try {
+      document.execCommand(command, false, value);
+    } catch (e) {
+      // fallback noop
+    }
+  };
+
   const handleGeneralChange = (field, value) => {
     setTempSettings({
       ...tempSettings,
@@ -54,32 +116,32 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
 
   const handleSaveGeneral = () => {
     setGeneralSettings(tempSettings);
-    setIsEditing(false);
+    setEditingGeneral(false);
   };
 
   const handleCancelGeneral = () => {
     setTempSettings(generalSettings);
-    setIsEditing(false);
+    setEditingGeneral(false);
   };
 
   const handleSavePrivacy = () => {
     setPrivacyPolicy(tempPrivacyPolicy);
-    setIsEditing(false);
+    setEditingPrivacy(false);
   };
 
   const handleCancelPrivacy = () => {
     setTempPrivacyPolicy(privacyPolicy);
-    setIsEditing(false);
+    setEditingPrivacy(false);
   };
 
   const handleSaveTerms = () => {
     setTermsConditions(tempTermsConditions);
-    setIsEditing(false);
+    setEditingTerms(false);
   };
 
   const handleCancelTerms = () => {
     setTempTermsConditions(termsConditions);
-    setIsEditing(false);
+    setEditingTerms(false);
   };
 
   return (
@@ -91,9 +153,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
         <button
           onClick={() => {
             setActiveTab("general");
-            setIsEditing(false);
           }}
-          className={`pb-3 px-1 font-medium text-sm border-b-2 transition ${
+          className={`pb-3 px-1 font-medium  border-b-2 transition ${
             activeTab === "general"
               ? "border-blue text-blue"
               : "border-transparent text-gray-600 hover:text-gray-900"
@@ -104,9 +165,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
         <button
           onClick={() => {
             setActiveTab("terms");
-            setIsEditing(false);
           }}
-          className={`pb-3 px-1 font-medium text-sm border-b-2 transition ${
+          className={`pb-3 px-1 font-medium  border-b-2 transition ${
             activeTab === "terms"
               ? "border-blue text-blue"
               : "border-transparent text-gray-600 hover:text-gray-900"
@@ -117,9 +177,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
         <button
           onClick={() => {
             setActiveTab("privacy");
-            setIsEditing(false);
           }}
-          className={`pb-3 px-1 font-medium text-sm border-b-2 transition ${
+          className={`pb-3 px-1 font-medium  border-b-2 transition ${
             activeTab === "privacy"
               ? "border-blue text-blue"
               : "border-transparent text-gray-600 hover:text-gray-900"
@@ -138,20 +197,20 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
               <h2 className="text-lg font-semibold text-gray-900 mb-2">
                 Platform Information
               </h2>
-              <p className="text-sm text-gray-600 mb-6">
+              <p className=" text-gray-600 mb-6">
                 Basic information about your platform.
               </p>
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block  font-medium text-gray-700 mb-2">
                     Platform Name
                   </label>
                   <input
                     type="text"
-                    disabled={!isEditing || !isAdmin}
+                    disabled={!editingGeneral || !isAdmin}
                     value={
-                      isEditing
+                      editingGeneral
                         ? tempSettings.platformName
                         : generalSettings.platformName
                     }
@@ -163,13 +222,13 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block  font-medium text-gray-700 mb-2">
                     Description
                   </label>
                   <textarea
-                    disabled={!isEditing || !isAdmin}
+                    disabled={!editingGeneral || !isAdmin}
                     value={
-                      isEditing
+                      editingGeneral
                         ? tempSettings.description
                         : generalSettings.description
                     }
@@ -182,14 +241,14 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block  font-medium text-gray-700 mb-2">
                     Brief description of your platform for SEO and social
                     sharing.
                   </label>
                   <textarea
-                    disabled={!isEditing || !isAdmin}
+                    disabled={!editingGeneral || !isAdmin}
                     value={
-                      isEditing
+                      editingGeneral
                         ? tempSettings.briefDescription
                         : generalSettings.briefDescription
                     }
@@ -202,14 +261,14 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block  font-medium text-gray-700 mb-2">
                     Contact Email
                   </label>
                   <input
                     type="email"
-                    disabled={!isEditing || !isAdmin}
+                    disabled={!editingGeneral || !isAdmin}
                     value={
-                      isEditing
+                      editingGeneral
                         ? tempSettings.contactEmail
                         : generalSettings.contactEmail
                     }
@@ -227,7 +286,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
               <h2 className="text-lg font-semibold text-gray-900 mb-2">
                 Notifications
               </h2>
-              <p className="text-sm text-gray-600 mb-6">
+              <p className=" text-gray-600 mb-6">
                 Configure email notifications sent to users.
               </p>
 
@@ -235,9 +294,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
                 <label className="flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    disabled={!isEditing || !isAdmin}
+                    disabled={!editingGeneral || !isAdmin}
                     checked={
-                      isEditing
+                      editingGeneral
                         ? tempSettings.welcomeEmail
                         : generalSettings.welcomeEmail
                     }
@@ -246,7 +305,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
                     }
                     className="w-5 h-5 rounded border-gray-300 text-blue-600 disabled:cursor-not-allowed"
                   />
-                  <span className="ml-3 text-sm font-medium text-gray-700">
+                  <span className="ml-3  font-medium text-gray-700">
                     Send welcome email to new users
                   </span>
                 </label>
@@ -254,9 +313,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
                 <label className="flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    disabled={!isEditing || !isAdmin}
+                    disabled={!editingGeneral || !isAdmin}
                     checked={
-                      isEditing
+                      editingGeneral
                         ? tempSettings.applicationStatusNotification
                         : generalSettings.applicationStatusNotification
                     }
@@ -268,7 +327,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
                     }
                     className="w-5 h-5 rounded border-gray-300 text-blue-600 disabled:cursor-not-allowed"
                   />
-                  <span className="ml-3 text-sm font-medium text-gray-700">
+                  <span className="ml-3  font-medium text-gray-700">
                     Send notification when application status changes
                   </span>
                 </label>
@@ -277,7 +336,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
 
             {isAdmin && (
               <div className="flex gap-3 justify-end mt-8 pt-8">
-                {isEditing ? (
+                {editingGeneral ? (
                   <>
                     <button
                       onClick={handleCancelGeneral}
@@ -287,15 +346,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
                     </button>
                     <button
                       onClick={handleSaveGeneral}
-                      className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+                      className="px-6 py-2 bg-blue text-white rounded-lg font-medium"
                     >
                       Save
                     </button>
                   </>
                 ) : (
                   <button
-                    onClick={() => setIsEditing(true)}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+                    onClick={() => setEditingGeneral(true)}
+                    className="px-6 py-2 bg-blue text-white rounded-lg font-medium"
                   >
                     Edit
                   </button>
@@ -315,32 +374,110 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
             </h2>
             {isAdmin && (
               <button
-                onClick={() => setIsEditing(!isEditing)}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+                onClick={() => setEditingPrivacy(!editingPrivacy)}
+                className="px-6 py-2 bg-blue text-white rounded-lg font-medium"
               >
-                {isEditing ? "Cancel" : "Edit"}
+                {editingPrivacy ? "Cancel" : "Edit"}
               </button>
             )}
           </div>
 
-          {isEditing && isAdmin ? (
+          {editingPrivacy && isAdmin ? (
             <div className="space-y-4">
-              <textarea
-                value={tempPrivacyPolicy}
-                onChange={(e) => setTempPrivacyPolicy(e.target.value)}
-                rows="15"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+              {/* toolbar */}
+              <div className="flex items-center gap-2 mb-2">
+                <button
+                  type="button"
+                  onClick={() => exec(privacyRef, "bold")}
+                  className="px-2 py-1 border rounded"
+                >
+                  B
+                </button>
+                <button
+                  type="button"
+                  onClick={() => exec(privacyRef, "italic")}
+                  className="px-2 py-1 border rounded"
+                >
+                  I
+                </button>
+                <button
+                  type="button"
+                  onClick={() => exec(privacyRef, "underline")}
+                  className="px-2 py-1 border rounded"
+                >
+                  U
+                </button>
+                <select
+                  onChange={(e) => exec(privacyRef, "fontSize", e.target.value)}
+                  defaultValue="3"
+                  className="ml-2 border px-2 py-1 rounded"
+                >
+                  <option value="1">XS</option>
+                  <option value="2">S</option>
+                  <option value="3">M</option>
+                  <option value="4">L</option>
+                  <option value="5">XL</option>
+                </select>
+                <div className="ml-2 flex gap-1">
+                  <button
+                    type="button"
+                    onClick={() => exec(privacyRef, "justifyLeft")}
+                    className="px-2 py-1 border rounded"
+                  >
+                    <LuAlignLeft />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => exec(privacyRef, "justifyCenter")}
+                    className="px-2 py-1 border rounded"
+                  >
+                    <LuAlignCenter />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => exec(privacyRef, "justifyRight")}
+                    className="px-2 py-1 border rounded"
+                  >
+                    <LuAlignRight />
+                  </button>
+                  {/* <button
+                    type="button"
+                    onClick={() => exec(privacyRef, "justifyJustify")}
+                    className="px-2 py-1 border rounded"
+                  >
+                    <LuAlignJustify />
+                  </button> */}
+                </div>
+              </div>
+
+              <div
+                ref={privacyRef}
+                contentEditable
+                suppressContentEditableWarning
+                className="w-full min-h-[200px] px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white "
               />
+
               <div className="flex gap-3 justify-end">
                 <button
-                  onClick={handleCancelPrivacy}
+                  onClick={() => {
+                    // reset editor content
+                    if (privacyRef.current)
+                      privacyRef.current.innerHTML = privacyPolicy;
+                    handleCancelPrivacy();
+                  }}
                   className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50"
                 >
                   Cancel
                 </button>
                 <button
-                  onClick={handleSavePrivacy}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+                  onClick={() => {
+                    const html = privacyRef.current
+                      ? privacyRef.current.innerHTML
+                      : tempPrivacyPolicy;
+                    setTempPrivacyPolicy(html);
+                    handleSavePrivacy();
+                  }}
+                  className="px-6 py-2 bg-blue text-white rounded-lg font-medium"
                 >
                   Save
                 </button>
@@ -348,9 +485,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
             </div>
           ) : (
             <div className="prose prose-sm max-w-none">
-              <p className="text-gray-700 whitespace-pre-line leading-relaxed">
-                {privacyPolicy}
-              </p>
+              <div
+                className="text-gray-700 leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: privacyPolicy }}
+              />
             </div>
           )}
         </div>
@@ -365,32 +503,102 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
             </h2>
             {isAdmin && (
               <button
-                onClick={() => setIsEditing(!isEditing)}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+                onClick={() => setEditingTerms(!editingTerms)}
+                className="px-6 py-2 bg-blue text-white rounded-lg font-medium"
               >
-                {isEditing ? "Cancel" : "Edit"}
+                {editingTerms ? "Cancel" : "Edit"}
               </button>
             )}
           </div>
 
-          {isEditing && isAdmin ? (
+          {editingTerms && isAdmin ? (
             <div className="space-y-4">
-              <textarea
-                value={tempTermsConditions}
-                onChange={(e) => setTempTermsConditions(e.target.value)}
-                rows="15"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+              {/* toolbar */}
+              <div className="flex items-center gap-2 mb-2">
+                <button
+                  type="button"
+                  onClick={() => exec(termsRef, "bold")}
+                  className="px-2 py-1 border rounded"
+                >
+                  B
+                </button>
+                <button
+                  type="button"
+                  onClick={() => exec(termsRef, "italic")}
+                  className="px-2 py-1 border rounded"
+                >
+                  I
+                </button>
+                <button
+                  type="button"
+                  onClick={() => exec(termsRef, "underline")}
+                  className="px-2 py-1 border rounded"
+                >
+                  U
+                </button>
+                <select
+                  onChange={(e) => exec(termsRef, "fontSize", e.target.value)}
+                  defaultValue="3"
+                  className="ml-2 border px-2 py-1 rounded"
+                >
+                  <option value="1">XS</option>
+                  <option value="2">S</option>
+                  <option value="3">M</option>
+                  <option value="4">L</option>
+                  <option value="5">XL</option>
+                </select>
+                <div className="ml-2 flex gap-1">
+                  <button
+                    type="button"
+                    onClick={() => exec(termsRef, "justifyLeft")}
+                    className="px-2 py-1 border rounded"
+                  >
+                    <LuAlignLeft />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => exec(termsRef, "justifyCenter")}
+                    className="px-2 py-1 border rounded"
+                  >
+                    <LuAlignCenter />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => exec(termsRef, "justifyRight")}
+                    className="px-2 py-1 border rounded"
+                  >
+                    <LuAlignRight />
+                  </button>
+                </div>
+              </div>
+
+              <div
+                ref={termsRef}
+                contentEditable
+                suppressContentEditableWarning
+                className="w-full min-h-[200px] px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white "
               />
+
               <div className="flex gap-3 justify-end">
                 <button
-                  onClick={handleCancelTerms}
+                  onClick={() => {
+                    if (termsRef.current)
+                      termsRef.current.innerHTML = termsConditions;
+                    handleCancelTerms();
+                  }}
                   className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50"
                 >
                   Cancel
                 </button>
                 <button
-                  onClick={handleSaveTerms}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+                  onClick={() => {
+                    const html = termsRef.current
+                      ? termsRef.current.innerHTML
+                      : tempTermsConditions;
+                    setTempTermsConditions(html);
+                    handleSaveTerms();
+                  }}
+                  className="px-6 py-2 bg-blue text-white rounded-lg font-medium"
                 >
                   Save
                 </button>
@@ -398,9 +606,10 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
             </div>
           ) : (
             <div className="prose prose-sm max-w-none space-y-4">
-              <p className="text-gray-700 whitespace-pre-line leading-relaxed">
-                {termsConditions}
-              </p>
+              <div
+                className="text-gray-700 leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: termsConditions }}
+              />
             </div>
           )}
         </div>
