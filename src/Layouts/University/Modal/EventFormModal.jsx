@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 
 export default function EventFormModal({ event, onSave, onClose, isEdit }) {
   const [formData, setFormData] = useState(
@@ -11,36 +11,43 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
       type: "Online",
       status: "Upcoming",
       description: "",
-    },
-  )
+    }
+  );
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    onSave(formData)
-  }
+    e.preventDefault();
+    onSave(formData);
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg max-w-md w-full mx-4 p-6">
-        <div className="flex justify-between items-center mb-4 border-b pb-4">
-          <h2 className="text-xl font-semibold text-gray-900">{isEdit ? "Edit Event" : "Create Event"}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl">
+      <div className="bg-white rounded-lg max-w-lg w-full mx-4">
+        <div className="flex justify-between items-center mb-4 border-b p-4 ">
+          <h2 className="text-xl font-semibold text-gray-900">
+            {isEdit ? "Edit Event" : "Create Event"}
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 text-2xl"
+          >
             ×
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 ">
           {/* Event Title */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Event Title</label>
+          <div className="px-6">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Event Title
+            </label>
             <input
               type="text"
               name="title"
@@ -53,9 +60,11 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
           </div>
 
           {/* Date and Time */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 px-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Date
+              </label>
               <input
                 type="date"
                 name="date"
@@ -65,8 +74,10 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
                 required
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
+            <div >
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Time
+              </label>
               <input
                 type="text"
                 name="time"
@@ -80,9 +91,11 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
           </div>
 
           {/* Event Type and Status */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 px-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Event Type</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Event Type
+              </label>
               <select
                 name="type"
                 value={formData.type}
@@ -94,7 +107,9 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Status
+              </label>
               <select
                 name="status"
                 value={formData.status}
@@ -109,8 +124,10 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
           </div>
 
           {/* Event Description */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Event Description</label>
+          <div className="px-6">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Event Description
+            </label>
             <textarea
               name="description"
               value={formData.description}
@@ -123,7 +140,7 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
           </div>
 
           {/* Buttons */}
-          <div className="flex gap-3 pt-2">
+          <div className="flex gap-3 py-6 border-t px-6 bg-[#F9FAFB] rounded-b-lg">
             <button
               type="button"
               onClick={onClose}
@@ -141,5 +158,5 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
         </form>
       </div>
     </div>
-  )
+  );
 }

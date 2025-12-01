@@ -74,7 +74,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
             </div>
             <div className="flex items-center gap-2">
               <span
-                className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${
+                className={`inline-block px-2.5 py-1 rounded-full  font-medium ${
                   program.status === "Published"
                     ? "bg-emerald-100 text-emerald-700"
                     : "bg-yellow-100 text-yellow-700"
@@ -87,7 +87,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
           <div className="flex gap-6">
             <div className="grid grid-cols-2 gap-4 flex-1">
               <div>
-                <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+                <p className=" text-gray-500 font-medium uppercase tracking-wide">
                   Level
                 </p>
                 <p className="font-semibold text-gray-900 mt-1">
@@ -95,7 +95,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
                 </p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+                <p className=" text-gray-500 font-medium uppercase tracking-wide">
                   Duration
                 </p>
                 <p className="font-semibold text-gray-900 mt-1">
@@ -103,7 +103,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
                 </p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+                <p className=" text-gray-500 font-medium uppercase tracking-wide">
                   Language
                 </p>
                 <p className="font-semibold text-gray-900 mt-1">
@@ -111,7 +111,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
                 </p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+                <p className=" text-gray-500 font-medium uppercase tracking-wide">
                   Applications
                 </p>
                 <p className="font-semibold text-gray-900 mt-1">
@@ -119,7 +119,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
                 </p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+                <p className=" text-gray-500 font-medium uppercase tracking-wide">
                   Last Updated
                 </p>
                 <p className="font-semibold text-gray-900 mt-1">2024-09-15</p>
@@ -135,7 +135,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
         <div className="">
           {/* Program Description */}
           <DetailSection title="Program Description" section="description">
-            <p className="text-gray-700 leading-relaxed text-sm">
+            <p className="text-gray-700 leading-relaxed">
               {program.description}
             </p>
           </DetailSection>
@@ -148,15 +148,13 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
                 program.learningOutcomes.map((outcome, index) => (
                   <div key={index} className="flex gap-3 items-start">
                     <span className="text-[#16A34A]">
-                      <CircleCheckBig size={18} strokeWidth={2.5} />
+                      <CircleCheckBig size={18} strokeWidth={2.75} />
                     </span>
-                    <p className="text-sm text-gray-700">{outcome}</p>
+                    <p className=" text-gray-700">{outcome}</p>
                   </div>
                 ))
               ) : (
-                <p className="text-sm text-gray-500">
-                  No learning outcomes added
-                </p>
+                <p className=" text-gray-500">No learning outcomes added</p>
               )}
             </div>
           </DetailSection>
@@ -171,16 +169,16 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
                     className="flex gap-3 items-center border p-4 rounded-lg"
                   >
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gray-300 to-gray-400 flex-shrink-0 flex items-center justify-center">
-                      <span className="text-xs font-semibold text-white">
+                      <span className=" font-semibold text-white">
                         {faculty.name.charAt(0)}
                       </span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm text-gray-900">
+                      <p className="font-semibold text-gray-900">
                         {faculty.name}
                       </p>
-                      <p className="text-xs text-gray-600">Department Chair</p>
-                      <p className="text-xs text-gray-600">
+                      <p className=" text-gray-600">Department Chair</p>
+                      <p className=" text-gray-600">
                         Macroeconomic Theory
                       </p>
                     </div>
@@ -188,7 +186,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-500">No faculties added</p>
+              <p className=" text-gray-500">No faculties added</p>
             )}
           </DetailSection>
 
@@ -212,7 +210,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
                     <ul className="space-y-3">
                       {year.courses.map((course, courseIdx) => (
                         <li key={courseIdx} className="flex items-start">
-                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue/20 text-blue text-sm font-medium mr-3 flex-shrink-0">
+                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue/20 text-blue font-medium mr-3 flex-shrink-0">
                             {courseIdx + 1}
                           </span>
                           <span className="text-gray-700">{course}</span>
@@ -223,7 +221,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-500">No curriculum added</p>
+              <p className=" text-gray-500">No curriculum added</p>
             )}
           </DetailSection>
 
@@ -250,7 +248,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
                 </div>
               </div>
             ) : (
-              <p className="text-sm text-gray-500">No requirements added</p>
+              <p className=" text-gray-500">No requirements added</p>
             )}
             <div>
               <h1 className="font-semibold my-6 text-black">Requirements</h1>
@@ -258,9 +256,9 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
                 {program.requirements.req.map((req, idx) => (
                   <div key={idx} className="flex gap-3 items-start">
                     <span className="text-[#16A34A]">
-                      <CircleCheckBig size={18} strokeWidth={2.5} />
+                      <CircleCheckBig size={18} strokeWidth={2.75} />
                     </span>
-                    <p className="text-sm text-gray-700">{req}</p>
+                    <p className=" text-gray-700">{req}</p>
                   </div>
                 ))}
               </div>
@@ -277,15 +275,15 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
               <ol className="space-y-3">
                 {program.appProcess.map((step, index) => (
                   <li key={index} className="flex gap-3 items-start">
-                    <span className="bg-blue text-white rounded-full w-6 h-6 flex items-center justify-center text-xs flex-shrink-0">
+                    <span className="bg-blue text-white rounded-full w-10 h-10 flex items-center justify-center  flex-shrink-0">
                       {index + 1}
                     </span>
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-gray-900">
+                      <p className=" font-semibold text-gray-900">
                         {typeof step === "string" ? step : step.title}
                       </p>
                       {typeof step === "object" && step.description && (
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className=" text-gray-600 mt-1">
                           {step.description}
                         </p>
                       )}
@@ -294,9 +292,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
                 ))}
               </ol>
             ) : (
-              <p className="text-sm text-gray-500">
-                No application steps added
-              </p>
+              <p className=" text-gray-500">No application steps added</p>
             )}
           </DetailSection>
         </div>
@@ -305,7 +301,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
         <div className="bg-white px-6 py-4 border-t border-gray-100 flex gap-3 justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium text-sm text-gray-700"
+            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium text-gray-700"
           >
             Cancel
           </button>
@@ -314,7 +310,7 @@ export default function ProgramDetailView({ program, onEdit, onClose }) {
               onEdit(program);
               onClose();
             }}
-            className="px-4 py-2 bg-blue text-white rounded-lg hover:bg-blue-700 transition font-medium text-sm"
+            className="px-4 py-2 bg-blue text-white rounded-lg hover:bg-blue-700 transition font-medium"
           >
             Save Changes
           </button>

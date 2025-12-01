@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Plus, Upload } from "lucide-react";
+import { X, Plus, Upload, Calendar } from "lucide-react";
 
 export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
   const defaultCurriculum = { year1: [], year2: [], year3: [], year4: [] };
@@ -149,9 +149,8 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 overflow-auto p-4 rounded-lg">
       <div className="bg-white rounded-xl shadow-lg w-full max-w-4xl my-8">
-      
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#F5E6E3] to-[#DEF0EC] px-6 py-4  border-gray-200 flex justify-between items-start sticky top-0 w-full">
+        <div className="bg-gradient-to-r from-[#F5E6E3] to-[#DEF0EC] text-lg px-6 py-4 rounded-t-lg border-gray-200 flex justify-between items-start sticky top-0 w-full">
           <div> {isEdit ? "Edit Program" : "Add New Program"}</div>
           <button
             onClick={onCancel}
@@ -164,107 +163,91 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
           <div className="space-y-4">
             {/* Program Description */}
             <div className="">
-              <h2 className="text-lg font-bold text-gray-900 mb-6">
-                Program Description
-              </h2>
               <div className="grid grid-cols-3 gap-4 mb-4">
-                <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-2">
-                    Program Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="e.g. Bachelor of Computer Science"
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
-                  />
+                <div className="grid grid-cols-2 gap-4 mb-4 col-span-2">
+                  <div className="col-span-2">
+                    <label className="block font-semibold text-xl text-gray-700 mb-2">
+                      Program Description
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="e.g. Bachelor of Computer Science"
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-gray-700 mb-2">
+                      Level
+                    </label>
+                    <select
+                      name="level"
+                      value={formData.level}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                    >
+                      <option>Bachelor</option>
+                      <option>Master</option>
+                      <option>PhD</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-gray-700 mb-2">
+                      Duration
+                    </label>
+                    <input
+                      type="text"
+                      name="duration"
+                      value={formData.duration}
+                      onChange={handleInputChange}
+                      placeholder="e.g. 4 years"
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-gray-700 mb-2">
+                      Language
+                    </label>
+                    <input
+                      type="text"
+                      name="language"
+                      value={formData.language}
+                      onChange={handleInputChange}
+                      placeholder="e.g. English"
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-semibold text-gray-700 mb-2">
+                      Status
+                    </label>
+                    <select
+                      name="status"
+                      value={formData.status}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                    >
+                      <option>Draft</option>
+                      <option>Published</option>
+                    </select>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-2">
-                    Code
-                  </label>
-                  <input
-                    type="text"
-                    name="code"
-                    value={formData.code}
-                    onChange={handleInputChange}
-                    placeholder="e.g. BCS"
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
-                  />
-                </div>
-                <div className="text-right">
-                  <button className="inline-flex w-full h-full bg-base items-center gap-1 px-3 py-2 text-sm text-gray-700 border border-gray-300 rounded hover:bg-gray-50">
+                <div className="text-center">
+                  <button className="flex justify-center w-full h-full bg-base items-center gap-1 px-3 py-2 text-gray-700 border border-gray-300 rounded hover:bg-gray-50">
                     <Upload size={14} strokeWidth={2.75} /> Upload new
                   </button>
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-4 mb-4">
-                <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-2">
-                    Level
-                  </label>
-                  <select
-                    name="level"
-                    value={formData.level}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
-                  >
-                    <option>Bachelor</option>
-                    <option>Master</option>
-                    <option>PhD</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-2">
-                    Duration
-                  </label>
-                  <input
-                    type="text"
-                    name="duration"
-                    value={formData.duration}
-                    onChange={handleInputChange}
-                    placeholder="e.g. 4 years"
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-2">
-                    Language
-                  </label>
-                  <input
-                    type="text"
-                    name="language"
-                    value={formData.language}
-                    onChange={handleInputChange}
-                    placeholder="e.g. English"
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <div>
-                  <label className="block text-xs font-semibold text-gray-700 mb-2">
-                    Status
-                  </label>
-                  <select
-                    name="status"
-                    value={formData.status}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
-                  >
-                    <option>Draft</option>
-                    <option>Published</option>
-                  </select>
-                </div>
                 <div className="col-span-2"></div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold mb-2">
+                <label className="block font-semibold mb-2">
                   Program Description
                 </label>
                 <textarea
@@ -273,7 +256,7 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                   onChange={handleInputChange}
                   placeholder="Program description..."
                   rows="2"
-                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
               </div>
             </div>
@@ -287,7 +270,7 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                 {formData.learningOutcomes.map((outcome, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-3 bg-gray-50 p-3 rounded text-sm"
+                    className="flex items-center gap-3 bg-gray-50 p-3 rounded"
                   >
                     <span className="text-gray-600">•</span>
                     <span className="text-gray-700 flex-1">{outcome}</span>
@@ -306,11 +289,11 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                   value={newOutcome}
                   onChange={(e) => setNewOutcome(e.target.value)}
                   placeholder="Add learning outcome..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
                 <button
                   onClick={handleAddOutcome}
-                  className="px-4 py-2 bg-blue text-white rounded text-sm font-semibold"
+                  className="px-4 py-2 bg-blue text-white rounded font-semibold"
                 >
                   Add
                 </button>
@@ -330,13 +313,11 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                   >
                     <div className="w-10 h-10 rounded-full bg-gray-300 flex-shrink-0"></div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm text-gray-900">
+                      <p className="font-semibold text-gray-900">
                         {faculty.name}
                       </p>
-                      <p className="text-xs text-gray-600">Department</p>
-                      <p className="text-xs text-gray-600">
-                        {faculty.expertise}
-                      </p>
+                      <p className="text-gray-600">Department</p>
+                      <p className="text-gray-600">{faculty.expertise}</p>
                     </div>
                     <button
                       onClick={() => handleRemoveFaculty(index)}
@@ -355,13 +336,13 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                     setNewFaculty((prev) => ({ ...prev, name: e.target.value }))
                   }
                   placeholder="Faculty name..."
-                  className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
+                  className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
                 <input
                   type="text"
                   onChange={(e) => e.target.value}
                   placeholder="Department..."
-                  className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
+                  className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
                 <input
                   type="text"
@@ -373,11 +354,11 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                     }))
                   }
                   placeholder="Expertise..."
-                  className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
+                  className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
                 <button
                   onClick={handleAddFaculty}
-                  className="col-span-3 px-4 py-2 bg-blue text-white rounded text-sm font-semibold"
+                  className="col-span-3 px-4 py-2 bg-blue text-white rounded font-semibold"
                 >
                   Add Faculty
                 </button>
@@ -393,12 +374,12 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                 placeholder={`The curriculum is...`}
                 rows="4"
                 onChange={(e) => e.target.value}
-                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm mb-4"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue mb-4"
               />
               <div className="grid grid-cols-2 gap-4">
                 {["year1", "year2", "year3", "year4"].map((year, idx) => (
                   <div key={year} className="border-l-4 border-blue pl-4">
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    <label className="block font-semibold text-gray-900 mb-2">
                       {["First", "Second", "Third", "Fourth"][idx]} Year
                     </label>
                     <textarea
@@ -413,7 +394,7 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                       onChange={(e) =>
                         handleCurriculumChange(year, e.target.value)
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                     />
                   </div>
                 ))}
@@ -423,20 +404,22 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
             {/* Admission Requirements */}
             <div className="">
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                Administration Requirements
+                Admission Requirements
               </h2>
-              <div className="bg-blue-50 rounded p-4">
+              <div className="bg-[#EFF6FF] p-4 border border-[#BFDBFE] rounded-lg ">
                 <div className="flex items-start gap-3 mb-3">
-                  <span className="text-lg">📋</span>
-                  <div>
-                    <p className="font-semibold text-sm text-gray-900">
+                
+                  <div className="space-y-2">
+                    <p className="font-semibold text-blue">
                       Application Deadlines
                     </p>
-                    <p className="text-xs text-gray-600">
-                      September 2025 intake: January 1, 2025
+                    <p className="text-gray-600 flex items-center gap-2">
+                      <Calendar className="text-blue" size={20} strokeWidth={3.0} /> September 2025
+                      intake: <span className="text-black font-semibold">January 1, 2025</span>
                     </p>
-                    <p className="text-xs text-gray-600">
-                      January 2026 intake: October 1, 2025
+                    <p className="text-gray-600 flex items-center gap-2">
+                      <Calendar className="text-blue" size={20} strokeWidth={3.0} /> January 2026
+                      intake:  <span className="text-black font-semibold">October 1, 2025 </span>
                     </p>
                   </div>
                 </div>
@@ -445,25 +428,33 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
 
             {/* Application Process */}
             <div className="pb-8">
-              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
                 Requirements
               </h2>
-              <div className="space-y-3 mb-4">
+
+              <textarea
+                placeholder={`High School Diploma...`}
+                rows="4"
+                onChange={(e) => e.target.value}
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue mb-4"
+              />
+              <div className="mb-4">
+                <h2 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                  Application Process{" "}
+                </h2>
                 {formData.appProcess.map((step, index) => (
                   <div
                     key={index}
                     className="flex items-start gap-3 bg-blue-50 p-3 rounded"
                   >
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue text-white flex items-center justify-center text-xs font-bold">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue text-white flex items-center justify-center">
                       {index + 1}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm text-gray-900">
+                      <p className="font-semibold text-gray-900">
                         {step.title}
                       </p>
-                      <p className="text-xs text-gray-600">
-                        {step.description}
-                      </p>
+                      <p className="text-gray-600">{step.description}</p>
                     </div>
                     <button
                       onClick={() => handleRemoveAppProcess(index)}
@@ -485,7 +476,7 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                     }))
                   }
                   placeholder="Step title..."
-                  className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
+                  className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
                 <input
                   type="text"
@@ -497,11 +488,11 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                     }))
                   }
                   placeholder="Step description..."
-                  className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue text-sm"
+                  className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
                 <button
                   onClick={handleAddAppProcess}
-                  className="col-span-2 px-4 py-2 bg-blue text-white rounded text-sm font-semibold"
+                  className="col-span-2 px-4 py-2 bg-blue text-white rounded font-semibold"
                 >
                   Add Step
                 </button>
@@ -512,13 +503,13 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
             <div className="flex gap-3 justify-end pt-6 border-t">
               <button
                 onClick={onCancel}
-                className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50 transition font-semibold text-sm"
+                className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50 transition font-semibold"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSubmit}
-                className="px-6 py-2 bg-blue text-white rounded transition font-semibold text-sm"
+                className="px-6 py-2 bg-blue text-white rounded transition font-semibold"
               >
                 {isEdit ? "Save Changes" : "Add"}
               </button>

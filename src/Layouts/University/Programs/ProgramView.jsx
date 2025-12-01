@@ -65,7 +65,6 @@ export default function ProgramsView({
             <div className={`p-4 bg-gradient-to-r from-[#F5E7E4] to-[#DEF0EC]`}>
               <div className="flex justify-between items-start mb-3">
                 <h3 className="font-bold text-lg">{program.name}</h3>
-                <button className="text-gray-600 hover:text-gray-900">⋯</button>
               </div>
               <span
                 className={`inline-block px-3 py-1 rounded-full text-sm ${getStatusColor(
@@ -83,22 +82,22 @@ export default function ProgramsView({
 
                 <div>
                   <div>
-                    <p className="text-gray-600 text-sm">Level</p>
+                    <p className="text-gray-600">Level</p>
                     <p className="">{program.level}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 text-sm">Language</p>
+                    <p className="text-gray-600">Language</p>
                     <p className="">{program.language}</p>
                   </div>
                 </div>
                 <div>
                   <div>
-                    <p className="text-gray-600 text-sm">Duration</p>
+                    <p className="text-gray-600">Duration</p>
                     <p className="">{program.duration}</p>
                   </div>
 
                   <div>
-                    <p className="text-gray-600 text-sm">Applications</p>
+                    <p className="text-gray-600">Applications</p>
                     <p className="">{program.applications}</p>
                   </div>
                 </div>
@@ -106,7 +105,7 @@ export default function ProgramsView({
 
               {/* Footer */}
               <div className="border-t pt-3 flex justify-between items-center">
-                <p className="text-xs text-gray-600">
+                <p className=" text-grey">
                   Last updated: {program.lastUpdated}
                 </p>
                 <div className="flex gap-3 items-center ">
@@ -135,16 +134,16 @@ export default function ProgramsView({
       {/* Delete Modal */}
       {deleteModal && programToDelete && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <div className="bg-white rounded-lg w-full max-w-lg shadow-lg">
+            <h2 className="text-xl font-bold text-gray-900 mb-4 px-6 py-4 border-b">
               Delete Program
             </h2>
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to delete{" "}
+            <p className="text-gray-600 mb-6 px-6">
+              Are you sure you want to delete the program{" "}
               <span className="font-semibold">{programToDelete.name}</span>?
               This action cannot be undone.
             </p>
-            <div className="flex gap-3 justify-end">
+            <div className="flex gap-3 justify-end px-6 bg-[#F9FAFB] py-4 border-t">
               <button
                 onClick={() => setDeleteModal(false)}
                 className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
