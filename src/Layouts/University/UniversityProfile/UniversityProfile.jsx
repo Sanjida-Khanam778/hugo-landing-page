@@ -153,7 +153,7 @@ export default function UniversityProfile() {
                   <button
                     type="button"
                     onClick={handleRemoveLogo}
-                    className="absolute top-2 right-2 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-2 right-2 bg-red text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <X size={20} />
                   </button>
@@ -194,7 +194,7 @@ export default function UniversityProfile() {
                   <button
                     type="button"
                     onClick={handleRemoveSectionVideo}
-                    className="absolute top-2 right-2 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-2 right-2 bg-red text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <X size={20} />
                   </button>
@@ -235,7 +235,7 @@ export default function UniversityProfile() {
                   <button
                     type="button"
                     onClick={handleRemoveBannerVideo}
-                    className="absolute top-2 right-2 bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute top-2 right-2 bg-red text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <X size={20} />
                   </button>

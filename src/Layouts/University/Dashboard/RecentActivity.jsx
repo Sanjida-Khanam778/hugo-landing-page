@@ -1,30 +1,35 @@
+import icon1 from "../../../assets/icons/new_student.png";
+import icon2 from "../../../assets/icons/event_reg.png";
+import icon3 from "../../../assets/icons/testimonial.png";
+import icon4 from "../../../assets/icons/program_updated.png";
+
 const activities = [
   {
     title: "New student application",
     description: "John Doe applied for Computer Science",
     time: "2 hours ago",
-    icon: "👤",
+    icon: icon1,
     color: "blue",
   },
   {
     title: "Event registration",
     description: "Virtual Open Day reached 50 registrations",
     time: "3 hours ago",
-    icon: "✓",
+    icon: icon2,
     color: "green",
   },
   {
     title: "Testimonial approved",
     description: "Admin approved Sarah's testimonial.",
     time: "6 hours ago",
-    icon: "📋",
+    icon: icon3,
     color: "purple",
   },
   {
     title: "Program updated",
     description: "MBA program details were updated",
     time: "1 day ago",
-    icon: "📊",
+    icon: icon4,
     color: "orange",
   },
 ]
@@ -42,17 +47,11 @@ export default function RecentActivity() {
       <h3 className="text-lg font-bold text-gray-900 mb-6">Recent Activity</h3>
       <div className="space-y-4">
         {activities.map((activity, index) => (
-          <div key={index} className="flex gap-4 pb-4 border-b last:border-b-0">
-            <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg ${
-                colorMap[activity.color]
-              }`}
-            >
-              {activity.icon}
-            </div>
+          <div key={index} className="flex gap-8 items-center pb-4 border-b last:border-b-0">
+           <div><img className="w-10" src={activity.icon} alt="" /></div>
             <div className="flex-1">
-              <p className="font-semibold text-gray-900">{activity.title}</p>
-              <p className="text-sm text-gray-600">{activity.description}</p>
+              <p className="font-semibold text-lg text-gray-900">{activity.title}</p>
+              <p className=" text-gray-600">{activity.description}</p>
               <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
             </div>
           </div>

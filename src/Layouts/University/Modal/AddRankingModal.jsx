@@ -18,8 +18,8 @@ export default function AddRankingModal({ onAdd, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-        <div className="flex justify-between items-center mb-6">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg">
+        <div className="flex justify-between items-center mb-6 px-6 py-4 border-b">
           <h2 className="text-xl font-bold text-gray-800">Add Ranking</h2>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
             <X size={24} />
@@ -27,7 +27,7 @@ export default function AddRankingModal({ onAdd, onClose }) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
+          <div className="p-6 py-0">
             <label className="block text-sm font-medium text-gray-700 mb-2">Ranking Organization</label>
             <input
               type="text"
@@ -39,7 +39,7 @@ export default function AddRankingModal({ onAdd, onClose }) {
             />
           </div>
 
-          <div>
+          <div className="p-6 py-0">
             <label className="block text-sm font-medium text-gray-700 mb-2">Rank</label>
             <input
               type="text"
@@ -51,7 +51,7 @@ export default function AddRankingModal({ onAdd, onClose }) {
             />
           </div>
 
-          <div>
+          <div className="p-6 py-0">
             <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
             <input
               type="text"
@@ -63,7 +63,7 @@ export default function AddRankingModal({ onAdd, onClose }) {
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4">
+          <div className="flex justify-end gap-3 px-6 bg-[#F9FAFB] py-4 border-t rounded-b-lg">
             <button
               type="button"
               onClick={onClose}
