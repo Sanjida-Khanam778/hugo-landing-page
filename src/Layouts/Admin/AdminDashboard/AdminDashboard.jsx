@@ -41,21 +41,21 @@ export default function AdminDashboard() {
         <AdminStat
           title="Total Universities"
           value="124"
-          icon={icon1}
+          icon={icon2}
           bgColor="bg-blue-50"
           iconBg="bg-blue-100"
         />
         <AdminStat
           title="Active Students"
           value="45,231"
-          icon={icon2}
+          icon={icon3}
           bgColor="bg-green-50"
           iconBg="bg-green-100"
         />
         <AdminStat
           title="Active Offers"
           value="1,892"
-          icon={icon3}
+          icon={icon1}
           bgColor="bg-purple-50"
           iconBg="bg-purple-100"
         />
@@ -86,7 +86,7 @@ export default function AdminDashboard() {
                   borderRadius: "0.5rem",
                 }}
               />
-              <Bar dataKey="universityUsers" fill="#8b5cf6" barSize={14} />
+              <Bar dataKey="universityUsers" fill="#A855F7" barSize={14} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
                   borderRadius: "0.5rem",
                 }}
               />
-              <Bar dataKey="studentUsers" fill="#06b6d4" barSize={14} />
+              <Bar dataKey="studentUsers" fill="#78C9B3" barSize={14} />
             </BarChart>
           </ResponsiveContainer>
         </div>

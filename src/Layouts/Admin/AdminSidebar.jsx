@@ -50,7 +50,7 @@ export default function AdminSidebar() {
               }`}
             >
               <Icon size={20} />
-              <span className="text-sm font-medium">{item.label}</span>
+              <span className="font-medium">{item.label}</span>
             </button>
           );
         })}
