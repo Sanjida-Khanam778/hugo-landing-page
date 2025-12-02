@@ -255,7 +255,7 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                   value={formData.description}
                   onChange={handleInputChange}
                   placeholder="Program description..."
-                  rows="2"
+                  rows="4"
                   className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
               </div>
@@ -414,12 +414,12 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                       Application Deadlines
                     </p>
                     <p className="text-gray-600 flex items-center gap-2">
-                      <Calendar className="text-blue" size={20} strokeWidth={3.0} /> September 2025
-                      intake: <span className="text-black font-semibold">January 1, 2025</span>
+                      <Calendar className="text-blue" size={20} strokeWidth={3.0} />
+                      Batch name: <span className="text-black font-semibold">January 1, 2025</span>
                     </p>
                     <p className="text-gray-600 flex items-center gap-2">
-                      <Calendar className="text-blue" size={20} strokeWidth={3.0} /> January 2026
-                      intake:  <span className="text-black font-semibold">October 1, 2025 </span>
+                      <Calendar className="text-blue" size={20} strokeWidth={3.0} />
+                      Batch name:  <span className="text-black font-semibold">October 1, 2025 </span>
                     </p>
                   </div>
                 </div>
@@ -427,7 +427,7 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
             </div>
 
             {/* Application Process */}
-            <div className="pb-8">
+            <div className="">
               <h2 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
                 Requirements
               </h2>

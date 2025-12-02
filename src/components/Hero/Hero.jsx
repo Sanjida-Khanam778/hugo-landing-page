@@ -27,7 +27,7 @@ export default function Hero() {
       <Navbar />
       {/* Content */}
       <div className="relative z-10 h-full flex items-center justify-start w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="w-full max-w-3xl border border-white border-opacity-40 bg-white/5 text-white font-medium p-4 md:p-6 lg:p-10 rounded-lg transition-colors backdrop-blur-md">
+        <div className="w-full max-w-3xl border border-white border-opacity-40 bg-primary font-medium p-4 md:p-6 lg:p-10 rounded-lg transition-colors backdrop-blur-md">
           {/* Heading */}
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight text-balance">
             Find Your Perfect University & Program
@@ -48,13 +48,15 @@ export default function Hero() {
                 placeholder="Search universities..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 bg-transparent outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base"
+                className="flex-1 bg-transparent outline-none text-black"
               />
             </div>
 
-            <div className="text-black my-auto px-4 h-full border-l border-[#CCCCCC] py-3">University</div>
+            <div className="text-black my-auto px-4 h-full border-l border-[#CCCCCC] py-3">
+              University
+            </div>
 
-            <button className="bg-blue text-white font-semibold px-6  rounded transition-colors text-sm sm:text-base">
+            <button className="bg-blue text-white px-6 rounded transition-colors">
               Search
             </button>
           </div>

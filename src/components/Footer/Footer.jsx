@@ -33,7 +33,7 @@ export default function Footer() {
           {/* Brand Section */}
           <div>
             <h2 className="text-xl font-semibold mb-4">EduConnect</h2>
-            <p className="text-[#CCCCCC] text-sm mb-4">
+            <p className="text-[#CCCCCC] mb-4">
               Connecting students with the best educational opportunities
               worldwide.
             </p>
@@ -67,12 +67,12 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-sm font-semibold mb-4">Quick Links</h3>
+            <h3 className="font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
                 <a
                   href="#"
-                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
+                  className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
                 >
                   Home
                 </a>
@@ -80,7 +80,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
+                  className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
                 >
                   Universities
                 </a>
@@ -88,7 +88,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
+                  className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
                 >
                   Programs
                 </a>
@@ -96,7 +96,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
+                  className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
                 >
                   Events
                 </a>
@@ -104,7 +104,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
+                  className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
                 >
                   Jobs
                 </a>
@@ -114,12 +114,12 @@ export default function Footer() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold mb-4">Resources</h3>
+            <h3 className="font-semibold mb-4">Resources</h3>
             <ul className="space-y-2">
               <li>
                 <a
                   href="#"
-                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
+                  className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
                 >
                   About Us
                 </a>
@@ -127,7 +127,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
+                  className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
                 >
                   Privacy Policy
                 </a>
@@ -135,7 +135,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-[#CCCCCC] text-sm hover:text-[#CCCCCC] transition-colors"
+                  className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
                 >
                   Terms of Service
                 </a>
@@ -145,8 +145,8 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div>
-            <h3 className="text-sm font-semibold mb-4">Newsletter</h3>
-            <p className="text-[#CCCCCC] text-sm mb-4">
+            <h3 className="font-semibold mb-4">Newsletter</h3>
+            <p className="text-[#CCCCCC] mb-4">
               Subscribe to our newsletter for the latest updates.
             </p>
             <div className="flex">
@@ -156,7 +156,7 @@ export default function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="flex-1 px-4 py-2 bg-white text-slate-900 text-sm rounded-l w-24 focus:outline-none"
+                className="flex-1 px-4 py-3 bg-white text-slate-900 rounded-l w-24 focus:outline-none"
               />
               <button
                 onClick={handleSubmit}
