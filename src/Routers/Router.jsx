@@ -35,6 +35,7 @@ import AdminMain from "../Layouts/Admin/AdminMain";
 import AdminSignIn from "../Pages/Auth/AdminSignin";
 import AdminDashboard from "../Layouts/Admin/AdminDashboard/AdminDashboard";
 import Universities from "../Layouts/Admin/Universities/Universities";
+import AIAssistant from "../components/AIAssistant/AIAssistant";
 
 export const router = createBrowserRouter([
   {
@@ -125,6 +126,10 @@ export const router = createBrowserRouter([
   {
     path: "/admin",
     element: <AdminSignIn />,
+  },
+  {
+    path: "ai-assistant",
+    element: <AIAssistant />,
   },
   {
     path: "/university",

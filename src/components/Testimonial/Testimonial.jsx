@@ -159,7 +159,7 @@ export default function Testimonial() {
               key={index}
               onClick={() => goToSlide(index)}
               className={`w-3 h-3 rounded-full transition-all ${
-                index === currentSlide ? "bg-blue-500 w-8" : "bg-gray-300"
+                index === currentSlide ? "bg-blue w-8" : "bg-gray-300"
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />
