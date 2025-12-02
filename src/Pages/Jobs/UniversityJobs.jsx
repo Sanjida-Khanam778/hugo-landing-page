@@ -104,6 +104,13 @@ export default function UniversityJobs() {
         "Support the marketing team in campaign management, social media management, and email marketing campaigns and assist in content creation.",
       fullDescription:
         "Support the marketing team in campaign management, social media management, and email marketing campaigns.",
+      details: {
+        category: "Technology",
+        experience: "Entry Level",
+        openings: "5 Positions",
+        deadline: "July 1, 2025",
+        duration: "3 months",
+      },
     },
     {
       id: 3,
@@ -119,6 +126,13 @@ export default function UniversityJobs() {
         "Assist with cutting-edge research in artificial intelligence and machine learning. Contribute to experimental, data collection, and publication preparation.",
       fullDescription:
         "Assist with cutting-edge research in artificial intelligence and machine learning.",
+      details: {
+        category: "Technology",
+        experience: "Entry Level",
+        openings: "5 Positions",
+        deadline: "July 1, 2025",
+        duration: "3 months",
+      },
     },
     {
       id: 4,
@@ -134,6 +148,13 @@ export default function UniversityJobs() {
         "Join our dynamic design team to support development, specifically product design research and product feature design.",
       fullDescription:
         "Join our dynamic design team to support development, specifically product design research and product feature design.",
+      details: {
+        category: "Technology",
+        experience: "Entry Level",
+        openings: "5 Positions",
+        deadline: "July 1, 2025",
+        duration: "3 months",
+      },
     },
     {
       id: 5,
@@ -149,6 +170,13 @@ export default function UniversityJobs() {
         "Assist professors in conducting theory labs, grading assignments, and supporting students in understanding advanced physics concepts.",
       fullDescription:
         "Assist professors in conducting theory labs, grading assignments, and supporting students in understanding advanced physics concepts.",
+      details: {
+        category: "Technology",
+        experience: "Entry Level",
+        openings: "5 Positions",
+        deadline: "July 1, 2025",
+        duration: "3 months",
+      },
     },
     {
       id: 6,
@@ -164,6 +192,13 @@ export default function UniversityJobs() {
         "Identify and pursue new business opportunities, negotiate deals, prospective accounts, lead deal research and tracking opportunities.",
       fullDescription:
         "Identify and pursue new business opportunities, negotiate deals, prospective accounts.",
+      details: {
+        category: "Technology",
+        experience: "Entry Level",
+        openings: "5 Positions",
+        deadline: "July 1, 2025",
+        duration: "3 months",
+      },
     },
   ];
 

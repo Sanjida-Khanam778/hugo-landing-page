@@ -8,12 +8,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-export default function JobDetails({
-  job,
-  onBackClick,
-  background,
-  uni_logo,
-}) {
+export default function JobDetails({ job, onBackClick, background, uni_logo }) {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [selectedType, setSelectedType] = useState("All Types");
@@ -197,10 +192,11 @@ export default function JobDetails({
               {job.responsibilities && (
                 <div className="space-y-2">
                   {job.responsibilities.map((item, index) => (
-                    <div key={index} className="flex items-start gap-2">
+                    <div key={index} className="flex items-center gap-2">
                       <CheckCircle
-                        size={16}
-                        className="text-green-600 mt-1 flex-shrink-0"
+                        size={18}
+                        strokeWidth={2.75}
+                        className="text-[#16A34A] mt-1 flex-shrink-0"
                       />
                       <span className="text-sm text-gray-700">{item}</span>
                     </div>
@@ -217,8 +213,9 @@ export default function JobDetails({
                   {job.requirements.map((item, index) => (
                     <div key={index} className="flex items-start gap-2">
                       <CheckCircle
-                        size={16}
-                        className="text-green-600 mt-1 flex-shrink-0"
+                        size={18}
+                        strokeWidth={2.75}
+                        className="text-[#16A34A] mt-1 flex-shrink-0"
                       />
                       <span className="text-sm text-gray-700">{item}</span>
                     </div>
@@ -237,8 +234,9 @@ export default function JobDetails({
                   {job.qualifications.map((item, index) => (
                     <div key={index} className="flex items-start gap-2">
                       <CheckCircle
-                        size={16}
-                        className="text-green-600 mt-1 flex-shrink-0"
+                        size={18}
+                        strokeWidth={2.75}
+                        className="text-[#16A34A] mt-1 flex-shrink-0"
                       />
                       <span className="text-sm text-gray-700">{item}</span>
                     </div>
@@ -255,7 +253,11 @@ export default function JobDetails({
                   {job.benefits.map((item, index) => (
                     <div key={index} className="flex items-center gap-3">
                       <div>
-                        <CheckCircle size={16} className="text-green-600" />
+                        <CheckCircle
+                          size={18}
+                          strokeWidth={2.75}
+                          className="text-[#16A34A] mt-1 flex-shrink-0"
+                        />
                       </div>
                       <span className="text-sm text-gray-700">{item}</span>
                     </div>

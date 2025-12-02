@@ -71,11 +71,11 @@ export default function UniversityDirectory() {
   // reusable filters markup so we can render it in desktop sidebar and mobile panel
   const FiltersContent = () => (
     <div className="bg-[#ECF5FF] p-6 shadow-sm">
-      <h3 className="font-semibold mb-4">Filters</h3>
+      <h3 className="font-bold text-xl mb-4">Filters</h3>
 
       {/* Study type Filter */}
       <div className="mb-6">
-        <h4 className="text-sm font-medium mb-3">Study Type</h4>
+        <h4 className="font-semibold mb-3">Study Type</h4>
         <div className="space-y-2">
           <label className="flex items-center cursor-pointer select-none">
             <input
@@ -153,7 +153,7 @@ export default function UniversityDirectory() {
       </div>
       {/* Country Filter */}
       <div className="mb-6">
-        <h4 className="text-sm font-medium mb-3">Country</h4>
+        <h4 className="font-semibold mb-3">Country</h4>
         <div className="space-y-2">
           <label className="flex items-center cursor-pointer select-none">
             <input
@@ -210,7 +210,7 @@ export default function UniversityDirectory() {
 
       {/* Study Level Filter */}
       <div className="mb-6">
-        <h4 className="text-sm font-medium mb-3">Study Level</h4>
+        <h4 className="font-semibold mb-3">Study Level</h4>
         <div className="space-y-2">
           <label className="flex items-center cursor-pointer select-none">
             <input
@@ -267,7 +267,7 @@ export default function UniversityDirectory() {
 
       {/* Field of Study Filter */}
       <div>
-        <h4 className="text-sm font-medium mb-3">Field of Study</h4>
+        <h4 className="font-semibold mb-3">Field of Study</h4>
         <div className="space-y-2">
           <label className="flex items-center cursor-pointer select-none">
             <input
@@ -495,7 +495,7 @@ export default function UniversityDirectory() {
 
             {/* Load More Button */}
             <div className="mt-8 text-center">
-              <button className="px-6 py-2 border-2 border-blue-600 text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition-colors inline-flex items-center">
+              <button className="px-6 py-3 text-lg border-2 border-blue text-blue rounded-md font-medium hover:bg-blue-50 transition-colors inline-flex items-center">
                 Load More
                 <ChevronDown size={16} className="ml-2" />
               </button>

@@ -25,6 +25,9 @@ import { FiCalendar } from "react-icons/fi";
 export default function UniversityEvents() {
   const [view, setView] = useState("list"); // 'list' or 'detail'
   const [selectedEvent, setSelectedEvent] = useState(null);
+  // single-select filters
+  const [eventFormat, setEventFormat] = useState("all");
+  const [eventType, setEventType] = useState("all");
 
   const events = [
     {
@@ -114,7 +117,7 @@ export default function UniversityEvents() {
       university: "Stanford University",
       date: "August 20, 2025",
       time: "2:00 PM - 5:00 PM",
-      location: "Online",
+      location: "Virtual Event",
       attendees: "500 Students",
       category: "Webinar",
       badge: "Online",
@@ -163,7 +166,7 @@ export default function UniversityEvents() {
           <div className="w-11/12 mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
             <button
               onClick={handleBackToList}
-              className="mb-10 text-white/80 hover:text-white text-sm"
+              className="mb-10 text-white/80 hover:text-white "
             >
               ← Back to Events
             </button>
@@ -198,26 +201,22 @@ export default function UniversityEvents() {
                   <div className="flex items-start gap-3 bg-[#EFF6FF] p-4 rounded-lg">
                     <Calendar className="text-blue mt-2" size={20} />
                     <div>
-                      <p className="text-xs text-grey">Date</p>
-                      <p className="text-sm font-medium">
-                        {selectedEvent.date}
-                      </p>
+                      <p className=" text-grey">Date</p>
+                      <p className=" font-medium">{selectedEvent.date}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 bg-[#EFF6FF] p-4 rounded-lg">
                     <Clock className="text-blue mt-2" size={20} />
                     <div>
-                      <p className="text-xs text-grey">Time</p>
-                      <p className="text-sm font-medium">
-                        {selectedEvent.time}
-                      </p>
+                      <p className=" text-grey">Time</p>
+                      <p className=" font-medium">{selectedEvent.time}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 bg-[#EFF6FF] p-4 rounded-lg">
                     <Users className="text-blue mt-2" size={20} />
                     <div>
-                      <p className="text-xs text-grey">Category</p>
-                      <p className="text-sm font-medium">Open Day</p>
+                      <p className=" text-grey">Category</p>
+                      <p className=" font-medium">Open Day</p>
                     </div>
                   </div>
                 </div>
@@ -231,14 +230,14 @@ export default function UniversityEvents() {
                     {selectedEvent.agenda.map((item, index) => (
                       <div className="flex gap-4">
                         <div className="border-r-2 border-[#BFDBFE] pr-4 w-40">
-                          <p className="text-sm text-grey">{item.time}</p>
+                          <p className=" text-grey">{item.time}</p>
                         </div>
 
                         <div key={index} className="pl-4 pb-6">
                           <p className="font-medium text-[#111827]">
                             {item.title}
                           </p>
-                          <p className="text-sm text-[#374151] mt-2">
+                          <p className=" text-[#374151] mt-2">
                             {item.description}
                           </p>
                         </div>
@@ -263,12 +262,8 @@ export default function UniversityEvents() {
                         </div>
                         <div>
                           <h3 className="font-semibold">{speaker.name}</h3>
-                          <p className="text-sm text-gray-600">
-                            {speaker.title}
-                          </p>
-                          <p className="text-sm text-gray-700 mt-2">
-                            {speaker.bio}
-                          </p>
+                          <p className=" text-gray-600">{speaker.title}</p>
+                          <p className=" text-gray-700 mt-2">{speaker.bio}</p>
                         </div>
                       </div>
                     ))}
@@ -284,7 +279,7 @@ export default function UniversityEvents() {
                     <h3 className="font-semibold mb-2">
                       {selectedEvent.venue.name}
                     </h3>
-                    <p className="text-sm text-gray-700 mb-4">
+                    <p className=" text-gray-700 mb-4">
                       {selectedEvent.venue.address}
                     </p>
 
@@ -292,8 +287,8 @@ export default function UniversityEvents() {
                       <div className="flex items-start gap-2">
                         <Check className="text-[#16A34A]" size={22} />
                         <div>
-                          <p className="text-sm font-medium">Parking:</p>
-                          <p className="text-sm text-gray-600">
+                          <p className=" font-medium">Parking:</p>
+                          <p className=" text-gray-600">
                             {selectedEvent.venue.parking}
                           </p>
                         </div>
@@ -302,8 +297,8 @@ export default function UniversityEvents() {
                         <Check className="text-[#16A34A]" size={22} />
 
                         <div>
-                          <p className="text-sm font-medium">Accessibility:</p>
-                          <p className="text-sm text-gray-600">
+                          <p className=" font-medium">Accessibility:</p>
+                          <p className=" text-gray-600">
                             {selectedEvent.venue.accessibility}
                           </p>
                         </div>
@@ -311,10 +306,8 @@ export default function UniversityEvents() {
                       <div className="flex items-start gap-2">
                         <Check className="text-[#16A34A]" size={22} />
                         <div>
-                          <p className="text-sm font-medium">
-                            Public Transport:
-                          </p>
-                          <p className="text-sm text-gray-600">
+                          <p className=" font-medium">Public Transport:</p>
+                          <p className=" text-gray-600">
                             {selectedEvent.venue.transport}
                           </p>
                         </div>
@@ -329,7 +322,7 @@ export default function UniversityEvents() {
                 <h2 className="text-xl font-bold mb-4">
                   Additional Information
                 </h2>
-                <p className="text-sm text-gray-700">
+                <p className=" text-gray-700">
                   Business casual attire recommended. Bring government-issued ID
                   for campus access.
                 </p>
@@ -343,7 +336,7 @@ export default function UniversityEvents() {
                 <h3 className="font-semibold mb-4">Event Registration</h3>
                 <img src={event} className="mx-auto" alt="" />
                 <p className="font-medium text-center my-4">Event Ended</p>
-                <p className="text-sm text-gray-600 mb-4 text-center">
+                <p className=" text-gray-600 mb-4 text-center">
                   This event has already taken place. Check out our upcoming
                   events.
                 </p>
@@ -363,11 +356,11 @@ export default function UniversityEvents() {
                     <p className="font-medium">Harvard University</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-700 mb-4">
+                <p className=" text-gray-700 mb-4">
                   Learn more about programs, admissions, and life as a Harvard
                   student at University.
                 </p>
-                <button className="text-blue-600 bg-base w-full p-3 rounded-lg text-sm">
+                <button className="text-blue-600 bg-base w-full p-3 rounded-lg ">
                   Visit University Profile
                 </button>
               </div>
@@ -375,7 +368,7 @@ export default function UniversityEvents() {
               {/* Related Events */}
               <div className="bg-white rounded-lg p-6">
                 <h3 className="font-semibold mb-4">Related Events</h3>
-                <button className="text-blue text-center w-full text-sm font-medium">
+                <button className="text-blue text-center w-full  font-medium">
                   View All Events
                 </button>
               </div>
@@ -413,28 +406,28 @@ export default function UniversityEvents() {
                 <Calendar size={22} className="text-blue" />
                 <p className="text-dark font-medium text-lg">Founded</p>
               </div>
-              <p className="text-sm text-[#374151]">1636</p>
+              <p className=" text-[#374151]">1636</p>
             </div>
             <div className="grid place-items-center gap-2">
               <div className="flex items-center gap-3">
                 <Building size={22} className="text-blue" />
                 <p className="text-dark font-medium text-lg">Campuses</p>
               </div>
-              <p className="text-sm text-[#374151]">3</p>
+              <p className=" text-[#374151]">3</p>
             </div>
             <div className="grid place-items-center gap-2">
               <div className="flex items-center gap-3">
                 <Users size={22} className="text-blue" />
                 <p className="text-dark font-medium text-lg">Students</p>
               </div>
-              <p className="text-sm text-[#374151]">23,000</p>
+              <p className=" text-[#374151]">23,000</p>
             </div>
             <div className="grid place-items-center gap-2">
               <div className="flex items-center gap-3">
                 <Award size={22} className="text-blue" />
                 <p className="text-dark font-medium text-lg">Faculty</p>
               </div>
-              <p className="text-sm text-[#374151]">2,400</p>
+              <p className=" text-[#374151]">2,400</p>
             </div>
           </div>
         </div>
@@ -446,74 +439,125 @@ export default function UniversityEvents() {
           {/* Filters Sidebar */}
           <div className="w-56 flex-shrink-0">
             <div className="bg-white rounded-lg p-4">
-              <div className="mb-4">
-                <p className="text-xs text-gray-500 mb-2">Showing: 6 events</p>
-              </div>
-
-              <h3 className="font-semibold mb-3 text-sm">Filters</h3>
+              <h3 className="font-semibold mb-3 text-lg">Filters</h3>
 
               <div className="mb-4">
-                <h4 className="text-xs font-medium mb-2 text-gray-700">
+                <h4 className=" font-medium mb-2 text-gray-700">
                   Event Format
                 </h4>
                 <div className="space-y-1.5">
-                  <label className="flex items-center text-sm">
-                    <input type="checkbox" className="mr-2" />
-                    <span>All Events</span>
+                  <label className="flex items-center cursor-pointer select-none">
+                    <input
+                      type="radio"
+                      name="eventFormat"
+                      className="mr-2 cursor-pointer"
+                      checked={eventFormat === "all"}
+                      onChange={() => setEventFormat("all")}
+                    />
+                    <span className="text-sm">All Events</span>
                   </label>
-                  <label className="flex items-center text-sm">
-                    <input type="checkbox" className="mr-2" />
-                    <span>In-Person</span>
+                  <label className="flex items-center cursor-pointer select-none">
+                    <input
+                      type="radio"
+                      name="eventFormat"
+                      className="mr-2 cursor-pointer"
+                      checked={eventFormat === "in-person"}
+                      onChange={() => setEventFormat("in-person")}
+                    />
+                    <span className="text-sm">In-Person</span>
                   </label>
-                  <label className="flex items-center text-sm">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Virtual</span>
+                  <label className="flex items-center cursor-pointer select-none">
+                    <input
+                      type="radio"
+                      name="eventFormat"
+                      className="mr-2 cursor-pointer"
+                      checked={eventFormat === "virtual"}
+                      onChange={() => setEventFormat("virtual")}
+                    />
+                    <span className="text-sm">Virtual</span>
                   </label>
                 </div>
               </div>
 
               <div className="mb-4">
-                <h4 className="text-xs font-medium mb-2 text-gray-700">
-                  Event Type
-                </h4>
+                <h4 className=" font-medium mb-2 text-gray-700">Event Type</h4>
                 <div className="space-y-1.5">
-                  <label className="flex items-center text-sm">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Open Day</span>
+                  <label className="flex items-center cursor-pointer select-none">
+                    <input
+                      type="radio"
+                      name="eventType"
+                      className="mr-2 cursor-pointer"
+                      checked={eventType === "all"}
+                      onChange={() => setEventType("all")}
+                    />
+                    <span className="text-sm">All Types</span>
                   </label>
-                  <label className="flex items-center text-sm">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Webinar</span>
+                  <label className="flex items-center cursor-pointer select-none">
+                    <input
+                      type="radio"
+                      name="eventType"
+                      className="mr-2 cursor-pointer"
+                      checked={eventType === "open-day"}
+                      onChange={() => setEventType("open-day")}
+                    />
+                    <span className="text-sm">Open Day</span>
                   </label>
-                  <label className="flex items-center text-sm">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Info Session</span>
+                  <label className="flex items-center cursor-pointer select-none">
+                    <input
+                      type="radio"
+                      name="eventType"
+                      className="mr-2 cursor-pointer"
+                      checked={eventType === "webinar"}
+                      onChange={() => setEventType("webinar")}
+                    />
+                    <span className="text-sm">Webinar</span>
                   </label>
-                  <label className="flex items-center text-sm">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Workshop</span>
+                  <label className="flex items-center cursor-pointer select-none">
+                    <input
+                      type="radio"
+                      name="eventType"
+                      className="mr-2 cursor-pointer"
+                      checked={eventType === "info-session"}
+                      onChange={() => setEventType("info-session")}
+                    />
+                    <span className="text-sm">Info Session</span>
                   </label>
-                  <label className="flex items-center text-sm">
-                    <input type="checkbox" className="mr-2" />
-                    <span>Conference</span>
+                  <label className="flex items-center cursor-pointer select-none">
+                    <input
+                      type="radio"
+                      name="eventType"
+                      className="mr-2 cursor-pointer"
+                      checked={eventType === "workshop"}
+                      onChange={() => setEventType("workshop")}
+                    />
+                    <span className="text-sm">Workshop</span>
+                  </label>
+                  <label className="flex items-center cursor-pointer select-none">
+                    <input
+                      type="radio"
+                      name="eventType"
+                      className="mr-2 cursor-pointer"
+                      checked={eventType === "conference"}
+                      onChange={() => setEventType("conference")}
+                    />
+                    <span className="text-sm">Conference</span>
                   </label>
                 </div>
               </div>
 
               <div>
-                <h4 className="text-xs font-medium mb-2 text-gray-700">
-                  Study Field
-                </h4>
-                <button className="text-sm text-gray-600 flex items-center justify-between w-full">
-                  <span>All Fields</span>
-                  <ChevronDown size={14} />
-                </button>
+                <h4 className=" font-medium mb-2 text-gray-700">Date</h4>
+                <input type="date" className="border p-2 rounded-lg w-full" />
               </div>
             </div>
           </div>
 
           {/* Events List */}
           <div className="flex-1">
+            {/* Events Header */}
+            <div className="mb-4">
+              <p className="text-sm text-gray-600">Showing 3 events</p>
+            </div>
             <div className="space-y-4">
               {events.map((event) => (
                 <div
@@ -536,7 +580,7 @@ export default function UniversityEvents() {
                             <div className="">
                               <img src={uni_logo} alt="" />
                             </div>
-                            <span className="text-xs text-gray-600">
+                            <span className=" text-gray-600">
                               {event.university}
                             </span>
                           </div>
@@ -546,7 +590,7 @@ export default function UniversityEvents() {
                         </div>
                         {event.badge && (
                           <span
-                            className={`text-xs px-3 py-1 rounded-md ${
+                            className={` px-3 py-1 rounded-md ${
                               event.badge === "In-person"
                                 ? "bg-[#BFDBFE] text-[#1E40AF]"
                                 : "bg-[#DCFCE7] text-[#16A34A]"
@@ -557,7 +601,7 @@ export default function UniversityEvents() {
                         )}
                       </div>
 
-                      <div className="flex items-center gap-4 text-xs text-[#374151] mb-2">
+                      <div className="flex items-center gap-4  text-[#374151] mb-2">
                         <span className="flex items-center">
                           <Calendar size={16} className="mr-1 text-dark" />
                           {event.date}
@@ -567,23 +611,21 @@ export default function UniversityEvents() {
                           {event.time}
                         </span>
                       </div>
-                      <div className="flex items-center text-xs text-[#374151] mb-4">
+                      <div className="flex items-center  text-[#374151] mb-4">
                         <MapPin size={16} className="mr-1 text-dark" />
                         {event.location}
                       </div>
 
-                      <p className="text-sm text-gray-700">
-                        {event.description}
-                      </p>
+                      <p className=" text-gray-700">{event.description}</p>
                     </div>
 
                     <div className="flex items-center justify-between mt-3">
-                      <span className="text-xs text-dark bg-[#F3F4F6] px-2 py-1 rounded-md">
+                      <span className=" text-dark bg-[#F3F4F6] px-2 py-1 rounded-md">
                         {event.category}
                       </span>
                       <button
                         onClick={() => handleViewDetails(event)}
-                        className="bg-blue text-white px-4 py-2 rounded text-sm transition-colors"
+                        className="bg-blue text-white px-4 py-2 rounded  transition-colors"
                       >
                         View Details
                       </button>
