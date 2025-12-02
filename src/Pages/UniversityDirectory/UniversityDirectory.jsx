@@ -5,6 +5,7 @@ import { PiBookOpenBold, PiGlobeSimpleBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
 export default function UniversityDirectory() {
+  const [studyType, setStudyType] = useState("all");
   const [selectedCountry, setSelectedCountry] = useState("all");
   const [selectedLevel, setSelectedLevel] = useState("all");
   const [selectedField, setSelectedField] = useState("all");
@@ -72,55 +73,137 @@ export default function UniversityDirectory() {
     <div className="bg-[#ECF5FF] p-6 shadow-sm">
       <h3 className="font-semibold mb-4">Filters</h3>
 
+      {/* Study type Filter */}
+      <div className="mb-6">
+        <h4 className="text-sm font-medium mb-3">Study Type</h4>
+        <div className="space-y-2">
+          <label className="flex items-center cursor-pointer select-none">
+            <input
+              type="radio"
+              name="type"
+              className="mr-2 cursor-pointer"
+              checked={studyType === "all"}
+              onChange={() => setStudyType("all")}
+            />
+            <span className="text-sm cursor-pointer">All Type</span>
+          </label>
+          <label className="flex items-center cursor-pointer select-none">
+            <input
+              type="radio"
+              name="type"
+              className="mr-2 cursor-pointer"
+              checked={studyType === "college"}
+              onChange={() => setStudyType("college")}
+            />
+            <span className="text-sm cursor-pointer">College</span>
+          </label>
+          <label className="flex items-center cursor-pointer select-none">
+            <input
+              type="radio"
+              name="type"
+              className="mr-2 cursor-pointer"
+              checked={studyType === "master"}
+              onChange={() => setStudyType("master")}
+            />
+            <span className="text-sm cursor-pointer">Master</span>
+          </label>
+          <label className="flex items-center cursor-pointer select-none">
+            <input
+              type="radio"
+              name="type"
+              className="mr-2 cursor-pointer"
+              checked={studyType === "degree"}
+              onChange={() => setStudyType("degree")}
+            />
+            <span className="text-sm cursor-pointer">Degree</span>
+          </label>
+          <label className="flex items-center cursor-pointer select-none">
+            <input
+              type="radio"
+              name="type"
+              className="mr-2 cursor-pointer"
+              checked={studyType === "academy"}
+              onChange={() => setStudyType("academy")}
+            />
+            <span className="text-sm cursor-pointer">Academy</span>
+          </label>
+          <label className="flex items-center cursor-pointer select-none">
+            <input
+              type="radio"
+              name="type"
+              className="mr-2 cursor-pointer"
+              checked={studyType === "online courses"}
+              onChange={() => setStudyType("online courses")}
+            />
+            <span className="text-sm cursor-pointer">Online courses</span>
+          </label>
+          <label className="flex items-center cursor-pointer select-none">
+            <input
+              type="radio"
+              name="type"
+              className="mr-2 cursor-pointer"
+              checked={studyType === "professional Formation"}
+              onChange={() => setStudyType("professional Formation")}
+            />
+            <span className="text-sm cursor-pointer">
+              Professional Formation
+            </span>
+          </label>
+        </div>
+      </div>
       {/* Country Filter */}
       <div className="mb-6">
         <h4 className="text-sm font-medium mb-3">Country</h4>
         <div className="space-y-2">
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="country"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
               checked={selectedCountry === "all"}
               onChange={() => setSelectedCountry("all")}
             />
-            <span className="text-sm">All Countries</span>
+            <span className="text-sm cursor-pointer">All Countries</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="country"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedCountry === "us"}
               onChange={() => setSelectedCountry("us")}
             />
-            <span className="text-sm">United States</span>
+            <span className="text-sm cursor-pointer">United States</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="country"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedCountry === "uk"}
               onChange={() => setSelectedCountry("uk")}
             />
-            <span className="text-sm">United Kingdom</span>
+            <span className="text-sm cursor-pointer">United Kingdom</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="country"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedCountry === "canada"}
               onChange={() => setSelectedCountry("canada")}
             />
-            <span className="text-sm">Canada</span>
+            <span className="text-sm cursor-pointer">Canada</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="country"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedCountry === "australia"}
               onChange={() => setSelectedCountry("australia")}
             />
-            <span className="text-sm">Australia</span>
+            <span className="text-sm cursor-pointer">Australia</span>
           </label>
         </div>
       </div>
@@ -129,51 +212,55 @@ export default function UniversityDirectory() {
       <div className="mb-6">
         <h4 className="text-sm font-medium mb-3">Study Level</h4>
         <div className="space-y-2">
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="level"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
               checked={selectedLevel === "all"}
               onChange={() => setSelectedLevel("all")}
             />
-            <span className="text-sm">All Levels</span>
+            <span className="text-sm cursor-pointer">All Levels</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="level"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedLevel === "bachelor"}
               onChange={() => setSelectedLevel("bachelor")}
             />
-            <span className="text-sm">Bachelor's</span>
+            <span className="text-sm cursor-pointer">Bachelor's</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="level"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedLevel === "master"}
               onChange={() => setSelectedLevel("master")}
             />
-            <span className="text-sm">Master's</span>
+            <span className="text-sm cursor-pointer">Master's</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="level"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedLevel === "doctorate"}
               onChange={() => setSelectedLevel("doctorate")}
             />
-            <span className="text-sm">Doctorate</span>
+            <span className="text-sm cursor-pointer">Doctorate</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="level"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedLevel === "certificate"}
               onChange={() => setSelectedLevel("certificate")}
             />
-            <span className="text-sm">Certificate</span>
+            <span className="text-sm cursor-pointer">Certificate</span>
           </label>
         </div>
       </div>
@@ -182,78 +269,85 @@ export default function UniversityDirectory() {
       <div>
         <h4 className="text-sm font-medium mb-3">Field of Study</h4>
         <div className="space-y-2">
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="field"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
               checked={selectedField === "all"}
               onChange={() => setSelectedField("all")}
             />
-            <span className="text-sm">All Fields</span>
+            <span className="text-sm cursor-pointer">All Fields</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="field"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedField === "business"}
               onChange={() => setSelectedField("business")}
             />
-            <span className="text-sm">Business</span>
+            <span className="text-sm cursor-pointer">Business</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="field"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedField === "engineering"}
               onChange={() => setSelectedField("engineering")}
             />
-            <span className="text-sm">Engineering</span>
+            <span className="text-sm cursor-pointer">Engineering</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="field"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedField === "medicine"}
               onChange={() => setSelectedField("medicine")}
             />
-            <span className="text-sm">Medicine</span>
+            <span className="text-sm cursor-pointer">Medicine</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="field"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedField === "cs"}
               onChange={() => setSelectedField("cs")}
             />
-            <span className="text-sm">Computer Science</span>
+            <span className="text-sm cursor-pointer">Computer Science</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="field"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedField === "law"}
               onChange={() => setSelectedField("law")}
             />
-            <span className="text-sm">Law</span>
+            <span className="text-sm cursor-pointer">Law</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="field"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedField === "arts"}
               onChange={() => setSelectedField("arts")}
             />
-            <span className="text-sm">Arts</span>
+            <span className="text-sm cursor-pointer">Arts</span>
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
               name="field"
-              className="mr-2"
+              className="mr-2 cursor-pointer"
+              checked={selectedField === "humanities"}
               onChange={() => setSelectedField("humanities")}
             />
-            <span className="text-sm">Humanities</span>
+            <span className="text-sm cursor-pointer">Humanities</span>
           </label>
         </div>
       </div>
@@ -388,9 +482,11 @@ export default function UniversityDirectory() {
                       <span className="text-xs bg-[#BFDBFE] text-[#1E40AF] px-3 py-1 rounded-[4px]">
                         {uni.badges[0]}
                       </span>
-                      <Link to={`/universities/${uni.id}`}><button className="text-[#002B5B] text-sm font-medium">
-                        View Details
-                      </button></Link>
+                      <Link to={`/universities/${uni.id}`}>
+                        <button className="text-[#002B5B] text-sm font-medium">
+                          View Details
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
