@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { MapPin, X } from "lucide-react";
-
+import req from "../../assets/images/reqInfo.png";
 import Program from "./Program";
 import Events from "./Events";
 import Testimonial from "../../components/Testimonial/Testimonial";
 import TestimonialTab from "./TestimonialTab";
 import Gallery from "./Gallery";
 import Overview from "./Overview";
+import { FaMapMarkerAlt } from "react-icons/fa";
 export default function UniversityTab() {
   const [activeTab, setActiveTab] = useState("overview");
   const [showRequestForm, setShowRequestForm] = useState(false);
@@ -45,7 +46,7 @@ export default function UniversityTab() {
           <div className="flex gap-8">
             <button
               onClick={() => setActiveTab("overview")}
-              className={`py-4 text-sm font-medium border-b-2 transition-colors ${
+              className={`py-4 font-medium border-b-2 transition-colors ${
                 activeTab === "overview"
                   ? "border-blue text-blue"
                   : "border-transparent text-gray-600 hover:text-gray-900"
@@ -55,7 +56,7 @@ export default function UniversityTab() {
             </button>
             <button
               onClick={() => setActiveTab("programs")}
-              className={`py-4 text-sm font-medium border-b-2 transition-colors ${
+              className={`py-4 font-medium border-b-2 transition-colors ${
                 activeTab === "programs"
                   ? "border-blue text-blue"
                   : "border-transparent text-gray-600 hover:text-gray-900"
@@ -65,7 +66,7 @@ export default function UniversityTab() {
             </button>
             <button
               onClick={() => setActiveTab("events")}
-              className={`py-4 text-sm font-medium border-b-2 transition-colors ${
+              className={`py-4 font-medium border-b-2 transition-colors ${
                 activeTab === "events"
                   ? "border-blue text-blue"
                   : "border-transparent text-gray-600 hover:text-gray-900"
@@ -75,7 +76,7 @@ export default function UniversityTab() {
             </button>
             <button
               onClick={() => setActiveTab("testimonials")}
-              className={`py-4 text-sm font-medium border-b-2 transition-colors ${
+              className={`py-4 font-medium border-b-2 transition-colors ${
                 activeTab === "testimonials"
                   ? "border-blue text-blue"
                   : "border-transparent text-gray-600 hover:text-gray-900"
@@ -85,7 +86,7 @@ export default function UniversityTab() {
             </button>
             <button
               onClick={() => setActiveTab("gallery")}
-              className={`py-4 text-sm font-medium border-b-2 transition-colors ${
+              className={`py-4 font-medium border-b-2 transition-colors ${
                 activeTab === "gallery"
                   ? "border-blue text-blue"
                   : "border-transparent text-gray-600 hover:text-gray-900"
@@ -102,9 +103,7 @@ export default function UniversityTab() {
         <div className="grid grid-cols-3 gap-8">
           {/* Left Content - Overview Tab */}
           <div className="col-span-2 space-y-6">
-            {activeTab === "overview" && (
-            <Overview />
-            )}
+            {activeTab === "overview" && <Overview />}
 
             {activeTab === "programs" && <Program />}
 
@@ -112,63 +111,61 @@ export default function UniversityTab() {
 
             {activeTab === "testimonials" && <TestimonialTab />}
 
-            {activeTab === "gallery" && (
-             <Gallery />
-            )}
+            {activeTab === "gallery" && <Gallery />}
           </div>
 
           {/* Right Sidebar - Request Information (Stable) */}
           <div className="space-y-6">
-            <div className="bg-white rounded-lg p-6 shadow-sm sticky top-8">
-              <h3 className="text-lg font-bold mb-3">Request Information</h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Interested in learning more about Harvard University? Fill out
-                the form and a university representative will contact you!
-              </p>
-              <button
-                onClick={() => setShowRequestForm(true)}
-                className="w-full bg-blue text-white py-3 rounded-lg font-medium transition-colors"
-              >
-                Request Information
-              </button>
-
+            <div className="sticky top-16">
+              <div className="bg-white rounded-lg p-6 shadow-sm ">
+                {" "}
+                <h3 className="text-lg font-bold mb-3">Request Information</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Interested in learning more about Harvard University? Fill out
+                  the form and a university representative will contact you!
+                </p>
+                <button
+                  onClick={() => setShowRequestForm(true)}
+                  className="w-full bg-blue text-white py-3 rounded-lg font-medium transition-colors"
+                >
+                  Request Information
+                </button>
+              </div>
               {/* Campus Locations */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="space-y-4">
+              <div
+                className="mt-6 pt-6 rounded-xl p-6"
+                style={{
+                  backgroundImage: `url(${req})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              >
+                <div className="space-y-8">
                   <div className="flex items-start gap-3">
-                    <MapPin
-                      size={18}
-                      className="text-blue-600 mt-1 flex-shrink-0"
-                    />
+                    <div className=" bg-[#002B5B]/10 rounded-full w-12 h-12 flex items-center justify-center">
+                      <FaMapMarkerAlt className="text-primary text-xl mt-1 flex-shrink-0" />
+                    </div>
                     <div>
-                      <p className="font-medium text-sm">1. ABC Campus</p>
-                      <p className="text-xs text-gray-600">
-                        Road 00, Abc palace, etc
-                      </p>
+                      <p className="font-medium ">1. ABC Campus</p>
+                      <p className=" text-gray-600">Road 00, Abc palace, etc</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <MapPin
-                      size={18}
-                      className="text-blue-600 mt-1 flex-shrink-0"
-                    />
+                    <div className=" bg-[#002B5B]/10 rounded-full w-12 h-12 flex items-center justify-center">
+                      <FaMapMarkerAlt className="text-primary text-xl mt-1 flex-shrink-0" />
+                    </div>
                     <div>
-                      <p className="font-medium text-sm">2. ABC Campus</p>
-                      <p className="text-xs text-gray-600">
-                        Road 00, Abc palace, etc
-                      </p>
+                      <p className="font-medium ">2. ABC Campus</p>
+                      <p className=" text-gray-600">Road 00, Abc palace, etc</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <MapPin
-                      size={18}
-                      className="text-blue-600 mt-1 flex-shrink-0"
-                    />
+                    <div className=" bg-[#002B5B]/10 rounded-full w-12 h-12 flex items-center justify-center">
+                      <FaMapMarkerAlt className="text-primary text-xl mt-1 flex-shrink-0" />
+                    </div>
                     <div>
-                      <p className="font-medium text-sm">3. ABC Campus</p>
-                      <p className="text-xs text-gray-600">
-                        Road 00, Abc palace, etc
-                      </p>
+                      <p className="font-medium ">3. ABC Campus</p>
+                      <p className=" text-gray-600">Road 00, Abc palace, etc</p>
                     </div>
                   </div>
                 </div>

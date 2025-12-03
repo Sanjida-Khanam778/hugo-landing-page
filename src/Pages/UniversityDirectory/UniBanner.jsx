@@ -5,7 +5,7 @@ import uni_logo from "../../assets/icons/harvard.png";
 
 export default function UniBanner() {
   return (
-   <div className="relative overflow-hidden h-[50vh]">
+    <div className="relative overflow-hidden h-[50vh]">
       {/* Video Background Container */}
       <div className="absolute inset-0 w-full h-full">
         <video
@@ -42,5 +42,5 @@ export default function UniBanner() {
         </div>
       </div>
     </div>
-  )
+  );
 }
