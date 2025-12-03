@@ -1,6 +1,7 @@
 import React from "react";
 import program1 from "../../assets/images/program1.png";
 import program2 from "../../assets/images/program2.png";
+import { Link } from "react-router-dom";
 export default function Program() {
   return (
     <div className="border p-6 bg-white rounded-xl">
@@ -53,9 +54,11 @@ export default function Program() {
             </div>
 
             <div className="flex justify-end">
-              <button className="bg-blue text-white px-6 py-2 rounded-lg transition-colors">
-                View Details
-              </button>
+              <Link to={"/program-details"}>
+                <button className="bg-blue text-white px-6 py-2 rounded-lg transition-colors">
+                  View Details
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -101,9 +104,11 @@ export default function Program() {
             </div>
 
             <div className="flex justify-end">
-              <button className="bg-blue hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
-                View Details
-              </button>
+              <Link to={"/program-details"}>
+                <button className="bg-blue text-white px-6 py-2 rounded-lg transition-colors">
+                  View Details
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -147,9 +152,11 @@ export default function Program() {
             </div>
 
             <div className="flex justify-end">
-              <button className="bg-blue hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
-                View Details
-              </button>
+              <Link to={"/program-details"}>
+                <button className="bg-blue text-white px-6 py-2 rounded-lg transition-colors">
+                  View Details
+                </button>
+              </Link>
             </div>
           </div>
         </div>
