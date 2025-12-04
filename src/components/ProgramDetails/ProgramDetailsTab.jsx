@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CheckCircle, Phone, Mail } from "lucide-react";
+import { CheckCircle, Phone, Mail, Calendar } from "lucide-react";
 import profile1 from "../../assets/images/profile1.png";
 import profile2 from "../../assets/images/speaker.png";
 export default function ProgramDetailsTab() {
@@ -64,7 +64,7 @@ export default function ProgramDetailsTab() {
             {activeTab === "overview" && (
               <>
                 {/* Program Overview */}
-                <div className="bg-white rounded-lg p-6 shadow-sm">
+                <div className="bg-white rounded-lg p-6 ">
                   <h2 className="text-2xl font-bold mb-4">Program Overview</h2>
                   <p className="text-gray-700 leading-relaxed mb-6">
                     The Bachelor of Arts in Economics program at Harvard
@@ -86,7 +86,7 @@ export default function ProgramDetailsTab() {
                         strokeWidth={3.0}
                         className="text-[#16A34A] mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Understand and apply macroeconomic and microeconomic
                         theories
                       </span>
@@ -97,7 +97,7 @@ export default function ProgramDetailsTab() {
                         strokeWidth={3.0}
                         className="text-[#16A34A] mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Analyze economic data using statistical and econometric
                         methods
                       </span>
@@ -108,7 +108,7 @@ export default function ProgramDetailsTab() {
                         strokeWidth={3.0}
                         className="text-[#16A34A] mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Evaluate economic policies and their impacts on society
                       </span>
                     </div>
@@ -118,7 +118,7 @@ export default function ProgramDetailsTab() {
                         strokeWidth={3.0}
                         className="text-[#16A34A] mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Develop critical thinking and problem-solving skills for
                         economic issues
                       </span>
@@ -129,7 +129,7 @@ export default function ProgramDetailsTab() {
                         strokeWidth={3.0}
                         className="text-[#16A34A] mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Communicate economic concepts effectively in written and
                         oral forms
                       </span>
@@ -143,10 +143,10 @@ export default function ProgramDetailsTab() {
                       <img className="w-16 h-16" src={profile1} alt="" />{" "}
                       <div>
                         <p className="font-semibold">Dr. Jane Smith</p>
-                        <p className="text-sm text-gray-600">
+                        <p className=" text-gray-600">
                           Professor of Economics
                         </p>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className=" text-gray-500 mt-1">
                           Macroeconomic Theory
                         </p>
                       </div>
@@ -155,10 +155,10 @@ export default function ProgramDetailsTab() {
                       <img className="w-16 h-16" src={profile2} alt="" />{" "}
                       <div>
                         <p className="font-semibold">Dr. Robert Johnson</p>
-                        <p className="text-sm text-gray-600">
+                        <p className=" text-gray-600">
                           Associate Professor
                         </p>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className=" text-gray-500 mt-1">
                           Experimental Economics
                         </p>
                       </div>
@@ -167,7 +167,7 @@ export default function ProgramDetailsTab() {
                 </div>
 
                 {/* Program Curriculum */}
-                <div className="bg-white rounded-lg p-6 shadow-sm">
+                <div className="bg-white rounded-lg p-6 ">
                   <h2 className="text-2xl font-bold mb-4">
                     Program Curriculum
                   </h2>
@@ -189,7 +189,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             1
                           </div>
-                          <span className="text-sm text-gray-700">
+                          <span className=" text-gray-700">
                             Principles of Microeconomics
                           </span>
                         </div>
@@ -197,7 +197,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             2
                           </div>
-                          <span className="text-sm text-gray-700">
+                          <span className=" text-gray-700">
                             Principles of Macroeconomics
                           </span>
                         </div>
@@ -205,7 +205,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             3
                           </div>
-                          <span className="text-sm text-gray-700">
+                          <span className=" text-gray-700">
                             Calculus I & II
                           </span>
                         </div>
@@ -213,7 +213,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             4
                           </div>
-                          <span className="text-sm text-gray-700">
+                          <span className=" text-gray-700">
                             Introduction to Statistics
                           </span>
                         </div>
@@ -221,7 +221,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             5
                           </div>
-                          <span className="text-sm text-gray-700">
+                          <span className=" text-gray-700">
                             Writing and Communication
                           </span>
                         </div>
@@ -238,7 +238,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             1
                           </div>
-                          <span className="text-sm text-gray-700">
+                          <span className=" text-gray-700">
                             Intermediate Microeconomics
                           </span>
                         </div>
@@ -246,7 +246,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             2
                           </div>
-                          <span className="text-sm text-gray-700">
+                          <span className=" text-gray-700">
                             Intermediate Macroeconomics
                           </span>
                         </div>
@@ -254,7 +254,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             3
                           </div>
-                          <span className="text-sm text-gray-700">
+                          <span className=" text-gray-700">
                             Econometrics
                           </span>
                         </div>
@@ -262,7 +262,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             4
                           </div>
-                          <span className="text-sm text-gray-700">
+                          <span className=" text-gray-700">
                             Economic History
                           </span>
                         </div>
@@ -270,7 +270,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             5
                           </div>
-                          <span className="text-sm text-gray-700">
+                          <span className=" text-gray-700">
                             Electives
                           </span>
                         </div>
@@ -287,7 +287,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             1
                           </div>
-                          <span className="text-sm text-gray-700">
+                          <span className=" text-gray-700">
                             Advanced Microeconomics
                           </span>
                         </div>
@@ -295,7 +295,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             2
                           </div>
-                          <span className="text-sm text-gray-700">
+                          <span className=" text-gray-700">
                             Advanced Macroeconomics
                           </span>
                         </div>
@@ -410,28 +410,26 @@ export default function ProgramDetailsTab() {
             )}
 
             {activeTab === "admission" && (
-              <>
+              <div className="bg-white p-6">
                 {/* Admission Requirements */}
-                <div className="bg-white rounded-lg p-6 shadow-sm mb-6">
+                <div className="bg-white rounded-lg mb-6">
                   <h2 className="text-2xl font-bold mb-6">
                     Admission Requirements
                   </h2>
 
                   {/* Application Deadlines */}
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                    <h3 className="font-semibold text-sm mb-3">
+                  <div className="bg-[#EFF6FF] border border-[#EFF6FF] rounded-lg p-4 mb-6">
+                    <h3 className="font-semibold text-blue mb-3">
                       Application Deadlines
                     </h3>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm">
-                        <div className="w-4 h-4 border-2 border-blue-600 rounded flex items-center justify-center flex-shrink-0">
-                          <svg
-                            className="w-3 h-3 text-blue-600"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" />
-                          </svg>
+                        <div className="">
+                          <Calendar
+                            size={16}
+                            strokeWidth={2.75}
+                            className="text-blue"
+                          />
                         </div>
                         <span className="text-gray-700">
                           September 30th - (Early:{" "}
@@ -439,14 +437,12 @@ export default function ProgramDetailsTab() {
                         </span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
-                        <div className="w-4 h-4 border-2 border-blue-600 rounded flex items-center justify-center flex-shrink-0">
-                          <svg
-                            className="w-3 h-3 text-blue-600"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" />
-                          </svg>
+                        <div className="">
+                          <Calendar
+                            size={16}
+                            strokeWidth={2.75}
+                            className="text-blue"
+                          />
                         </div>
                         <span className="text-gray-700">
                           January 15th - (Regular:{" "}
@@ -457,59 +453,65 @@ export default function ProgramDetailsTab() {
                   </div>
 
                   {/* Requirements List */}
-                  <h3 className="font-semibold text-base mb-4">Requirements</h3>
+                  <h3 className="font-semibold mb-4">Requirements</h3>
                   <div className="space-y-3">
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-center gap-3">
                       <CheckCircle
+                        strokeWidth={3.0}
                         size={18}
-                        className="text-green-600 mt-0.5 flex-shrink-0"
+                        className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         High school diploma or equivalent
                       </span>
                     </div>
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-center gap-3">
                       <CheckCircle
+                        strokeWidth={3.0}
                         size={18}
-                        className="text-green-600 mt-0.5 flex-shrink-0"
+                        className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Completed GPA (typically 3.8 or higher)
                       </span>
                     </div>
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-center gap-3">
                       <CheckCircle
+                        strokeWidth={3.0}
                         size={18}
-                        className="text-green-600 mt-0.5 flex-shrink-0"
+                        className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         SAT/ACT scores
                       </span>
                     </div>
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-center gap-3">
                       <CheckCircle
+                        strokeWidth={3.0}
                         size={18}
-                        className="text-green-600 mt-0.5 flex-shrink-0"
+                        className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Personal Statement
                       </span>
                     </div>
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-center gap-3">
                       <CheckCircle
+                        strokeWidth={3.0}
                         size={18}
-                        className="text-green-600 mt-0.5 flex-shrink-0"
+                        className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Letters of recommendation
                       </span>
                     </div>
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-center gap-3">
                       <CheckCircle
+                        strokeWidth={3.0}
                         size={18}
-                        className="text-green-600 mt-0.5 flex-shrink-0"
+                        className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Demonstrated interest in economics or related fields
                       </span>
                     </div>
@@ -517,7 +519,7 @@ export default function ProgramDetailsTab() {
                 </div>
 
                 {/* Application Process */}
-                <div className="bg-white rounded-lg p-6 shadow-sm">
+                <div className="bg-white rounded-lg">
                   <h2 className="text-2xl font-bold mb-6">
                     Application Process
                   </h2>
@@ -525,14 +527,14 @@ export default function ProgramDetailsTab() {
                   <div className="space-y-4">
                     {/* Step 1 */}
                     <div className="flex gap-4">
-                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold">
+                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm">
                         1
                       </div>
                       <div>
-                        <h4 className="font-semibold text-sm mb-1">
+                        <h4 className="font-semibold  mb-1">
                           Create an Account
                         </h4>
-                        <p className="text-sm text-gray-600">
+                        <p className=" text-gray-600">
                           Register on the university's application portal.
                         </p>
                       </div>
@@ -540,14 +542,14 @@ export default function ProgramDetailsTab() {
 
                     {/* Step 2 */}
                     <div className="flex gap-4">
-                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold">
+                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0  ">
                         2
                       </div>
                       <div>
-                        <h4 className="font-semibold text-sm mb-1">
+                        <h4 className="font-semibold  mb-1">
                           Complete the Application Form
                         </h4>
-                        <p className="text-sm text-gray-600">
+                        <p className=" text-gray-600">
                           Fill in your personal details, academic information,
                           and program preferences.
                         </p>
@@ -556,14 +558,14 @@ export default function ProgramDetailsTab() {
 
                     {/* Step 3 */}
                     <div className="flex gap-4">
-                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold">
+                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0 ">
                         3
                       </div>
                       <div>
-                        <h4 className="font-semibold text-sm mb-1">
+                        <h4 className="font-semibold  mb-1">
                           Upload Required Documents
                         </h4>
-                        <p className="text-sm text-gray-600">
+                        <p className=" text-gray-600">
                           Submit transcripts, test scores, letters of
                           recommendation, and personal statement.
                         </p>
@@ -572,14 +574,14 @@ export default function ProgramDetailsTab() {
 
                     {/* Step 4 */}
                     <div className="flex gap-4">
-                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold">
+                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0  ">
                         4
                       </div>
                       <div>
-                        <h4 className="font-semibold text-sm mb-1">
+                        <h4 className="font-semibold  mb-1">
                           Pay Application Fee
                         </h4>
-                        <p className="text-sm text-gray-600">
+                        <p className=" text-gray-600">
                           Complete payment of the application fee.
                         </p>
                       </div>
@@ -587,14 +589,14 @@ export default function ProgramDetailsTab() {
 
                     {/* Step 5 */}
                     <div className="flex gap-4">
-                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold">
+                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0  ">
                         5
                       </div>
                       <div>
-                        <h4 className="font-semibold text-sm mb-1">
+                        <h4 className="font-semibold  mb-1">
                           Interview (if required)
                         </h4>
-                        <p className="text-sm text-gray-600">
+                        <p className=" text-gray-600">
                           Selected applicants may be invited for an interview.
                         </p>
                       </div>
@@ -602,19 +604,19 @@ export default function ProgramDetailsTab() {
                   </div>
 
                   {/* Apply Now Button */}
-                  <div className="mt-6">
-                    <button className="bg-blue hover:bg-blue-700 text-white px-8 py-2.5 rounded-lg text-sm font-medium transition-colors">
+                  <div className="mt-6 text-center">
+                    <button className="bg-blue hover:bg-blue-700 text-white px-8 py-2.5 rounded-lg transition-colors">
                       Apply Now
                     </button>
                   </div>
                 </div>
-              </>
+              </div>
             )}
 
             {activeTab === "fees" && (
               <>
                 {/* Tuition Fees */}
-                <div className="bg-white rounded-lg p-6 shadow-sm mb-6">
+                <div className="bg-white rounded-lg p-6  mb-6">
                   <h2 className="text-2xl font-bold mb-6">
                     Tuition Fees & Financial Aid
                   </h2>
@@ -626,7 +628,7 @@ export default function ProgramDetailsTab() {
                     <div className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center gap-2 mb-2">
                         <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                        <span className="text-sm font-medium text-gray-700">
+                        <span className=" font-medium text-gray-700">
                           Domestic Students
                         </span>
                       </div>
@@ -635,7 +637,7 @@ export default function ProgramDetailsTab() {
                     <div className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center gap-2 mb-2">
                         <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                        <span className="text-sm font-medium text-gray-700">
+                        <span className=" font-medium text-gray-700">
                           International Students
                         </span>
                       </div>
@@ -643,7 +645,7 @@ export default function ProgramDetailsTab() {
                     </div>
                   </div>
 
-                  <p className="text-sm text-gray-600 mb-6">
+                  <p className=" text-gray-600 mb-6">
                     *Fees can include accommodation, books, and other expenses.
                   </p>
 
@@ -654,32 +656,32 @@ export default function ProgramDetailsTab() {
 
                   <div className="space-y-3 mb-6">
                     <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Books & Supplies
                       </span>
-                      <span className="text-sm font-semibold">
+                      <span className=" font-semibold">
                         $1,000 - $1,500
                       </span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Room & Board
                       </span>
-                      <span className="text-sm font-semibold">
+                      <span className=" font-semibold">
                         $16,000 - $18,000
                       </span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Health Insurance
                       </span>
-                      <span className="text-sm font-semibold">$3,000</span>
+                      <span className=" font-semibold">$3,000</span>
                     </div>
                     <div className="flex justify-between items-center py-2">
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Personal Expenses
                       </span>
-                      <span className="text-sm font-semibold">
+                      <span className=" font-semibold">
                         $2,000 - $3,000
                       </span>
                     </div>
@@ -687,7 +689,7 @@ export default function ProgramDetailsTab() {
                 </div>
 
                 {/* Scholarships & Financial Aid */}
-                <div className="bg-white rounded-lg p-6 shadow-sm">
+                <div className="bg-white rounded-lg p-6 ">
                   <h2 className="text-lg font-bold mb-4">
                     Scholarships & Financial Aid
                   </h2>
@@ -696,14 +698,14 @@ export default function ProgramDetailsTab() {
                   <div className="border border-gray-200 rounded-lg p-4 mb-4">
                     <div className="flex items-center gap-2 mb-2">
                       <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                      <span className="text-sm font-semibold text-gray-900">
+                      <span className=" font-semibold text-gray-900">
                         Merit-Based Scholarship
                       </span>
                     </div>
-                    <div className="text-sm text-gray-700 mb-1">
+                    <div className=" text-gray-700 mb-1">
                       <span className="font-medium">Amount:</span> Up to $10,000
                     </div>
-                    <div className="text-sm text-gray-700">
+                    <div className=" text-gray-700">
                       <span className="font-medium">Eligibility:</span> Must
                       have a GPA of 3.8 or higher
                     </div>
@@ -713,15 +715,15 @@ export default function ProgramDetailsTab() {
                   <div className="border border-gray-200 rounded-lg p-4 mb-4">
                     <div className="flex items-center gap-2 mb-2">
                       <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                      <span className="text-sm font-semibold text-gray-900">
+                      <span className=" font-semibold text-gray-900">
                         Need-Based Aid
                       </span>
                     </div>
-                    <div className="text-sm text-gray-700 mb-1">
+                    <div className=" text-gray-700 mb-1">
                       <span className="font-medium">Amount:</span> $5,000 -
                       $20,000
                     </div>
-                    <div className="text-sm text-gray-700">
+                    <div className=" text-gray-700">
                       <span className="font-medium">Eligibility:</span> Based on
                       financial need and academic performance
                     </div>
@@ -729,19 +731,19 @@ export default function ProgramDetailsTab() {
 
                   {/* Financial Aid Office */}
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-                    <h4 className="font-semibold text-sm mb-2">
+                    <h4 className="font-semibold  mb-2">
                       Financial Aid Office
                     </h4>
-                    <p className="text-sm text-gray-700 mb-3">
+                    <p className=" text-gray-700 mb-3">
                       For more information about scholarships, grants, and
                       loans, please contact our Financial Aid Office.
                     </p>
                     <div className="space-y-1">
-                      <p className="text-sm text-gray-700">
+                      <p className=" text-gray-700">
                         <span className="font-medium">Email:</span>{" "}
                         financialaid@harvard.edu
                       </p>
-                      <p className="text-sm text-gray-700">
+                      <p className=" text-gray-700">
                         <span className="font-medium">Phone:</span> +1 (123)
                         456-7890
                       </p>
@@ -754,7 +756,7 @@ export default function ProgramDetailsTab() {
             {activeTab === "careers" && (
               <>
                 {/* Career Opportunities */}
-                <div className="bg-white rounded-lg p-6 shadow-sm mb-6">
+                <div className="bg-white rounded-lg p-6  mb-6">
                   <h2 className="text-2xl font-bold mb-4">
                     Career Opportunities
                   </h2>
@@ -775,7 +777,7 @@ export default function ProgramDetailsTab() {
                           1
                         </span>
                       </div>
-                      <p className="text-sm font-medium">Economic Researcher</p>
+                      <p className=" font-medium">Economic Researcher</p>
                     </div>
                     <div className="text-center p-4 border border-gray-200 rounded-lg">
                       <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -783,7 +785,7 @@ export default function ProgramDetailsTab() {
                           2
                         </span>
                       </div>
-                      <p className="text-sm font-medium">
+                      <p className=" font-medium">
                         Financial Consultant
                       </p>
                     </div>
@@ -793,7 +795,7 @@ export default function ProgramDetailsTab() {
                           3
                         </span>
                       </div>
-                      <p className="text-sm font-medium">
+                      <p className=" font-medium">
                         Market Research Analyst
                       </p>
                     </div>
@@ -803,7 +805,7 @@ export default function ProgramDetailsTab() {
                           4
                         </span>
                       </div>
-                      <p className="text-sm font-medium">Policy Advisor</p>
+                      <p className=" font-medium">Policy Advisor</p>
                     </div>
                     <div className="text-center p-4 border border-gray-200 rounded-lg">
                       <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -811,7 +813,7 @@ export default function ProgramDetailsTab() {
                           5
                         </span>
                       </div>
-                      <p className="text-sm font-medium">
+                      <p className=" font-medium">
                         Graduate studies in Economics, Business, or Law
                       </p>
                     </div>
@@ -819,36 +821,36 @@ export default function ProgramDetailsTab() {
                 </div>
 
                 {/* Employment Statistics */}
-                <div className="bg-white rounded-lg p-6 shadow-sm mb-6">
+                <div className="bg-white rounded-lg p-6  mb-6">
                   <h3 className="text-lg font-bold mb-4">
                     Employment Statistics
                   </h3>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Employed or Not Active (3 months)
                       </span>
-                      <span className="text-sm font-semibold">95%</span>
+                      <span className=" font-semibold">95%</span>
                     </div>
                     <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Average Starting Salary
                       </span>
-                      <span className="text-sm font-semibold">$75K</span>
+                      <span className=" font-semibold">$75K</span>
                     </div>
                     <div className="flex justify-between items-center py-3">
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Graduate School Placement
                       </span>
-                      <span className="text-sm font-semibold">20%</span>
+                      <span className=" font-semibold">20%</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Career Services */}
-                <div className="bg-white rounded-lg p-6 shadow-sm">
+                <div className="bg-white rounded-lg p-6 ">
                   <h3 className="text-lg font-bold mb-4">Career Services</h3>
-                  <p className="text-gray-700 text-sm leading-relaxed mb-4">
+                  <p className="text-gray-700  leading-relaxed mb-4">
                     Harvard University's Career Services provides career
                     services to help students prepare for and find employment.
                   </p>
@@ -856,55 +858,61 @@ export default function ProgramDetailsTab() {
                   <div className="space-y-3">
                     <div className="flex items-start gap-3">
                       <CheckCircle
+                        strokeWidth={3.0}
                         size={18}
-                        className="text-green-600 mt-0.5 flex-shrink-0"
+                        className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         One-on-one career counseling
                       </span>
                     </div>
                     <div className="flex items-start gap-3">
                       <CheckCircle
+                        strokeWidth={3.0}
                         size={18}
-                        className="text-green-600 mt-0.5 flex-shrink-0"
+                        className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Resume and cover letter workshops
                       </span>
                     </div>
                     <div className="flex items-start gap-3">
                       <CheckCircle
+                        strokeWidth={3.0}
                         size={18}
-                        className="text-green-600 mt-0.5 flex-shrink-0"
+                        className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Interview preparation and mock interviews
                       </span>
                     </div>
                     <div className="flex items-start gap-3">
                       <CheckCircle
+                        strokeWidth={3.0}
                         size={18}
-                        className="text-green-600 mt-0.5 flex-shrink-0"
+                        className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Job and internship fairs
                       </span>
                     </div>
                     <div className="flex items-start gap-3">
                       <CheckCircle
+                        strokeWidth={3.0}
                         size={18}
-                        className="text-green-600 mt-0.5 flex-shrink-0"
+                        className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Networking events with alumni and industry professionals
                       </span>
                     </div>
                     <div className="flex items-start gap-3">
                       <CheckCircle
+                        strokeWidth={3.0}
                         size={18}
-                        className="text-green-600 mt-0.5 flex-shrink-0"
+                        className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className="text-sm text-gray-700">
+                      <span className=" text-gray-700">
                         Access to exclusive job postings database
                       </span>
                     </div>
@@ -917,11 +925,11 @@ export default function ProgramDetailsTab() {
           {/* Right Sidebar - Fixed */}
           <div className="space-y-6">
             {/* Apply Now */}
-            <div className=" rounded-lg  shadow-sm sticky top-16">
+            <div className=" rounded-lg   sticky top-16">
               {!showApplicationForm ? (
                 <div className="bg-white p-6 rounded-lg">
                   <h3 className="text-lg font-medium mb-3">Apply Now</h3>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className=" text-gray-600 mb-4">
                     Ready to take the next step in your education? Apply now for
                     the Bachelor of Arts in Economics program.
                   </p>
@@ -938,34 +946,34 @@ export default function ProgramDetailsTab() {
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block  font-medium text-gray-700 mb-2">
                         Full Name
                       </label>
                       <input
                         type="text"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block  font-medium text-gray-700 mb-2">
                         Email Address
                       </label>
                       <input
                         type="email"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block  font-medium text-gray-700 mb-2">
                         Documents
                       </label>
                       <div className="relative">
                         <input
                           type="text"
                           placeholder="CV, Transcript, ..."
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
                         />
                         <button className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                           <svg
@@ -986,10 +994,10 @@ export default function ProgramDetailsTab() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block  font-medium text-gray-700 mb-2">
                         Highest Education
                       </label>
-                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm text-gray-500">
+                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500  text-gray-500">
                         <option>Select education level</option>
                         <option>High School</option>
                         <option>Bachelor's Degree</option>
@@ -999,23 +1007,23 @@ export default function ProgramDetailsTab() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block  font-medium text-gray-700 mb-2">
                         Additional Information
                       </label>
                       <textarea
                         rows="3"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none "
                       ></textarea>
                     </div>
                   </div>
 
                   <div className="flex gap-2 mt-4">
-                    <button className="flex-1 bg-blue hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors text-sm">
+                    <button className="flex-1 bg-blue hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors ">
                       Submit Application
                     </button>
                     <button
                       onClick={() => setShowApplicationForm(false)}
-                      className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-lg font-medium transition-colors text-sm"
+                      className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-lg font-medium transition-colors "
                     >
                       Cancel
                     </button>
@@ -1059,7 +1067,7 @@ export default function ProgramDetailsTab() {
 
                 {/* Have Questions */}
                 <div className="mt-6 p-6 rounded-lg bg-white">
-                  <h4 className="font-semibold text-sm mb-3">
+                  <h4 className="font-semibold  mb-3">
                     Have Questions?
                   </h4>
                   <p className="text-xs text-gray-600 mb-3">
@@ -1069,11 +1077,11 @@ export default function ProgramDetailsTab() {
                   <div className="space-y-2 text-blue">
                     <div className="flex items-center gap-2 text-blue-600">
                       <Mail size={14} />
-                      <span className="text-sm">admissions@harvard.edu</span>
+                      <span className="">admissions@harvard.edu</span>
                     </div>
                     <div className="flex items-center gap-2 text-blue-600">
                       <Phone size={14} />
-                      <span className="text-sm">+1 (123) 456-7890</span>
+                      <span className="">+1 (123) 456-7890</span>
                     </div>
                   </div>
                 </div>
