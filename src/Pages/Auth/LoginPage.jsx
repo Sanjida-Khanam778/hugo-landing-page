@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <div className="relative overflow-hidden h-screen text-white">
+    <div className="relative overflow-hidden text-white">
       {/* Video Background Container */}
       <div className="absolute inset-0 w-full h-full">
         <video
@@ -26,7 +26,7 @@ export default function LoginPage() {
       </div>
       <Navbar />
       {/* Content */}
-      <div className="flex flex-col items-center justify-center relative z-10 xl:h-[80vh] mx-auto">
+      <div className="flex flex-col items-center justify-center relative z-10 h-full xl:h-[80vh] mx-auto">
         <div className="text-center space-y-8 max-w-4xl my-10">
           <h1 className="text-3xl xl:text-[56px] font-bold xl:leading-tight">Welcome to the University Management Portal</h1>
           <h4 className="text-xl xl:text-3xl font-medium">
