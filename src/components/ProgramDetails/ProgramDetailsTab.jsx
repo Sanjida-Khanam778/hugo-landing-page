@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { CheckCircle, Phone, Mail, Calendar } from "lucide-react";
+import {
+  CheckCircle,
+  Phone,
+  Mail,
+  Calendar,
+  DollarSign,
+  Award,
+} from "lucide-react";
 import profile1 from "../../assets/images/profile1.png";
 import profile2 from "../../assets/images/speaker.png";
 export default function ProgramDetailsTab() {
@@ -143,9 +150,7 @@ export default function ProgramDetailsTab() {
                       <img className="w-16 h-16" src={profile1} alt="" />{" "}
                       <div>
                         <p className="font-semibold">Dr. Jane Smith</p>
-                        <p className=" text-gray-600">
-                          Professor of Economics
-                        </p>
+                        <p className=" text-gray-600">Professor of Economics</p>
                         <p className=" text-gray-500 mt-1">
                           Macroeconomic Theory
                         </p>
@@ -155,9 +160,7 @@ export default function ProgramDetailsTab() {
                       <img className="w-16 h-16" src={profile2} alt="" />{" "}
                       <div>
                         <p className="font-semibold">Dr. Robert Johnson</p>
-                        <p className=" text-gray-600">
-                          Associate Professor
-                        </p>
+                        <p className=" text-gray-600">Associate Professor</p>
                         <p className=" text-gray-500 mt-1">
                           Experimental Economics
                         </p>
@@ -254,9 +257,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             3
                           </div>
-                          <span className=" text-gray-700">
-                            Econometrics
-                          </span>
+                          <span className=" text-gray-700">Econometrics</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
@@ -270,9 +271,7 @@ export default function ProgramDetailsTab() {
                           <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
                             5
                           </div>
-                          <span className=" text-gray-700">
-                            Electives
-                          </span>
+                          <span className=" text-gray-700">Electives</span>
                         </div>
                       </div>
                     </div>
@@ -481,9 +480,7 @@ export default function ProgramDetailsTab() {
                         size={18}
                         className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className=" text-gray-700">
-                        SAT/ACT scores
-                      </span>
+                      <span className=" text-gray-700">SAT/ACT scores</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <CheckCircle
@@ -491,9 +488,7 @@ export default function ProgramDetailsTab() {
                         size={18}
                         className="text-green mt-0.5 flex-shrink-0"
                       />
-                      <span className=" text-gray-700">
-                        Personal Statement
-                      </span>
+                      <span className=" text-gray-700">Personal Statement</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <CheckCircle
@@ -621,132 +616,126 @@ export default function ProgramDetailsTab() {
                     Tuition Fees & Financial Aid
                   </h2>
 
-                  {/* Tuition Fees Section */}
-                  <h3 className="text-lg font-bold mb-4">Tuition Fees</h3>
+                  <div className="border border-[#CCCCCC] mb-6 rounded-xl">
+                    {/* Tuition Fees Section */}
+                    <h3 className="text-xl font-bold bg-base p-4 rounded-t-xl border-b border-[#CCCCCC]">
+                      Tuition Fees
+                    </h3>
 
-                  <div className="grid grid-cols-2 gap-6 mb-6">
-                    <div className="border border-gray-200 rounded-lg p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                        <span className=" font-medium text-gray-700">
-                          Domestic Students
-                        </span>
+                    <div className="grid grid-cols-2 gap-6 mb-4 p-4 pb-0">
+                      <div className="bg-base rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <DollarSign className="text-green" />{" "}
+                          <span className=" font-medium text-gray-700">
+                            Domestic Students
+                          </span>
+                        </div>
+                        <p className="text-2xl font-bold">$52,000 per year</p>
                       </div>
-                      <p className="text-2xl font-bold">$52,000 per year</p>
-                    </div>
-                    <div className="border border-gray-200 rounded-lg p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                        <span className=" font-medium text-gray-700">
-                          International Students
-                        </span>
+                      <div className="bg-base rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <DollarSign className="text-green" />
+                          <span className=" font-medium text-gray-700">
+                            International Students
+                          </span>
+                        </div>
+                        <p className="text-2xl font-bold">$55,000 per year</p>
                       </div>
-                      <p className="text-2xl font-bold">$55,000 per year</p>
                     </div>
+
+                    <p className=" text-gray-600 p-4 pt-0">
+                      Does not include accommodation, books, and other expenses
+                    </p>
                   </div>
 
-                  <p className=" text-gray-600 mb-6">
-                    *Fees can include accommodation, books, and other expenses.
-                  </p>
-
                   {/* Additional Expenses */}
-                  <h3 className="text-lg font-bold mb-4">
+                  <h3 className="text-xl font-bold mb-4">
                     Additional Expenses (Estimated)
                   </h3>
 
-                  <div className="space-y-3 mb-6">
-                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                      <span className=" text-gray-700">
-                        Books & Supplies
-                      </span>
-                      <span className=" font-semibold">
-                        $1,000 - $1,500
-                      </span>
+                  <div className="space-y-3 mb-6 rounded-xl border border-[#CCCCCC]">
+                    <div className="flex justify-between items-center py-3 border-b rounded-t-xl border-[#CCCCCC] bg-base px-6">
+                      <span className="text-gray-700">Expense</span>
+                      <span className="">Cost (Annual)</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                      <span className=" text-gray-700">
-                        Room & Board
-                      </span>
-                      <span className=" font-semibold">
-                        $16,000 - $18,000
-                      </span>
+                    <div className="flex justify-between items-center py-3 border-b border-[#CCCCCC] px-6">
+                      <span className=" text-gray-700">Accommodation</span>
+                      <span className="">$16,000 - $18,000</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                      <span className=" text-gray-700">
-                        Health Insurance
-                      </span>
-                      <span className=" font-semibold">$3,000</span>
+                    <div className="flex justify-between items-center py-3 border-b border-[#CCCCCC] px-6">
+                      <span className=" text-gray-700">Books & Supplies</span>
+                      <span className="">$1,000 - $1,500</span>
                     </div>
-                    <div className="flex justify-between items-center py-2">
-                      <span className=" text-gray-700">
-                        Personal Expenses
-                      </span>
-                      <span className=" font-semibold">
-                        $2,000 - $3,000
-                      </span>
+                    <div className="flex justify-between items-center py-3 border-b border-[#CCCCCC] px-6">
+                      <span className=" text-gray-700">Health Insurance</span>
+                      <span className="">$3,000</span>
+                    </div>
+                    <div className="flex justify-between items-center py-3 px-6">
+                      <span className=" text-gray-700">Personal Expenses</span>
+                      <span className="">$2,000 - $3,000</span>
                     </div>
                   </div>
-                </div>
+                  {/* Scholarships & Financial Aid */}
+                  <div className="bg-white rounded-lg">
+                    <h2 className="text-xl font-bold mb-4">
+                      Scholarships & Financial Aid
+                    </h2>
 
-                {/* Scholarships & Financial Aid */}
-                <div className="bg-white rounded-lg p-6 ">
-                  <h2 className="text-lg font-bold mb-4">
-                    Scholarships & Financial Aid
-                  </h2>
+                    {/* Merit-Based Scholarship */}
+                    <div className="border border-gray-200 rounded-lg p-4 mb-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Award className="text-[#CA8A04]" />
+                        <span className=" font-semibold text-gray-900">
+                          Merit-Based Scholarship
+                        </span>
+                      </div>
+                      <div className="  mb-2">
+                        <span className="font-medium">Amount:</span> Up to
+                        $10,000
+                      </div>
+                      <div className="">
+                        <span className="font-medium">Eligibility:</span> Must
+                        have a GPA of 3.8 or higher
+                      </div>
+                    </div>
 
-                  {/* Merit-Based Scholarship */}
-                  <div className="border border-gray-200 rounded-lg p-4 mb-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                      <span className=" font-semibold text-gray-900">
-                        Merit-Based Scholarship
-                      </span>
+                    {/* Need-Based Aid */}
+                    <div className="border border-gray-200 rounded-lg p-4 mb-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Award className="text-[#CA8A04]" />
+                        <span className=" font-semibold text-gray-900">
+                          Need-Based Aid
+                        </span>
+                      </div>
+                      <div className="mb-2">
+                        <span className="font-medium">Amount:</span> $5,000 -
+                        $20,000
+                      </div>
+                      <div className="">
+                        <span className="font-medium">Eligibility:</span> Based
+                        on financial need and academic performance
+                      </div>
                     </div>
-                    <div className=" text-gray-700 mb-1">
-                      <span className="font-medium">Amount:</span> Up to $10,000
-                    </div>
-                    <div className=" text-gray-700">
-                      <span className="font-medium">Eligibility:</span> Must
-                      have a GPA of 3.8 or higher
-                    </div>
-                  </div>
 
-                  {/* Need-Based Aid */}
-                  <div className="border border-gray-200 rounded-lg p-4 mb-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                      <span className=" font-semibold text-gray-900">
-                        Need-Based Aid
-                      </span>
-                    </div>
-                    <div className=" text-gray-700 mb-1">
-                      <span className="font-medium">Amount:</span> $5,000 -
-                      $20,000
-                    </div>
-                    <div className=" text-gray-700">
-                      <span className="font-medium">Eligibility:</span> Based on
-                      financial need and academic performance
-                    </div>
-                  </div>
-
-                  {/* Financial Aid Office */}
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
-                    <h4 className="font-semibold  mb-2">
-                      Financial Aid Office
-                    </h4>
-                    <p className=" text-gray-700 mb-3">
-                      For more information about scholarships, grants, and
-                      loans, please contact our Financial Aid Office.
-                    </p>
-                    <div className="space-y-1">
-                      <p className=" text-gray-700">
-                        <span className="font-medium">Email:</span>{" "}
-                        financialaid@harvard.edu
+                    {/* Financial Aid Office */}
+                    <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-lg p-4 mt-6">
+                      <h4 className="font-semibold text-[#1E40AF] mb-2">
+                        Financial Aid Office
+                      </h4>
+                      <p className=" text-gray-700 mb-3">
+                        For more information about scholarships, grants, and
+                        loans, please contact our Financial Aid Office.
                       </p>
-                      <p className=" text-gray-700">
-                        <span className="font-medium">Phone:</span> +1 (123)
-                        456-7890
-                      </p>
+                      <div className="space-y-1">
+                        <p className=" text-gray-700">
+                          <span className="font-medium">Email:</span>{" "}
+                          financialaid@harvard.edu
+                        </p>
+                        <p className=" text-gray-700">
+                          <span className="font-medium">Phone:</span> +1 (123)
+                          456-7890
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -754,10 +743,10 @@ export default function ProgramDetailsTab() {
             )}
 
             {activeTab === "careers" && (
-              <>
+              <div className="bg-white p-6 rounded-xl">
                 {/* Career Opportunities */}
-                <div className="bg-white rounded-lg p-6  mb-6">
-                  <h2 className="text-2xl font-bold mb-4">
+                <div className="bg-white rounded-lg mt-6">
+                  <h2 className="text-4xl font-bold mb-4">
                     Career Opportunities
                   </h2>
                   <p className="text-gray-700 leading-relaxed mb-6">
@@ -769,47 +758,43 @@ export default function ProgramDetailsTab() {
                   </p>
 
                   {/* Career Paths */}
-                  <h3 className="text-lg font-bold mb-4">Career Paths</h3>
+                  <h3 className="text-2xl font-medium mb-4">Career Paths</h3>
                   <div className="grid grid-cols-3 gap-4 mb-6">
                     <div className="text-center p-4 border border-gray-200 rounded-lg">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-xl font-bold text-blue-600">
+                      <div className="w-12 h-12 bg-sky text-blue rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-xl font-medium text-blue-600">
                           1
                         </span>
                       </div>
                       <p className=" font-medium">Economic Researcher</p>
                     </div>
                     <div className="text-center p-4 border border-gray-200 rounded-lg">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-xl font-bold text-blue-600">
+                      <div className="w-12 h-12 bg-sky text-blue rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-xl font-medium text-blue-600">
                           2
                         </span>
                       </div>
-                      <p className=" font-medium">
-                        Financial Consultant
-                      </p>
+                      <p className=" font-medium">Financial Consultant</p>
                     </div>
                     <div className="text-center p-4 border border-gray-200 rounded-lg">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-xl font-bold text-blue-600">
+                      <div className="w-12 h-12 bg-sky text-blue rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-xl font-medium text-blue-600">
                           3
                         </span>
                       </div>
-                      <p className=" font-medium">
-                        Market Research Analyst
-                      </p>
+                      <p className=" font-medium">Market Research Analyst</p>
                     </div>
                     <div className="text-center p-4 border border-gray-200 rounded-lg">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-xl font-bold text-blue-600">
+                      <div className="w-12 h-12 bg-sky text-blue rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-xl font-medium text-blue-600">
                           4
                         </span>
                       </div>
                       <p className=" font-medium">Policy Advisor</p>
                     </div>
                     <div className="text-center p-4 border border-gray-200 rounded-lg">
-                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span className="text-xl font-bold text-blue-600">
+                      <div className="w-12 h-12 bg-sky text-blue rounded-full flex items-center justify-center mx-auto mb-3">
+                        <span className="text-xl font-medium text-blue-600">
                           5
                         </span>
                       </div>
@@ -821,35 +806,35 @@ export default function ProgramDetailsTab() {
                 </div>
 
                 {/* Employment Statistics */}
-                <div className="bg-white rounded-lg p-6  mb-6">
-                  <h3 className="text-lg font-bold mb-4">
+                <div className="bg-white rounded-lg mb-6">
+                  <h3 className="text-2xl font-medium mb-4">
                     Employment Statistics
                   </h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                      <span className=" text-gray-700">
+                  <div className="space-y-3 border border-[#CCCCCC] rounded-xl">
+                    <div className="flex justify-between items-center px-6 py-3 font-medium bg-base rounded-t-xl text-grey border-b border-[#CCCCCC]">
+                      <span className="">Metric</span>
+                      <span className="">Value</span>
+                    </div>
+                    <div className="flex justify-between items-center px-6 py-3 border-b border-[#CCCCCC]">
+                      <span className="">
                         Employed or Not Active (3 months)
                       </span>
-                      <span className=" font-semibold">95%</span>
+                      <span className="">95%</span>
                     </div>
-                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                      <span className=" text-gray-700">
-                        Average Starting Salary
-                      </span>
-                      <span className=" font-semibold">$75K</span>
+                    <div className="flex justify-between items-center px-6 py-3 border-b border-[#CCCCCC]">
+                      <span className="">Average Starting Salary</span>
+                      <span className="">$75K</span>
                     </div>
-                    <div className="flex justify-between items-center py-3">
-                      <span className=" text-gray-700">
-                        Graduate School Placement
-                      </span>
-                      <span className=" font-semibold">20%</span>
+                    <div className="flex justify-between items-center px-6 py-3">
+                      <span className="">Graduate School Placement</span>
+                      <span className="">20%</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Career Services */}
-                <div className="bg-white rounded-lg p-6 ">
-                  <h3 className="text-lg font-bold mb-4">Career Services</h3>
+                <div className="bg-white rounded-lg mb-6">
+                  <h3 className="text-2xl font-medium mb-4">Career Services</h3>
                   <p className="text-gray-700  leading-relaxed mb-4">
                     Harvard University's Career Services provides career
                     services to help students prepare for and find employment.
@@ -918,14 +903,14 @@ export default function ProgramDetailsTab() {
                     </div>
                   </div>
                 </div>
-              </>
+              </div>
             )}
           </div>
 
           {/* Right Sidebar - Fixed */}
           <div className="space-y-6">
             {/* Apply Now */}
-            <div className=" rounded-lg   sticky top-16">
+            <div className=" rounded-lg sticky top-16">
               {!showApplicationForm ? (
                 <div className="bg-white p-6 rounded-lg">
                   <h3 className="text-lg font-medium mb-3">Apply Now</h3>
@@ -1067,9 +1052,7 @@ export default function ProgramDetailsTab() {
 
                 {/* Have Questions */}
                 <div className="mt-6 p-6 rounded-lg bg-white">
-                  <h4 className="font-semibold  mb-3">
-                    Have Questions?
-                  </h4>
+                  <h4 className="font-semibold  mb-3">Have Questions?</h4>
                   <p className="text-xs text-gray-600 mb-3">
                     Contact our admissions team for any questions about this
                     program.
