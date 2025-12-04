@@ -42,8 +42,10 @@ export default function UniSignIn() {
       style={{ backgroundImage: `url(${background})` }}
     >
       <div className="mx-auto my-auto h-full max-w-2xl flex flex-col justify-center">
-        <h1 className="text-4xl font-bold text-center mb-2">Sign In</h1>
-        <p className="text-blue-100 text-center mb-8">
+        <h1 className="text-2xl lg:text-4xl font-bold text-center mb-2">
+          Sign In
+        </h1>
+        <p className="text-blue-100 text-center mb-4 lg:mb-8">
           Enter your credentials to access the admin portal
         </p>
 
@@ -82,16 +84,8 @@ export default function UniSignIn() {
           <p className="text-red-300 text-sm mb-4">{errors.signin}</p>
         )} */}
 
-          <div className="flex items-center justify-between mb-6">
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="mr-2 w-4 h-4"
-              />
-              Remember me
-            </label>
+          <div className="flex items-center justify-end mb-6">
+             
             <button type="button" className="hover:text-blue text-sm">
               Forgot your password?
             </button>

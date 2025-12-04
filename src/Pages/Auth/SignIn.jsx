@@ -48,7 +48,7 @@ export default function SignIn() {
       <div className="flex justify-between w-11/12 mx-auto bg-white mt-16">
         <div className="flex items-center justify-center w-full p-16">
           <div className="w-full">
-            <h1 className="text-3xl font-semibold mb-8 border-b pb-4 border-[#E2E1E1]">
+            <h1 className="text-xl lg:text-3xl font-semibold mb-8 border-b pb-4 border-[#E2E1E1]">
               SIGN IN
             </h1>
 

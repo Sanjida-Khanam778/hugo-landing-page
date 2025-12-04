@@ -68,8 +68,8 @@ export default function Navbar() {
                 to={link.href}
                 className={({ isActive }) =>
                   isActive
-                    ? "text-[#002B5B] text-lg font-bold transition-colors"
-                    : "text-gray-700 text-lg hover:text-gray-900 font-medium transition-colors"
+                    ? "text-[#002B5B] text-lg font-semibold xl:font-bold transition-colors"
+                    : "text-gray-700 text-lg hover:text-gray-900 xl:font-medium transition-colors"
                 }
               >
                 {link.label}
@@ -80,7 +80,7 @@ export default function Navbar() {
           {/* Search Bar and Dashboard Button */}
           <div className="flex items-center gap-2 sm:gap-4">
             {/* Search Input - Hidden on mobile */}
-            <div className="hidden lg:flex items-center bg-gray-50 border border-gray-300 rounded-full px-4 py-2 gap-2 focus-within:border-gray-400 transition-colors">
+            {/* <div className="hidden lg:flex items-center bg-gray-50 border border-gray-300 rounded-full px-4 py-2 gap-2 focus-within:border-gray-400 transition-colors">
               <Search size={18} className="text-gray-400" />
               <input
                 type="text"
@@ -89,20 +89,20 @@ export default function Navbar() {
                 onChange={(e) => setSearchValue(e.target.value)}
                 className="bg-transparent outline-none text-gray-700 placeholder-gray-400 w-32 sm:w-40"
               />
-            </div>
+            </div> */}
 
             {/* Dashboard Button */}
             {isLoggedIn ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center">
                 <Link to={"/user"}>
-                  <button className="flex items-center gap-2 bg-primary text-white font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700 transition-colors">
+                  <button className="flex items-center gap-2 bg-primary text-white px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700 transition-colors">
                     <User size={18} />
                     <span className="hidden sm:inline">Dashboard</span>
                   </button>
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 bg-red-600 text-white font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-red-700 transition-colors"
+                  className="flex items-center gap-2 bg-red-600 font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-red-700 transition-colors"
                 >
                   <LogOut size={18} />
                   <span className="hidden sm:inline">Logout</span>
@@ -111,7 +111,7 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={handleLogin}
-                className="flex items-center gap-2 bg-primary text-white font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700 transition-colors"
+                className="flex items-center gap-2 bg-primary text-white px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700 transition-colors"
               >
                 <User size={18} />
                 <span className="hidden sm:inline">Login</span>

@@ -51,7 +51,7 @@ export default function UniSignUp() {
       className="p-8 bg-cover h-screen bg-no-repeat text-white"
     >
       <div className="mx-auto my-auto h-full max-w-2xl flex flex-col justify-center">
-        <h1 className="text-4xl font-bold text-white text-center mb-2">
+        <h1 className="text-2xl lg:text-4xl font-bold text-white text-center mb-2">
           Sign Up
         </h1>
         <p className="text-blue-100 text-center mb-8">

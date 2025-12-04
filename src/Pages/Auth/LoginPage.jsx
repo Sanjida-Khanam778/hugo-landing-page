@@ -26,16 +26,16 @@ export default function LoginPage() {
       </div>
       <Navbar />
       {/* Content */}
-      <div className="flex flex-col items-center relative z-10 h-full mx-auto">
+      <div className="flex flex-col items-center justify-center relative z-10 xl:h-[80vh] mx-auto">
         <div className="text-center space-y-8 max-w-4xl my-10">
-          <h1 className="text-[56px] font-bold leading-tight">Welcome to the University Management Portal</h1>
-          <h4 className="text-3xl font-medium">
+          <h1 className="text-3xl xl:text-[56px] font-bold xl:leading-tight">Welcome to the University Management Portal</h1>
+          <h4 className="text-xl xl:text-3xl font-medium">
             This platform is designed to streamline and centralize all critical
             university operations. Please select your user type to proceed to
             login or registration.
           </h4>
         </div>
-        <div className="max-w-7xl flex items-center justify-start gap-6 mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl flex flex-col lg:flex-row items-center justify-start gap-6 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="border text-center border-white border-opacity-40 bg-white/5 text-white font-medium p-4 md:p-6 lg:p-10 rounded-lg transition-colors backdrop-blur-md">
             {/* Heading */}
             <h1 className="text-2xl font-semibold text-white mb-4">
