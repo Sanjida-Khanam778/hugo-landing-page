@@ -43,8 +43,8 @@ export default function SignUp() {
           </h1>
         </div>
       </div>
-      <div className="flex justify-between w-11/12 mx-auto bg-white mt-16">
-        <div className="flex items-center justify-center w-full p-16">
+      <div className="flex flex-col-reverse lg:flex-row justify-between w-11/12 mx-auto bg-white mt-8 lg:mt-16">
+        <div className="flex items-center justify-center w-full p-8 lg:p-16">
           <div className="w-full">
             <h1 className="text-3xl font-semibold mb-8 border-b pb-4 border-[#E2E1E1]">
               SIGN UP
@@ -91,7 +91,7 @@ export default function SignUp() {
                 />
               </div>
 
-              <div className="flex items-center pt-6 justify-between">
+              <div className="flex flex-col gap-4 md:gap-0 md:flex-row items-center pt-6 justify-between">
                 <button
                   onClick={handleSubmit}
                   className="bg-blue px-8 text-white py-3 rounded font-medium"
@@ -100,7 +100,7 @@ export default function SignUp() {
                 </button>
 
                 <div className="flex gap-4 justify-center items-center">
-                  <span className="px-4 text-sm text-gray-500">
+                  <span className="px-4  text-gray-500">
                     or sign up with
                   </span>
                   <button className="w-12 h-12 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 transition-colors">
@@ -126,7 +126,7 @@ export default function SignUp() {
                 </div>
               </div>
 
-              <p className="text-sm text-gray-600">
+              <p className=" text-gray-600">
                 Already have an account?
                 <Link to={"/login"}>
                   <button className="text-blue-600 font-medium hover:underline ml-2">
@@ -137,7 +137,7 @@ export default function SignUp() {
             </div>
           </div>
         </div>
-        <img src={signup} alt="Sign In" className="" />
+        <img src={signup} alt="Sign In" className="md:w-1/2 mx-auto md:mt-6 lg:mt-0" />
       </div>
     </div>
   );

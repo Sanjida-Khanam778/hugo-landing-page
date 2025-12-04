@@ -45,8 +45,8 @@ export default function SignIn() {
           </h1>
         </div>
       </div>
-      <div className="flex justify-between w-11/12 mx-auto bg-white mt-16">
-        <div className="flex items-center justify-center w-full p-16">
+      <div className="flex flex-col-reverse lg:flex-row justify-between w-11/12 mx-auto bg-white mt-8 lg:mt-16">
+        <div className="flex items-center justify-center w-full p-8 lg:p-16">
           <div className="w-full">
             <h1 className="text-xl lg:text-3xl font-semibold mb-8 border-b pb-4 border-[#E2E1E1]">
               SIGN IN
@@ -54,7 +54,7 @@ export default function SignIn() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm mb-2">
+                <label className="block  mb-2">
                   Email <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -67,7 +67,7 @@ export default function SignIn() {
               </div>
 
               <div>
-                <label className="block text-sm mb-2">
+                <label className="block  mb-2">
                   Password <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -79,22 +79,14 @@ export default function SignIn() {
                 />
               </div>
 
-              <div className="flex items-center justify-between text-sm pt-2">
+              <div className="flex items-center justify-between  pt-2">
                 <button className="text-red-500 hover:text-red-600">
                   Forgot Password?
                 </button>
-                <label className="flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="mr-2"
-                  />
-                  <span className="text-gray-600">Remember me</span>
-                </label>
+             
               </div>
 
-              <div className="flex items-center pt-6 justify-between">
+              <div className="flex flex-col md:flex-row gap-4 md:gap-0 items-center pt-6 justify-between">
                 <button
                   onClick={handleSubmit}
                   className="bg-blue px-8 text-white py-3 rounded font-medium"
@@ -103,7 +95,7 @@ export default function SignIn() {
                 </button>
 
                 <div className="flex gap-4 justify-center items-center">
-                  <span className="px-4 text-sm text-gray-500">
+                  <span className="px-4 text-gray-500">
                     or sign up with
                   </span>
                   <button className="w-12 h-12 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 transition-colors">
@@ -129,7 +121,7 @@ export default function SignIn() {
                 </div>
               </div>
 
-              <p className="text-sm text-gray-600">
+              <p className=" text-gray-600">
                 Don't have an account?{" "}
                 <Link to={"/register"}>
                   <button className="text-blue-600 font-medium hover:underline ml-2">
@@ -140,7 +132,7 @@ export default function SignIn() {
             </div>
           </div>
         </div>
-        <img src={signin} alt="Sign In" className="" />
+        <img src={signin} alt="Sign In" className="md:w-1/2 mx-auto md:mt-6 lg:mt-0" />
       </div>
     </div>
   );
