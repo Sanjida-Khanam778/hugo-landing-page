@@ -88,7 +88,7 @@ export default function AdminSignIn() {
           <p className="text-center text-blue-100">
             Don't have an account?{" "}
             <Link to={"/university-register"}>
-              <button type="button" className="text-blue-300 hover:text-blue">
+              <button type="button" className="text-blue-300 hover:shadow-lg hover:scale-105 transition-transform hover:underline">
                 Sign Up
               </button>
             </Link>

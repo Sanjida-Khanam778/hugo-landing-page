@@ -23,7 +23,7 @@ export default function UserDashboard() {
                   </p>
                 </div>
               </div>
-              <Link to={'/message'}><button className="bg-blue text-white px-6 py-2 rounded text-sm font-medium hover:bg-blue-700">
+              <Link to={'/message'}><button className="bg-blue hover:shadow-lg hover:scale-105 transition-transform text-white px-6 py-2 rounded font-medium hover:bg-blue-700">
                 Message
               </button></Link>
             </div>

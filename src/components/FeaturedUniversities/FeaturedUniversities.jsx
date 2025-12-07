@@ -122,7 +122,7 @@ export default function FeaturedUniversities() {
 
         {/* View All Button */}
         <Link to={'/universities'} className="flex justify-center">
-          <button className="px-8 py-3 border-2 border-blue text-blue font-semibold rounded-lg hover:bg-blue-50 transition-colors duration-200">
+          <button className="px-8 py-3 hover:shadow-lg hover:scale-105 transition-transform border-2 border-blue text-blue font-semibold rounded-lg duration-200">
             View All Universities
           </button>
         </Link>

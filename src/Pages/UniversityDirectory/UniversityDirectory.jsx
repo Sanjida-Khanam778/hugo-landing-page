@@ -483,7 +483,7 @@ export default function UniversityDirectory() {
                         {uni.badges[0]}
                       </span>
                       <Link to={`/universities/${uni.id}`}>
-                        <button className="text-[#002B5B] text-sm font-medium">
+                        <button className="text-[#002B5B] text-sm hover:scale-105 transition-transform font-medium">
                           View Details
                         </button>
                       </Link>

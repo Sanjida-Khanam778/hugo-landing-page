@@ -55,7 +55,7 @@ export default function Program() {
 
             <div className="flex justify-end">
               <Link to={"/program-details"}>
-                <button className="bg-blue text-white px-6 py-2 rounded-lg transition-colors">
+                <button className="bg-blue hover:shadow-lg hover:scale-105 transition-transform text-white px-6 py-2 rounded-lg">
                   View Details
                 </button>
               </Link>
@@ -105,7 +105,7 @@ export default function Program() {
 
             <div className="flex justify-end">
               <Link to={"/program-details"}>
-                <button className="bg-blue text-white px-6 py-2 rounded-lg transition-colors">
+                <button className="bg-blue text-white px-6 py-2 hover:shadow-lg hover:scale-105 transition-transform rounded-lg">
                   View Details
                 </button>
               </Link>
@@ -153,7 +153,7 @@ export default function Program() {
 
             <div className="flex justify-end">
               <Link to={"/program-details"}>
-                <button className="bg-blue text-white px-6 py-2 rounded-lg transition-colors">
+                <button className="bg-blue text-white px-6 py-2 hover:shadow-lg hover:scale-105 transition-transform rounded-lg">
                   View Details
                 </button>
               </Link>

@@ -95,14 +95,14 @@ export default function Navbar() {
             {isLoggedIn ? (
               <div className="flex items-center">
                 <Link to={"/user"}>
-                  <button className="flex items-center gap-2 bg-primary text-white px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700 transition-colors">
+                  <button className="flex items-center gap-2 hover:shadow-lg hover:scale-105 transition-transform bg-primary text-white px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700">
                     <User size={18} />
                     <span className="hidden sm:inline">Dashboard</span>
                   </button>
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 bg-red-600 font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-red-700 transition-colors"
+                  className="flex items-center gap-2 hover:shadow-lg hover:scale-105 transition-transform bg-red-600 font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-red-700"
                 >
                   <LogOut size={18} />
                   <span className="hidden sm:inline">Logout</span>
@@ -111,7 +111,7 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={handleLogin}
-                className="flex items-center gap-2 bg-primary text-white px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700 transition-colors"
+                className="flex items-center gap-2 hover:shadow-lg hover:scale-105 transition-transform bg-primary text-white px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700"
               >
                 <User size={18} />
                 <span className="hidden sm:inline">Login</span>
