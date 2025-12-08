@@ -86,9 +86,12 @@ export default function AIAssistant() {
         {/* Header */}
         <div className="bg-primary text-white px-6 py-4 flex items-center justify-between">
           <h1 className="text-lg font-semibold">AI Assistant</h1>
-        <Link to={"/"}>  <button className="hover:bg-blue-800 p-1 rounded transition-colors">
-            <X size={24} />
-          </button></Link>
+          <Link to={"/"}>
+            {" "}
+            <button className="hover:bg-blue-800 p-1 rounded transition-colors">
+              <X size={24} />
+            </button>
+          </Link>
         </div>
 
         <div className="flex flex-1 overflow-hidden">

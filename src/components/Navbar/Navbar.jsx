@@ -50,7 +50,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={`w-full sticky top-0 bg-[#F3F4F5]/70 z-[9999]`}>
+    <nav className={`w-full fixed top-0 bg-[#F3F4F5]/80 z-[9999]`}>
       <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
@@ -77,21 +77,8 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Search Bar and Dashboard Button */}
+          {/* Dashboard Button */}
           <div className="flex items-center gap-2 sm:gap-4">
-            {/* Search Input - Hidden on mobile */}
-            {/* <div className="hidden lg:flex items-center bg-gray-50 border border-gray-300 rounded-full px-4 py-2 gap-2 focus-within:border-gray-400 transition-colors">
-              <Search size={18} className="text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                className="bg-transparent outline-none text-gray-700 placeholder-gray-400 w-32 sm:w-40"
-              />
-            </div> */}
-
-            {/* Dashboard Button */}
             {isLoggedIn ? (
               <div className="flex items-center">
                 <Link to={"/user"}>

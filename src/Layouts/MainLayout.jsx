@@ -8,7 +8,7 @@ export default function MainLayout() {
   console.log(location.pathname.includes("/"));
   return (
     <div className="font-rubik">
-      {location.pathname === "/" ? null : <Navbar />}
+      {location.pathname === "/" ? <Navbar /> : <Navbar />}
 
       <Outlet />
       {location.pathname === "/" ? null : <Footer />}

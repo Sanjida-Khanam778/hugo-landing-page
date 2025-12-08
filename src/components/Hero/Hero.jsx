@@ -24,7 +24,6 @@ export default function Hero() {
         {/* Dark Overlay */}
         <div className="absolute inset-0 bg-black/10"></div>
       </div>
-      <Navbar />
       {/* Content */}
       <div className="relative z-10 h-full flex items-center justify-start w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-3xl border border-white border-opacity-40 bg-primary p-4 md:p-6 lg:p-10 rounded-lg transition-colors backdrop-blur-md">

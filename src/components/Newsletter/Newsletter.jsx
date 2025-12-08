@@ -43,7 +43,7 @@ export default function Newsletter() {
             />
             <button
               type="submit"
-              className="px-6 py-3 bg-[#0047E9] text-white font-semibold rounded-lg transition-colors duration-200"
+              className="px-6 py-3 bg-[#0047E9] hover:shadow-lg hover:scale-105 transition-transform text-white font-semibold rounded-lg duration-200"
             >
               Subscribe
             </button>
