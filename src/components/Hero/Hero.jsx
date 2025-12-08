@@ -2,7 +2,6 @@ import banner from "../../assets/video/banner.mp4";
 
 import { useState } from "react";
 import { Search, Info, BookOpen, Calendar } from "lucide-react";
-import Navbar from "../Navbar/Navbar";
 
 export default function Hero() {
   const [searchQuery, setSearchQuery] = useState("");

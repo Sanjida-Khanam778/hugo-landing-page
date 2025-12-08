@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, User, Menu, X, LogOut } from "lucide-react";
+import {
+  Search,
+  User,
+  Menu,
+  X,
+  LogOut,
+  ChartBar,
+  MessageSquareMore,
+} from "lucide-react";
 import logo from "../../assets/images/logo.png";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
@@ -24,6 +32,7 @@ export default function Navbar() {
 
   const navLinks = [
     { label: "Universities", href: "/universities" },
+    { label: "Programs", href: "/programs" },
     { label: "Events", href: "/events" },
     { label: "Jobs", href: "/jobs" },
     { label: "About us", href: "/about" },
@@ -80,19 +89,25 @@ export default function Navbar() {
           {/* Dashboard Button */}
           <div className="flex items-center gap-2 sm:gap-4">
             {isLoggedIn ? (
-              <div className="flex items-center">
+              <div className="flex items-center gap-3">
                 <Link to={"/user"}>
-                  <button className="flex items-center gap-2 hover:shadow-lg hover:scale-105 transition-transform bg-primary text-white px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700">
+                  <button className="flex items-center gap-2 hover:shadow-lg hover:scale-105 transition-transform bg-primary text-white px-4 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700">
                     <User size={18} />
                     <span className="hidden sm:inline">Dashboard</span>
                   </button>
                 </Link>
+                <Link to={"/message"}>
+                  {" "}
+                  <button className="flex items-center gap-2 border px-2 border-primary hover:scale-105 transition-transform text-primary font-medium py-1.5 rounded-lg whitespace-nowrap hover:bg-red-700">
+                    <MessageSquareMore size={20} />
+                    <span>Chat</span>
+                  </button>
+                </Link>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 hover:shadow-lg hover:scale-105 transition-transform bg-red-600 font-medium px-4 sm:px-6 py-2 rounded-lg whitespace-nowrap hover:bg-red-700"
+                  className="flex items-center gap-2 hover:scale-105 transition-transform text-red font-medium py-2 rounded-lg whitespace-nowrap hover:bg-red-700"
                 >
-                  <LogOut size={18} />
-                  <span className="hidden sm:inline">Logout</span>
+                  <LogOut size={22} />
                 </button>
               </div>
             ) : (

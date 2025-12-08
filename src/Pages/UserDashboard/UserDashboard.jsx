@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export default function UserDashboard() {
   return (
-    <div className="min-h-screen bg-base p-8">
+    <div className="min-h-screen bg-base p-8 xl:pt-24">
       <div className="w-11/12 mx-auto">
         {/* Header */}
         <h1 className="text-2xl font-bold mb-6">User Dashboard</h1>
@@ -12,7 +12,7 @@ export default function UserDashboard() {
           {/* Profile Section */}
           <div className=" border-b border-[#CCCCCC] pb-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">      
+              <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-[#BFDBFE] rounded-full flex items-center justify-center text-blue font-semibold">
                   JD
                 </div>
@@ -23,9 +23,11 @@ export default function UserDashboard() {
                   </p>
                 </div>
               </div>
-              <Link to={'/message'}><button className="bg-blue hover:shadow-lg hover:scale-105 transition-transform text-white px-6 py-2 rounded font-medium hover:bg-blue-700">
-                Message
-              </button></Link>
+              <Link to={"/message"}>
+                <button className="bg-blue hover:shadow-lg hover:scale-105 transition-transform text-white px-6 py-2 rounded font-medium hover:bg-blue-700">
+                  Message
+                </button>
+              </Link>
             </div>
           </div>
 

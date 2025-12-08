@@ -204,7 +204,7 @@ export default function MessageInterface() {
   };
 
   return (
-    <div className="flex h-[90vh] bg-gray-50">
+    <div className="flex h-screen bg-base pt-20">
       {/* Left Sidebar - Conversation List */}
       <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
         <div className="p-4 flex-1 overflow-y-auto">
