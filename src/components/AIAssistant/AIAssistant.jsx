@@ -1,5 +1,5 @@
 "use client";
-
+import robot from "../../assets/images/robot.png";
 import { useState } from "react";
 import { X, ChevronDown, Send, Edit } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -148,7 +148,8 @@ export default function AIAssistant() {
               {messages.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center">
                   <div className="text-center">
-                    <p className="text-3xl lg:text-4xl font-semibold text-gray-900 mb-4">
+                    <img src={robot} alt="" />
+                    <p className="text-3xl lg:text-4xl font-semibold text-gray-900 my-4">
                       Hi Hugo.
                     </p>
                     <p className="text-gray-600 text-xl">

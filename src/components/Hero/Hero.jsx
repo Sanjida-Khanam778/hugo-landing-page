@@ -73,7 +73,7 @@ export default function Hero() {
           {/* Action Buttons */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <Link to={"/ai-assistant"}>
-              <button className="flex items-center justify-center gap-2 w-full bg-white/20 hover:bg-white/30 text-white font-medium px-4 sm:px-6 py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base">
+              <button className="flex items-center justify-center gap-2 w-full bg-white/20 hover:bg-white/30 text-white font-medium py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base">
                 <Info className="w-5 h-5" />
                 <span>Orientator chat</span>
               </button>
@@ -81,22 +81,24 @@ export default function Hero() {
 
             <button
               onClick={handleCompare}
-              className="flex items-center justify-center gap-2 bg-white/10 text-white font-medium px-4 sm:px-6 py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base"
+              className="flex items-center justify-center gap-2 bg-white/10 text-white font-medium py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base"
             >
               <BookOpen className="w-5 h-5" />
               <span>Compare centers</span>
             </button>
             <button
-              className="flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 text-white font-medium px-4 sm:px-6 py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base"
+              onClick={handleCompare}
+              className="flex items-center justify-center gap-2 bg-white/10 text-white font-medium py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base"
             >
               <BookOpen className="w-5 h-5" />
-              <span>Consult a vocational orientator</span>
+              <span>Vocational orientator</span>
             </button>
-
-            <button className="flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 text-white font-medium px-4 sm:px-6 py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base">
-              <Calendar className="w-5 h-5" />
-              <span>Upcoming Events</span>
-            </button>
+            <Link to={"/ai-assistant"}>
+              <button className="flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 text-white font-medium w-full py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base">
+                <Calendar className="w-5 h-5" />
+                <span>Talk to Robot Hugo</span>
+              </button>
+            </Link>
           </div>
         </div>
       </div>
