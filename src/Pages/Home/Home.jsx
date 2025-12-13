@@ -17,7 +17,7 @@ export default function Home() {
       <Newsletter />
       <Testimonial />
       <Footer />
-      <ChatButton />
+      {/* <ChatButton /> */}
     </div>
   );
 }

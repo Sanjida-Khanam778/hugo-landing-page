@@ -1,4 +1,3 @@
-import background from "../../assets/images/background.png";
 import service1 from "../../assets/icons/service1.png";
 import service2 from "../../assets/icons/service2.png";
 import service3 from "../../assets/icons/service3.png";
@@ -7,7 +6,6 @@ export default function OurServices() {
   return (
     <section
       className="w-full py-10 md:py-16 lg:py-20"
-      style={{ backgroundImage: `url(${background})` }}
     >
       {/* Background image can be added via CSS or inline style */}
       <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8">

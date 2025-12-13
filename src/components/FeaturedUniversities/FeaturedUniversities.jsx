@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import universities from "../../../public/data/universities.json";
 import { Link } from "react-router-dom";
-
+import logo from "../../assets/icons/uni_logo.png";
 export default function FeaturedUniversities() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -53,7 +53,7 @@ export default function FeaturedUniversities() {
   );
 
   return (
-    <section className="w-full bg-[#F3F4F6] py-10 md:py-16 rounded-t-3xl relative -top-6">
+    <section className="w-full bg-[#F3F4F6] pt-10 md:pt-16 rounded-t-3xl relative -top-6">
       <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header with Navigation */}
         <div className="flex items-center justify-between mb-12">
@@ -62,21 +62,29 @@ export default function FeaturedUniversities() {
           </h2>
 
           {/* Navigation Arrows */}
-          <div className="flex gap-2">
-            <button
-              onClick={handlePrevious}
-              className="p-2 rounded-full border border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200"
-              aria-label="Previous universities"
-            >
-              <ChevronLeft className="w-5 h-5 text-gray-600 hover:text-blue-600" />
-            </button>
-            <button
-              onClick={handleNext}
-              className="p-2 rounded-full border border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200"
-              aria-label="Next universities"
-            >
-              <ChevronRight className="w-5 h-5 text-gray-600 hover:text-blue-600" />
-            </button>
+          {/* View All Button */}
+          <div className="flex items-center gap-8">
+            <Link to={"/universities"} className="flex justify-center">
+              <button className="px-8 py-3 hover:shadow-lg hover:scale-105 transition-transform border-2 border-blue text-blue font-semibold rounded-lg duration-200">
+                View All Universities
+              </button>
+            </Link>
+            <div className="flex gap-2">
+              <button
+                onClick={handlePrevious}
+                className="p-2 rounded-full border border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200"
+                aria-label="Previous universities"
+              >
+                <ChevronLeft className="w-5 h-5 text-gray-600 hover:text-blue-600" />
+              </button>
+              <button
+                onClick={handleNext}
+                className="p-2 rounded-full border border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200"
+                aria-label="Next universities"
+              >
+                <ChevronRight className="w-5 h-5 text-gray-600 hover:text-blue-600" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -98,11 +106,17 @@ export default function FeaturedUniversities() {
 
               {/* Card Content */}
               <div className="p-4">
-                <h3 className="text-lg font-semibold text-[#002B5B] mb-1">
-                  {uni.name}
-                </h3>
-                <p className="text-sm text-[#374151] mb-3">{uni.location}</p>
-
+                <div className="flex items-center justify-between mb-2">
+                  <div>
+                    <h3 className="text-lg font-semibold text-[#002B5B] mb-1">
+                      {uni.name}
+                    </h3>
+                    <p className="text-sm text-[#374151] mb-3">
+                      {uni.location}
+                    </p>
+                  </div>
+                  <img src={logo} alt="" />
+                </div>
                 {/* Programs and Rating */}
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-[#6B7280]">
@@ -119,13 +133,6 @@ export default function FeaturedUniversities() {
             </div>
           ))}
         </div>
-
-        {/* View All Button */}
-        <Link to={'/universities'} className="flex justify-center">
-          <button className="px-8 py-3 hover:shadow-lg hover:scale-105 transition-transform border-2 border-blue text-blue font-semibold rounded-lg duration-200">
-            View All Universities
-          </button>
-        </Link>
       </div>
     </section>
   );
