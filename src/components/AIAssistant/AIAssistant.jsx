@@ -3,7 +3,8 @@ import robot from "../../assets/images/robot.png";
 import { useState } from "react";
 import { X, ChevronDown, Send, Edit } from "lucide-react";
 import { Link } from "react-router-dom";
-
+import Lottie from "lottie-react";
+import robotLottie from "../../assets/lottie/robot.json";
 export default function AIAssistant() {
   const [currentChatId, setCurrentChatId] = useState(null);
   const [chats, setChats] = useState([
@@ -147,14 +148,20 @@ export default function AIAssistant() {
             <div className="flex-1 overflow-y-auto p-6 flex flex-col max-w-7xl mx-auto w-full">
               {messages.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center">
-                  <div className="text-center">
-                    <img src={robot} alt="" />
-                    <p className="text-3xl lg:text-4xl font-semibold text-gray-900 my-4">
-                      Hi Hugo.
-                    </p>
-                    <p className="text-gray-600 text-xl">
-                      What can I help with?
-                    </p>
+                  <div className="text-center -space-y-24">
+                    {/* <img src={robot} alt="" /> */}
+                    <div className="">
+                      <Lottie animationData={robotLottie}></Lottie>
+                    </div>
+                    <div>
+                      {" "}
+                      <p className="text-3xl lg:text-4xl font-semibold text-gray-900 my-4">
+                        Hi Hugo.
+                      </p>
+                      <p className="text-gray-600 text-xl">
+                        What can I help with?
+                      </p>
+                    </div>
                   </div>
                 </div>
               ) : (

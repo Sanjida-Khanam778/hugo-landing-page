@@ -383,8 +383,7 @@ export default function UniversityEvents() {
     <div className="min-h-screen bg-base">
       {/* Header */}
       <div
-        className="bg-cover bg-no-repeat h-[50vh] text-white py-12 px-8 relative overflow-hidden flex items-center justify-center"
-        style={{ backgroundImage: `url(${backgroundBanner})` }}
+        className="bg-primary h-[50vh] text-white py-12 px-8 relative overflow-hidden flex items-center justify-center"
       >
         <div className="w-11/12 mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl xl:text-5xl font-bold mb-2">
@@ -398,7 +397,7 @@ export default function UniversityEvents() {
       </div>
 
       {/* Tabs */}
-      <div className="bg-white border-b border-gray-200 p-6">
+      {/* <div className="bg-white border-b border-gray-200 p-6">
         <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between gap-8">
             <div className="grid place-items-center gap-2">
@@ -431,7 +430,7 @@ export default function UniversityEvents() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Main Content */}
       <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-8">

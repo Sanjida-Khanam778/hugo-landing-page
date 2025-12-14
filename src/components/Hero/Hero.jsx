@@ -1,7 +1,15 @@
 import banner from "../../assets/video/banner.mp4";
 
 import { useState } from "react";
-import { Search, Info, BookOpen, Calendar, ShieldPlus } from "lucide-react";
+import {
+  Search,
+  Info,
+  BookOpen,
+  Calendar,
+  ShieldPlus,
+  MessageCircleMore,
+  Bot,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -71,13 +79,13 @@ export default function Hero() {
             Check out these tools.
           </p>
           {/* Action Buttons */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            <Link to={"/ai-assistant"}>
+          <div className="grid grid-cols-3 gap-3 sm:gap-4">
+            {/* <Link to={"/ai-assistant"}>
               <button className="flex items-center justify-center gap-2 w-full bg-white/20 hover:bg-white/30 text-white font-medium py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base">
                 <Info className="w-5 h-5" />
                 <span>Orientator chat</span>
               </button>
-            </Link>
+            </Link> */}
 
             <button
               onClick={handleCompare}
@@ -90,12 +98,12 @@ export default function Hero() {
               onClick={handleCompare}
               className="flex items-center justify-center gap-2 bg-white/10 text-white font-medium py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base"
             >
-              <BookOpen className="w-5 h-5" />
+              <MessageCircleMore className="w-5 h-5" />
               <span>Vocational orientator</span>
             </button>
             <Link to={"/ai-assistant"}>
               <button className="flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 text-white font-medium w-full py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base">
-                <Calendar className="w-5 h-5" />
+                <Bot className="w-6 h-6" />
                 <span>Talk to Robot Hugo</span>
               </button>
             </Link>

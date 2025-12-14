@@ -24,10 +24,7 @@ export default function JobList({
   const [showTypeDropdown, setShowTypeDropdown] = useState(false);
   return (
     <div className="min-h-screen bg-base">
-      <div
-        style={{ backgroundImage: `url(${background})` }}
-        className="text-white flex items-center justify-center relative overflow-hidden bg-cover bg-no-repeat h-[50vh] px-8"
-      >
+      <div className="text-white flex items-center justify-center relative overflow-hidden bg-primary h-[50vh] px-8">
         <div className="w-11/12 mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl md:text-4xl font-bold mb-8">
             Jobs & Internships
@@ -48,121 +45,7 @@ export default function JobList({
             placeholder="Search for job title, company, keywords..."
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
           />
-          <div className="ml-4 flex gap-3 relative text-[#111827]">
-            {/* Job Type Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setShowTypeDropdown(!showTypeDropdown);
-                  setShowCategoryDropdown(false);
-                }}
-                className="px-4 py-2 bg-white border border-gray-300 rounded-lg  font-medium hover:bg-gray-50 flex items-center gap-2"
-              >
-                {selectedType}
-                <ChevronDown size={16} />
-              </button>
-
-              {showTypeDropdown && (
-                <div className="absolute top-full mt-2 left-0 bg-white rounded-lg shadow-lg border border-gray-200 py-4 px-6 min-w-[280px] z-50">
-                  <div className="space-y-3">
-                    <button
-                      onClick={() => {
-                        setSelectedType("All Types");
-                        setShowTypeDropdown(false);
-                      }}
-                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
-                    >
-                      All Types
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedType("Internship");
-                        setShowTypeDropdown(false);
-                      }}
-                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
-                    >
-                      Internship
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedType("Full Time");
-                        setShowTypeDropdown(false);
-                      }}
-                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
-                    >
-                      Full Time
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Category Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setShowCategoryDropdown(!showCategoryDropdown);
-                  setShowTypeDropdown(false);
-                }}
-                className="px-4 py-2 bg-white border border-gray-300 rounded-lg  font-medium hover:bg-gray-50 flex items-center gap-2"
-              >
-                {selectedCategory}
-                <ChevronDown size={16} />
-              </button>
-
-              {showCategoryDropdown && (
-                <div className="absolute top-full mt-2 left-0 bg-white rounded-lg shadow-lg border border-gray-200 py-4 px-6 min-w-[280px] z-50">
-                  <div className="space-y-3">
-                    <button
-                      onClick={() => {
-                        setSelectedCategory("Technology");
-                        setShowCategoryDropdown(false);
-                      }}
-                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
-                    >
-                      Technology
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedCategory("Marketing");
-                        setShowCategoryDropdown(false);
-                      }}
-                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
-                    >
-                      Marketing
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedCategory("Finance");
-                        setShowCategoryDropdown(false);
-                      }}
-                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
-                    >
-                      Finance
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedCategory("Research");
-                        setShowCategoryDropdown(false);
-                      }}
-                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
-                    >
-                      Research
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedCategory("Education");
-                        setShowCategoryDropdown(false);
-                      }}
-                      className="block w-full text-left text-lg hover:text-blue-600 transition-colors"
-                    >
-                      Education
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+        
         </div>
       </div>
 
@@ -170,13 +53,15 @@ export default function JobList({
       <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex gap-8">
           {/* Filters Sidebar */}
-          <div className="w-56 flex-shrink-0">
+          <div className="w-56 flex-shrink-0 text-sm">
             <div className="bg-[#ECF5FF] rounded p-6">
               <h3 className="font-semibold mb-4 text-xl">Filters</h3>
 
               {/* Job Type */}
               <div className="mb-5">
-                <h4 className=" font-medium mb-3 text-gray-900">Job Type</h4>
+                <h4 className=" font-medium mb-3 text-gray-900 text-base">
+                  Job Type
+                </h4>
                 <div className="space-y-2">
                   <label className="flex items-center  text-gray-700">
                     <input
@@ -212,7 +97,9 @@ export default function JobList({
 
               {/* Category */}
               <div className="mb-5">
-                <h4 className=" font-medium mb-3 text-gray-900">Category</h4>
+                <h4 className=" font-medium mb-3 text-gray-900 text-base">
+                  Category
+                </h4>
                 <div className="space-y-2">
                   <label className="flex items-center  text-gray-700">
                     <input
@@ -225,30 +112,94 @@ export default function JobList({
                   </label>
                   <label className="flex items-center  text-gray-700">
                     <input type="radio" name="category" className="mr-2" />
-                    <span>Technology</span>
+                    <span>Business Management and Administration</span>
                   </label>
                   <label className="flex items-center  text-gray-700">
                     <input type="radio" name="category" className="mr-2" />
-                    <span>Marketing</span>
+                    <span>Legal and Social Sciences</span>
                   </label>
                   <label className="flex items-center  text-gray-700">
                     <input type="radio" name="category" className="mr-2" />
-                    <span>Design</span>
+                    <span>Healthcare</span>
                   </label>
                   <label className="flex items-center  text-gray-700">
                     <input type="radio" name="category" className="mr-2" />
-                    <span>Finance</span>
+                    <span>Natural Sciences and Mathematics</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span>Humanities and Letter</span>
                   </label>
                   <label className="flex items-center  text-gray-700">
                     <input type="radio" name="category" className="mr-2" />
                     <span>Education</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span>Technology and Telecommunications</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span>Economics and Finance</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span>Languages</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span>Commerce and Marketing</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span>Hospitality and Tourism</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span>Sports and Physical Activity</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span>Agriculture, Mining, and Gardening</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span>Image, Film, and Sound</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span> Fine Arts</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span> Security and Civil Protection</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span> Logistics and Transportation</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span> Graphic Arts</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span> Fashion and Textile Production</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span>Music, Performing Arts, and Dance</span>
+                  </label>
+                  <label className="flex items-center  text-gray-700">
+                    <input type="radio" name="category" className="mr-2" />
+                    <span> Veterinary Medicine and Animals</span>
                   </label>
                 </div>
               </div>
 
               {/* Posted Within */}
               <div>
-                <h4 className=" font-medium mb-3 text-gray-900">
+                <h4 className="font-medium mb-3 text-gray-900 text-base">
                   Posted Within
                 </h4>
                 <div className="space-y-2">
@@ -295,7 +246,10 @@ export default function JobList({
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="text-lg font-semibold">{job.title}</h3>
                         </div>
-                        <p className=" text-gray-600 flex gap-2"><GraduationCap strokeWidth={3.00} />{job.company}</p>
+                        <p className=" text-gray-600 flex gap-2">
+                          <GraduationCap strokeWidth={3.0} />
+                          {job.company}
+                        </p>
                       </div>
                     </div>
                     <span
@@ -326,7 +280,9 @@ export default function JobList({
 
                   <div className="flex items-center justify-between">
                     <div className="space-x-4">
-                      <span className="bg-base p-2 rounded-lg">{job.details.category}</span>
+                      <span className="bg-base p-2 rounded-lg">
+                        {job.details.category}
+                      </span>
                       <span className=" text-gray-500">{job.posted}</span>
                     </div>
                     <div>

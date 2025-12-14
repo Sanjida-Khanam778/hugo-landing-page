@@ -23,7 +23,7 @@ export default function UniBanner() {
       </div>
       {/* Content */}
       <div className="relative z-10 h-full flex items-center justify-start w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="w-full flex max-w-4xl border border-white border-opacity-40 bg-white/5 text-white font-medium lg:p-10 rounded-lg transition-colors backdrop-blur-md">
+        <div className="w-full flex max-w-4xl border border-white border-opacity-40 bg-primary text-white font-medium lg:p-10 rounded-lg transition-colors backdrop-blur-md">
           <div className="w-40">
             <img src={uni_logo} className="    h-full w-full" alt="" />
           </div>
