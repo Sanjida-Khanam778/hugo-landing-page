@@ -4,8 +4,8 @@ import shape from "../../assets/images/shape.png";
 export default function Overview() {
   return (
     <div>
-      <div className="inset-0 flex gap-6">
-        <div className="w-1/2 h-full space-y-4">
+      <div className="flex gap-6">
+        <div className="w-1/2 h-auto">
           <video
             autoPlay
             muted
@@ -17,7 +17,6 @@ export default function Overview() {
             <source src={banner} type="video/mp4" />
             {/* <source src={banner} type="video/mp4" /> */}
           </video>
-          <img src={shape} alt="" />
         </div>
         <div className="w-1/2 h-full">
           {/* About Section */}
@@ -41,6 +40,56 @@ export default function Overview() {
             </p>
           </div>
         </div>
+      </div>
+
+      {/* "What makes us different" - expanded profile section */}
+      <div className="rounded-lg p-6 mt-6 bg-white shadow-sm">
+        <h3 className="text-2xl font-semibold mb-3">What makes us different</h3>
+        <p className="text-gray-700 leading-relaxed mb-3">
+          We are a problem-centric, solution focused University with a strong
+          philosophy around shaping tomorrow, today. Our students, graduates and
+          staff are making an impact in our region and around the world by using
+          their expertise and experience to drive innovation and make positive
+          changes. You can be part of that story.
+        </p>
+
+        <p className="text-gray-700 leading-relaxed mb-3">
+          We are continuously investing in our facilities and have added a
+          multi-million pound Bioscience Superlab and Research Hub. A brand-new
+          International Business School has opened in the heart of the city
+          centre as a modern, zero-carbon hub for students and start-up
+          companies to learn, network and prosper.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <div className="p-4 border rounded">
+            <h4 className="font-semibold mb-2">Research & Innovation</h4>
+            <p className="text-sm text-gray-600">
+              World-class research centres and industry partnerships driving new
+              discoveries.
+            </p>
+          </div>
+          <div className="p-4 border rounded">
+            <h4 className="font-semibold mb-2">Student Experience</h4>
+            <p className="text-sm text-gray-600">
+              Strong student support, modern facilities and a vibrant campus
+              life.
+            </p>
+          </div>
+          <div className="p-4 border rounded">
+            <h4 className="font-semibold mb-2">Sustainability</h4>
+            <p className="text-sm text-gray-600">
+              Committed to reducing environmental impact across teaching and
+              operations.
+            </p>
+          </div>
+        </div>
+
+        <p className="text-gray-700 leading-relaxed mt-4">
+          The University ranked in the Top 15 for satisfaction with feedback and
+          continues to focus on high-quality teaching, employability and an
+          inclusive learning environment.
+        </p>
       </div>
 
       {/* Rankings Section */}

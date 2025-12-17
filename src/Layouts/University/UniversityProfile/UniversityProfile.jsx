@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Upload, Plus, Edit2, Trash2, X } from "lucide-react";
+import { Upload, Plus, X } from "lucide-react";
 import AddRankingModal from "../Modal/AddRankingModal";
 import AddLocationModal from "../Modal/AddLocationModal";
 import AddAccreditationModal from "../Modal/AddAccreditationModal";

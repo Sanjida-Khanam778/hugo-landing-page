@@ -39,6 +39,21 @@ export default function UniversityTab() {
     });
   };
 
+  // Campus locations data and helper to open Google Maps
+  const campuses = [
+    { id: 1, name: "1. ABC Campus", address: "Aqua tower, mohakhali, dhaka" },
+    { id: 2, name: "2. ABC Campus", address: "Road 01, Def street, City" },
+    { id: 3, name: "3. ABC Campus", address: "Road 02, Ghi avenue, City" },
+  ];
+
+  function openMap(address) {
+    if (!address) return;
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      address
+    )}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
   return (
     <div className="bg-base">
       {/* Navigation Tabs */}
@@ -154,33 +169,28 @@ export default function UniversityTab() {
                 }}
               >
                 <div className="space-y-8">
-                  <div className="flex items-start gap-3">
-                    <div className=" bg-[#002B5B]/10 rounded-full w-12 h-12 flex items-center justify-center">
-                      <FaMapMarkerAlt className="text-primary text-xl mt-1 flex-shrink-0" />
+                  {campuses.map((c) => (
+                    <div
+                      key={c.id}
+                      className="flex items-start gap-3 cursor-pointer hover:bg-gray-50 rounded-md p-2"
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => openMap(c.address)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ")
+                          openMap(c.address);
+                      }}
+                      aria-label={`Open ${c.name} in Google Maps`}
+                    >
+                      <div className=" bg-[#002B5B]/10 rounded-full w-12 h-12 flex items-center justify-center">
+                        <FaMapMarkerAlt className="text-primary text-xl mt-1 flex-shrink-0" />
+                      </div>
+                      <div>
+                        <p className="font-medium ">{c.name}</p>
+                        <p className=" text-gray-600">{c.address}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium ">1. ABC Campus</p>
-                      <p className=" text-gray-600">Road 00, Abc palace, etc</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className=" bg-[#002B5B]/10 rounded-full w-12 h-12 flex items-center justify-center">
-                      <FaMapMarkerAlt className="text-primary text-xl mt-1 flex-shrink-0" />
-                    </div>
-                    <div>
-                      <p className="font-medium ">2. ABC Campus</p>
-                      <p className=" text-gray-600">Road 00, Abc palace, etc</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className=" bg-[#002B5B]/10 rounded-full w-12 h-12 flex items-center justify-center">
-                      <FaMapMarkerAlt className="text-primary text-xl mt-1 flex-shrink-0" />
-                    </div>
-                    <div>
-                      <p className="font-medium ">3. ABC Campus</p>
-                      <p className=" text-gray-600">Road 00, Abc palace, etc</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
