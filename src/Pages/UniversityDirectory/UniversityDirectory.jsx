@@ -606,7 +606,7 @@ export default function UniversityDirectory() {
           </div>
 
           {/* Desktop sidebar (hidden on small) */}
-          <div className="w-64 flex-shrink-0 hidden md:block">
+          <div className="w-68 flex-shrink-0 hidden md:block">
             <FiltersContent />
           </div>
 
@@ -653,9 +653,7 @@ export default function UniversityDirectory() {
                   </div>
                   <div className="flex bg-[#374151] items-center gap-4 px-4 py-2">
                     <div className="w-10 h-10 bg-white rounded-full"></div>
-                    <h3 className="font-semibold text-white">
-                      {uni.name}
-                    </h3>
+                    <h3 className="font-semibold text-white">{uni.name}</h3>
                   </div>
 
                   {/* Card Content */}

@@ -15,7 +15,6 @@ export default function JobList({
   jobs,
   onViewDetails,
   getBadgeColor,
-  background,
   uni_logo,
 }) {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
@@ -45,7 +44,6 @@ export default function JobList({
             placeholder="Search for job title, company, keywords..."
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
           />
-        
         </div>
       </div>
 
@@ -53,7 +51,7 @@ export default function JobList({
       <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex gap-8">
           {/* Filters Sidebar */}
-          <div className="w-56 flex-shrink-0 text-sm">
+          <div className="w-68 flex-shrink-0 text-sm">
             <div className="bg-[#ECF5FF] rounded p-6">
               <h3 className="font-semibold mb-4 text-xl">Filters</h3>
 

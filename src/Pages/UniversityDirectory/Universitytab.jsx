@@ -8,6 +8,7 @@ import TestimonialTab from "./TestimonialTab";
 import Gallery from "./Gallery";
 import Overview from "./Overview";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import Jobs from "./Jobs";
 export default function UniversityTab() {
   const [activeTab, setActiveTab] = useState("overview");
   const [showRequestForm, setShowRequestForm] = useState(false);
@@ -75,6 +76,16 @@ export default function UniversityTab() {
               Events
             </button>
             <button
+              onClick={() => setActiveTab("jobs")}
+              className={`py-4 font-medium border-b-2 transition-colors ${
+                activeTab === "jobs"
+                  ? "border-blue text-blue"
+                  : "border-transparent text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              Jobs
+            </button>
+            <button
               onClick={() => setActiveTab("testimonials")}
               className={`py-4 font-medium border-b-2 transition-colors ${
                 activeTab === "testimonials"
@@ -92,7 +103,7 @@ export default function UniversityTab() {
                   : "border-transparent text-gray-600 hover:text-gray-900"
               }`}
             >
-              Gallery
+              Student Life
             </button>
           </div>
         </div>
@@ -108,6 +119,8 @@ export default function UniversityTab() {
             {activeTab === "programs" && <Program />}
 
             {activeTab === "events" && <Events />}
+
+            {activeTab === "jobs" && <Jobs />}
 
             {activeTab === "testimonials" && <TestimonialTab />}
 

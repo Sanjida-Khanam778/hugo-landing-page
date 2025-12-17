@@ -257,7 +257,6 @@ export default function Universities() {
                   university.status.slice(1)}
               </span>
               <span>
-                {" "}
                 <p className=" text-gray-600">
                   Applied on: {university.appliedDate}
                 </p>
@@ -306,7 +305,6 @@ export default function Universities() {
           </button>
         </div>
       )}
-
 
       {/* Modal */}
       {showModal && (

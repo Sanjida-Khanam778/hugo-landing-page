@@ -436,7 +436,7 @@ export default function UniversityEvents() {
       <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex gap-8">
           {/* Filters Sidebar */}
-          <div className="w-56 flex-shrink-0">
+          <div className="w-64 flex-shrink-0">
             <div className="bg-white rounded-lg p-4">
               <h3 className="font-semibold mb-3 text-lg">Filters</h3>
 
