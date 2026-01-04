@@ -36,6 +36,7 @@ import AdminSignIn from "../Pages/Auth/AdminSignin";
 import AdminDashboard from "../Layouts/Admin/AdminDashboard/AdminDashboard";
 import Universities from "../Layouts/Admin/Universities/Universities";
 import AIAssistant from "../components/AIAssistant/AIAssistant";
+import AllUniversityPrograms from "../Pages/Programs/AllUniversityPrograms";
 
 export const router = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
       {
         path: "/program-details",
         element: <ProgramDetails />,
+      },
+      {
+        path: "/programs",
+        element: <AllUniversityPrograms />,
       },
       {
         path: "/events",
