@@ -3,6 +3,7 @@ import banner from "../../assets/video/uni_banner.mp4";
 import { MapPin } from "lucide-react";
 import uni_logo from "../../assets/icons/harvard.png";
 import ApplyModal from "../../components/ApplyModal/ApplyModal";
+import { Link } from "react-router-dom";
 
 export default function UniBannerWrapper() {
   const [showApply, setShowApply] = useState(false);
@@ -67,7 +68,9 @@ function UniBannerInner({ setShowApply }) {
             >
               Apply Now
             </button>
-            <button className="px-4 py-2 border rounded-md">Message</button>
+            <Link to="/message">
+              <button className="px-4 py-2 border rounded-md">Message</button>
+            </Link>
           </div>
         </div>
       </div>

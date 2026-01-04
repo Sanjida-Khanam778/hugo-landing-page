@@ -97,7 +97,7 @@ export default function ApplyModal({ open, onClose, uniName = "University" }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[100000] flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={onClose}></div>
       <div className="relative w-[95%] md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-auto bg-white rounded-lg shadow-lg p-6 z-10">
         <div className="flex items-center justify-between mb-4">
