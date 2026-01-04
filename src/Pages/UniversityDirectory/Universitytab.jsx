@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { MapPin, X } from "lucide-react";
+import { useState } from "react";
+import { X } from "lucide-react";
 import req from "../../assets/images/reqInfo.png";
 import Program from "./Program";
 import Events from "./Events";
-import Testimonial from "../../components/Testimonial/Testimonial";
 import TestimonialTab from "./TestimonialTab";
 import Gallery from "./Gallery";
 import Overview from "./Overview";
