@@ -2,33 +2,31 @@ import React, { useState } from "react";
 import background from "../../assets/images/uniBanner.png";
 import signin from "../../assets/images/signin.png";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useLoginMutation } from "../../Api/authApi";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  // const [rememberMe, setRememberMe] = useState(false); // Unused in logic but kept state
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const [login, { isLoading, isError, error }] = useLoginMutation();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password);
-    // Validate email and password
     if (email && password) {
-      // Extract user name from email or you can add a name field
-      const userName = email.split("@")[0];
-
-      // Store login info in localStorage
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("userName", userName);
-      localStorage.setItem("userEmail", email);
-
-      console.log("Sign in:", { email, password });
-
-      // Navigate to dashboard or home
-      navigate("/");
-
-      // Refresh page to update Navbar state
-      window.location.reload();
+      try {
+        const res = await login({ email, password, role: "student" }).unwrap();
+        console.log("Login successful", res);
+        navigate("/");
+        // window.location.reload(); // Removed reload to allow SPA navigation
+      } catch (err) {
+        console.error("Failed to login:", err);
+        toast.error(err.data?.error[0], {
+          position: "bottom-center"
+        })
+      }
     }
   };
 
@@ -51,6 +49,8 @@ export default function SignIn() {
             <h1 className="text-xl lg:text-3xl font-semibold mb-8 border-b pb-4 border-[#E2E1E1]">
               SIGN IN
             </h1>
+
+
 
             <div className="space-y-4">
               <div>
@@ -79,19 +79,20 @@ export default function SignIn() {
                 />
               </div>
 
-              <div className="flex items-center justify-between  pt-2">
+              <Link to={"/forget-pass"} className="flex items-center justify-between  pt-2">
                 <button className="text-red-500 hover:text-red-600">
                   Forgot Password?
                 </button>
-             
-              </div>
+
+              </Link>
 
               <div className="flex flex-col md:flex-row gap-4 md:gap-0 items-center pt-6 justify-between">
                 <button
                   onClick={handleSubmit}
-                  className="bg-blue px-8 text-white py-3 rounded font-medium"
+                  disabled={isLoading}
+                  className="bg-blue px-8 text-white py-3 rounded font-medium disabled:opacity-50"
                 >
-                  Sign In
+                  {isLoading ? "Signing In..." : "Sign In"}
                 </button>
 
                 <div className="flex gap-4 justify-center items-center">

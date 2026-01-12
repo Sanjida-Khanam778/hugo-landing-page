@@ -37,6 +37,9 @@ import AdminDashboard from "../Layouts/Admin/AdminDashboard/AdminDashboard";
 import Universities from "../Layouts/Admin/Universities/Universities";
 import AIAssistant from "../components/AIAssistant/AIAssistant";
 import AllUniversityPrograms from "../Pages/Programs/AllUniversityPrograms";
+import ForgetPass from "../Pages/Auth/ForgetPass";
+import VerifyOTP from "../Pages/Auth/VerifyOTP";
+import ResetPass from "../Pages/Auth/ResetPass";
 
 export const router = createBrowserRouter([
   {
@@ -97,6 +100,18 @@ export const router = createBrowserRouter([
       {
         path: "/login",
         element: <SignIn />,
+      },
+      {
+        path: "/forget-pass",
+        element: <ForgetPass />,
+      },
+      {
+        path: "/verify-otp",
+        element: <VerifyOTP />,
+      },
+      {
+        path: "/reset-pass",
+        element: <ResetPass />,
       },
       {
         path: "/register",

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "",
+  baseUrl: "/api/v1",
   prepareHeaders: (headers, { getState }) => {
     // Try to get token from Redux state
     const token = getState().auth?.accessToken || null;
@@ -9,9 +9,17 @@ const baseQuery = fetchBaseQuery({
     if (token) {
       headers.set("authorization", `Bearer ${token}`);
     } else {
-      const authData = JSON.parse(localStorage.getItem("auth")); // Parse the `auth` object from local storage
-      if (authData?.access) {
-        headers.set("authorization", `Bearer ${authData.access}`); // Set Authorization header
+      const storedAuth = localStorage.getItem("auth");
+      if (storedAuth) {
+        try {
+          const authData = JSON.parse(storedAuth);
+          if (authData?.access) {
+            headers.set("authorization", `Bearer ${authData.access}`);
+          }
+        } catch (error) {
+          console.warn("Failed to parse auth token from local storage:", error);
+          localStorage.removeItem("auth"); // Clean up invalid data
+        }
       }
     }
     return headers;

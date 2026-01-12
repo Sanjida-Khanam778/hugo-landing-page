@@ -7,13 +7,16 @@ import {
   Menu,
   X,
   LogOut,
-  ChartBar,
   MessageSquareMore,
 } from "lucide-react";
+
 import logo from "../../assets/images/logo.png";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
+import { useSelector } from "react-redux";
 export default function Navbar() {
+  const data = useSelector((state) => state.auth);
+  console.log(data)
   const [searchValue, setSearchValue] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -59,7 +62,8 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={`w-full fixed top-0 bg-[#F3F4F5]/80 z-[9999]`}>
+    <nav className={`w-full fixed top-0 bg-[#F3F4F5]
+     z-[9999]`}>
       <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}

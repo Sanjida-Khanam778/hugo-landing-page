@@ -5,7 +5,6 @@ import Footer from "../components/Footer/Footer";
 
 export default function MainLayout() {
   const location = useLocation();
-  console.log(location.pathname.includes("/"));
   return (
     <div className="font-rubik">
       {location.pathname === "/" ? <Navbar /> : <Navbar />}

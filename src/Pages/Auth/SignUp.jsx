@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import background from "../../assets/images/uniBanner.png";
-import signup from "../../assets/images/signup.png";
+import signupImg from "../../assets/images/signup.png";
 import { Link, useNavigate } from "react-router-dom";
+import { useSignupMutation } from "../../Api/authApi";
+import toast from "react-hot-toast";
 
 export default function SignUp() {
   const [fullName, setFullName] = useState("");
@@ -10,23 +12,29 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const [signup, { isLoading }] = useSignupMutation();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Validate all fields
     if (fullName && phone && email && password) {
-      // Store login info in localStorage
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("userName", fullName);
-      localStorage.setItem("userEmail", email);
-      localStorage.setItem("userPhone", phone);
-
-      console.log("Sign up:", { fullName, phone, email, password });
-
-      // Navigate to home
-      navigate("/");
-
-      // Refresh page to update Navbar state
-      window.location.reload();
+      try {
+        const res = await signup({
+          full_name: fullName,
+          phone,
+          email,
+          password,
+          role: "student",
+        }).unwrap();
+        console.log("Sign up successful:", res);
+        navigate("/");
+        // window.location.reload(); // Removed reload to allow SPA navigation
+      } catch (err) {
+        console.error("Sign up failed:", err);
+        toast.error(err.data.phone[0], {
+          position: "bottom-center"
+        })
+      }
     }
   };
 
@@ -49,6 +57,8 @@ export default function SignUp() {
             <h1 className="text-3xl font-semibold mb-8 border-b pb-4 border-[#E2E1E1]">
               SIGN UP
             </h1>
+
+
 
             <div className="space-y-4">
               <div>
@@ -94,9 +104,10 @@ export default function SignUp() {
               <div className="flex flex-col gap-4 md:gap-0 md:flex-row items-center pt-6 justify-between">
                 <button
                   onClick={handleSubmit}
-                  className="bg-blue px-8 text-white py-3 rounded font-medium"
+                  disabled={isLoading}
+                  className="bg-blue px-8 text-white py-3 rounded font-medium disabled:opacity-50"
                 >
-                  Sign Up
+                  {isLoading ? "Signing Up..." : "Sign Up"}
                 </button>
 
                 <div className="flex gap-4 justify-center items-center">
@@ -137,7 +148,7 @@ export default function SignUp() {
             </div>
           </div>
         </div>
-        <img src={signup} alt="Sign In" className="md:w-1/2 mx-auto md:mt-6 lg:mt-0" />
+        <img src={signupImg} alt="Sign In" className="md:w-1/2 mx-auto md:mt-6 lg:mt-0" />
       </div>
     </div>
   );
