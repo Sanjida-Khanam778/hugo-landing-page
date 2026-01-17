@@ -39,7 +39,6 @@ export default function UniSignUp() {
 
       try {
         const res = await universitySignupMutation(newUser).unwrap();
-        console.log("Sign up successful:", res);
         navigate("/university/dashboard");
         // window.location.reload(); // Removed reload to allow SPA navigation
       } catch (err) {

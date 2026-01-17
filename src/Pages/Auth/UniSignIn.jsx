@@ -1,38 +1,30 @@
 import React, { useState } from "react";
 import background from "../../assets/images/uniLogin.png";
 import { Link, useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../../Api/authapi";
+import toast from "react-hot-toast";
 
 export default function UniSignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  // const [rememberMe, setRememberMe] = useState(false); 
   const navigate = useNavigate();
-  const [currentPage, setCurrentPage] = useState("signup");
-  const [users, setUsers] = useState([]);
-  const [rememberMe, setRememberMe] = useState(false);
-  const handleSigninChange = (e) => {
-    const [signinForm, setSigninForm] = useState({
-      email: "",
-      password: "",
-    });
 
-    const [errors, setErrors] = useState({});
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    setSigninForm({
-      ...signinForm,
-      [e.target.name]: e.target.value,
-    });
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: "" });
-    }
-  };
-  const handleSignin = () => {
-    const user = users.find(
-      (u) => u.email === signinForm.email && u.password === signinForm.password
-    );
-    navigate("/university/dashboard");
+  const [login, { isLoading }] = useLoginMutation();
 
-    if (user) {
-      setIsLoggedIn(true);
-    } else {
-      setErrors({ signin: "Invalid email or password" });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (email && password) {
+      try {
+        const res = await login({ email, password, role: "university" }).unwrap();
+        console.log("Login successful", res);
+        navigate("/university/dashboard");
+      } catch (err) {
+        console.error("Failed to login:", err.data.error[0]);
+        toast.error( err.data?.error[0], {
+          position: "bottom-center",
+        });
+      }
     }
   };
 
@@ -62,7 +54,7 @@ export default function UniSignIn() {
               type="email"
               name="email"
               // value={signinForm.email}
-              onChange={handleSigninChange}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 bg-transparent border-2 border-blue-300 rounded-lg placeholder-blue-200 focus:outline-none focus:border-blue-400"
               placeholder="Enter your email"
             />
@@ -74,7 +66,7 @@ export default function UniSignIn() {
               type="password"
               name="password"
               // value={signinForm.password}
-              onChange={handleSigninChange}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 bg-transparent border-2 border-blue-300 rounded-lg placeholder-blue-200 focus:outline-none focus:border-blue-400"
               placeholder="••••••••••"
             />
@@ -85,17 +77,19 @@ export default function UniSignIn() {
         )} */}
 
           <div className="flex items-center justify-end mb-6">
-             
+
             <button type="button" className="hover:text-blue text-sm">
               Forgot your password?
             </button>
           </div>
 
           <button
-            onClick={handleSignin}
+            onClick={handleSubmit}
+            disabled={isLoading}
             className="w-full bg-blue hover:bg-blue-700 font-semibold py-3 rounded-lg transition duration-200 mb-4"
           >
-            Sign In
+            {isLoading ? "Signing In..." : "Sign In"}
+
           </button>
 
           <p className="text-center text-blue-100">

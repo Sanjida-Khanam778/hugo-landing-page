@@ -40,7 +40,6 @@ export const authapi = api.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log("Signup successfuleeeeeeeeeee:", data);
           const { refresh_token, access_token, user } = data;
 
           // Dispatch setCredentials to update Redux state
