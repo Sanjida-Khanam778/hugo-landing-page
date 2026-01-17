@@ -1,7 +1,8 @@
 import { api } from "./api";
 import { setCredentials } from "../features/authSlice";
+import { CloudCog } from "lucide-react";
 
-export const authApi = api.injectEndpoints({
+export const authapi = api.injectEndpoints({
   endpoints: (builder) => ({
     signup: builder.mutation({
       query: (data) => ({
@@ -20,6 +21,34 @@ export const authApi = api.injectEndpoints({
               refresh: refresh_token,
               access: access_token,
               user: userData,
+            })
+          );
+
+          // Persist user data to localStorage (legacy support)
+          localStorage.setItem("auth", JSON.stringify({ refresh: refresh_token, access: access_token }));
+        } catch (error) {
+          // console.error("Signup error:", error);
+        }
+      },
+    }),
+    universitySignup: builder.mutation({
+      query: (data) => ({
+        url: "/university/signup/university/",
+        method: "POST",
+        body: data,
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log("Signup successfuleeeeeeeeeee:", data);
+          const { refresh_token, access_token, user } = data;
+
+          // Dispatch setCredentials to update Redux state
+          dispatch(
+            setCredentials({
+              refresh: refresh_token,
+              access: access_token,
+              user: user,
             })
           );
 
@@ -106,4 +135,5 @@ export const {
   useResetPasswordMutation,
   useVerifyOtpMutation,
   useGetUserProfileQuery,
-} = authApi;
+  useUniversitySignupMutation
+} = authapi;

@@ -2,7 +2,13 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "/api/v1",
-  prepareHeaders: (headers, { getState }) => {
+  prepareHeaders: (headers, { getState, endpoint }) => {
+    // Skip auth token for public endpoints
+    const publicEndpoints = ["signup", "universitySignup", "login", "forgetPass", "verifyOtp", "resetPassword"];
+    if (publicEndpoints.includes(endpoint)) {
+      return headers;
+    }
+
     // Try to get token from Redux state
     const token = getState().auth?.accessToken || null;
     // If token not in state, retrieve from local storage

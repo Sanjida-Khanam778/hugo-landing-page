@@ -3,29 +3,28 @@ import background from "../../assets/images/uniBanner.png";
 import signin from "../../assets/images/signin.png";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useLoginMutation } from "../../Api/authApi";
+import { useLoginMutation } from "../../Api/authapi";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [rememberMe, setRememberMe] = useState(false); // Unused in logic but kept state
+  // const [rememberMe, setRememberMe] = useState(false); 
   const navigate = useNavigate();
 
-  const [login, { isLoading, isError, error }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (email && password) {
       try {
         const res = await login({ email, password, role: "student" }).unwrap();
-        console.log("Login successful", res);
+        console.log("Login successful", res.error);
         navigate("/");
-        // window.location.reload(); // Removed reload to allow SPA navigation
       } catch (err) {
-        console.error("Failed to login:", err);
-        toast.error(err.data?.error[0], {
-          position: "bottom-center"
-        })
+        console.error("Failed to login:", err.data.error[0]);
+        toast.error(err.data?.email[0] || err.data?.error?.[0], {
+          position: "bottom-center",
+        });
       }
     }
   };
@@ -49,8 +48,6 @@ export default function SignIn() {
             <h1 className="text-xl lg:text-3xl font-semibold mb-8 border-b pb-4 border-[#E2E1E1]">
               SIGN IN
             </h1>
-
-
 
             <div className="space-y-4">
               <div>
@@ -79,11 +76,13 @@ export default function SignIn() {
                 />
               </div>
 
-              <Link to={"/forget-pass"} className="flex items-center justify-between  pt-2">
+              <Link
+                to={"/forget-pass"}
+                className="flex items-center justify-between  pt-2"
+              >
                 <button className="text-red-500 hover:text-red-600">
                   Forgot Password?
                 </button>
-
               </Link>
 
               <div className="flex flex-col md:flex-row gap-4 md:gap-0 items-center pt-6 justify-between">
@@ -96,9 +95,7 @@ export default function SignIn() {
                 </button>
 
                 <div className="flex gap-4 justify-center items-center">
-                  <span className="px-4 text-gray-500">
-                    or sign up with
-                  </span>
+                  <span className="px-4 text-gray-500">or sign up with</span>
                   <button className="w-12 h-12 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 transition-colors">
                     <svg className="w-6 h-6" viewBox="0 0 24 24">
                       <path
@@ -123,7 +120,7 @@ export default function SignIn() {
               </div>
 
               <p className=" text-gray-600">
-                Don't have an account?{" "}
+                Don't have an account?
                 <Link to={"/register"}>
                   <button className="text-blue-600 font-medium hover:underline ml-2">
                     Sign Up
@@ -133,7 +130,11 @@ export default function SignIn() {
             </div>
           </div>
         </div>
-        <img src={signin} alt="Sign In" className="md:w-1/2 mx-auto md:mt-6 lg:mt-0" />
+        <img
+          src={signin}
+          alt="Sign In"
+          className="md:w-1/2 mx-auto md:mt-6 lg:mt-0"
+        />
       </div>
     </div>
   );

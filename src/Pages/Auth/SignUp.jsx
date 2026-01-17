@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import background from "../../assets/images/uniBanner.png";
 import signupImg from "../../assets/images/signup.png";
 import { Link, useNavigate } from "react-router-dom";
-import { useSignupMutation } from "../../Api/authApi";
 import toast from "react-hot-toast";
+import { useSignupMutation } from "../../Api/authapi";
 
 export default function SignUp() {
   const [fullName, setFullName] = useState("");

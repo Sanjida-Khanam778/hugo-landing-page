@@ -1,37 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  Search,
-  User,
-  Menu,
-  X,
-  LogOut,
-  MessageSquareMore,
-} from "lucide-react";
+import { Search, User, Menu, X, LogOut, MessageSquareMore } from "lucide-react";
 
 import logo from "../../assets/images/logo.png";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../../features/authSlice";
 export default function Navbar() {
+  const dispatch = useDispatch();
   const data = useSelector((state) => state.auth);
-  console.log(data)
+  console.log(data.isAuthenticated);
   const [searchValue, setSearchValue] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
-
-  // Check localStorage on component mount
-  useEffect(() => {
-    const loggedIn = localStorage.getItem("isLoggedIn");
-    const name = localStorage.getItem("userName");
-    if (loggedIn === "true" && name) {
-      setIsLoggedIn(true);
-      setUserName(name);
-    }
-  }, []);
 
   const navLinks = [
     { label: "Universities", href: "/universities" },
@@ -46,12 +30,7 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUserName("");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("userEmail");
-    localStorage.removeItem("userPhone");
+    dispatch(logOut());
     navigate("/");
   };
 
@@ -62,8 +41,10 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={`w-full fixed top-0 bg-[#F3F4F5]
-     z-[9999]`}>
+    <nav
+      className={`w-full fixed top-0 bg-[#F3F4F5]
+     z-[9999]`}
+    >
       <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
@@ -92,7 +73,7 @@ export default function Navbar() {
 
           {/* Dashboard Button */}
           <div className="flex items-center gap-2 sm:gap-4">
-            {isLoggedIn ? (
+            {data.isAuthenticated ? (
               <div className="flex items-center gap-3">
                 <Link to={"/user"}>
                   <button className="flex items-center gap-2 hover:shadow-lg hover:scale-105 transition-transform bg-primary text-white px-4 py-2 rounded-lg whitespace-nowrap hover:bg-blue-700">
