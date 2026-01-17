@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import background from "../../assets/images/uniLogin.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useUniversitySignupMutation } from "../../Api/authapi";
+import toast from "react-hot-toast";
 
 export default function UniSignUp() {
   const navigate = useNavigate();
@@ -42,10 +43,10 @@ export default function UniSignUp() {
         navigate("/university/dashboard");
         // window.location.reload(); // Removed reload to allow SPA navigation
       } catch (err) {
-        console.error("Sign up failed:", err);
-        // toast.error(err.data.phone[0], {
-        //   position: "bottom-center"
-        // })
+        console.error("Sign up failed:", err.data.email[0]);
+        toast.error(err.data.email[0], {
+          position: "bottom-center"
+        })
       }
 
       setSignupForm({
@@ -71,7 +72,7 @@ export default function UniSignUp() {
           Sign Up
         </h1>
         <p className="text-blue-100 text-center mb-4">
-          Create your account to request admin access
+          Create your account to request university access
         </p>
         <div>
           <h2 className="text-white text-lg font-semibold mb-8 text-center">
@@ -135,7 +136,7 @@ export default function UniSignUp() {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-2 gap-4">
             <div className="mb-4">
               <label className="block text-white text-sm mb-2">
                 Job Title/Designation *

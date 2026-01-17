@@ -60,7 +60,7 @@ export default function UniSignIn() {
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-8">
             <label className="block text-sm mb-2">Create Password *</label>
             <input
               type="password"
@@ -72,16 +72,7 @@ export default function UniSignIn() {
             />
           </div>
 
-          {/* {errors.signin && (
-          <p className="text-red-300 text-sm mb-4">{errors.signin}</p>
-        )} */}
-
-          <div className="flex items-center justify-end mb-6">
-
-            <button type="button" className="hover:text-blue text-sm">
-              Forgot your password?
-            </button>
-          </div>
+       
 
           <button
             onClick={handleSubmit}

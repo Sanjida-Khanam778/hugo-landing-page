@@ -8,9 +8,7 @@ import { useLoginMutation } from "../../Api/authapi";
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [rememberMe, setRememberMe] = useState(false); 
   const navigate = useNavigate();
-
   const [login, { isLoading }] = useLoginMutation();
 
   const handleSubmit = async (e) => {
@@ -18,7 +16,7 @@ export default function SignIn() {
     if (email && password) {
       try {
         const res = await login({ email, password, role: "student" }).unwrap();
-        console.log("Login successful", res.error);
+        console.log("Login successful", res);
         navigate("/");
       } catch (err) {
         console.error("Failed to login:", err.data.error[0]);
