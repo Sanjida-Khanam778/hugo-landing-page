@@ -1,59 +1,74 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Plus, Upload, Calendar } from "lucide-react";
+import { useGetProgramByIdQuery } from "../../../Api/universityApi";
 
-export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
-  const defaultCurriculum = { year1: [], year2: [], year3: [], year4: [] };
+export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
+  const { data: program, isLoading, error } = useGetProgramByIdQuery(programId);
 
-  const normalizeCurriculum = (curr) => {
-    if (!curr) return { ...defaultCurriculum };
-    // If curriculum comes from Programs sample (curr.years[].courses)
-    if (Array.isArray(curr.years)) {
-      return {
-        year1: Array.isArray(curr.years[0]?.courses)
-          ? curr.years[0].courses
-          : [],
-        year2: Array.isArray(curr.years[1]?.courses)
-          ? curr.years[1].courses
-          : [],
-        year3: Array.isArray(curr.years[2]?.courses)
-          ? curr.years[2].courses
-          : [],
-        year4: Array.isArray(curr.years[3]?.courses)
-          ? curr.years[3].courses
-          : [],
-      };
-    }
-    // If curriculum already has year1..year4 keys, ensure they are arrays
-    return {
-      year1: Array.isArray(curr.year1) ? curr.year1 : [],
-      year2: Array.isArray(curr.year2) ? curr.year2 : [],
-      year3: Array.isArray(curr.year3) ? curr.year3 : [],
-      year4: Array.isArray(curr.year4) ? curr.year4 : [],
-    };
+  // Helper to parse comma-separated string to array
+  const parseCourses = (str) =>
+    str ? str.split(",").map((s) => s.trim()).filter(Boolean) : [];
+
+  // Helper to join array to comma-separated string
+  const joinCourses = (arr) => arr.join(", ");
+
+  const defaultFormData = {
+    title: "",
+    level: "Bachelor",
+    duration: "",
+    language: "English",
+    status: "Draft",
+    description: "",
+    curriculum_overview: "",
+    requirements: "",
+    curriculum: { year1: "", year2: "", year3: "", year4: "" },
+    learningOutcomes: [],
+    faculties: [],
+    deadlines: [],
+    appProcess: [],
   };
 
-  const initialFormData = program
-    ? { ...program, curriculum: normalizeCurriculum(program.curriculum) }
-    : {
-        name: "",
-        code: "",
-        status: "Draft",
-        level: "Bachelor",
-        duration: "",
-        language: "English",
-        description: "",
-        learningOutcomes: [],
-        faculties: [],
-        curriculum: { ...defaultCurriculum },
-        requirements: [],
-        admissionReqs: [],
-        appProcess: [],
-      };
+  const [formData, setFormData] = useState(defaultFormData);
 
-  const [formData, setFormData] = useState(initialFormData);
+  useEffect(() => {
+    if (program && isEdit) {
+      setFormData({
+        id: program.id,
+        title: program.title || "",
+        level: program.level || "Bachelor",
+        duration: program.duration || "",
+        language: program.language || "English",
+        status: program.status || "Draft",
+        description: program.description || "",
+        curriculum_overview: program.curriculum_overview || "",
+        requirements: program.requirements || "",
 
+        // Map API strings to arrays for UI -> Join by newline for textarea
+        curriculum: {
+          year1: parseCourses(program.first_year_courses).join("\n"),
+          year2: parseCourses(program.second_year_courses).join("\n"),
+          year3: parseCourses(program.third_year_courses).join("\n"),
+          year4: parseCourses(program.fourth_year_courses).join("\n"),
+        },
+        // API: [{id, outcome_text}] -> UI: [string]
+        learningOutcomes: program.learning_outcomes?.map(l => l.outcome_text) || [],
+        faculties: program.faculties || [],
+        deadlines: program.deadlines || [],
+        // API: [{step_title, step_description}] -> UI: [{title, description}]
+        appProcess: program.steps?.map(s => ({
+          title: s.step_title,
+          description: s.step_description
+        })) || [],
+      });
+    } else {
+      setFormData(defaultFormData);
+    }
+  }, [program, isEdit]);
+
+  // New item states
   const [newOutcome, setNewOutcome] = useState("");
-  const [newFaculty, setNewFaculty] = useState({ name: "", expertise: "" });
+  const [newFaculty, setNewFaculty] = useState({ name: "", department: "", expertise: "" });
+  const [newDeadline, setNewDeadline] = useState({ batch_name: "", deadline_date: "" });
   const [newAppProcess, setNewAppProcess] = useState({
     title: "",
     description: "",
@@ -64,6 +79,7 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // --- Learning Outcomes ---
   const handleAddOutcome = () => {
     if (newOutcome.trim()) {
       setFormData((prev) => ({
@@ -81,13 +97,14 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
     }));
   };
 
+  // --- Faculties ---
   const handleAddFaculty = () => {
     if (newFaculty.name.trim()) {
       setFormData((prev) => ({
         ...prev,
         faculties: [...prev.faculties, newFaculty],
       }));
-      setNewFaculty({ name: "", expertise: "" });
+      setNewFaculty({ name: "", department: "", expertise: "" });
     }
   };
 
@@ -98,6 +115,25 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
     }));
   };
 
+  // --- Deadlines ---
+  const handleAddDeadline = () => {
+    if (newDeadline.batch_name.trim() && newDeadline.deadline_date) {
+      setFormData((prev) => ({
+        ...prev,
+        deadlines: [...prev.deadlines, newDeadline],
+      }));
+      setNewDeadline({ batch_name: "", deadline_date: "" });
+    }
+  };
+
+  const handleRemoveDeadline = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      deadlines: prev.deadlines.filter((_, i) => i !== index),
+    }));
+  };
+
+  // --- App Process (Steps) ---
   const handleAddAppProcess = () => {
     if (newAppProcess.title.trim()) {
       setFormData((prev) => ({
@@ -115,32 +151,68 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
     }));
   };
 
+  // --- Curriculum ---
   const handleCurriculumChange = (year, value) => {
+    // Store as string to support typing spaces/newlines normally
     setFormData((prev) => ({
       ...prev,
       curriculum: {
         ...(prev.curriculum || {}),
-        [year]: value
-          .split("\n")
-          .map((s) => s.trim())
-          .filter(Boolean),
+        [year]: value,
       },
     }));
   };
 
   const handleSubmit = () => {
-    // Convert internal year1..year4 structure back to the 'years' array shape
-    // used elsewhere in the app to keep data consistent.
-    const years = [
-      { title: "First Year", courses: formData.curriculum.year1 || [] },
-      { title: "Second Year", courses: formData.curriculum.year2 || [] },
-      { title: "Third Year", courses: formData.curriculum.year3 || [] },
-      { title: "Fourth Year", courses: formData.curriculum.year4 || [] },
-    ];
+    // Helper to process string back to comma-separated for API which likely calls joinCourses later or we do it here
+    // Original joinCourses(arr) took an array. Now we have a string.
+    // The API payload construction used joinCourses(formData.curriculum.year1) where it was array.
+    // Now year1 is string "Course A\nCourse B".
+    // We want "Course A, Course B".
+
+    const processCurriculum = (str) => {
+      if (!str) return "";
+      return str
+        .split("\n")
+        .map(s => s.trim())
+        .filter(Boolean)
+        .join(", ");
+    };
 
     const payload = {
-      ...formData,
-      curriculum: { years },
+      // Basic Fields
+      id: formData.id, // Include ID if editing
+      title: formData.title,
+      level: formData.level,
+      duration: formData.duration,
+      language: formData.language,
+      status: formData.status,
+      description: formData.description,
+      curriculum_overview: formData.curriculum_overview,
+      requirements: formData.requirements,
+      image: null, // As per sample
+
+      // Process Strings
+      first_year_courses: processCurriculum(formData.curriculum.year1),
+      second_year_courses: processCurriculum(formData.curriculum.year2),
+      third_year_courses: processCurriculum(formData.curriculum.year3),
+      fourth_year_courses: processCurriculum(formData.curriculum.year4),
+
+      // Expand Learning Outcomes to Objects
+      learning_outcomes: formData.learningOutcomes.map(text => ({ outcome_text: text })),
+
+      // Faculties (already objects)
+      faculties: formData.faculties,
+
+      // Deadlines
+      deadlines: formData.deadlines,
+
+      // Steps (Rename title/desc to step_title/step_description)
+      steps: formData.appProcess.map((step, index) => ({
+        step_title: step.title,
+        step_description: step.description,
+        order: index + 1
+      })),
     };
 
     onSave(payload);
@@ -150,8 +222,8 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 overflow-auto p-4 rounded-lg">
       <div className="bg-white rounded-xl shadow-lg w-full max-w-4xl my-8">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#F5E6E3] to-[#DEF0EC] text-lg px-6 py-4 rounded-t-lg border-gray-200 flex justify-between items-start sticky top-0 w-full">
-          <div> {isEdit ? "Edit Program" : "Add New Program"}</div>
+        <div className="bg-gradient-to-r from-[#F5E6E3] to-[#DEF0EC] text-lg px-6 py-4 rounded-t-lg border-gray-200 flex justify-between items-start sticky top-0 w-full z-10">
+          <div className="font-semibold"> {isEdit ? "Edit Program" : "Add New Program"}</div>
           <button
             onClick={onCancel}
             className="text-gray-400 hover:text-gray-600 transition"
@@ -159,110 +231,110 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
             <X size={24} />
           </button>
         </div>
+
         <div className="overflow-y-auto max-h-[calc(100vh-200px)] p-8">
-          <div className="space-y-4">
-            {/* Program Description */}
-            <div className="">
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="grid grid-cols-2 gap-4 mb-4 col-span-2">
-                  <div className="col-span-2">
-                    <label className="block font-semibold text-xl text-gray-700 mb-2">
-                      Program Description
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      placeholder="e.g. Bachelor of Computer Science"
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
-                    />
-                  </div>
+          <div className="space-y-6">
 
-                  <div>
-                    <label className="block font-semibold text-gray-700 mb-2">
-                      Level
-                    </label>
-                    <select
-                      name="level"
-                      value={formData.level}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
-                    >
-                      <option>Bachelor</option>
-                      <option>Master</option>
-                      <option>PhD</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block font-semibold text-gray-700 mb-2">
-                      Duration
-                    </label>
-                    <input
-                      type="text"
-                      name="duration"
-                      value={formData.duration}
-                      onChange={handleInputChange}
-                      placeholder="e.g. 4 years"
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
-                    />
-                  </div>
-                  <div>
-                    <label className="block font-semibold text-gray-700 mb-2">
-                      Language
-                    </label>
-                    <input
-                      type="text"
-                      name="language"
-                      value={formData.language}
-                      onChange={handleInputChange}
-                      placeholder="e.g. English"
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
-                    />
-                  </div>
-                  <div>
-                    <label className="block font-semibold text-gray-700 mb-2">
-                      Status
-                    </label>
-                    <select
-                      name="status"
-                      value={formData.status}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
-                    >
-                      <option>Draft</option>
-                      <option>Published</option>
-                    </select>
-                  </div>
+            {/* Top Section: Basic Info */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="col-span-1 md:col-span-2">
+                  <label className="block font-semibold text-xl text-gray-700 mb-2">
+                    Program Title
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    placeholder="e.g. Bachelor of Computer Science"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                  />
                 </div>
-                <div className="text-center">
-                  <button className="flex justify-center w-full h-full bg-base items-center gap-1 px-3 py-2 text-gray-700 border border-gray-300 rounded hover:bg-gray-50">
-                    <Upload size={14} strokeWidth={2.75} /> Upload new
-                  </button>
+
+                <div>
+                  <label className="block font-semibold text-gray-700 mb-2">
+                    Level
+                  </label>
+                  <select
+                    name="level"
+                    value={formData.level}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                  >
+                    <option>Bachelor</option>
+                    <option>Master</option>
+                    <option>PhD</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block font-semibold text-gray-700 mb-2">
+                    Duration
+                  </label>
+                  <input
+                    type="text"
+                    name="duration"
+                    value={formData.duration}
+                    onChange={handleInputChange}
+                    placeholder="e.g. 4 years"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold text-gray-700 mb-2">
+                    Language
+                  </label>
+                  <input
+                    type="text"
+                    name="language"
+                    value={formData.language}
+                    onChange={handleInputChange}
+                    placeholder="e.g. English"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold text-gray-700 mb-2">
+                    Status
+                  </label>
+                  <select
+                    name="status"
+                    value={formData.status}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                  >
+                    <option>Draft</option>
+                    <option>Published</option>
+                  </select>
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="col-span-2"></div>
-              </div>
-
-              <div>
-                <label className="block font-semibold mb-2">
-                  Program Description
-                </label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  placeholder="Program description..."
-                  rows="4"
-                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
-                />
+              {/* Upload Section placeholder */}
+              <div className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 h-full">
+                <Upload size={32} className="text-gray-400 mb-2" />
+                <button className="text-blue font-medium hover:underline">
+                  Upload Image
+                </button>
+                <span className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB</span>
               </div>
             </div>
 
+            <div>
+              <label className="block font-semibold mb-2">
+                Program Description
+              </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                placeholder="Detailed program description..."
+                rows="4"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+              />
+            </div>
+
             {/* Learning Outcomes */}
-            <div className="">
+            <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 Learning Outcomes
               </h2>
@@ -270,13 +342,15 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                 {formData.learningOutcomes.map((outcome, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-3 bg-gray-50 p-3 rounded"
+                    className="flex justify-between items-center bg-gray-50 p-3 rounded border border-gray-200"
                   >
-                    <span className="text-gray-600">•</span>
-                    <span className="text-gray-700 flex-1">{outcome}</span>
+                    <div className="flex items-start gap-3">
+                      <span className="text-blue mt-1">•</span>
+                      <span className="text-gray-700">{outcome}</span>
+                    </div>
                     <button
                       onClick={() => handleRemoveOutcome(index)}
-                      className="text-gray-400 hover:text-red-600"
+                      className="text-gray-400 hover:text-red-600 p-1"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -288,184 +362,217 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                   type="text"
                   value={newOutcome}
                   onChange={(e) => setNewOutcome(e.target.value)}
-                  placeholder="Add learning outcome..."
+                  placeholder="Add a new learning outcome..."
                   className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
                 <button
                   onClick={handleAddOutcome}
-                  className="px-4 py-2 bg-blue text-white rounded font-semibold"
+                  className="px-4 py-2 bg-blue text-white rounded font-semibold hover:bg-blue-600 transition"
                 >
-                  Add
+                  <Plus size={20} />
                 </button>
               </div>
             </div>
 
             {/* Faculties */}
-            <div className="">
+            <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 Key Faculties
               </h2>
-              <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 {formData.faculties.map((faculty, index) => (
                   <div
                     key={index}
-                    className="bg-gray-50 p-4 rounded flex items-start gap-3"
+                    className="bg-gray-50 p-4 rounded flex items-start gap-3 border border-gray-200"
                   >
-                    <div className="w-10 h-10 rounded-full bg-gray-300 flex-shrink-0"></div>
+                    <div className="w-10 h-10 rounded-full bg-gray-300 flex-shrink-0 flex items-center justify-center font-bold text-gray-500">
+                      {faculty.name.charAt(0)}
+                    </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-gray-900">
-                        {faculty.name}
-                      </p>
-                      <p className="text-gray-600">Department</p>
-                      <p className="text-gray-600">{faculty.expertise}</p>
+                      <p className="font-semibold text-gray-900">{faculty.name}</p>
+                      <p className="text-sm text-gray-600">{faculty.department}</p>
+                      <p className="text-sm text-gray-500">{faculty.expertise}</p>
                     </div>
                     <button
                       onClick={() => handleRemoveFaculty(index)}
-                      className="text-gray-400 hover:text-red-600 flex-shrink-0"
+                      className="text-gray-400 hover:text-red-600"
                     >
                       <X className="w-4 h-4" />
                     </button>
                   </div>
                 ))}
               </div>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                 <input
                   type="text"
                   value={newFaculty.name}
                   onChange={(e) =>
                     setNewFaculty((prev) => ({ ...prev, name: e.target.value }))
                   }
-                  placeholder="Faculty name..."
+                  placeholder="Faculty Name"
                   className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
                 <input
                   type="text"
-                  onChange={(e) => e.target.value}
-                  placeholder="Department..."
+                  value={newFaculty.department}
+                  onChange={(e) => setNewFaculty(prev => ({ ...prev, department: e.target.value }))}
+                  placeholder="Department"
                   className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
                 <input
                   type="text"
                   value={newFaculty.expertise}
                   onChange={(e) =>
-                    setNewFaculty((prev) => ({
-                      ...prev,
-                      expertise: e.target.value,
-                    }))
+                    setNewFaculty((prev) => ({ ...prev, expertise: e.target.value }))
                   }
-                  placeholder="Expertise..."
-                  className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                  placeholder="Expertise"
+                  className=" col-span-1 md:col-span-2 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
                 <button
                   onClick={handleAddFaculty}
-                  className="col-span-3 px-4 py-2 bg-blue text-white rounded font-semibold"
+                  className="md:col-span-4 px-4 py-2 bg-blue text-white rounded font-semibold hover:bg-blue-600 transition flex items-center justify-center gap-2"
                 >
-                  Add Faculty
+                  <Plus size={18} /> Add Faculty
                 </button>
               </div>
             </div>
 
             {/* Curriculum */}
-            <div className="">
+            <div>
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                 Program Curriculum
               </h2>
-              <textarea
-                placeholder={`The curriculum is...`}
-                rows="4"
-                onChange={(e) => e.target.value}
-                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue mb-4"
-              />
-              <div className="grid grid-cols-2 gap-4">
+              <div className="mb-4">
+                <label className="block font-semibold text-gray-700 mb-2">Curriculum Overview</label>
+                <textarea
+                  name="curriculum_overview"
+                  value={formData.curriculum_overview}
+                  onChange={handleInputChange}
+                  placeholder="Brief overview of the curriculum..."
+                  rows="3"
+                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {["year1", "year2", "year3", "year4"].map((year, idx) => (
-                  <div key={year} className="border-l-4 border-blue pl-4">
-                    <label className="block font-semibold text-gray-900 mb-2">
-                      {["First", "Second", "Third", "Fourth"][idx]} Year
+                  <div key={year} className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <label className="block font-semibold text-blue-800 mb-2">
+                      {["First", "Second", "Third", "Fourth"][idx]} Year Courses
                     </label>
                     <textarea
-                      placeholder={`Year ${idx + 1} courses...`}
-                      rows="4"
-                      value={
-                        formData.curriculum &&
-                        Array.isArray(formData.curriculum[year])
-                          ? formData.curriculum[year].join("\n")
-                          : ""
-                      }
+                      placeholder={`Enter courses for year ${idx + 1}...`}
+                      rows="5"
+                      // Use value directly since it's now a string in state
+                      value={formData.curriculum[year] || ""}
                       onChange={(e) =>
                         handleCurriculumChange(year, e.target.value)
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                      className="w-full px-3 py-2 border border-blue-200 rounded focus:outline-none focus:ring-2 focus:ring-blue bg-white"
                     />
+                    <p className="text-xs text-gray-500 mt-1 text-right">Separate courses with new lines</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Admission Requirements */}
-            <div className="">
+            {/* Deadlines & Requirements */}
+            <div>
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                Admission Requirements
+                Admission Requirements & Deadlines
               </h2>
-              <div className="bg-[#EFF6FF] p-4 border border-[#BFDBFE] rounded-lg ">
-                <div className="flex items-start gap-3 mb-3">
-                
-                  <div className="space-y-2">
-                    <p className="font-semibold text-blue">
-                      Application Deadlines
-                    </p>
-                    <p className="text-gray-600 flex items-center gap-2">
-                      <Calendar className="text-blue" size={20} strokeWidth={3.0} />
-                      Batch name: <span className="text-black font-semibold">January 1, 2025</span>
-                    </p>
-                    <p className="text-gray-600 flex items-center gap-2">
-                      <Calendar className="text-blue" size={20} strokeWidth={3.0} />
-                      Batch name:  <span className="text-black font-semibold">October 1, 2025 </span>
-                    </p>
+
+              <div className="mb-6">
+                <label className="block font-semibold text-gray-700 mb-2">Requirements</label>
+                <textarea
+                  name="requirements"
+                  value={formData.requirements}
+                  onChange={handleInputChange}
+                  placeholder="Enter admission requirements..."
+                  rows="4"
+                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue mb-4"
+                />
+              </div>
+
+              <div className="bg-[#EFF6FF] p-5 border border-[#BFDBFE] rounded-lg">
+                <p className="font-semibold text-blue mb-4">
+                  Application Deadlines
+                </p>
+                <div className="space-y-3 mb-4">
+                  {formData.deadlines.map((deadline, index) => (
+                    <div key={index} className="flex items-center gap-3 bg-white p-3 rounded shadow-sm">
+                      <Calendar className="text-blue" size={20} />
+                      <div className="flex-1">
+                        <span className="font-semibold text-gray-800">{deadline.batch_name}:</span>
+                        <span className="ml-2 text-gray-600">{deadline.deadline_date}</span>
+                      </div>
+                      <button onClick={() => handleRemoveDeadline(index)} className="text-gray-400 hover:text-red-500">
+                        <X size={18} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-3 items-end">
+                  <div className="flex-1">
+                    <label className="text-xs font-semibold text-gray-500 uppercase">Batch Name</label>
+                    <input
+                      type="text"
+                      value={newDeadline.batch_name}
+                      onChange={(e) => setNewDeadline(prev => ({ ...prev, batch_name: e.target.value }))}
+                      placeholder="e.g. Spring 2026"
+                      className="w-full px-3 py-2 border border-blue-200 rounded mt-1 focus:ring-2 focus:ring-blue focus:outline-none"
+                    />
                   </div>
+                  <div className="flex-1">
+                    <label className="text-xs font-semibold text-gray-500 uppercase">Deadline Date</label>
+                    <input
+                      type="date"
+                      value={newDeadline.deadline_date}
+                      onChange={(e) => setNewDeadline(prev => ({ ...prev, deadline_date: e.target.value }))}
+                      className="w-full px-3 py-2 border border-blue-200 rounded mt-1 focus:ring-2 focus:ring-blue focus:outline-none"
+                    />
+                  </div>
+                  <button
+                    onClick={handleAddDeadline}
+                    className="px-4 py-2 bg-blue text-white rounded font-semibold hover:bg-blue-600 h-[42px]"
+                  >
+                    Add
+                  </button>
                 </div>
               </div>
             </div>
 
-            {/* Application Process */}
-            <div className="">
-              <h2 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
-                Requirements
+            {/* Application Steps */}
+            <div>
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                Application Process
               </h2>
-
-              <textarea
-                placeholder={`High School Diploma...`}
-                rows="4"
-                onChange={(e) => e.target.value}
-                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue mb-4"
-              />
-              <div className="mb-4">
-                <h2 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
-                  Application Process{" "}
-                </h2>
+              <div className="space-y-3 mb-4">
                 {formData.appProcess.map((step, index) => (
                   <div
                     key={index}
-                    className="flex items-start gap-3 bg-blue-50 p-3 rounded"
+                    className="flex items-start gap-4 bg-gray-50 p-4 rounded border border-gray-200"
                   >
-                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue text-white flex items-center justify-center">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue text-white flex items-center justify-center font-bold">
                       {index + 1}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-gray-900">
                         {step.title}
                       </p>
-                      <p className="text-gray-600">{step.description}</p>
+                      <p className="text-gray-600 text-sm mt-1">{step.description}</p>
                     </div>
                     <button
                       onClick={() => handleRemoveAppProcess(index)}
-                      className="text-gray-400 hover:text-red-600 flex-shrink-0"
+                      className="text-gray-400 hover:text-red-600 flex-shrink-0 mt-1"
                     >
-                      <X className="w-4 h-4" />
+                      <X size={18} />
                     </button>
                   </div>
                 ))}
               </div>
-              <div className="grid grid-cols-2 gap-4">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded border border-gray-200 border-dashed">
+                <div className="col-span-1 md:col-span-2 text-sm font-semibold text-gray-500 uppercase">Add New Step</div>
                 <input
                   type="text"
                   value={newAppProcess.title}
@@ -475,7 +582,7 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                       title: e.target.value,
                     }))
                   }
-                  placeholder="Step title..."
+                  placeholder="Step Title (e.g. Online Application)"
                   className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
                 <input
@@ -487,12 +594,12 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
                       description: e.target.value,
                     }))
                   }
-                  placeholder="Step description..."
+                  placeholder="Description (e.g. Fill out the admission form...)"
                   className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                 />
                 <button
                   onClick={handleAddAppProcess}
-                  className="col-span-2 px-4 py-2 bg-blue text-white rounded font-semibold"
+                  className="col-span-1 md:col-span-2 px-4 py-2 bg-blue text-white rounded font-semibold hover:bg-blue-600 transition"
                 >
                   Add Step
                 </button>
@@ -500,18 +607,18 @@ export default function ProgramForm({ program, onSave, onCancel, isEdit }) {
             </div>
 
             {/* Form Actions */}
-            <div className="flex gap-3 justify-end pt-6 border-t">
+            <div className="flex gap-4 justify-end pt-6 border-t mt-8">
               <button
                 onClick={onCancel}
-                className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50 transition font-semibold"
+                className="px-6 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-semibold text-gray-700"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSubmit}
-                className="px-6 py-2 bg-blue text-white rounded transition font-semibold"
+                className="px-8 py-2.5 bg-blue text-white rounded-lg hover:bg-blue-600 transition font-semibold shadow-sm hover:shadow"
               >
-                {isEdit ? "Save Changes" : "Add"}
+                {isEdit ? "Save Changes" : "Create Program"}
               </button>
             </div>
           </div>
