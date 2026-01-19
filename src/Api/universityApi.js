@@ -16,7 +16,7 @@ export const authapi = api.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-    }),
+    }),  
 
     getAllPrograms: builder.query({
       query: () => "/programs/",
