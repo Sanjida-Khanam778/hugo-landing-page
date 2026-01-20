@@ -1,16 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X, Plus, Upload, Calendar } from "lucide-react";
 import { useGetProgramByIdQuery } from "../../../Api/universityApi";
 
 export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
-  const { data: program, isLoading, error } = useGetProgramByIdQuery(programId);
+  const { data: program, isLoading, error } = useGetProgramByIdQuery(isEdit ? programId : null);
+  const fileInputRef = useRef(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   // Helper to parse comma-separated string to array
   const parseCourses = (str) =>
     str ? str.split(",").map((s) => s.trim()).filter(Boolean) : [];
-
-  // Helper to join array to comma-separated string
-  const joinCourses = (arr) => arr.join(", ");
 
   const defaultFormData = {
     title: "",
@@ -26,6 +25,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
     faculties: [],
     deadlines: [],
     appProcess: [],
+    image: null,
   };
 
   const [formData, setFormData] = useState(defaultFormData);
@@ -59,9 +59,12 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
           title: s.step_title,
           description: s.step_description
         })) || [],
+        image: program.image || null,
       });
+      setImagePreview(program.image || null);
     } else {
       setFormData(defaultFormData);
+      setImagePreview(null);
     }
   }, [program, isEdit]);
 
@@ -77,6 +80,14 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData((prev) => ({ ...prev, image: file }));
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   // --- Learning Outcomes ---
@@ -164,12 +175,6 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
   };
 
   const handleSubmit = () => {
-    // Helper to process string back to comma-separated for API which likely calls joinCourses later or we do it here
-    // Original joinCourses(arr) took an array. Now we have a string.
-    // The API payload construction used joinCourses(formData.curriculum.year1) where it was array.
-    // Now year1 is string "Course A\nCourse B".
-    // We want "Course A, Course B".
-
     const processCurriculum = (str) => {
       if (!str) return "";
       return str
@@ -181,7 +186,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
 
     const payload = {
       // Basic Fields
-      id: formData.id, // Include ID if editing
+      id: formData.id,
       title: formData.title,
       level: formData.level,
       duration: formData.duration,
@@ -190,7 +195,6 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
       description: formData.description,
       curriculum_overview: formData.curriculum_overview,
       requirements: formData.requirements,
-      image: null, // As per sample
 
       // Process Strings
       first_year_courses: processCurriculum(formData.curriculum.year1),
@@ -215,7 +219,35 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
       })),
     };
 
-    onSave(payload);
+    console.log("Constructing FormData from payload:", payload);
+
+    const fd = new FormData();
+    Object.keys(payload).forEach(key => {
+      const value = payload[key];
+      if (value === null || value === undefined) return;
+
+      if (Array.isArray(value)) {
+        value.forEach((item, index) => {
+          if (typeof item === "object") {
+            Object.keys(item).forEach((subKey) => {
+              // Using key[index]subKey format which is common for DRF multipart
+              fd.append(`${key}[${index}]${subKey}`, item[subKey]);
+            });
+          } else {
+            // For simple arrays like learningOutcomes if they were strings
+            fd.append(`${key}[${index}]`, item);
+          }
+        });
+      } else {
+        fd.append(key, value);
+      }
+    });
+
+    if (formData.image instanceof File) {
+      fd.append("image", formData.image);
+    }
+
+    onSave(fd);
   };
 
   return (
@@ -309,13 +341,30 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                 </div>
               </div>
 
-              {/* Upload Section placeholder */}
-              <div className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 h-full">
-                <Upload size={32} className="text-gray-400 mb-2" />
-                <button className="text-blue font-medium hover:underline">
-                  Upload Image
-                </button>
-                <span className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB</span>
+              {/* Upload Section */}
+              <div
+                className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 h-full cursor-pointer relative overflow-hidden"
+                onClick={() => fileInputRef.current.click()}
+              >
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  onChange={handleImageChange}
+                  accept="image/*"
+                />
+
+                {imagePreview ? (
+                  <img src={imagePreview} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+                ) : (
+                  <>
+                    <Upload size={32} className="text-gray-400 mb-2" />
+                    <button className="text-blue font-medium hover:underline">
+                      Upload Image
+                    </button>
+                    <span className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB</span>
+                  </>
+                )}
               </div>
             </div>
 

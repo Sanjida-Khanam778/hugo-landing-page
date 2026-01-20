@@ -46,7 +46,13 @@ export default function Programs() {
   };
 
   const handleSave = async (programData) => {
-    console.log(programData);
+    // Log FormData clearly for debugging
+    if (programData instanceof FormData) {
+      console.log("Sending FormData Payload:", Object.fromEntries(programData.entries()));
+    } else {
+      console.log("Sending JSON Payload:", programData);
+    }
+
     try {
       if (editingProgram) {
         await updateProgram(programData).unwrap();
@@ -54,8 +60,11 @@ export default function Programs() {
         await createProgram(programData).unwrap();
       }
       setView("list");
+      toast.success(editingProgram ? "Program updated" : "Program created");
     } catch (err) {
-      toast.error(err?.data?.detail);
+      console.error("API Error Detailed:", err);
+      if (err?.data) console.log("Validation Errors:", err.data);
+      toast.error(err?.data?.detail || "An error occurred. Check console.");
     }
   };
 
