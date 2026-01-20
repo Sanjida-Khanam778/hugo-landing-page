@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { Plus, Upload, X } from "lucide-react";
+import { useRef, useState } from "react";
 
 export default function EventFormModal({ event, onSave, onClose, isEdit }) {
+  const [logo, setLogo] = useState(null);
+  const logoInputRef = useRef(null);
+
   const [formData, setFormData] = useState(
     event || {
       title: "",
@@ -11,8 +15,52 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
       type: "Online",
       status: "Upcoming",
       description: "",
+      agenda: [],
+      additional: "",
     }
   );
+
+  const [newAgenda, setNewAgenda] = useState({
+    time: "",
+    title: "",
+    subtitle: "",
+  });
+
+  // File upload handlers
+  const handleLogoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setLogo({
+          name: file.name,
+          data: event.target.result,
+          type: file.type,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveLogo = () => {
+    setLogo(null);
+  };
+  const handleAddAgenda = () => {
+    if (newAgenda.time.trim() && newAgenda.title.trim()) {
+      setFormData((prev) => ({
+        ...prev,
+        agenda: [...(prev.agenda || []), newAgenda],
+      }));
+      setNewAgenda({ time: "", title: "", subtitle: "" });
+    }
+  };
+
+  const handleRemoveAgenda = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      agenda: prev.agenda.filter((_, i) => i !== index),
+    }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,7 +77,7 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg max-w-lg w-full mx-4">
+      <div className="bg-white rounded-lg max-w-2xl w-full mx-4 h-[80vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4 border-b p-4 ">
           <h2 className="text-xl font-semibold text-gray-900">
             {isEdit ? "Edit Event" : "Create Event"}
@@ -43,6 +91,45 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 ">
+          <div>
+            {logo ? (
+              <div className="relative h-48 bg-gray-100 rounded-lg overflow-hidden group mx-4">
+                <img
+                  src={logo.data}
+                  alt="Logo"
+                  className="h-full mx-auto object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={handleRemoveLogo}
+                  className="absolute top-2 right-2 bg-red text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <X size={20} />
+                </button>
+                <p className="absolute bottom-2 left-2 text-xs text-white bg-black bg-opacity-50 px-2 py-1 rounded truncate w-40">
+                  {logo.name}
+                </p>
+              </div>
+            ) : (
+              <div
+                onClick={() => logoInputRef.current?.click()}
+                className="flex flex-col items-center justify-center border-2 mx-6 border-dashed border-gray-300 rounded-lg p-8 hover:border-blue-500 transition-colors cursor-pointer h-48"
+              >
+                <Upload size={24} className="text-gray-400 mb-2" />
+                <span className="text-sm text-gray-600">Upload Event Image</span>
+                <span className="text-xs text-gray-400 mt-1">
+                  Recommended: 400x400px
+                </span>
+              </div>
+            )}
+            <input
+              ref={logoInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleLogoUpload}
+              className="hidden"
+            />
+          </div>
           {/* Event Title */}
           <div className="px-6">
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -103,7 +190,7 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="Online">Online</option>
-                <option value="Campus">Campus</option>
+                <option value="Campus">In-Person</option>
               </select>
             </div>
             <div>
@@ -138,7 +225,82 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
               required
             />
           </div>
+          {/* Event Agenda */}
+          <div className="px-6">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Event Agenda</h3>
 
+            <div className="space-y-4 mb-6">
+              {formData.agenda?.map((item, index) => (
+                <div key={index} className="flex gap-4 group relative">
+                  <div className="w-1/3 text-sm text-gray-600 font-medium pt-1">
+                    {item.time}
+                  </div>
+                  <div className="flex-1 border-l-2 border-blue-100 pl-4 py-1">
+                    <p className="font-bold text-gray-900">{item.title}</p>
+                    <p className="text-sm text-gray-600 mt-1">{item.subtitle}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveAgenda(index)}
+                    className="text-red-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-gray-50 p-4 rounded-lg border border-dashed border-gray-300">
+              <p className="text-xs font-bold text-gray-500 uppercase mb-3 text-center">Add Agenda Item</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <input
+                  type="text"
+                  placeholder="Time (e.g. 10:00 AM - 11:00 AM)"
+                  value={newAgenda.time}
+                  onChange={(e) => setNewAgenda({ ...newAgenda, time: e.target.value })}
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+                <input
+                  type="text"
+                  placeholder="Task Title (e.g. Opening Remarks)"
+                  value={newAgenda.title}
+                  onChange={(e) => setNewAgenda({ ...newAgenda, title: e.target.value })}
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+                <textarea
+                  placeholder="Subtitle/Description (Optional)"
+                  value={newAgenda.subtitle}
+                  onChange={(e) => setNewAgenda({ ...newAgenda, subtitle: e.target.value })}
+                  className="md:col-span-2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                  rows="2"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddAgenda}
+                  className="md:col-span-2 bg-blue text-white py-2 rounded-lg text-sm font-bold flex items-center justify-center gap-2 hover:bg-blue-700 transition"
+                >
+                  <Plus size={16} /> Add to Agenda
+                </button>
+              </div>
+            </div>
+          </div>
+
+
+          {/* Additional Information */}
+          <div className="px-6">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Additional Information
+            </label>
+            <textarea
+              name="additional"
+              value={formData.additional}
+              onChange={handleChange}
+              placeholder="Optional"
+              rows="2"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
           {/* Buttons */}
           <div className="flex gap-3 py-6 border-t px-6 bg-[#F9FAFB] rounded-b-lg">
             <button
