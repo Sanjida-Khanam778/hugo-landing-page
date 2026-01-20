@@ -598,12 +598,7 @@ export default function ProgramDetailsTab() {
                     </div>
                   </div>
 
-                  {/* Apply Now Button */}
-                  <div className="mt-6 text-center">
-                    <button className="bg-blue hover:bg-blue-700 text-white px-8 py-2.5 rounded-lg transition-colors">
-                      Apply Now
-                    </button>
-                  </div>
+         
                 </div>
               </div>
             )}

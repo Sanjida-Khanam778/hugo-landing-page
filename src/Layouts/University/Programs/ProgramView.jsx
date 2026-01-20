@@ -79,7 +79,7 @@ export default function ProgramsView({
                         {/* Content */}
                         <div className="p-4">
                             <div className="flex gap-4 mb-4 justify-around">
-                                <img src={image} alt="Program" className="h-24 rounded-lg" />
+                                <img src={program?.image || image} alt="Program" className="h-24 rounded-lg" />
 
                                 <div>
                                     <div>

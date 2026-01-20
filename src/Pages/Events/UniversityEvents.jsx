@@ -271,51 +271,7 @@ export default function UniversityEvents() {
                 </div>
               )}
 
-              {/* Venue Information */}
-              {selectedEvent.venue && (
-                <div className="rounded-lg p-6">
-                  <h2 className="text-xl font-bold mb-4">Venue Information</h2>
-                  <div className="bg-[#F3F4F6] p-4 rounded-lg">
-                    <h3 className="font-semibold mb-2">
-                      {selectedEvent.venue.name}
-                    </h3>
-                    <p className=" text-gray-700 mb-4">
-                      {selectedEvent.venue.address}
-                    </p>
-
-                    <div className="space-y-3">
-                      <div className="flex items-start gap-2">
-                        <Check className="text-[#16A34A]" size={22} />
-                        <div>
-                          <p className=" font-medium">Parking:</p>
-                          <p className=" text-gray-600">
-                            {selectedEvent.venue.parking}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-2">
-                        <Check className="text-[#16A34A]" size={22} />
-
-                        <div>
-                          <p className=" font-medium">Accessibility:</p>
-                          <p className=" text-gray-600">
-                            {selectedEvent.venue.accessibility}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-2">
-                        <Check className="text-[#16A34A]" size={22} />
-                        <div>
-                          <p className=" font-medium">Public Transport:</p>
-                          <p className=" text-gray-600">
-                            {selectedEvent.venue.transport}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+           
 
               {/* Additional Information */}
               <div className="bg-white rounded-lg p-6">

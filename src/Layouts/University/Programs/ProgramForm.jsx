@@ -18,6 +18,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
     language: "English",
     status: "Draft",
     description: "",
+    credit: null,
     curriculum_overview: "",
     requirements: "",
     curriculum: { year1: "", year2: "", year3: "", year4: "" },
@@ -133,7 +134,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
         ...prev,
         deadlines: [...prev.deadlines, newDeadline],
       }));
-      setNewDeadline({ batch_name: "", deadline_date: "" });
+      setNewDeadline({ batch_name: "", deadline_date: "", start_date: "", next_start_date: "" });
     }
   };
 
@@ -191,6 +192,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
       level: formData.level,
       duration: formData.duration,
       language: formData.language,
+      credits: formData.credit,
       status: formData.status,
       description: formData.description,
       curriculum_overview: formData.curriculum_overview,
@@ -283,7 +285,19 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                     className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                   />
                 </div>
-
+                <div>
+                  <label className="block font-semibold text-gray-700 mb-2">
+                    Language
+                  </label>
+                  <input
+                    type="text"
+                    name="language"
+                    value={formData.language}
+                    onChange={handleInputChange}
+                    placeholder="e.g. English"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                  />
+                </div>
                 <div>
                   <label className="block font-semibold text-gray-700 mb-2">
                     Level
@@ -312,19 +326,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                     className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                   />
                 </div>
-                <div>
-                  <label className="block font-semibold text-gray-700 mb-2">
-                    Language
-                  </label>
-                  <input
-                    type="text"
-                    name="language"
-                    value={formData.language}
-                    onChange={handleInputChange}
-                    placeholder="e.g. English"
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
-                  />
-                </div>
+               
                 <div>
                   <label className="block font-semibold text-gray-700 mb-2">
                     Status
@@ -338,6 +340,19 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                     <option>Draft</option>
                     <option>Published</option>
                   </select>
+                </div>
+                 <div>
+                  <label className="block font-semibold text-gray-700 mb-2">
+                    Credit
+                  </label>
+                  <input
+                    type="number"
+                    name="credit"
+                    value={formData.credit}
+                    onChange={handleInputChange}
+                    placeholder="e.g. 120"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
+                  />
                 </div>
               </div>
 
@@ -551,8 +566,10 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                     <div key={index} className="flex items-center gap-3 bg-white p-3 rounded shadow-sm">
                       <Calendar className="text-blue" size={20} />
                       <div className="flex-1">
-                        <span className="font-semibold text-gray-800">{deadline.batch_name}:</span>
-                        <span className="ml-2 text-gray-600">{deadline.deadline_date}</span>
+                        <span className="font-semibold text-gray-800">{deadline.batch_name}:</span><br />
+                        <span className=" text-gray-600 "> <span className="font-semibold">Start: </span>{deadline.start_date}</span>
+                        <span className="ml-2 text-gray-600"><span className="font-semibold">End: </span>{deadline.deadline_date}</span>
+                        <span className="ml-2 text-gray-600"><span className="font-semibold">Next Start: </span>{deadline.next_start_date}</span>
                       </div>
                       <button onClick={() => handleRemoveDeadline(index)} className="text-gray-400 hover:text-red-500">
                         <X size={18} />
@@ -572,11 +589,29 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="text-xs font-semibold text-gray-500 uppercase">Deadline Date</label>
+                    <label className="text-xs font-semibold text-gray-500 uppercase">Start Date</label>
+                    <input
+                      type="date"
+                      value={newDeadline.start_date}
+                      onChange={(e) => setNewDeadline(prev => ({ ...prev, start_date: e.target.value }))}
+                      className="w-full px-3 py-2 border border-blue-200 rounded mt-1 focus:ring-2 focus:ring-blue focus:outline-none"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label className="text-xs font-semibold text-gray-500 uppercase">End Date</label>
                     <input
                       type="date"
                       value={newDeadline.deadline_date}
                       onChange={(e) => setNewDeadline(prev => ({ ...prev, deadline_date: e.target.value }))}
+                      className="w-full px-3 py-2 border border-blue-200 rounded mt-1 focus:ring-2 focus:ring-blue focus:outline-none"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label className="text-xs font-semibold text-gray-500 uppercase">Next Start Date</label>
+                    <input
+                      type="date"
+                      value={newDeadline.next_start_date}
+                      onChange={(e) => setNewDeadline(prev => ({ ...prev, next_start_date: e.target.value }))}
                       className="w-full px-3 py-2 border border-blue-200 rounded mt-1 focus:ring-2 focus:ring-blue focus:outline-none"
                     />
                   </div>
