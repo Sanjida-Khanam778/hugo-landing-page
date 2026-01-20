@@ -5,9 +5,11 @@ import { Upload, Plus, X } from "lucide-react";
 import AddRankingModal from "../Modal/AddRankingModal";
 import AddLocationModal from "../Modal/AddLocationModal";
 import AddAccreditationModal from "../Modal/AddAccreditationModal";
+import TextEditor from "../../../editor";
 
 export default function UniversityProfile() {
   const [activeModal, setActiveModal] = useState(null);
+  const [editorContent, setEditorContent] = useState("");
   const [logo, setLogo] = useState(null);
   const [sectionVideo, setSectionVideo] = useState(null);
   const [bannerVideo, setBannerVideo] = useState(null);
@@ -297,7 +299,7 @@ export default function UniversityProfile() {
               </label>
               <textarea
                 placeholder="Description about your university..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 rows="4"
               />
             </div>
@@ -308,6 +310,16 @@ export default function UniversityProfile() {
               <input
                 type="number"
                 placeholder="1636"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Faculty
+              </label>
+              <input
+                type="number"
+                placeholder="200"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -366,6 +378,21 @@ export default function UniversityProfile() {
             ))}
           </div>
         </div>
+        <div className="bg-white rounded-lg shadow p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">What makes us different</h2>
+
+          <div className="col-span-2">
+
+            {/* <textarea
+
+              placeholder="Description about your university..."
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              rows="4"
+            /> */}
+          <TextEditor htmlElement={editorContent} onChange={(value) => setEditorContent(value)} isEditable={true} />
+          </div>
+        </div>
+
         {/* Rankings Section */}
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <div className="flex justify-between items-center mb-6">
