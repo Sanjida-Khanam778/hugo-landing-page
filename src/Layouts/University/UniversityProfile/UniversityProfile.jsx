@@ -272,7 +272,7 @@ export default function UniversityProfile() {
           <h2 className="text-xl font-bold text-gray-800 mb-6">
             University Information
           </h2>
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 University Name
@@ -285,15 +285,26 @@ export default function UniversityProfile() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Tagline
+                University Type
+              </label>
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="Private">Private</option>
+                <option value="Public">Public</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Total Campuses
               </label>
               <input
-                type="url"
-                placeholder="www.harvard.edu"
+                type="number"
+                placeholder="2"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            <div className="col-span-2">
+            <div className="col-span-3">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 About
               </label>
@@ -315,7 +326,7 @@ export default function UniversityProfile() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Faculty
+                Total Faculty
               </label>
               <input
                 type="number"
@@ -389,7 +400,7 @@ export default function UniversityProfile() {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               rows="4"
             /> */}
-          <TextEditor htmlElement={editorContent} onChange={(value) => setEditorContent(value)} isEditable={true} />
+            <TextEditor htmlElement={editorContent} onChange={(value) => setEditorContent(value)} isEditable={true} />
           </div>
         </div>
 
