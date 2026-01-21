@@ -26,6 +26,11 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
     faculties: [],
     deadlines: [],
     appProcess: [],
+    domestic_fee: "",
+    international_fee: "",
+    additional_expenses: [],
+    scholarships: [],
+    financial_aid_office: { description: "", email: "", phone: "" },
     image: null,
   };
 
@@ -60,6 +65,11 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
           title: s.step_title,
           description: s.step_description
         })) || [],
+        domestic_fee: program.domestic_fee || "",
+        international_fee: program.international_fee || "",
+        additional_expenses: program.additional_expenses || [],
+        scholarships: program.scholarships || [],
+        financial_aid_office: program.financial_aid_office || { description: "", email: "", phone: "" },
         image: program.image || null,
       });
       setImagePreview(program.image || null);
@@ -77,6 +87,8 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
     title: "",
     description: "",
   });
+  const [newExpense, setNewExpense] = useState({ expense: "", cost: "" });
+  const [newScholarship, setNewScholarship] = useState({ name: "", amount: "", eligibility: "" });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -163,6 +175,42 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
     }));
   };
 
+  // --- Additional Expenses ---
+  const handleAddExpense = () => {
+    if (newExpense.expense.trim() && newExpense.cost.trim()) {
+      setFormData((prev) => ({
+        ...prev,
+        additional_expenses: [...prev.additional_expenses, newExpense],
+      }));
+      setNewExpense({ expense: "", cost: "" });
+    }
+  };
+
+  const handleRemoveExpense = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      additional_expenses: prev.additional_expenses.filter((_, i) => i !== index),
+    }));
+  };
+
+  // --- Scholarships ---
+  const handleAddScholarship = () => {
+    if (newScholarship.name.trim() && newScholarship.amount.trim()) {
+      setFormData((prev) => ({
+        ...prev,
+        scholarships: [...prev.scholarships, newScholarship],
+      }));
+      setNewScholarship({ name: "", amount: "", eligibility: "" });
+    }
+  };
+
+  const handleRemoveScholarship = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      scholarships: prev.scholarships.filter((_, i) => i !== index),
+    }));
+  };
+
   // --- Curriculum ---
   const handleCurriculumChange = (year, value) => {
     // Store as string to support typing spaces/newlines normally
@@ -197,6 +245,11 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
       description: formData.description,
       curriculum_overview: formData.curriculum_overview,
       requirements: formData.requirements,
+      domestic_fee: formData.domestic_fee,
+      international_fee: formData.international_fee,
+      additional_expenses: formData.additional_expenses,
+      scholarships: formData.scholarships,
+      financial_aid_office: formData.financial_aid_office,
 
       // Process Strings
       first_year_courses: processCurriculum(formData.curriculum.year1),
@@ -326,7 +379,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                     className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                   />
                 </div>
-               
+
                 <div>
                   <label className="block font-semibold text-gray-700 mb-2">
                     Status
@@ -341,7 +394,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                     <option>Published</option>
                   </select>
                 </div>
-                 <div>
+                <div>
                   <label className="block font-semibold text-gray-700 mb-2">
                     Credit
                   </label>
@@ -621,6 +674,205 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                   >
                     Add
                   </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Tuition Fees & Financial Aid */}
+            <div>
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                Tuition Fees & Financial Aid
+              </h2>
+
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-6">
+                <h3 className="font-semibold text-gray-800 mb-4 uppercase text-sm tracking-wider">Tuition Fees</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                    <div className="flex items-center gap-2 text-green-600 mb-2">
+                      <span className="font-bold text-xl">$</span>
+                      <span className="text-sm font-semibold uppercase">Domestic Students</span>
+                    </div>
+                    <input
+                      type="text"
+                      name="domestic_fee"
+                      value={formData.domestic_fee}
+                      onChange={handleInputChange}
+                      placeholder="e.g. $52,000 per year"
+                      className="w-full text-lg text-gray-800 outline-none border-b-2 border-transparent focus:border-blue-300 transition-colors py-1"
+                    />
+                  </div>
+                  <div className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                    <div className="flex items-center gap-2 text-green-600 mb-2">
+                      <span className="font-bold text-xl">$</span>
+                      <span className="text-sm font-semibold uppercase">International Students</span>
+                    </div>
+                    <input
+                      type="text"
+                      name="international_fee"
+                      value={formData.international_fee}
+                      onChange={handleInputChange}
+                      placeholder="e.g. $55,000 per year"
+                      className="w-full text-lg text-gray-800 outline-none border-b-2 border-transparent focus:border-blue-300 transition-colors py-1"
+                    />
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-4 italic">Does not include accommodation, books, and other expenses</p>
+              </div>
+
+              <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                <div className="bg-gray-50 px-4 py-2 border-b border-gray-200 flex justify-between items-center">
+                  <span className="font-semibold text-gray-700 text-sm uppercase">Additional Expenses (Estimated)</span>
+                </div>
+                <div className="divide-y divide-gray-100">
+                  <div className="grid grid-cols-2 px-4 py-2 bg-gray-50 text-xs font-bold text-gray-500 uppercase">
+                    <div>Expense</div>
+                    <div className="text-right">Cost (Annual)</div>
+                  </div>
+                  {formData.additional_expenses.map((exp, index) => (
+                    <div key={index} className="grid grid-cols-2 px-4 py-3 text-sm group relative">
+                      <div className="text-gray-700 font-medium">{exp.expense}</div>
+                      <div className="text-right text-gray-900 font-bold">{exp.cost}</div>
+                      <button
+                        onClick={() => handleRemoveExpense(index)}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Add Expense Inputs */}
+                <div className="p-4 bg-gray-50 border-t border-gray-200 grid grid-cols-1 md:grid-cols-5 gap-3">
+                  <input
+                    type="text"
+                    placeholder="e.g. Accommodation"
+                    value={newExpense.expense}
+                    onChange={(e) => setNewExpense({ ...newExpense, expense: e.target.value })}
+                    className="md:col-span-2 px-3 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue focus:outline-none"
+                  />
+                  <input
+                    type="text"
+                    placeholder="e.g. $16,000 - $18,000"
+                    value={newExpense.cost}
+                    onChange={(e) => setNewExpense({ ...newExpense, cost: e.target.value })}
+                    className="md:col-span-2 px-3 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue focus:outline-none"
+                  />
+                  <button
+                    onClick={handleAddExpense}
+                    className="bg-blue text-white rounded font-semibold hover:bg-blue-600 transition flex items-center justify-center gap-2 py-2"
+                  >
+                    <Plus size={18} /> Add
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Scholarships & Financial Aid */}
+            <div>
+              <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                Scholarships & Financial Aid
+              </h2>
+
+              <div className="space-y-4 mb-6">
+                {formData.scholarships.map((scholarship, index) => (
+                  <div key={index} className="bg-white border border-gray-200 rounded-lg p-5 relative group shadow-sm">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-500 flex-shrink-0">
+                        <Plus size={20} className="rotate-45" /> {/* Placeholder icon for award */}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-bold text-gray-900 mb-2">{scholarship.name}</h3>
+                        <p className="text-sm text-gray-700 mb-1"><span className="font-semibold">Amount:</span> {scholarship.amount}</p>
+                        <p className="text-sm text-gray-700"><span className="font-semibold">Eligibility:</span> {scholarship.eligibility}</p>
+                      </div>
+                      <button
+                        onClick={() => handleRemoveScholarship(index)}
+                        className="absolute top-4 right-4 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X size={18} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Add Scholarship Inputs */}
+              <div className="bg-gray-50 p-5 rounded-lg border border-dashed border-gray-300 mb-6">
+                <p className="text-xs font-bold text-gray-500 uppercase mb-4">Add Scholarship</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    placeholder="Scholarship Name"
+                    value={newScholarship.name}
+                    onChange={(e) => setNewScholarship({ ...newScholarship, name: e.target.value })}
+                    className="px-3 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue focus:outline-none"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Amount (e.g. Up to $10,000)"
+                    value={newScholarship.amount}
+                    onChange={(e) => setNewScholarship({ ...newScholarship, amount: e.target.value })}
+                    className="px-3 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue focus:outline-none"
+                  />
+                  <textarea
+                    placeholder="Eligibility details..."
+                    value={newScholarship.eligibility}
+                    onChange={(e) => setNewScholarship({ ...newScholarship, eligibility: e.target.value })}
+                    className="md:col-span-2 px-3 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue focus:outline-none resize-none"
+                    rows="2"
+                  />
+                  <button
+                    onClick={handleAddScholarship}
+                    className="md:col-span-2 bg-blue text-white rounded font-semibold hover:bg-blue-600 transition flex items-center justify-center gap-2 py-2"
+                  >
+                    <Plus size={18} /> Add Scholarship
+                  </button>
+                </div>
+              </div>
+
+              {/* Financial Aid Office Info */}
+              <div className="bg-blue-50 border border-blue-100 rounded-lg p-6">
+                <h3 className="font-bold text-blue-800 mb-4">Financial Aid Office</h3>
+                <div className="space-y-4">
+                  <textarea
+                    placeholder="General description about financial aid, grants, loans..."
+                    value={formData.financial_aid_office.description}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      financial_aid_office: { ...formData.financial_aid_office, description: e.target.value }
+                    })}
+                    className="w-full px-3 py-2 border border-blue-200 rounded text-sm focus:ring-2 focus:ring-blue focus:outline-none bg-white"
+                    rows="3"
+                  />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-gray-500 uppercase">Email</label>
+                      <input
+                        type="email"
+                        placeholder="financialaid@university.edu"
+                        value={formData.financial_aid_office.email}
+                        onChange={(e) => setFormData({
+                          ...formData,
+                          financial_aid_office: { ...formData.financial_aid_office, email: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border border-blue-200 rounded text-sm focus:ring-2 focus:ring-blue focus:outline-none bg-white font-medium"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-gray-500 uppercase">Phone</label>
+                      <input
+                        type="text"
+                        placeholder="+1 (123) 456-7890"
+                        value={formData.financial_aid_office.phone}
+                        onChange={(e) => setFormData({
+                          ...formData,
+                          financial_aid_office: { ...formData.financial_aid_office, phone: e.target.value }
+                        })}
+                        className="w-full px-3 py-2 border border-blue-200 rounded text-sm focus:ring-2 focus:ring-blue focus:outline-none bg-white font-medium"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

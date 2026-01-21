@@ -1,4 +1,4 @@
-import { CloudCog, Eye, SquarePen, Trash, Trash2 } from "lucide-react";
+import { Eye, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
 import image from "../../../assets/images/program1.png";
 export default function ProgramsView({
