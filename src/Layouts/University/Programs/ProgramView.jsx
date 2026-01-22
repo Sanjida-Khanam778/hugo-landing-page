@@ -1,6 +1,7 @@
 import { Eye, SquarePen, Trash2 } from "lucide-react";
 import { useState } from "react";
 import image from "../../../assets/images/program1.png";
+import AddCareerModal from "../Modal/AddCareerModal";
 export default function ProgramsView({
     programs,
     onAdd,
@@ -12,7 +13,15 @@ export default function ProgramsView({
     const [searchTerm, setSearchTerm] = useState("");
     const [deleteModal, setDeleteModal] = useState(false);
     const [programToDelete, setProgramToDelete] = useState(null);
-
+    const [showAddCareerModal, setShowAddCareerModal] = useState(false);
+    const [careers, setCareers] = useState([
+        {
+            id: 1,
+            title: "Financial Consultant",
+            description:
+                "Work with clients on financial planning and investment strategies",
+        },
+    ]);
     const filteredPrograms = programs.filter((program) =>
         program.title?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -28,6 +37,11 @@ export default function ProgramsView({
         setProgramToDelete(null);
     };
 
+    const handleAddCareer = (careerData) => {
+        setCareers([...careers, { ...careerData, id: Date.now() }]);
+        setShowAddCareerModal(false);
+    };
+
     const getStatusColor = (status) => {
         if (status === "Published") return "bg-[#DCFCE7] text-[#166534]";
         if (status === "Draft") return "bg-yellow-100 text-yellow-700";
@@ -38,12 +52,18 @@ export default function ProgramsView({
         <div className="min-h-screen bg-gray-50 p-8 font-rubik">
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-3xl font-bold text-gray-900">Programs</h1>
-                <button
-                    onClick={onAdd}
-                    className="bg-[#1D4ED8] text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center gap-2"
+                <div className="flex gap-3">    <button
+                    onClick={() => setShowAddCareerModal(true)}
+                    className=" text-blue border border-blue px-4 py-2 rounded-lg hover:bg-gray-50"
                 >
-                    + Add New Program
+                    + Add Career
                 </button>
+                    <button
+                        onClick={onAdd}
+                        className="bg-[#1D4ED8] text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition flex items-center gap-2"
+                    >
+                        + Add New Program
+                    </button></div>
             </div>
 
             {/* Search Bar */}
@@ -160,6 +180,12 @@ export default function ProgramsView({
                         </div>
                     </div>
                 </div>
+            )}
+            {showAddCareerModal && (
+                <AddCareerModal
+                    onSave={handleAddCareer}
+                    onClose={() => setShowAddCareerModal(false)}
+                />
             )}
         </div>
     );

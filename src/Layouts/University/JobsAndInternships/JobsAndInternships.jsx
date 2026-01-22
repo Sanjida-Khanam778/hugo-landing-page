@@ -125,17 +125,7 @@ export default function JobsAndInternships() {
     },
   ]);
 
-  const [careers, setCareers] = useState([
-    {
-      id: 1,
-      title: "Financial Consultant",
-      description:
-        "Work with clients on financial planning and investment strategies",
-    },
-  ]);
-
   const [showPostJobModal, setShowPostJobModal] = useState(false);
-  const [showAddCareerModal, setShowAddCareerModal] = useState(false);
   const [viewingJob, setViewingJob] = useState(null);
   const [editingJob, setEditingJob] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -161,10 +151,6 @@ export default function JobsAndInternships() {
     setJobs(jobs.filter((j) => j.id !== id));
   };
 
-  const handleAddCareer = (careerData) => {
-    setCareers([...careers, { ...careerData, id: Date.now() }]);
-    setShowAddCareerModal(false);
-  };
 
   const filteredJobs = jobs.filter(
     (job) =>
@@ -177,12 +163,7 @@ export default function JobsAndInternships() {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Jobs & Internships</h1>
         <div className="flex gap-3">
-          <button
-            onClick={() => setShowAddCareerModal(true)}
-            className=" text-blue border border-blue px-4 py-2 rounded-lg hover:bg-gray-50"
-          >
-            + Add Career
-          </button>
+       
           <button
             onClick={() => {
               setEditingJob(null);
@@ -220,13 +201,6 @@ export default function JobsAndInternships() {
             setShowPostJobModal(false);
             setEditingJob(null);
           }}
-        />
-      )}
-
-      {showAddCareerModal && (
-        <AddCareerModal
-          onSave={handleAddCareer}
-          onClose={() => setShowAddCareerModal(false)}
         />
       )}
 
