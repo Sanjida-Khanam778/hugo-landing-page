@@ -83,7 +83,7 @@ console.log("program", program)
   // New item states
   const [newOutcome, setNewOutcome] = useState("");
   const [newFaculty, setNewFaculty] = useState({ name: "", department: "", expertise: "" });
-  const [newDeadline, setNewDeadline] = useState({ batch_name: "", start_date: "", end_date: "" });
+  const [newDeadline, setNewDeadline] = useState({ batch_name: "", start_date: "", end_date: "", next_start_date: "" });
   const [newAppProcess, setNewAppProcess] = useState({
     title: "",
     description: "",
@@ -142,12 +142,12 @@ console.log("program", program)
 
   // --- Deadlines ---
   const handleAddDeadline = () => {
-    if (newDeadline.batch_name.trim() && newDeadline.start_date && newDeadline.end_date) {
+    if (newDeadline.batch_name.trim() && newDeadline.start_date && newDeadline.end_date && newDeadline.next_start_date) {
       setFormData((prev) => ({
         ...prev,
         deadlines: [...prev.deadlines, newDeadline],
       }));
-      setNewDeadline({ batch_name: "", start_date: "", end_date: "" });
+      setNewDeadline({ batch_name: "", start_date: "", end_date: "", next_start_date: "" });
     }
   };
 
@@ -264,7 +264,8 @@ console.log("program", program)
       deadlines: (formData.deadlines || []).map(d => ({
         batch_name: d.batch_name,
         start_date: d.start_date,
-        end_date: d.end_date
+        end_date: d.end_date,
+        next_start_date: d.next_start_date
       })),
       steps: (formData.appProcess || []).map((step, index) => ({
         step_title: step.title,
@@ -628,6 +629,7 @@ console.log("program", program)
                         <span className="font-semibold text-gray-800">{deadline.batch_name}:</span><br />
                         <span className=" text-gray-600 "> <span className="font-semibold">Start: </span>{deadline.start_date}</span>
                         <span className=" text-gray-600 "> <span className="font-semibold">End: </span>{deadline.end_date}</span>
+                        <span className=" text-gray-600 "> <span className="font-semibold">Next Start: </span>{formData.next_start_date}</span>
                       </div>
                       <button onClick={() => handleRemoveDeadline(index)} className="text-gray-400 hover:text-red-500">
                         <X size={18} />
@@ -661,6 +663,15 @@ console.log("program", program)
                       type="date"
                       value={newDeadline.end_date}
                       onChange={(e) => setNewDeadline(prev => ({ ...prev, end_date: e.target.value }))}
+                      className="w-full px-3 py-2 border border-blue-200 rounded mt-1 focus:ring-2 focus:ring-blue focus:outline-none"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <label className="text-xs font-semibold text-gray-500 uppercase">Next Start Date</label>
+                    <input
+                      type="date"
+                      value={newDeadline.next_start_date}
+                      onChange={(e) => setNewDeadline(prev => ({ ...prev, next_start_date: e.target.value }))}
                       className="w-full px-3 py-2 border border-blue-200 rounded mt-1 focus:ring-2 focus:ring-blue focus:outline-none"
                     />
                   </div>

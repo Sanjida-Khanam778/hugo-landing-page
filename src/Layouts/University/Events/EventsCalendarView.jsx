@@ -7,7 +7,7 @@ export default function EventsCalendarView({
   onEdit,
   onViewRegistrations,
 }) {
-  const [currentDate, setCurrentDate] = useState(new Date(2025, 9, 1)); // October 2025
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -47,10 +47,10 @@ export default function EventsCalendarView({
 
   const getEventsForDate = (day) => {
     if (!day) return [];
-    const dateStr = `2025-${String(currentDate.getMonth() + 1).padStart(
-      2,
-      "0"
-    )}-${String(day).padStart(2, "0")}`;
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const formattedDay = String(day).padStart(2, "0");
+    const dateStr = `${year}-${month}-${formattedDay}`;
     return events.filter((e) => e.date === dateStr);
   };
 
@@ -93,9 +93,8 @@ export default function EventsCalendarView({
         {days.map((day, index) => (
           <div
             key={index}
-            className={`min-h-32 p-2 border rounded-lg ${
-              day ? "bg-white" : "bg-gray-50"
-            }`}
+            className={`min-h-32 p-2 border rounded-lg ${day ? "bg-white" : "bg-gray-50"
+              }`}
           >
             {day && (
               <>
@@ -114,7 +113,7 @@ export default function EventsCalendarView({
                           onEdit && onEdit(event);
                       }}
                       className={`text-xs p-1 bg-gradient-to-r from-[#F4E7E4] to-[#DFF0EC] rounded cursor-pointer hover:opacity-80 ${getEventColor(
-                        event.type
+                        event.event_type
                       )}`}
                     >
                       <div className="font-semibold text-gray-900 truncate">

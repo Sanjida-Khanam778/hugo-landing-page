@@ -3,8 +3,8 @@
 import { Calendar, Dot, MapPin, Users, Video } from "lucide-react"
 import { useState } from "react"
 
-export default function EventsListView({ events, onEdit, onViewRegistrations }) {
-  const [currentDate, setCurrentDate] = useState(new Date(2025, 9, 1))
+export default function EventsListView({ events = [], onEdit, onViewRegistrations }) {
+  const [currentDate, setCurrentDate] = useState(new Date())
 
   const monthName = currentDate.toLocaleString("default", { month: "long", year: "numeric" })
 
@@ -30,7 +30,7 @@ export default function EventsListView({ events, onEdit, onViewRegistrations }) 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
       {/* Month Navigation */}
-       <div className="flex justify-center items-center gap-4 mb-6">
+      <div className="flex justify-center items-center gap-4 mb-6">
         <button
           onClick={handlePrevMonth}
           className="text-gray-600 hover:text-gray-900 text-lg"
@@ -53,21 +53,32 @@ export default function EventsListView({ events, onEdit, onViewRegistrations }) 
           currentMonthEvents.map((event) => (
             <div key={event.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
               <div className="flex justify-between items-start mb-3">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">{event.title}</h3>
-                  <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
-                    <span className="flex gap-2"> 
-                     <Calendar size={18} strokeWidth={3.00} />{event.date}
+                <div className="flex gap-4">
+                  {event.image && (
+                    <img
+                      src={event.image}
+                      alt={event.title}
+                      className="w-16 h-16 rounded-lg object-cover bg-gray-100"
+                    />
+                  )}
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">{event.title}</h3>
+                    <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
+                      <span className="flex gap-2">
+                        <Calendar size={18} strokeWidth={3.00} />{event.date}
+                      </span>
+                      <span className="flex items-center"> <Dot /> {event.time}</span>
+                    </div>
+                    <span className={`flex items-center gap-2 text-blue ${event.event_type === "Online" ? "text-[#1E40AF]" : "text-green"}`}>
+                      {getEventTypeIcon(event.event_type)} {event.event_type} Event
                     </span>
-                    <span className="flex items-center"> <Dot /> {event.time}</span>
                   </div>
-                    <span className={`flex items-center gap-2 text-blue ${event.type === "Online" ? "text-[#1E40AF] py-1 rounded-full" : "text-green"}`}>
-                      {getEventTypeIcon(event.type)} {event.type} Event
-                    </span>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right flex gap-8 items-center">
-                    <div className="text-sm text-gray-600 flex gap-2"><Users size={18} strokeWidth={3.00} /> {event.registrations} registrations</div>
+                    <div className="text-sm text-gray-600 flex gap-2">
+                      <Users size={18} strokeWidth={3.00} /> {event.registration_count} registrations
+                    </div>
                     <span className={`inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mt-1 ${event.status === "Upcoming" ? "bg-[#DCFCE7] text-[#166534]" : ""}`}>
                       {event.status}
                     </span>

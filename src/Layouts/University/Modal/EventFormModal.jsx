@@ -130,22 +130,37 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
               className="hidden"
             />
           </div>
-          {/* Event Title */}
-          <div className="px-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Event Title
-            </label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="e.g. Virtual Open Day"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+          <div className="grid grid-cols-2 gap-4 px-6">
+            {/* Event Title */}
+            <div className="">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Event Title
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="e.g. Virtual Open Day"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+            <div className="">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Category
+              </label>
+              <input
+                type="text"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                placeholder="e.g. Bootcamp"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
           </div>
-
           {/* Date and Time */}
           <div className="grid grid-cols-2 gap-4 px-6">
             <div>

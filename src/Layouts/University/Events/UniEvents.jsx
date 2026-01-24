@@ -5,6 +5,7 @@ import EventsCalendarView from "./EventsCalendarView";
 import EventsListView from "./EventsListView";
 import EventFormModal from "../Modal/EventFormModal";
 import ViewRegistrationsModal from "../Modal/ViewRegistrationsModal";
+import { useGetAllEventsQuery } from "../../../Api/universityApi";
 
 export default function UniEvents() {
   const [activeTab, setActiveTab] = useState("calendar"); // calendar, list
@@ -12,120 +13,7 @@ export default function UniEvents() {
   const [editingEvent, setEditingEvent] = useState(null);
   const [viewingRegistrations, setViewingRegistrations] = useState(null);
 
-  const [events, setEvents] = useState([
-    {
-      id: 1,
-      title: "Virtual Open Day",
-      date: "2025-10-15",
-      time: "10:00 - 14:00",
-      type: "Online",
-      status: "Upcoming",
-      description:
-        "This is a sample event description. In a real application, this would contain detailed information about the event.",
-      registrations: 128,
-      registrationsList: [
-        {
-          id: 1,
-          name: "John Smith",
-          email: "john.smith@email.com",
-          program: "Computer Science",
-          registeredOn: "2025-09-28",
-        },
-        {
-          id: 2,
-          name: "Emma Johnson",
-          email: "emma.j@email.com",
-          program: "Business Administration",
-          registeredOn: "2025-09-28",
-        },
-        {
-          id: 3,
-          name: "Michael Brown",
-          email: "michael.b@email.com",
-          program: "Engineering",
-          registeredOn: "2025-09-28",
-        },
-        {
-          id: 4,
-          name: "Sophia Williams",
-          email: "sophia.w@email.com",
-          program: "Psychology",
-          registeredOn: "2025-09-28",
-        },
-        {
-          id: 5,
-          name: "Daniel Martinez",
-          email: "daniel.m@email.com",
-          program: "Medicine",
-          registeredOn: "2025-09-28",
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "MBA Information Session",
-      date: "2025-10-18",
-      time: "10:00 - 14:00",
-      type: "Online",
-      status: "Upcoming",
-      description: "Learn about MBA program opportunities",
-      registrations: 76,
-      registrationsList: [
-        {
-          id: 1,
-          name: "Sarah Cooper",
-          email: "sarah.c@email.com",
-          program: "MBA",
-          registeredOn: "2025-09-28",
-        },
-        {
-          id: 2,
-          name: "James Wilson",
-          email: "james.w@email.com",
-          program: "Finance",
-          registeredOn: "2025-09-28",
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "Campus Tour",
-      date: "2025-10-19",
-      time: "10:00 - 14:00",
-      type: "Campus",
-      status: "Upcoming",
-      description: "Guided tour of campus facilities",
-      registrations: 42,
-      registrationsList: [
-        {
-          id: 1,
-          name: "Lisa Anderson",
-          email: "lisa.a@email.com",
-          program: "Engineering",
-          registeredOn: "2025-09-28",
-        },
-      ],
-    },
-    {
-      id: 4,
-      title: "Alumni Networking Event",
-      date: "2025-10-25",
-      time: "10:00 - 14:00",
-      type: "Campus",
-      status: "Upcoming",
-      description: "Network with university alumni",
-      registrations: 89,
-      registrationsList: [
-        {
-          id: 1,
-          name: "Robert Taylor",
-          email: "robert.t@email.com",
-          program: "Entrepreneurship",
-          registeredOn: "2025-09-28",
-        },
-      ],
-    },
-  ]);
+  const { data: events = [], isLoading, error } = useGetAllEventsQuery();
 
   const handleCreateEvent = () => {
     setEditingEvent(null);
@@ -138,27 +26,16 @@ export default function UniEvents() {
   };
 
   const handleSaveEvent = (eventData) => {
-    if (editingEvent) {
-      setEvents(
-        events.map((e) =>
-          e.id === editingEvent.id ? { ...e, ...eventData } : e
-        )
-      );
-    } else {
-      const newEvent = {
-        id: Math.max(...events.map((e) => e.id), 0) + 1,
-        ...eventData,
-        registrations: 0,
-        registrationsList: [],
-      };
-      setEvents([...events, newEvent]);
-    }
+    // This will be handled by mutations later
     setShowEventForm(false);
   };
 
   const handleViewRegistrations = (event) => {
     setViewingRegistrations(event);
   };
+
+  if (isLoading) return <div className="p-8">Loading events...</div>;
+  if (error) return <div className="p-8 text-red-500">Error loading events.</div>;
 
   return (
     <div className="p-8">
@@ -176,21 +53,19 @@ export default function UniEvents() {
       <div className="flex gap-4 mb-6">
         <button
           onClick={() => setActiveTab("calendar")}
-          className={`px-4 py-3 transition-colors ${
-            activeTab === "calendar"
+          className={`px-4 py-3 transition-colors ${activeTab === "calendar"
               ? "text-blue bg-[#DBEAFE] rounded-lg"
               : "text-gray-600 hover:text-gray-900"
-          }`}
+            }`}
         >
           Calendar
         </button>
         <button
           onClick={() => setActiveTab("list")}
-          className={`px-4 py-3 transition-colors ${
-            activeTab === "list"
+          className={`px-4 py-3 transition-colors ${activeTab === "list"
               ? "text-blue bg-[#DBEAFE] rounded-lg"
               : "text-gray-600 hover:text-gray-900"
-          }`}
+            }`}
         >
           List View
         </button>

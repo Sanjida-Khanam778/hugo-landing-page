@@ -43,6 +43,47 @@ export const authapi = api.injectEndpoints({
             }),
             invalidatesTags: (result, error, id) => ["uni_users", { type: "Program", id }],
         }),
+        createEvent: builder.mutation({
+            query: (data) => ({
+                url: "/events/create/",
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["uni_users"],
+        }),
+
+        eventUpdate: builder.mutation({
+            query: (data) => {
+                const id = data instanceof FormData ? data.get('id') : data.id;
+                return {
+                    url: `/events/edit/${id}/`,
+                    method: "PATCH",
+                    body: data,
+                };
+            },
+            invalidatesTags: (result, error, arg) => {
+                const id = arg instanceof FormData ? arg.get('id') : arg.id;
+                return ["uni_users", { type: "Program", id }];
+            },
+        }),
+
+        getAllEvents: builder.query({
+            query: () => "/events/",
+            providesTags: ["uni_users"],
+        }),
+
+        getEventById: builder.query({
+            query: (id) => `/events/${id}/registrations/`,
+            providesTags: (result, error, id) => [{ type: "Program", id }],
+        }),
+
+        deleteEvent: builder.mutation({
+            query: (id) => ({
+                url: `/events/cancel/${id}/`,
+                method: "DELETE",
+            }),
+            invalidatesTags: (result, error, id) => ["uni_users", { type: "Program", id }],
+        }),
 
         getUniversityProfile: builder.query({
             query: () => "/profile/",
@@ -68,4 +109,9 @@ export const {
     useGetProgramByIdQuery,
     useGetUniversityProfileQuery,
     useSetupProfileMutation,
+    useCreateEventMutation,
+    useGetAllEventsQuery,
+    useGetEventByIdQuery,
+    useDeleteEventMutation,
+    useEventUpdateMutation,
 } = authapi;
