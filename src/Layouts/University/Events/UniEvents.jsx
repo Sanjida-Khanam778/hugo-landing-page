@@ -5,10 +5,12 @@ import EventsCalendarView from "./EventsCalendarView";
 import EventsListView from "./EventsListView";
 import EventFormModal from "../Modal/EventFormModal";
 import ViewRegistrationsModal from "../Modal/ViewRegistrationsModal";
+import DeleteEventModal from "../Modal/DeleteEventModal";
 import {
   useGetAllEventsQuery,
   useCreateEventMutation,
-  useEventUpdateMutation
+  useEventUpdateMutation,
+  useDeleteEventMutation
 } from "../../../Api/universityApi";
 import toast from "react-hot-toast";
 
@@ -17,10 +19,12 @@ export default function UniEvents() {
   const [showEventForm, setShowEventForm] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
   const [viewingRegistrations, setViewingRegistrations] = useState(null);
+  const [eventToDelete, setEventToDelete] = useState(null);
 
   const { data: events = [], isLoading, error } = useGetAllEventsQuery();
   const [createEvent] = useCreateEventMutation();
   const [updateEvent] = useEventUpdateMutation();
+  const [deleteEvent] = useDeleteEventMutation();
 
   const handleCreateEvent = () => {
     setEditingEvent(null);
@@ -50,6 +54,21 @@ export default function UniEvents() {
 
   const handleViewRegistrations = (event) => {
     setViewingRegistrations(event);
+  };
+
+  const handleDeleteClick = (event) => {
+    setEventToDelete(event);
+  };
+
+  const handleConfirmDelete = async (id) => {
+    try {
+      await deleteEvent(id).unwrap();
+      toast.success("Event cancelled successfully");
+      setEventToDelete(null);
+    } catch (err) {
+      console.error("Failed to delete event:", err);
+      toast.error(err?.data?.detail || "Failed to cancel event.");
+    }
   };
 
   if (isLoading) return <div className="p-8">Loading events...</div>;
@@ -95,6 +114,7 @@ export default function UniEvents() {
           events={events}
           onEdit={handleEditEvent}
           onViewRegistrations={handleViewRegistrations}
+          onDelete={handleDeleteClick}
         />
       )}
 
@@ -103,6 +123,7 @@ export default function UniEvents() {
           events={events}
           onEdit={handleEditEvent}
           onViewRegistrations={handleViewRegistrations}
+          onDelete={handleDeleteClick}
         />
       )}
 
@@ -121,6 +142,15 @@ export default function UniEvents() {
         <ViewRegistrationsModal
           event={viewingRegistrations}
           onClose={() => setViewingRegistrations(null)}
+        />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {eventToDelete && (
+        <DeleteEventModal
+          event={eventToDelete}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setEventToDelete(null)}
         />
       )}
     </div>

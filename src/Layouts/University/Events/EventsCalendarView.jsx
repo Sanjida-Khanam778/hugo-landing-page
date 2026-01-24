@@ -6,6 +6,7 @@ export default function EventsCalendarView({
   events,
   onEdit,
   onViewRegistrations,
+  onDelete,
 }) {
   const [currentDate, setCurrentDate] = useState(new Date());
 

@@ -3,7 +3,7 @@
 import { Calendar, Dot, MapPin, Users, Video } from "lucide-react"
 import { useState } from "react"
 
-export default function EventsListView({ events = [], onEdit, onViewRegistrations }) {
+export default function EventsListView({ events = [], onEdit, onViewRegistrations, onDelete }) {
   const [currentDate, setCurrentDate] = useState(new Date())
 
   const monthName = currentDate.toLocaleString("default", { month: "long", year: "numeric" })
@@ -54,7 +54,7 @@ export default function EventsListView({ events = [], onEdit, onViewRegistration
             <div key={event.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
               <div className="flex justify-between items-start mb-3">
                 <div className="flex gap-4">
-             
+
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">{event.title}</h3>
                     <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
@@ -91,7 +91,12 @@ export default function EventsListView({ events = [], onEdit, onViewRegistration
                 >
                   View Registrations
                 </button>
-                <button className="text-red">Cancel Event</button>
+                <button
+                  onClick={() => onDelete && onDelete(event)}
+                  className="text-red hover:underline"
+                >
+                  Cancel Event
+                </button>
               </div>
             </div>
           ))
