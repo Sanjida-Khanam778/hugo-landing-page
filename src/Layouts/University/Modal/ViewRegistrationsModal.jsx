@@ -16,7 +16,7 @@ export default function ViewRegistrationsModal({ event, onClose }) {
         <div className="flex-1 overflow-auto p-6">
           <div className="flex justify-between items-center mb-4">
             <div className="text-sm font-medium text-gray-900">
-              Total registrations: <span className="font-bold">{event.registrationsList.length}</span>
+              Total registrations: <span className="font-bold">{event?.registrationsList?.length}</span>
             </div>
             <button className="text-blue text-sm font-medium flex items-center gap-2">
              <Mail size={20} strokeWidth={2.50} /> Email All

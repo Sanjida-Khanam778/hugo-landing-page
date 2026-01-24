@@ -5,7 +5,12 @@ import EventsCalendarView from "./EventsCalendarView";
 import EventsListView from "./EventsListView";
 import EventFormModal from "../Modal/EventFormModal";
 import ViewRegistrationsModal from "../Modal/ViewRegistrationsModal";
-import { useGetAllEventsQuery } from "../../../Api/universityApi";
+import {
+  useGetAllEventsQuery,
+  useCreateEventMutation,
+  useEventUpdateMutation
+} from "../../../Api/universityApi";
+import toast from "react-hot-toast";
 
 export default function UniEvents() {
   const [activeTab, setActiveTab] = useState("calendar"); // calendar, list
@@ -14,6 +19,8 @@ export default function UniEvents() {
   const [viewingRegistrations, setViewingRegistrations] = useState(null);
 
   const { data: events = [], isLoading, error } = useGetAllEventsQuery();
+  const [createEvent] = useCreateEventMutation();
+  const [updateEvent] = useEventUpdateMutation();
 
   const handleCreateEvent = () => {
     setEditingEvent(null);
@@ -25,9 +32,20 @@ export default function UniEvents() {
     setShowEventForm(true);
   };
 
-  const handleSaveEvent = (eventData) => {
-    // This will be handled by mutations later
-    setShowEventForm(false);
+  const handleSaveEvent = async (eventFormData) => {
+    try {
+      if (editingEvent) {
+        await updateEvent(eventFormData).unwrap();
+        toast.success("Event updated successfully");
+      } else {
+        await createEvent(eventFormData).unwrap();
+        toast.success("Event created successfully");
+      }
+      setShowEventForm(false);
+    } catch (err) {
+      console.error("Failed to save event:", err);
+      toast.error(err?.data?.detail || "An error occurred while saving the event.");
+    }
   };
 
   const handleViewRegistrations = (event) => {
@@ -54,8 +72,8 @@ export default function UniEvents() {
         <button
           onClick={() => setActiveTab("calendar")}
           className={`px-4 py-3 transition-colors ${activeTab === "calendar"
-              ? "text-blue bg-[#DBEAFE] rounded-lg"
-              : "text-gray-600 hover:text-gray-900"
+            ? "text-blue bg-[#DBEAFE] rounded-lg"
+            : "text-gray-600 hover:text-gray-900"
             }`}
         >
           Calendar
@@ -63,8 +81,8 @@ export default function UniEvents() {
         <button
           onClick={() => setActiveTab("list")}
           className={`px-4 py-3 transition-colors ${activeTab === "list"
-              ? "text-blue bg-[#DBEAFE] rounded-lg"
-              : "text-gray-600 hover:text-gray-900"
+            ? "text-blue bg-[#DBEAFE] rounded-lg"
+            : "text-gray-600 hover:text-gray-900"
             }`}
         >
           List View

@@ -54,13 +54,7 @@ export default function EventsListView({ events = [], onEdit, onViewRegistration
             <div key={event.id} className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
               <div className="flex justify-between items-start mb-3">
                 <div className="flex gap-4">
-                  {event.image && (
-                    <img
-                      src={event.image}
-                      alt={event.title}
-                      className="w-16 h-16 rounded-lg object-cover bg-gray-100"
-                    />
-                  )}
+             
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">{event.title}</h3>
                     <div className="flex items-center gap-4 text-sm text-gray-600 mt-1">
@@ -69,7 +63,7 @@ export default function EventsListView({ events = [], onEdit, onViewRegistration
                       </span>
                       <span className="flex items-center"> <Dot /> {event.time}</span>
                     </div>
-                    <span className={`flex items-center gap-2 text-blue ${event.event_type === "Online" ? "text-[#1E40AF]" : "text-green"}`}>
+                    <span className={`flex items-center gap-2 text-gray-600`}>
                       {getEventTypeIcon(event.event_type)} {event.event_type} Event
                     </span>
                   </div>

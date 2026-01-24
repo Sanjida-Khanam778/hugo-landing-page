@@ -1,24 +1,40 @@
 "use client";
 
 import { Plus, Upload, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 export default function EventFormModal({ event, onSave, onClose, isEdit }) {
-  const [logo, setLogo] = useState(null);
   const logoInputRef = useRef(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
 
-  const [formData, setFormData] = useState(
-    event || {
-      title: "",
-      date: "",
-      time: "",
-      type: "Online",
-      status: "Upcoming",
-      description: "",
-      agenda: [],
-      additional: "",
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "",
+    date: "",
+    time: "",
+    type: "Online",
+    status: "Upcoming",
+    description: "",
+    agenda: [],
+    additional: "",
+  });
+
+  useEffect(() => {
+    if (event) {
+      setFormData({
+        ...event,
+        agenda: event.agendas?.map(a => ({
+          time: a.time_slot,
+          title: a.task_title,
+          subtitle: a.description
+        })) || event.agenda || [],
+        type: event.event_type || event.type || "Online",
+        additional: event.additional_info || event.additional || ""
+      });
+      if (event.image) setImagePreview(event.image);
     }
-  );
+  }, [event]);
 
   const [newAgenda, setNewAgenda] = useState({
     time: "",
@@ -26,25 +42,20 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
     subtitle: "",
   });
 
-  // File upload handlers
   const handleLogoUpload = (e) => {
     const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setLogo({
-          name: file.name,
-          data: event.target.result,
-          type: file.type,
-        });
-      };
-      reader.readAsDataURL(file);
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
   const handleRemoveLogo = () => {
-    setLogo(null);
+    setImageFile(null);
+    setImagePreview(null);
+    if (logoInputRef.current) logoInputRef.current.value = "";
   };
+
   const handleAddAgenda = () => {
     if (newAgenda.time.trim() && newAgenda.title.trim()) {
       setFormData((prev) => ({
@@ -72,7 +83,34 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+
+    const fd = new FormData();
+    fd.append("title", formData.title);
+    fd.append("category", formData.category);
+    fd.append("date", formData.date);
+    fd.append("time", formData.time);
+    fd.append("event_type", formData.type === "Campus" ? "In-Person" : formData.type);
+    fd.append("status", formData.status);
+    fd.append("description", formData.description);
+    fd.append("additional_info", formData.additional);
+
+    // Map agenda to backend format and stringify
+    const agendas = (formData.agenda || []).map(item => ({
+      time_slot: item.time,
+      task_title: item.title,
+      description: item.subtitle
+    }));
+    fd.append("agendas", JSON.stringify(agendas));
+
+    if (imageFile) {
+      fd.append("image", imageFile);
+    }
+
+    if (isEdit && event?.id) {
+      fd.append("id", event.id);
+    }
+
+    onSave(fd);
   };
 
   return (
@@ -84,7 +122,7 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-2xl"
+            className="text-gray-400 hover:text-gray-600 text-3xl"
           >
             ×
           </button>
@@ -92,11 +130,11 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
 
         <form onSubmit={handleSubmit} className="space-y-4 ">
           <div>
-            {logo ? (
+            {imagePreview ? (
               <div className="relative h-48 bg-gray-100 rounded-lg overflow-hidden group mx-4">
                 <img
-                  src={logo.data}
-                  alt="Logo"
+                  src={imagePreview}
+                  alt="Preview"
                   className="h-full mx-auto object-cover"
                 />
                 <button
@@ -106,9 +144,6 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
                 >
                   <X size={20} />
                 </button>
-                <p className="absolute bottom-2 left-2 text-xs text-white bg-black bg-opacity-50 px-2 py-1 rounded truncate w-40">
-                  {logo.name}
-                </p>
               </div>
             ) : (
               <div
@@ -131,7 +166,6 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
             />
           </div>
           <div className="grid grid-cols-2 gap-4 px-6">
-            {/* Event Title */}
             <div className="">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Event Title
@@ -161,7 +195,6 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
               />
             </div>
           </div>
-          {/* Date and Time */}
           <div className="grid grid-cols-2 gap-4 px-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -185,14 +218,13 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
                 name="time"
                 value={formData.time}
                 onChange={handleChange}
-                placeholder="10:00 - 14:00"
+                placeholder="09:00 - 17:00"
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
           </div>
 
-          {/* Event Type and Status */}
           <div className="grid grid-cols-2 gap-4 px-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -225,7 +257,6 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
             </div>
           </div>
 
-          {/* Event Description */}
           <div className="px-6">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Event Description
@@ -240,7 +271,6 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
               required
             />
           </div>
-          {/* Event Agenda */}
           <div className="px-6">
             <h3 className="text-lg font-bold text-gray-900 mb-4">Event Agenda</h3>
 
@@ -270,14 +300,14 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <input
                   type="text"
-                  placeholder="Time (e.g. 10:00 AM - 11:00 AM)"
+                  placeholder="Time (e.g. 09:00 AM - 10:30 AM)"
                   value={newAgenda.time}
                   onChange={(e) => setNewAgenda({ ...newAgenda, time: e.target.value })}
                   className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                 />
                 <input
                   type="text"
-                  placeholder="Task Title (e.g. Opening Remarks)"
+                  placeholder="Task Title (e.g. Introduction)"
                   value={newAgenda.title}
                   onChange={(e) => setNewAgenda({ ...newAgenda, title: e.target.value })}
                   className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
@@ -300,8 +330,6 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
             </div>
           </div>
 
-
-          {/* Additional Information */}
           <div className="px-6">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Additional Information
@@ -313,10 +341,8 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
               placeholder="Optional"
               rows="2"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
             />
           </div>
-          {/* Buttons */}
           <div className="flex gap-3 py-6 border-t px-6 bg-[#F9FAFB] rounded-b-lg">
             <button
               type="button"
@@ -327,7 +353,7 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-blue text-white rounded-lg font-medium"
+              className="flex-1 px-4 py-2 bg-blue text-white rounded-lg font-medium shadow-md hover:bg-blue-600 transition"
             >
               {isEdit ? "Save Changes" : "Create Event"}
             </button>
