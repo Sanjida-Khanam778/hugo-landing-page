@@ -5,19 +5,40 @@ import JobDetailsModal from "../Modal/JobDetailsModal";
 import PostNewJobModal from "../Modal/PostNewJobModal";
 import JobsTable from "./JobsTable";
 import AddCareerModal from "../Modal/AddCareerModal";
-import { useGetAllJobsQuery } from "../../../Api/universityApi";
+import {
+  useGetAllJobsQuery,
+  useCreateJobMutation,
+  useJobUpdateMutation,
+  useGetJobByIdQuery
+} from "../../../Api/universityApi";
+import toast from "react-hot-toast";
 
 export default function JobsAndInternships() {
   const { data: jobs = [], isLoading, error } = useGetAllJobsQuery();
+
+  const [createJob] = useCreateJobMutation();
+  const [updateJob] = useJobUpdateMutation();
+
   const [showPostJobModal, setShowPostJobModal] = useState(false);
   const [viewingJob, setViewingJob] = useState(null);
   const [editingJob, setEditingJob] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const handleSaveJob = (jobData) => {
-    // Mutation will be handled later
-    setShowPostJobModal(false);
-    setEditingJob(null);
+  const handleSaveJob = async (jobData) => {
+    try {
+      if (editingJob) {
+        await updateJob(jobData).unwrap();
+        toast.success("Job updated successfully");
+      } else {
+        await createJob(jobData).unwrap();
+        toast.success("Job posted successfully");
+      }
+      setShowPostJobModal(false);
+      setEditingJob(null);
+    } catch (err) {
+      console.error("Failed to save job:", err);
+      toast.error(err?.data?.detail || "An error occurred while saving the job.");
+    }
   };
 
   const handleEditJob = (job) => {
