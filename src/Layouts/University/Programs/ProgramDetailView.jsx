@@ -13,7 +13,7 @@ export default function ProgramDetailView({ programId, onEdit, onClose }) {
   if (!programId) return null;
   const { data: program, isLoading, error } = useGetProgramByIdQuery(programId);
 
-
+  console.log(program);
   const [expandedSections, setExpandedSections] = useState({
     description: true,
     outcomes: true,
@@ -21,6 +21,7 @@ export default function ProgramDetailView({ programId, onEdit, onClose }) {
     curriculum: true,
     requirements: true,
     process: true,
+    fees: true,
   });
 
   const toggleSection = (section) => {
@@ -88,10 +89,8 @@ export default function ProgramDetailView({ programId, onEdit, onClose }) {
               <h1 className="text-2xl font-bold text-gray-900">
                 {program?.title}
               </h1>
-            </div>
-            <div className="flex items-center gap-2">
               <span
-                className={`inline-block px-2.5 py-1 rounded-full text-sm font-medium ${program?.status === "Published"
+                className={`inline-block px-2.5 py-1 ml-4 rounded-full text-sm font-medium ${program?.status === "Published"
                   ? "bg-emerald-100 text-emerald-700"
                   : "bg-yellow-100 text-yellow-700"
                   }`}
@@ -99,6 +98,8 @@ export default function ProgramDetailView({ programId, onEdit, onClose }) {
                 {program?.status}
               </span>
             </div>
+
+
           </div>
           <div className="flex flex-col md:flex-row gap-6">
             <div className="grid grid-cols-2 gap-4 flex-1">
@@ -128,13 +129,35 @@ export default function ProgramDetailView({ programId, onEdit, onClose }) {
               </div>
               <div>
                 <p className=" text-gray-500 font-medium uppercase tracking-wide text-xs">
+                  Modality
+                </p>
+                <p className="font-semibold text-gray-900 mt-1">
+                  {program?.modality}
+                </p>
+              </div>
+              <div>
+                <p className=" text-gray-500 font-medium uppercase tracking-wide text-xs">
+                  Next Start Date
+                </p>
+                <p className="font-semibold text-gray-900 mt-1">
+                  {program?.next_start_date}
+                </p>
+              </div>
+              <div>
+                <p className=" text-gray-500 font-medium uppercase tracking-wide text-xs">
+                  Credits
+                </p>
+                <p className="font-semibold text-gray-900 mt-1">{program?.credits}</p>
+              </div>
+              <div>
+                <p className=" text-gray-500 font-medium uppercase tracking-wide text-xs">
                   Last Updated
                 </p>
                 <p className="font-semibold text-gray-900 mt-1">{program?.updated_at ? program?.updated_at.split("T")[0] : "N/A"}</p>
               </div>
             </div>
             <div>
-              <img className="rounded-xl w-32 h-24 object-cover" src={program?.image || program1} alt="" />
+              <img className="rounded-xl w-40 h-auto object-cover" src={program?.image || program1} alt="" />
             </div>
           </div>
         </div>
@@ -239,14 +262,18 @@ export default function ProgramDetailView({ programId, onEdit, onClose }) {
 
                 <div className="space-y-3 ">
                   {deadlines.map((item, idx) => (
-                    <div key={idx} className="flex items-center text-gray-800 ">
-                      <Calendar
-                        strokeWidth={3.0}
-                        className="w-4 h-4 text-blue mr-3 flex-shrink-0"
-                      />
-                      <span className="text-blue-600 font-medium">{item.batch_name}</span>
-                      <span className="mx-2">:</span>
-                      <span className="font-semibold">{item.deadline_date}</span>
+                    <div key={idx} className="flex flex-col text-gray-800 border-b border-blue-100 pb-2 last:border-0">
+                      <div className="flex items-center">
+                        <Calendar
+                          strokeWidth={3.0}
+                          className="w-4 h-4 text-blue mr-3 flex-shrink-0"
+                        />
+                        <span className="text-blue-600 font-bold">{item.batch_name}</span>
+                      </div>
+                      <div className="ml-7 text-sm mt-1">
+                        <span className="font-semibold">Start:</span> {item.start_date} | <span className="font-semibold">End:</span> {item.end_date}
+                        {item.next_start_date && <> | <span className="font-semibold">Next Start:</span> {item.next_start_date}</>}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -254,9 +281,23 @@ export default function ProgramDetailView({ programId, onEdit, onClose }) {
             ) : null}
             <div>
               <h3 className="font-semibold my-4 text-black text-lg">Requirements</h3>
-              <p className="text-gray-700 whitespace-pre-wrap">
-                {program?.requirements || "No specific requirements listed."}
-              </p>
+              {Array.isArray(program?.requirements) ? (
+                <ul className="space-y-2">
+                  {program.requirements.map((req, index) => (
+                    <li key={index} className="flex gap-3 items-start">
+                      <span className="text-blue mt-1">•</span>
+                      <p className="text-gray-700">{req}</p>
+                    </li>
+                  ))}
+                  {program.requirements.length === 0 && (
+                    <p className="text-gray-500 italic text-sm">No specific requirements listed.</p>
+                  )}
+                </ul>
+              ) : (
+                <p className="text-gray-700 whitespace-pre-wrap">
+                  {program?.requirements || "No specific requirements listed."}
+                </p>
+              )}
             </div>
           </DetailSection>
 
@@ -264,7 +305,6 @@ export default function ProgramDetailView({ programId, onEdit, onClose }) {
           <DetailSection
             title="Application Process"
             section="process"
-            isLast={true}
           >
             {steps.length > 0 ? (
               <ol className="space-y-4">
@@ -289,6 +329,70 @@ export default function ProgramDetailView({ programId, onEdit, onClose }) {
             ) : (
               <p className=" text-gray-500">No application steps added</p>
             )}
+          </DetailSection>
+
+          {/* Fees & Financial Aid */}
+          <DetailSection title="Fees & Financial Aid" section="fees" isLast={true}>
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 border rounded-lg bg-green-50 border-green-100">
+                  <p className="text-xs font-semibold text-green-700 uppercase">Domestic Tuition</p>
+                  <p className="text-lg font-bold text-gray-900">{program?.tuition?.domestic_tuition} {program?.tuition?.currency}</p>
+                </div>
+                <div className="p-4 border rounded-lg bg-green-50 border-green-100">
+                  <p className="text-xs font-semibold text-green-700 uppercase">International Tuition</p>
+                  <p className="text-lg font-bold text-gray-900">{program?.tuition?.international_tuition} {program?.tuition?.currency}</p>
+                </div>
+              </div>
+
+              {program?.additional_expenses?.length > 0 && (
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-3">Additional Expenses</h4>
+                  <div className="space-y-2">
+                    {program.additional_expenses.map((exp, idx) => (
+                      <div key={idx} className="flex justify-between items-center p-3 bg-gray-50 rounded border border-gray-100">
+                        <span className="text-gray-700">{exp.expense_name}</span>
+                        <span className="font-semibold text-gray-900">{exp.cost_estimate}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {program?.scholarships?.length > 0 && (
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-3">Scholarships</h4>
+                  <div className="grid grid-cols-1 gap-3">
+                    {program.scholarships.map((scholarship, idx) => (
+                      <div key={idx} className="p-4 bg-orange-50 border border-orange-100 rounded-lg">
+                        <p className="font-bold text-gray-900">{scholarship.name}</p>
+                        <p className="text-sm text-gray-700 mt-1"><span className="font-semibold">Amount:</span> {scholarship.amount}</p>
+                        <p className="text-sm text-gray-600 mt-1 italic">{scholarship.eligibility}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {program?.financial_aid && (
+                <div className="p-4 bg-blue-50 border border-blue-100 rounded-lg">
+                  <h4 className="font-bold text-blue-800 mb-2">Financial Aid</h4>
+                  <p className="text-gray-700 text-sm mb-3">{program.financial_aid.description}</p>
+                  <div className="flex flex-wrap gap-4 text-sm">
+                    {program.financial_aid.email && (
+                      <div className="flex items-center gap-1">
+                        <span className="font-semibold">Email:</span> {program.financial_aid.email}
+                      </div>
+                    )}
+                    {program.financial_aid.phone && (
+                      <div className="flex items-center gap-1">
+                        <span className="font-semibold">Phone:</span> {program.financial_aid.phone}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </DetailSection>
         </div>
 

@@ -20,7 +20,10 @@ export const authapi = api.injectEndpoints({
                     body: data,
                 };
             },
-            invalidatesTags: ["uni_users"],
+            invalidatesTags: (result, error, arg) => {
+                const id = arg instanceof FormData ? arg.get('id') : arg.id;
+                return ["uni_users", { type: "Program", id }];
+            },
         }),
 
         getAllPrograms: builder.query({
@@ -38,7 +41,21 @@ export const authapi = api.injectEndpoints({
                 url: `/programs/delete/${id}/`,
                 method: "DELETE",
             }),
-            invalidatesTags: ["uni_users"],
+            invalidatesTags: (result, error, id) => ["uni_users", { type: "Program", id }],
+        }),
+
+        getUniversityProfile: builder.query({
+            query: () => "/profile/",
+            providesTags: ["uni_profile"],
+        }),
+
+        setupProfile: builder.mutation({
+            query: (data) => ({
+                url: "/profile/setup/",
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["uni_profile"],
         }),
     }),
 });
@@ -49,4 +66,6 @@ export const {
     useProgramUpdateMutation,
     useDeleteProgramMutation,
     useGetProgramByIdQuery,
+    useGetUniversityProfileQuery,
+    useSetupProfileMutation,
 } = authapi;

@@ -6,7 +6,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
   const { data: program, isLoading, error } = useGetProgramByIdQuery(isEdit ? programId : null);
   const fileInputRef = useRef(null);
   const [imagePreview, setImagePreview] = useState(null);
-
+console.log("program", program)
   // Helper to parse comma-separated string to array
   const parseCourses = (str) =>
     str ? str.split(",").map((s) => s.trim()).filter(Boolean) : [];
@@ -18,7 +18,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
     language: "English",
     status: "Draft",
     description: "",
-    credit: null,
+    credits: null,
     curriculum_overview: "",
     requirements: "",
     curriculum: { year1: "", year2: "", year3: "", year4: "" },
@@ -26,8 +26,8 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
     faculties: [],
     deadlines: [],
     appProcess: [],
-    domestic_fee: "",
-    international_fee: "",
+    domestic_tuition: "",
+    international_tuition: "",
     additional_expenses: [],
     scholarships: [],
     financial_aid_office: { description: "", email: "", phone: "" },
@@ -48,6 +48,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
         description: program.description || "",
         curriculum_overview: program.curriculum_overview || "",
         requirements: program.requirements || "",
+        credits: program.credits || null,
 
         // Map API strings to arrays for UI -> Join by newline for textarea
         curriculum: {
@@ -65,8 +66,8 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
           title: s.step_title,
           description: s.step_description
         })) || [],
-        domestic_fee: program.domestic_fee || "",
-        international_fee: program.international_fee || "",
+        domestic_tuition: program.domestic_tuition || "",
+        international_tuition: program.international_tuition || "",
         additional_expenses: program.additional_expenses || [],
         scholarships: program.scholarships || [],
         financial_aid_office: program.financial_aid_office || { description: "", email: "", phone: "" },
@@ -82,12 +83,12 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
   // New item states
   const [newOutcome, setNewOutcome] = useState("");
   const [newFaculty, setNewFaculty] = useState({ name: "", department: "", expertise: "" });
-  const [newDeadline, setNewDeadline] = useState({ batch_name: "", deadline_date: "" });
+  const [newDeadline, setNewDeadline] = useState({ batch_name: "", start_date: "", end_date: "" });
   const [newAppProcess, setNewAppProcess] = useState({
     title: "",
     description: "",
   });
-  const [newExpense, setNewExpense] = useState({ expense: "", cost: "" });
+  const [newExpense, setNewExpense] = useState({ expense_name: "", cost_estimate: "" });
   const [newScholarship, setNewScholarship] = useState({ name: "", amount: "", eligibility: "" });
 
   const handleInputChange = (e) => {
@@ -141,12 +142,12 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
 
   // --- Deadlines ---
   const handleAddDeadline = () => {
-    if (newDeadline.batch_name.trim() && newDeadline.deadline_date) {
+    if (newDeadline.batch_name.trim() && newDeadline.start_date && newDeadline.end_date) {
       setFormData((prev) => ({
         ...prev,
         deadlines: [...prev.deadlines, newDeadline],
       }));
-      setNewDeadline({ batch_name: "", deadline_date: "", start_date: "", next_start_date: "" });
+      setNewDeadline({ batch_name: "", start_date: "", end_date: "" });
     }
   };
 
@@ -177,12 +178,12 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
 
   // --- Additional Expenses ---
   const handleAddExpense = () => {
-    if (newExpense.expense.trim() && newExpense.cost.trim()) {
+    if (newExpense.expense_name.trim() && newExpense.cost_estimate.trim()) {
       setFormData((prev) => ({
         ...prev,
         additional_expenses: [...prev.additional_expenses, newExpense],
       }));
-      setNewExpense({ expense: "", cost: "" });
+      setNewExpense({ expense_name: "", cost_estimate: "" });
     }
   };
 
@@ -213,7 +214,6 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
 
   // --- Curriculum ---
   const handleCurriculumChange = (year, value) => {
-    // Store as string to support typing spaces/newlines normally
     setFormData((prev) => ({
       ...prev,
       curriculum: {
@@ -234,45 +234,62 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
     };
 
     const payload = {
-      // Basic Fields
-      id: formData.id,
       title: formData.title,
       level: formData.level,
       duration: formData.duration,
       language: formData.language,
-      credits: formData.credit,
       status: formData.status,
       description: formData.description,
       curriculum_overview: formData.curriculum_overview,
-      requirements: formData.requirements,
-      domestic_fee: formData.domestic_fee,
-      international_fee: formData.international_fee,
-      additional_expenses: formData.additional_expenses,
-      scholarships: formData.scholarships,
-      financial_aid_office: formData.financial_aid_office,
-
-      // Process Strings
+      requirements: formData.requirements ? [formData.requirements] : [],
+      credits: Number(formData.credits) || 0,
+      tuition: {
+        domestic_tuition: formData.domestic_tuition,
+        international_tuition: formData.international_tuition,
+        currency: "USD"
+      },
       first_year_courses: processCurriculum(formData.curriculum.year1),
       second_year_courses: processCurriculum(formData.curriculum.year2),
       third_year_courses: processCurriculum(formData.curriculum.year3),
       fourth_year_courses: processCurriculum(formData.curriculum.year4),
 
-      // Expand Learning Outcomes to Objects
-      learning_outcomes: formData.learningOutcomes.map(text => ({ outcome_text: text })),
-
-      // Faculties (already objects)
-      faculties: formData.faculties,
-
-      // Deadlines
-      deadlines: formData.deadlines,
-
-      // Steps (Rename title/desc to step_title/step_description)
-      steps: formData.appProcess.map((step, index) => ({
+      learning_outcomes: (formData.learningOutcomes || []).map(text => ({
+        outcome_text: text
+      })),
+      faculties: (formData.faculties || []).map(f => ({
+        name: f.name,
+        department: f.department,
+        expertise: f.expertise
+      })),
+      deadlines: (formData.deadlines || []).map(d => ({
+        batch_name: d.batch_name,
+        start_date: d.start_date,
+        end_date: d.end_date
+      })),
+      steps: (formData.appProcess || []).map((step, index) => ({
         step_title: step.title,
         step_description: step.description,
         order: index + 1
       })),
+      additional_expenses: (formData.additional_expenses || []).map(e => ({
+        expense_name: e.expense_name,
+        cost_estimate: e.cost_estimate
+      })),
+      scholarships: (formData.scholarships || []).map(s => ({
+        name: s.name,
+        amount: s.amount,
+        eligibility: s.eligibility
+      })),
+      financial_aid_office: {
+        description: formData.financial_aid_office?.description || "",
+        email: formData.financial_aid_office?.email || "",
+        phone: formData.financial_aid_office?.phone || ""
+      }
     };
+
+    if (formData.id) {
+      payload.id = formData.id;
+    }
 
     console.log("Constructing FormData from payload:", payload);
 
@@ -281,18 +298,8 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
       const value = payload[key];
       if (value === null || value === undefined) return;
 
-      if (Array.isArray(value)) {
-        value.forEach((item, index) => {
-          if (typeof item === "object") {
-            Object.keys(item).forEach((subKey) => {
-              // Using key[index]subKey format which is common for DRF multipart
-              fd.append(`${key}[${index}]${subKey}`, item[subKey]);
-            });
-          } else {
-            // For simple arrays like learningOutcomes if they were strings
-            fd.append(`${key}[${index}]`, item);
-          }
-        });
+      if (typeof value === "object" && !(value instanceof File)) {
+        fd.append(key, JSON.stringify(value));
       } else {
         fd.append(key, value);
       }
@@ -396,12 +403,12 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                 </div>
                 <div>
                   <label className="block font-semibold text-gray-700 mb-2">
-                    Credit
+                    Credits
                   </label>
                   <input
                     type="number"
-                    name="credit"
-                    value={formData.credit}
+                    name="credits"
+                    value={formData.credits}
                     onChange={handleInputChange}
                     placeholder="e.g. 120"
                     className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
@@ -579,7 +586,6 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                     <textarea
                       placeholder={`Enter courses for year ${idx + 1}...`}
                       rows="5"
-                      // Use value directly since it's now a string in state
                       value={formData.curriculum[year] || ""}
                       onChange={(e) =>
                         handleCurriculumChange(year, e.target.value)
@@ -592,7 +598,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
               </div>
             </div>
 
-            {/* Deadlines & Requirements */}
+            {/* Application Deadlines & Requirements */}
             <div>
               <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                 Admission Requirements & Deadlines
@@ -621,8 +627,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                       <div className="flex-1">
                         <span className="font-semibold text-gray-800">{deadline.batch_name}:</span><br />
                         <span className=" text-gray-600 "> <span className="font-semibold">Start: </span>{deadline.start_date}</span>
-                        <span className="ml-2 text-gray-600"><span className="font-semibold">End: </span>{deadline.deadline_date}</span>
-                        <span className="ml-2 text-gray-600"><span className="font-semibold">Next Start: </span>{deadline.next_start_date}</span>
+                        <span className=" text-gray-600 "> <span className="font-semibold">End: </span>{deadline.end_date}</span>
                       </div>
                       <button onClick={() => handleRemoveDeadline(index)} className="text-gray-400 hover:text-red-500">
                         <X size={18} />
@@ -654,17 +659,8 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                     <label className="text-xs font-semibold text-gray-500 uppercase">End Date</label>
                     <input
                       type="date"
-                      value={newDeadline.deadline_date}
-                      onChange={(e) => setNewDeadline(prev => ({ ...prev, deadline_date: e.target.value }))}
-                      className="w-full px-3 py-2 border border-blue-200 rounded mt-1 focus:ring-2 focus:ring-blue focus:outline-none"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <label className="text-xs font-semibold text-gray-500 uppercase">Next Start Date</label>
-                    <input
-                      type="date"
-                      value={newDeadline.next_start_date}
-                      onChange={(e) => setNewDeadline(prev => ({ ...prev, next_start_date: e.target.value }))}
+                      value={newDeadline.end_date}
+                      onChange={(e) => setNewDeadline(prev => ({ ...prev, end_date: e.target.value }))}
                       className="w-full px-3 py-2 border border-blue-200 rounded mt-1 focus:ring-2 focus:ring-blue focus:outline-none"
                     />
                   </div>
@@ -694,8 +690,8 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                     </div>
                     <input
                       type="text"
-                      name="domestic_fee"
-                      value={formData.domestic_fee}
+                      name="domestic_tuition"
+                      value={formData.domestic_tuition}
                       onChange={handleInputChange}
                       placeholder="e.g. $52,000 per year"
                       className="w-full text-lg text-gray-800 outline-none border-b-2 border-transparent focus:border-blue-300 transition-colors py-1"
@@ -708,8 +704,8 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                     </div>
                     <input
                       type="text"
-                      name="international_fee"
-                      value={formData.international_fee}
+                      name="international_tuition"
+                      value={formData.international_tuition}
                       onChange={handleInputChange}
                       placeholder="e.g. $55,000 per year"
                       className="w-full text-lg text-gray-800 outline-none border-b-2 border-transparent focus:border-blue-300 transition-colors py-1"
@@ -730,8 +726,8 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                   </div>
                   {formData.additional_expenses.map((exp, index) => (
                     <div key={index} className="grid grid-cols-2 px-4 py-3 text-sm group relative">
-                      <div className="text-gray-700 font-medium">{exp.expense}</div>
-                      <div className="text-right text-gray-900 font-bold">{exp.cost}</div>
+                      <div className="text-gray-700 font-medium">{exp.expense_name}</div>
+                      <div className="text-right text-gray-900 font-bold">{exp.cost_estimate}</div>
                       <button
                         onClick={() => handleRemoveExpense(index)}
                         className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -747,15 +743,15 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                   <input
                     type="text"
                     placeholder="e.g. Accommodation"
-                    value={newExpense.expense}
-                    onChange={(e) => setNewExpense({ ...newExpense, expense: e.target.value })}
+                    value={newExpense.expense_name}
+                    onChange={(e) => setNewExpense({ ...newExpense, expense_name: e.target.value })}
                     className="md:col-span-2 px-3 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue focus:outline-none"
                   />
                   <input
                     type="text"
                     placeholder="e.g. $16,000 - $18,000"
-                    value={newExpense.cost}
-                    onChange={(e) => setNewExpense({ ...newExpense, cost: e.target.value })}
+                    value={newExpense.cost_estimate}
+                    onChange={(e) => setNewExpense({ ...newExpense, cost_estimate: e.target.value })}
                     className="md:col-span-2 px-3 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue focus:outline-none"
                   />
                   <button
@@ -779,7 +775,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                   <div key={index} className="bg-white border border-gray-200 rounded-lg p-5 relative group shadow-sm">
                     <div className="flex items-start gap-4">
                       <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-500 flex-shrink-0">
-                        <Plus size={20} className="rotate-45" /> {/* Placeholder icon for award */}
+                        <Plus size={20} className="rotate-45" />
                       </div>
                       <div className="flex-1">
                         <h3 className="font-bold text-gray-900 mb-2">{scholarship.name}</h3>

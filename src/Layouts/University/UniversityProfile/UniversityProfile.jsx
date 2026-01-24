@@ -1,18 +1,32 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Upload, Plus, X } from "lucide-react";
 import AddRankingModal from "../Modal/AddRankingModal";
 import AddLocationModal from "../Modal/AddLocationModal";
 import AddAccreditationModal from "../Modal/AddAccreditationModal";
 import TextEditor from "../../../editor";
+import { useGetUniversityProfileQuery, useSetupProfileMutation } from "../../../Api/universityApi";
+import { toast } from "react-hot-toast";
 
 export default function UniversityProfile() {
+  const { data: profile, isLoading: profileLoading } = useGetUniversityProfileQuery();
+  const [setupProfile, { isLoading: isUpdating }] = useSetupProfileMutation();
   const [activeModal, setActiveModal] = useState(null);
   const [editorContent, setEditorContent] = useState("");
-  const [logo, setLogo] = useState(null);
-  const [sectionVideo, setSectionVideo] = useState(null);
-  const [bannerVideo, setBannerVideo] = useState(null);
+  const [logo, setLogo] = useState({ preview: null, file: null });
+  const [sectionVideo, setSectionVideo] = useState({ preview: null, file: null });
+  const [bannerVideo, setBannerVideo] = useState({ preview: null, file: null });
+
+  const [basicInfo, setBasicInfo] = useState({
+    name: "",
+    university_type: "Private",
+    total_campuses: "",
+    about: "",
+    year_founded: "",
+    total_faculty: "",
+    total_students: "",
+  });
 
   const logoInputRef = useRef(null);
   const sectionVideoInputRef = useRef(null);
@@ -24,18 +38,33 @@ export default function UniversityProfile() {
   const [locations, setLocations] = useState([
     { id: 1, name: "LARC Campus", address: "Main St, City, Country" },
   ]);
-  const [accreditations, setAccreditations] = useState([
-    {
-      id: 1,
-      name: "New England Commission of Higher Education (NECHE)",
-      status: "Valid",
-    },
-    {
-      id: 2,
-      name: "Association of American Universities (AAU)",
-      status: "Valid",
-    },
-  ]);
+  const [accreditations, setAccreditations] = useState([]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setBasicInfo((prev) => ({ ...prev, [name]: value }));
+  };
+
+  useEffect(() => {
+    if (profile) {
+      setBasicInfo({
+        name: profile.name || "",
+        university_type: profile.university_type || "Private",
+        total_campuses: profile.total_campuses || "",
+        about: profile.about || "",
+        year_founded: profile.year_founded || "",
+        total_faculty: profile.total_faculty || "",
+        total_students: profile.total_students || "",
+      });
+      setRankings(profile.rankings || []);
+      setLocations(profile.locations || []);
+      setAccreditations(profile.accreditations || []);
+      setEditorContent(profile.what_makes_us_different || "");
+      if (profile.logo) setLogo({ preview: profile.logo, file: null });
+      if (profile.section_video) setSectionVideo({ preview: profile.section_video, file: null });
+      if (profile.banner_video) setBannerVideo({ preview: profile.banner_video, file: null });
+    }
+  }, [profile]);
 
   const handleAddRanking = (data) => {
     setRankings([...rankings, { id: Date.now(), ...data }]);
@@ -68,45 +97,30 @@ export default function UniversityProfile() {
   const handleLogoUpload = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setLogo({
-          name: file.name,
-          data: event.target.result,
-          type: file.type,
-        });
-      };
-      reader.readAsDataURL(file);
+      setLogo({
+        preview: URL.createObjectURL(file),
+        file: file,
+      });
     }
   };
 
   const handleSectionVideoUpload = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("video/")) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setSectionVideo({
-          name: file.name,
-          data: event.target.result,
-          type: file.type,
-        });
-      };
-      reader.readAsDataURL(file);
+      setSectionVideo({
+        preview: URL.createObjectURL(file),
+        file: file,
+      });
     }
   };
 
   const handleBannerVideoUpload = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("video/")) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setBannerVideo({
-          name: file.name,
-          data: event.target.result,
-          type: file.type,
-        });
-      };
-      reader.readAsDataURL(file);
+      setBannerVideo({
+        preview: URL.createObjectURL(file),
+        file: file,
+      });
     }
   };
 
@@ -121,8 +135,37 @@ export default function UniversityProfile() {
   };
 
   const handleRemoveBannerVideo = () => {
-    setBannerVideo(null);
+    setBannerVideo({ preview: null, file: null });
     if (bannerVideoInputRef.current) bannerVideoInputRef.current.value = "";
+  };
+
+  const handleSave = async () => {
+    const fd = new FormData();
+    // Basic Info
+    Object.keys(basicInfo).forEach((key) => {
+      fd.append(key, basicInfo[key]);
+    });
+
+    // Content
+    fd.append("what_makes_us_different", editorContent);
+
+    // Lists (JSON stringify for mixed arrays in FormData)
+    fd.append("rankings", JSON.stringify(rankings.map(({ id, ...rest }) => rest)));
+    fd.append("locations", JSON.stringify(locations.map(({ id, ...rest }) => rest)));
+    fd.append("accreditations", JSON.stringify(accreditations.map(({ id, ...rest }) => rest)));
+
+    // Files
+    if (logo.file) fd.append("logo", logo.file);
+    if (sectionVideo.file) fd.append("section_video", sectionVideo.file);
+    if (bannerVideo.file) fd.append("banner_video", bannerVideo.file);
+
+    try {
+      await setupProfile(fd).unwrap();
+      toast.success("Profile updated successfully!");
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to update profile");
+      console.error("Profile update error:", err);
+    }
   };
 
   return (
@@ -132,9 +175,11 @@ export default function UniversityProfile() {
         <h1 className="text-3xl font-bold text-gray-800">University Profile</h1>
         <button
           type="button"
-          className="bg-blue text-white px-6 py-2 rounded-lg transition-colors"
+          onClick={handleSave}
+          disabled={isUpdating}
+          className="bg-blue text-white px-6 py-2 rounded-lg transition-colors disabled:opacity-50"
         >
-          Save Changes
+          {isUpdating ? "Saving..." : "Save Changes"}
         </button>
       </div>
 
@@ -145,10 +190,10 @@ export default function UniversityProfile() {
           <div className="grid grid-cols-3 gap-6">
             {/* Logo Upload */}
             <div>
-              {logo ? (
+              {logo.preview ? (
                 <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden group">
                   <img
-                    src={logo.data}
+                    src={logo.preview}
                     alt="Logo"
                     className="w-full h-full object-cover"
                   />
@@ -159,9 +204,6 @@ export default function UniversityProfile() {
                   >
                     <X size={20} />
                   </button>
-                  <p className="absolute bottom-2 left-2 text-xs text-white bg-black bg-opacity-50 px-2 py-1 rounded truncate w-40">
-                    {logo.name}
-                  </p>
                 </div>
               ) : (
                 <div
@@ -186,10 +228,10 @@ export default function UniversityProfile() {
 
             {/* Section Video Upload */}
             <div>
-              {sectionVideo ? (
+              {sectionVideo.preview ? (
                 <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden group">
                   <video
-                    src={sectionVideo.data}
+                    src={sectionVideo.preview}
                     className="w-full h-full object-cover"
                     controls
                   />
@@ -200,9 +242,6 @@ export default function UniversityProfile() {
                   >
                     <X size={20} />
                   </button>
-                  <p className="absolute bottom-2 left-2 text-xs text-white bg-black bg-opacity-50 px-2 py-1 rounded truncate w-40">
-                    {sectionVideo.name}
-                  </p>
                 </div>
               ) : (
                 <div
@@ -227,10 +266,10 @@ export default function UniversityProfile() {
 
             {/* Banner Video Upload */}
             <div>
-              {bannerVideo ? (
+              {bannerVideo.preview ? (
                 <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden group">
                   <video
-                    src={bannerVideo.data}
+                    src={bannerVideo.preview}
                     className="w-full h-full object-cover"
                     controls
                   />
@@ -241,9 +280,6 @@ export default function UniversityProfile() {
                   >
                     <X size={20} />
                   </button>
-                  <p className="absolute bottom-2 left-2 text-xs text-white bg-black bg-opacity-50 px-2 py-1 rounded truncate w-40">
-                    {bannerVideo.name}
-                  </p>
                 </div>
               ) : (
                 <div
@@ -279,6 +315,9 @@ export default function UniversityProfile() {
               </label>
               <input
                 type="text"
+                name="name"
+                value={basicInfo.name}
+                onChange={handleInputChange}
                 placeholder="Harvard University"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -288,6 +327,9 @@ export default function UniversityProfile() {
                 University Type
               </label>
               <select
+                name="university_type"
+                value={basicInfo.university_type}
+                onChange={handleInputChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="Private">Private</option>
@@ -300,6 +342,9 @@ export default function UniversityProfile() {
               </label>
               <input
                 type="number"
+                name="total_campuses"
+                value={basicInfo.total_campuses}
+                onChange={handleInputChange}
                 placeholder="2"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -309,6 +354,9 @@ export default function UniversityProfile() {
                 About
               </label>
               <textarea
+                name="about"
+                value={basicInfo.about}
+                onChange={handleInputChange}
                 placeholder="Description about your university..."
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 rows="4"
@@ -320,6 +368,9 @@ export default function UniversityProfile() {
               </label>
               <input
                 type="number"
+                name="year_founded"
+                value={basicInfo.year_founded}
+                onChange={handleInputChange}
                 placeholder="1636"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -330,6 +381,9 @@ export default function UniversityProfile() {
               </label>
               <input
                 type="number"
+                name="total_faculty"
+                value={basicInfo.total_faculty}
+                onChange={handleInputChange}
                 placeholder="200"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -340,6 +394,9 @@ export default function UniversityProfile() {
               </label>
               <input
                 type="number"
+                name="total_students"
+                value={basicInfo.total_students}
+                onChange={handleInputChange}
                 placeholder="21000"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
