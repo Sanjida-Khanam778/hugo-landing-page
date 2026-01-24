@@ -8,6 +8,14 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
 
+  const getFullImageUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:") || path.startsWith("data:")) {
+      return path;
+    }
+    return `http://10.10.13.20:8005${path}`;
+  };
+
   const [formData, setFormData] = useState({
     title: "",
     category: "",
@@ -133,7 +141,7 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
             {imagePreview ? (
               <div className="relative h-48 bg-gray-100 rounded-lg overflow-hidden group mx-4">
                 <img
-                  src={imagePreview}
+                  src={getFullImageUrl(imagePreview)}
                   alt="Preview"
                   className="h-full mx-auto object-cover"
                 />

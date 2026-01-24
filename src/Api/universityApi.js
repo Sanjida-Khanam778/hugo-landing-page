@@ -84,6 +84,47 @@ export const authapi = api.injectEndpoints({
             }),
             invalidatesTags: (result, error, id) => ["uni_users", { type: "Program", id }],
         }),
+        createJob: builder.mutation({
+            query: (data) => ({
+                url: "/post/job/",
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["uni_users"],
+        }),
+
+        jobUpdate: builder.mutation({
+            query: (data) => {
+                const id = data instanceof FormData ? data.get('id') : data.id;
+                return {
+                    url: `/job/${id}/update/`,
+                    method: "PATCH",
+                    body: data,
+                };
+            },
+            invalidatesTags: (result, error, arg) => {
+                const id = arg instanceof FormData ? arg.get('id') : arg.id;
+                return ["uni_users", { type: "Program", id }];
+            },
+        }),
+
+        getAllJobs: builder.query({
+            query: () => "/jobs/",
+            providesTags: ["uni_users"],
+        }),
+
+        getJobById: builder.query({
+            query: (id) => `/jobs?job_id=${id}`,
+            providesTags: (result, error, id) => [{ type: "Program", id }],
+        }),
+
+        deleteJob: builder.mutation({
+            query: (id) => ({
+                url: `/events/cancel/${id}/`,
+                method: "DELETE",
+            }),
+            invalidatesTags: (result, error, id) => ["uni_users", { type: "Program", id }],
+        }),
 
         getUniversityProfile: builder.query({
             query: () => "/profile/",
@@ -114,4 +155,9 @@ export const {
     useGetEventByIdQuery,
     useDeleteEventMutation,
     useEventUpdateMutation,
+    useCreateJobMutation,
+    useGetAllJobsQuery,
+    useGetJobByIdQuery,
+    useDeleteJobMutation,
+    useJobUpdateMutation,
 } = authapi;

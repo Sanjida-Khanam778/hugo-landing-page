@@ -6,7 +6,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
   const { data: program, isLoading, error } = useGetProgramByIdQuery(isEdit ? programId : null);
   const fileInputRef = useRef(null);
   const [imagePreview, setImagePreview] = useState(null);
-console.log("program", program)
+  console.log("program", program)
   // Helper to parse comma-separated string to array
   const parseCourses = (str) =>
     str ? str.split(",").map((s) => s.trim()).filter(Boolean) : [];
@@ -102,6 +102,14 @@ console.log("program", program)
       setFormData((prev) => ({ ...prev, image: file }));
       setImagePreview(URL.createObjectURL(file));
     }
+  };
+
+  const getFullImageUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:") || path.startsWith("data:")) {
+      return path;
+    }
+    return `http://10.10.13.20:8005${path}`;
   };
 
   // --- Learning Outcomes ---
@@ -431,7 +439,7 @@ console.log("program", program)
                 />
 
                 {imagePreview ? (
-                  <img src={imagePreview} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+                  <img src={getFullImageUrl(imagePreview)} alt="Preview" className="w-full h-full object-cover rounded-lg" />
                 ) : (
                   <>
                     <Upload size={32} className="text-gray-400 mb-2" />

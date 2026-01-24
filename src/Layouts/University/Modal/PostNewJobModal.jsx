@@ -396,7 +396,7 @@ export default function PostNewJobModal({ job, onSave, onClose }) {
           {/* Admission Requirements */}
           <div>
             <label className="block font-semibold text-gray-900 mb-2">
-              Admission Requirements
+              Admission Deadline
             </label>
             <div className="flex gap-2 mb-3">
               <div className="w-full">

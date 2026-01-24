@@ -5,141 +5,19 @@ import JobDetailsModal from "../Modal/JobDetailsModal";
 import PostNewJobModal from "../Modal/PostNewJobModal";
 import JobsTable from "./JobsTable";
 import AddCareerModal from "../Modal/AddCareerModal";
+import { useGetAllJobsQuery } from "../../../Api/universityApi";
 
 export default function JobsAndInternships() {
-  const [jobs, setJobs] = useState([
-    {
-      id: 1,
-      title: "Research Assistant - Computer Science",
-      department: "Computer Science",
-      type: "Full Time",
-      category: "Research",
-      applications: 32,
-      status: "Active",
-      createdDate: "2025-09-15",
-      salary: "$45,000 - $55,000",
-      jobDescription:
-        "We are looking for a research assistant to support our computer science research initiatives.",
-      responsibilities: ["Conduct research", "Write papers", "Assist faculty"],
-      requirements: ["BS in Computer Science", "Python proficiency"],
-      qualifications: ["Experience with ML"],
-      benefits: ["Health insurance", "Flexible schedule"],
-      applicationProcess: [
-        "Submit CV",
-        "Technical Interview",
-        "Final Interview",
-      ],
-      admissionRequirements: ["GPA > 3.0", "Sophomore standing or above"],
-      location: "On-Campus",
-      contact: {
-        email: "internship.recruiting@techcorp.com",
-        phone: "(415) - 555 - 0123",
-      },
-    },
-    {
-      id: 2,
-      title: "Marketing Intern",
-      department: "Business School",
-      type: "Internship",
-      category: "Internship",
-      applications: 18,
-      status: "Active",
-      createdDate: "2025-09-10",
-      salary: "$18/hour",
-      jobDescription: "Marketing internship opportunity for business students.",
-      responsibilities: [
-        "Social media management",
-        "Content creation",
-        "Campaign support",
-      ],
-      requirements: ["Currently enrolled in business program"],
-      qualifications: ["Social media experience"],
-      benefits: ["Flexible hours", "Resume building"],
-      applicationProcess: ["Submit application", "Interview"],
-      admissionRequirements: ["Business major"],
-      location: "On-Campus",
-      contact: {
-        email: "internship.recruiting@techcorp.com",
-        phone: "(415) - 555 - 0123",
-      },
-    },
-    {
-      id: 3,
-      title: "Teaching Assistant - Economics",
-      department: "Economics",
-      type: "Part Time",
-      category: "Teaching",
-      applications: 24,
-      status: "Active",
-      createdDate: "2025-09-05",
-      salary: "$20/hour",
-      jobDescription:
-        "Help teach economics courses and support student learning.",
-      responsibilities: [
-        "Grade assignments",
-        "Lead discussions",
-        "Office hours",
-      ],
-      requirements: ["Economics major", "Excellent GPA"],
-      qualifications: ["Teaching experience"],
-      benefits: ["Tuition discount"],
-      applicationProcess: ["Submit CV", "Teaching demo"],
-      admissionRequirements: ["Graduate student or senior undergraduate"],
-      location: "Remote",
-      contact: {
-        email: "internship.recruiting@techcorp.com",
-        phone: "(415) - 555 - 0123",
-      },
-    },
-    {
-      id: 4,
-      title: "Software Developer - University IT",
-      department: "Information Technology",
-      type: "Full Time",
-      category: "Technology",
-      applications: 45,
-      status: "Active",
-      createdDate: "2025-08-28",
-      salary: "$60,000 - $75,000",
-      jobDescription: "Develop and maintain university IT systems.",
-      responsibilities: [
-        "Code development",
-        "System maintenance",
-        "Troubleshooting",
-      ],
-      requirements: ["BS in Computer Science", "JavaScript/React"],
-      qualifications: ["3+ years experience"],
-      benefits: ["Health insurance", "401k", "Professional development"],
-      applicationProcess: [
-        "Submit CV",
-        "Coding assessment",
-        "Technical interview",
-        "Final round",
-      ],
-      admissionRequirements: ["Bachelor's degree"],
-      location: "On-Campus",
-      contact: {
-        email: "internship.recruiting@techcorp.com",
-        phone: "(415) - 555 - 0123",
-      },
-    },
-  ]);
-
+  const { data: jobs = [], isLoading, error } = useGetAllJobsQuery();
   const [showPostJobModal, setShowPostJobModal] = useState(false);
   const [viewingJob, setViewingJob] = useState(null);
   const [editingJob, setEditingJob] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSaveJob = (jobData) => {
-    if (editingJob) {
-      setJobs(
-        jobs.map((j) => (j.id === editingJob.id ? { ...jobData, id: j.id } : j))
-      );
-      setEditingJob(null);
-    } else {
-      setJobs([...jobs, { ...jobData, id: Date.now() }]);
-    }
+    // Mutation will be handled later
     setShowPostJobModal(false);
+    setEditingJob(null);
   };
 
   const handleEditJob = (job) => {
@@ -148,9 +26,8 @@ export default function JobsAndInternships() {
   };
 
   const handleDeleteJob = (id) => {
-    setJobs(jobs.filter((j) => j.id !== id));
+    // Mutation will be handled later
   };
-
 
   const filteredJobs = jobs.filter(
     (job) =>
@@ -158,12 +35,15 @@ export default function JobsAndInternships() {
       job.department.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  if (isLoading) return <div className="p-8">Loading jobs...</div>;
+  if (error) return <div className="p-8 text-red-500">Error loading jobs.</div>;
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Jobs & Internships</h1>
         <div className="flex gap-3">
-       
+
           <button
             onClick={() => {
               setEditingJob(null);
