@@ -13,10 +13,10 @@ console.log("program", program)
 
   const defaultFormData = {
     title: "",
-    level: "Bachelor",
+    level: "",
     duration: "",
-    language: "English",
-    status: "Draft",
+    language: "",
+    status: "",
     description: "",
     credits: null,
     curriculum_overview: "",
@@ -30,7 +30,7 @@ console.log("program", program)
     international_tuition: "",
     additional_expenses: [],
     scholarships: [],
-    financial_aid_office: { description: "", email: "", phone: "" },
+    financial_aid: { description: "", email: "", phone: "" },
     image: null,
   };
 
@@ -41,10 +41,10 @@ console.log("program", program)
       setFormData({
         id: program.id,
         title: program.title || "",
-        level: program.level || "Bachelor",
+        level: program.level || "",
         duration: program.duration || "",
-        language: program.language || "English",
-        status: program.status || "Draft",
+        language: program.language || "",
+        status: program.status || "",
         description: program.description || "",
         curriculum_overview: program.curriculum_overview || "",
         requirements: program.requirements || "",
@@ -70,7 +70,7 @@ console.log("program", program)
         international_tuition: program.international_tuition || "",
         additional_expenses: program.additional_expenses || [],
         scholarships: program.scholarships || [],
-        financial_aid_office: program.financial_aid_office || { description: "", email: "", phone: "" },
+        financial_aid: program.financial_aid || { description: "", email: "", phone: "" },
         image: program.image || null,
       });
       setImagePreview(program.image || null);
@@ -280,10 +280,10 @@ console.log("program", program)
         amount: s.amount,
         eligibility: s.eligibility
       })),
-      financial_aid_office: {
-        description: formData.financial_aid_office?.description || "",
-        email: formData.financial_aid_office?.email || "",
-        phone: formData.financial_aid_office?.phone || ""
+      financial_aid: {
+        description: formData.financial_aid?.description || "",
+        email: formData.financial_aid?.email || "",
+        phone: formData.financial_aid?.phone || ""
       }
     };
 
@@ -721,18 +721,18 @@ console.log("program", program)
                 </div>
                 <div className="divide-y divide-gray-100">
                   <div className="grid grid-cols-2 px-4 py-2 bg-gray-50 text-xs font-bold text-gray-500 uppercase">
-                    <div>Expense</div>
-                    <div className="text-right">Cost (Annual)</div>
+                    <div className="text-center">Expense</div>
+                    <div className="text-center">Cost (Annual)</div>
                   </div>
                   {formData.additional_expenses.map((exp, index) => (
                     <div key={index} className="grid grid-cols-2 px-4 py-3 text-sm group relative">
-                      <div className="text-gray-700 font-medium">{exp.expense_name}</div>
-                      <div className="text-right text-gray-900 font-bold">{exp.cost_estimate}</div>
+                      <div className="text-gray-700 text-center font-medium">{exp.expense_name}</div>
+                      <div className="text-center text-gray-900 font-bold">{exp.cost_estimate}</div>
                       <button
                         onClick={() => handleRemoveExpense(index)}
                         className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
                       >
-                        <X size={16} />
+                        <X className="text-red" size={20} />
                       </button>
                     </div>
                   ))}
@@ -833,10 +833,10 @@ console.log("program", program)
                 <div className="space-y-4">
                   <textarea
                     placeholder="General description about financial aid, grants, loans..."
-                    value={formData.financial_aid_office.description}
+                    value={formData.financial_aid?.description}
                     onChange={(e) => setFormData({
                       ...formData,
-                      financial_aid_office: { ...formData.financial_aid_office, description: e.target.value }
+                      financial_aid: { ...formData.financial_aid, description: e.target.value }
                     })}
                     className="w-full px-3 py-2 border border-blue-200 rounded text-sm focus:ring-2 focus:ring-blue focus:outline-none bg-white"
                     rows="3"
@@ -847,10 +847,10 @@ console.log("program", program)
                       <input
                         type="email"
                         placeholder="financialaid@university.edu"
-                        value={formData.financial_aid_office.email}
+                        value={formData.financial_aid?.email}
                         onChange={(e) => setFormData({
                           ...formData,
-                          financial_aid_office: { ...formData.financial_aid_office, email: e.target.value }
+                          financial_aid: { ...formData.financial_aid, email: e.target.value }
                         })}
                         className="w-full px-3 py-2 border border-blue-200 rounded text-sm focus:ring-2 focus:ring-blue focus:outline-none bg-white font-medium"
                       />
@@ -860,10 +860,10 @@ console.log("program", program)
                       <input
                         type="text"
                         placeholder="+1 (123) 456-7890"
-                        value={formData.financial_aid_office.phone}
+                        value={formData.financial_aid.phone}
                         onChange={(e) => setFormData({
                           ...formData,
-                          financial_aid_office: { ...formData.financial_aid_office, phone: e.target.value }
+                          financial_aid: { ...formData.financial_aid, phone: e.target.value }
                         })}
                         className="w-full px-3 py-2 border border-blue-200 rounded text-sm focus:ring-2 focus:ring-blue focus:outline-none bg-white font-medium"
                       />
