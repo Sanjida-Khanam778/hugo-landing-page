@@ -11,11 +11,13 @@ import { toast } from "react-hot-toast";
 
 export default function UniversityProfile() {
   const { data: profileResponse, isLoading: profileLoading } = useGetUniversityProfileQuery();
-  const profile = profileResponse?.data || profileResponse;
+  console.log(profileResponse);
+  const profile = profileResponse;
   const [setupProfile, { isLoading: isUpdating }] = useSetupProfileMutation();
   const [activeModal, setActiveModal] = useState(null);
   const [editorContent, setEditorContent] = useState("");
   const [logo, setLogo] = useState({ preview: null, file: null });
+  const [banner, setBanner] = useState({ preview: null, file: null });
   const [sectionVideo, setSectionVideo] = useState({ preview: null, file: null });
   const [bannerVideo, setBannerVideo] = useState({ preview: null, file: null });
 
@@ -32,6 +34,7 @@ export default function UniversityProfile() {
   });
 
   const logoInputRef = useRef(null);
+  const bannerInputRef = useRef(null);
   const sectionVideoInputRef = useRef(null);
   const bannerVideoInputRef = useRef(null);
   const [rankings, setRankings] = useState([]);
@@ -62,6 +65,7 @@ export default function UniversityProfile() {
       setAccreditations(profile.accreditations || []);
       setEditorContent(profile.what_makes_us_different || "");
       if (profile.logo) setLogo({ preview: profile.logo, file: null });
+      if (profile.picture) setBanner({ preview: profile.picture, file: null });
       if (profile.section_video) setSectionVideo({ preview: profile.section_video, file: null });
       if (profile.banner_video) setBannerVideo({ preview: profile.banner_video, file: null });
     }
@@ -105,6 +109,16 @@ export default function UniversityProfile() {
     }
   };
 
+  const handleBannerUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && (file.type.startsWith("image/") || file.type.startsWith("video/"))) {
+      setBanner({
+        preview: URL.createObjectURL(file),
+        file: file,
+      });
+    }
+  };
+
   const handleSectionVideoUpload = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("video/")) {
@@ -128,6 +142,11 @@ export default function UniversityProfile() {
   const handleRemoveLogo = () => {
     setLogo({ preview: null, file: null });
     if (logoInputRef.current) logoInputRef.current.value = "";
+  };
+
+  const handleRemoveBanner = () => {
+    setBanner({ preview: null, file: null });
+    if (bannerInputRef.current) bannerInputRef.current.value = "";
   };
 
   const handleRemoveSectionVideo = () => {
@@ -180,6 +199,9 @@ export default function UniversityProfile() {
     if (logo.file instanceof File) {
       fd.append("logo", logo.file);
     }
+    if (banner.file instanceof File) {
+      fd.append("picture", banner.file);
+    }
     if (sectionVideo.file instanceof File) {
       fd.append("section_video", sectionVideo.file);
     }
@@ -218,11 +240,13 @@ export default function UniversityProfile() {
       setAccreditations([]);
       setEditorContent("");
       setLogo({ preview: null, file: null });
+      setBanner({ preview: null, file: null });
       setSectionVideo({ preview: null, file: null });
       setBannerVideo({ preview: null, file: null });
 
       // Clear file input values
       if (logoInputRef.current) logoInputRef.current.value = "";
+      if (bannerInputRef.current) bannerInputRef.current.value = "";
       if (sectionVideoInputRef.current) sectionVideoInputRef.current.value = "";
       if (bannerVideoInputRef.current) bannerVideoInputRef.current.value = "";
 
@@ -261,7 +285,7 @@ export default function UniversityProfile() {
         {/* Branding Section */}
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-800 mb-6">Branding</h2>
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Logo Upload */}
             <div>
               {logo.preview ? (
@@ -296,6 +320,43 @@ export default function UniversityProfile() {
                 type="file"
                 accept="image/*"
                 onChange={handleLogoUpload}
+                className="hidden"
+              />
+            </div>
+            {/* Banner Upload */}
+            <div>
+              {banner.preview ? (
+                <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden group">
+                  <img
+                    src={getFullUrl(banner.preview)}
+                    alt="Banner"
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleRemoveBanner}
+                    className="absolute top-2 right-2 bg-red text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              ) : (
+                <div
+                  onClick={() => bannerInputRef.current?.click()}
+                  className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-8 hover:border-blue-500 transition-colors cursor-pointer h-48"
+                >
+                  <Upload size={24} className="text-gray-400 mb-2" />
+                  <span className="text-sm text-gray-600">Upload Banner</span>
+                  <span className="text-xs text-gray-400 mt-1">
+                    Recommended: 400x400px
+                  </span>
+                </div>
+              )}
+              <input
+                ref={bannerInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleBannerUpload}
                 className="hidden"
               />
             </div>

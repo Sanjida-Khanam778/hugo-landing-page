@@ -139,6 +139,20 @@ export const authapi = api.injectEndpoints({
             }),
             invalidatesTags: ["uni_profile"],
         }),
+
+        getAllUniversities: builder.query({
+            query: (params) => {
+                const searchParams = new URLSearchParams();
+                if (params) {
+                    Object.entries(params).forEach(([key, value]) => {
+                        if (value) searchParams.append(key, value);
+                    });
+                }
+                const queryString = searchParams.toString();
+                return `/discovery/universities/${queryString ? `?${queryString}` : ""}`;
+            },
+            providesTags: ["uni_users"],
+        }),
     }),
 });
 
@@ -160,4 +174,5 @@ export const {
     useGetJobByIdQuery,
     useDeleteJobMutation,
     useJobUpdateMutation,
+    useGetAllUniversitiesQuery,
 } = authapi;

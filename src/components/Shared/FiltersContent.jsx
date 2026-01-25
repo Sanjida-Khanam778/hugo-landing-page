@@ -1,10 +1,7 @@
 import { useState } from "react";
 
-export default function FiltersContent() {
-  const [studyType, setStudyType] = useState("all");
-  const [selectedCountry, setSelectedCountry] = useState("all");
-  const [selectedLevel, setSelectedLevel] = useState("all");
-  const [selectedField, setSelectedField] = useState("all");
+export default function FiltersContent({ filters, onFilterChange }) {
+  const { study_type, location, univ_type, field: selectedField } = filters;
   return (
     <div className="bg-[#ECF5FF] text-black p-6 shadow-sm z-[10000]">
       <h3 className="font-bold text-xl mb-4">Filters</h3>
@@ -18,8 +15,8 @@ export default function FiltersContent() {
               type="radio"
               name="type"
               className="mr-2 cursor-pointer"
-              checked={studyType === "all"}
-              onChange={() => setStudyType("all")}
+              checked={study_type === "all"}
+              onChange={() => onFilterChange("study_type", "all")}
             />
             <span className="text-sm cursor-pointer">All Type</span>
           </label>
@@ -28,8 +25,8 @@ export default function FiltersContent() {
               type="radio"
               name="type"
               className="mr-2 cursor-pointer"
-              checked={studyType === "college"}
-              onChange={() => setStudyType("college")}
+              checked={study_type === "college"}
+              onChange={() => onFilterChange("study_type", "college")}
             />
             <span className="text-sm cursor-pointer">College</span>
           </label>
@@ -38,8 +35,8 @@ export default function FiltersContent() {
               type="radio"
               name="type"
               className="mr-2 cursor-pointer"
-              checked={studyType === "master"}
-              onChange={() => setStudyType("master")}
+              checked={study_type === "master"}
+              onChange={() => onFilterChange("study_type", "master")}
             />
             <span className="text-sm cursor-pointer">Master</span>
           </label>
@@ -48,8 +45,8 @@ export default function FiltersContent() {
               type="radio"
               name="type"
               className="mr-2 cursor-pointer"
-              checked={studyType === "degree"}
-              onChange={() => setStudyType("degree")}
+              checked={study_type === "degree"}
+              onChange={() => onFilterChange("study_type", "degree")}
             />
             <span className="text-sm cursor-pointer">Degree</span>
           </label>
@@ -59,8 +56,8 @@ export default function FiltersContent() {
               type="radio"
               name="type"
               className="mr-2 cursor-pointer"
-              checked={studyType === "online courses"}
-              onChange={() => setStudyType("online courses")}
+              checked={study_type === "online courses"}
+              onChange={() => onFilterChange("study_type", "online courses")}
             />
             <span className="text-sm cursor-pointer">Online courses</span>
           </label>
@@ -69,8 +66,8 @@ export default function FiltersContent() {
               type="radio"
               name="type"
               className="mr-2 cursor-pointer"
-              checked={studyType === "professional Formation"}
-              onChange={() => setStudyType("professional Formation")}
+              checked={study_type === "professional Formation"}
+              onChange={() => onFilterChange("study_type", "professional Formation")}
             />
             <span className="text-sm cursor-pointer">Professional Formation</span>
           </label>
@@ -81,368 +78,71 @@ export default function FiltersContent() {
       <div>
         <h4 className="font-semibold mb-3">Programs</h4>
         <div className="space-y-2">
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "bma"}
-              onChange={() => setSelectedField("bma")}
-            />
-            <span className="text-sm cursor-pointer">
-              Business Management and Administration
-            </span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "lss"}
-              onChange={() => setSelectedField("lss")}
-            />
-            <span className="text-sm cursor-pointer">
-              Legal and Social Sciences
-            </span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "healthcare"}
-              onChange={() => setSelectedField("healthcare")}
-            />
-            <span className="text-sm cursor-pointer">Healthcare</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "mathematics"}
-              onChange={() => setSelectedField("mathematics")}
-            />
-            <span className="text-sm cursor-pointer">
-              Natural Sciences and Mathematics
-            </span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "humanities"}
-              onChange={() => setSelectedField("humanities")}
-            />
-            <span className="text-sm cursor-pointer">Humanities and Letters</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "education"}
-              onChange={() => setSelectedField("education")}
-            />
-            <span className="text-sm cursor-pointer">Education</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "technology"}
-              onChange={() => setSelectedField("technology")}
-            />
-            <span className="text-sm cursor-pointer">
-              Technology and Telecommunications
-            </span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "economics"}
-              onChange={() => setSelectedField("economics")}
-            />
-            <span className="text-sm cursor-pointer">Economics and Finance</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "languages"}
-              onChange={() => setSelectedField("languages")}
-            />
-            <span className="text-sm cursor-pointer">Languages</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "marketing"}
-              onChange={() => setSelectedField("marketing")}
-            />
-            <span className="text-sm cursor-pointer">Commerce and Marketing</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "tourism"}
-              onChange={() => setSelectedField("tourism")}
-            />
-            <span className="text-sm cursor-pointer">
-              {" "}
-              Hospitality and Tourism
-            </span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "sports"}
-              onChange={() => setSelectedField("sports")}
-            />
-            <span className="text-sm cursor-pointer">
-              {" "}
-              Sports and Physical Activity
-            </span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "agriculture"}
-              onChange={() => setSelectedField("agriculture")}
-            />
-            <span className="text-sm cursor-pointer">
-              Agriculture, Mining, and Gardening
-            </span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "image"}
-              onChange={() => setSelectedField("image")}
-            />
-            <span className="text-sm cursor-pointer">Image, Film, and Sound</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "arts"}
-              onChange={() => setSelectedField("arts")}
-            />
-            <span className="text-sm cursor-pointer">Fine Arts</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "civil"}
-              onChange={() => setSelectedField("civil")}
-            />
-            <span className="text-sm cursor-pointer">
-              Security and Civil Protection
-            </span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "logistics"}
-              onChange={() => setSelectedField("logistics")}
-            />
-            <span className="text-sm cursor-pointer">
-              Logistics and Transportation
-            </span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "graphic"}
-              onChange={() => setSelectedField("graphic")}
-            />
-            <span className="text-sm cursor-pointer">Graphic Arts</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "textile"}
-              onChange={() => setSelectedField("textile")}
-            />
-            <span className="text-sm cursor-pointer">
-              Fashion and Textile Production
-            </span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "music"}
-              onChange={() => setSelectedField("music")}
-            />
-            <span className="text-sm cursor-pointer">
-              Music, Performing Arts, and Dance
-            </span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="field"
-              className="mr-2 cursor-pointer"
-              checked={selectedField === "animals"}
-              onChange={() => setSelectedField("animals")}
-            />
-            <span className="text-sm cursor-pointer">
-              Veterinary Medicine and Animals
-            </span>
-          </label>
+          {[
+            { id: "bma", label: "Business Management and Administration" },
+            { id: "lss", label: "Legal and Social Sciences" },
+            { id: "healthcare", label: "Healthcare" },
+            { id: "mathematics", label: "Natural Sciences and Mathematics" },
+            { id: "humanities", label: "Humanities and Letters" },
+            { id: "education", label: "Education" },
+            { id: "technology", label: "Technology and Telecommunications" },
+            { id: "economics", label: "Economics and Finance" },
+            { id: "languages", label: "Languages" },
+            { id: "marketing", label: "Commerce and Marketing" },
+            { id: "tourism", label: "Hospitality and Tourism" },
+            { id: "sports", label: "Sports and Physical Activity" },
+            { id: "agriculture", label: "Agriculture, Mining, and Gardening" },
+            { id: "image", label: "Image, Film, and Sound" },
+            { id: "arts", label: "Fine Arts" },
+            { id: "civil", label: "Security and Civil Protection" },
+            { id: "logistics", label: "Logistics and Transportation" },
+            { id: "graphic", label: "Graphic Arts" },
+            { id: "textile", label: "Fashion and Textile Production" },
+            { id: "music", label: "Music, Performing Arts, and Dance" },
+            { id: "animals", label: "Veterinary Medicine and Animals" },
+          ].map((item) => (
+            <label key={item.id} className="flex items-center cursor-pointer select-none">
+              <input
+                type="radio"
+                name="field"
+                className="mr-2 cursor-pointer"
+                checked={selectedField === item.id}
+                onChange={() => onFilterChange("field", item.id)}
+              />
+              <span className="text-sm cursor-pointer">{item.label}</span>
+            </label>
+          ))}
         </div>
       </div>
       {/* Locations Filter */}
       <div className="my-6">
         <h4 className="font-semibold mb-3">Locations</h4>
         <div className="space-y-2">
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="country"
-              className="mr-2 cursor-pointer"
-              checked={selectedCountry === "madrid"}
-              onChange={() => setSelectedCountry("madrid")}
-            />
-            <span className="text-sm cursor-pointer">Comunidad de Madrid</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="country"
-              className="mr-2 cursor-pointer"
-              checked={selectedCountry === "barcelona"}
-              onChange={() => setSelectedCountry("barcelona")}
-            />
-            <span className="text-sm cursor-pointer">Barcelona</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="country"
-              className="mr-2 cursor-pointer"
-              checked={selectedCountry === "valencia"}
-              onChange={() => setSelectedCountry("valencia")}
-            />
-            <span className="text-sm cursor-pointer">Valencia</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="country"
-              className="mr-2 cursor-pointer"
-              checked={selectedCountry === "alicante"}
-              onChange={() => setSelectedCountry("alicante")}
-            />
-            <span className="text-sm cursor-pointer">Alicante</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="country"
-              className="mr-2 cursor-pointer"
-              checked={selectedCountry === "sevilla"}
-              onChange={() => setSelectedCountry("sevilla")}
-            />
-            <span className="text-sm cursor-pointer">Sevilla</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="country"
-              className="mr-2 cursor-pointer"
-              checked={selectedCountry === "salamanca"}
-              onChange={() => setSelectedCountry("salamanca")}
-            />
-            <span className="text-sm cursor-pointer">Salamanca</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="country"
-              className="mr-2 cursor-pointer"
-              checked={selectedCountry === "málaga"}
-              onChange={() => setSelectedCountry("málaga")}
-            />
-            <span className="text-sm cursor-pointer">Málaga</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="country"
-              className="mr-2 cursor-pointer"
-              checked={selectedCountry === "murcia"}
-              onChange={() => setSelectedCountry("murcia")}
-            />
-            <span className="text-sm cursor-pointer">Murcia</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="country"
-              className="mr-2 cursor-pointer"
-              checked={selectedCountry === "cádiz"}
-              onChange={() => setSelectedCountry("cádiz")}
-            />
-            <span className="text-sm cursor-pointer">Cádiz</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="country"
-              className="mr-2 cursor-pointer"
-              checked={selectedCountry === "vizcaya"}
-              onChange={() => setSelectedCountry("vizcaya")}
-            />
-            <span className="text-sm cursor-pointer">Vizcaya</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="country"
-              className="mr-2 cursor-pointer"
-              checked={selectedCountry === "asturias"}
-              onChange={() => setSelectedCountry("asturias")}
-            />
-            <span className="text-sm cursor-pointer">Asturias</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="country"
-              className="mr-2 cursor-pointer"
-              checked={selectedCountry === "zaragoza"}
-              onChange={() => setSelectedCountry("zaragoza")}
-            />
-            <span className="text-sm cursor-pointer">Zaragoza</span>
-          </label>
+          {[
+            { id: "madrid", label: "Comunidad de Madrid" },
+            { id: "barcelona", label: "Barcelona" },
+            { id: "valencia", label: "Valencia" },
+            { id: "alicante", label: "Alicante" },
+            { id: "sevilla", label: "Sevilla" },
+            { id: "salamanca", label: "Salamanca" },
+            { id: "málaga", label: "Málaga" },
+            { id: "murcia", label: "Murcia" },
+            { id: "cádiz", label: "Cádiz" },
+            { id: "vizcaya", label: "Vizcaya" },
+            { id: "asturias", label: "Asturias" },
+            { id: "zaragoza", label: "Zaragoza" },
+          ].map((item) => (
+            <label key={item.id} className="flex items-center cursor-pointer select-none">
+              <input
+                type="radio"
+                name="location"
+                className="mr-2 cursor-pointer"
+                checked={location === item.id}
+                onChange={() => onFilterChange("location", item.id)}
+              />
+              <span className="text-sm cursor-pointer">{item.label}</span>
+            </label>
+          ))}
         </div>
       </div>
       {/* Condition */}
@@ -454,8 +154,8 @@ export default function FiltersContent() {
               type="radio"
               name="level"
               className="mr-2 cursor-pointer"
-              checked={selectedLevel === "public"}
-              onChange={() => setSelectedLevel("public")}
+              checked={univ_type === "public"}
+              onChange={() => onFilterChange("univ_type", "public")}
             />
             <span className="text-sm cursor-pointer">Public</span>
           </label>
@@ -465,8 +165,8 @@ export default function FiltersContent() {
               type="radio"
               name="level"
               className="mr-2 cursor-pointer"
-              checked={selectedLevel === "private"}
-              onChange={() => setSelectedLevel("private")}
+              checked={univ_type === "private"}
+              onChange={() => onFilterChange("univ_type", "private")}
             />
             <span className="text-sm cursor-pointer">Private</span>
           </label>

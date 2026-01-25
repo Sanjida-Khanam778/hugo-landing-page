@@ -1,69 +1,35 @@
-import { useState } from "react";
 import { Star, ChevronDown, X } from "lucide-react";
 import { PiBookOpenBold, PiGlobeSimpleBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import FiltersContent from "../../components/Shared/FiltersContent";
+import { useGetAllUniversitiesQuery } from "../../Api/universityApi";
+import { useState } from "react";
 
 export default function UniversityDirectory() {
-
   const [showFilters, setShowFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filters, setFilters] = useState({
+    univ_type: "all",
+    location: "all",
+    study_type: "all",
+    field: "all",
+  });
 
-  const universities = [
-    {
-      id: 1,
-      name: "Harvard University",
-      location: "Cambridge, USA",
-      programs: 201,
-      rating: 4.9,
-      badges: ["Top Ranked"],
-      image: "https://i.imgur.com/hfqSqa0.jpeg",
-    },
-    {
-      id: 2,
-      name: "Stanford University",
-      location: "Stanford, USA",
-      programs: 231,
-      rating: 4.8,
-      badges: ["Top Rated Average"],
-      image: "https://i.imgur.com/hfqSqa0.jpeg",
-    },
-    {
-      id: 3,
-      name: "Oxford University",
-      location: "Oxford, UK",
-      programs: 180,
-      rating: 4.8,
-      badges: ["Top Rated Average"],
-      image: "https://i.imgur.com/hfqSqa0.jpeg",
-    },
-    {
-      id: 4,
-      name: "MIT",
-      location: "Cambridge, USA",
-      programs: 150,
-      rating: 4.8,
-      badges: ["Top Rated Average"],
-      image: "https://i.imgur.com/hfqSqa0.jpeg",
-    },
-    {
-      id: 5,
-      name: "University of Tokyo",
-      location: "Tokyo, Japan",
-      programs: 90,
-      rating: 4.6,
-      badges: ["Top Rated Average"],
-      image: "https://i.imgur.com/hfqSqa0.jpeg",
-    },
-    {
-      id: 6,
-      name: "ETH Zurich",
-      location: "Zurich, Switzerland",
-      programs: 130,
-      rating: 4.8,
-      badges: ["Top Rated Average"],
-      image: "https://i.imgur.com/hfqSqa0.jpeg",
-    },
-  ];
+  const { data: universitiesData, isLoading } = useGetAllUniversitiesQuery({
+    univ_type: filters.univ_type === "all" ? "" : filters.univ_type,
+    location: filters.location === "all" ? "" : filters.location,
+    study_type: filters.study_type === "all" ? "" : filters.study_type,
+    field: filters.field === "all" ? "" : filters.field,
+    search: searchQuery,
+  });
+
+  console.log(universitiesData);
+
+  const universities = universitiesData || [];
+
+  const handleFilterChange = (name, value) => {
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
 
   // reusable filters markup so we can render it in desktop sidebar and mobile panel
 
@@ -89,6 +55,8 @@ export default function UniversityDirectory() {
           <input
             type="text"
             placeholder="Search universities, locations, or programs..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {/* <div className="ml-4 flex items-center space-x-2">
@@ -118,7 +86,7 @@ export default function UniversityDirectory() {
 
           {/* Desktop sidebar (hidden on small) */}
           <div className="w-68 flex-shrink-0 hidden md:block">
-            <FiltersContent />
+            <FiltersContent filters={filters} onFilterChange={handleFilterChange} />
           </div>
 
           {/* Mobile filter panel (overlay) */}
@@ -135,7 +103,7 @@ export default function UniversityDirectory() {
                     <X />
                   </button>
                 </div>
-                <FiltersContent />
+                <FiltersContent filters={filters} onFilterChange={handleFilterChange} />
               </div>
             </>
           )}
@@ -143,64 +111,72 @@ export default function UniversityDirectory() {
           {/* University Grid */}
           <div className="flex-1 p-4 md:p-7 bg-[#ECF5FF]">
             <div className="mb-4">
-              <p className="text-sm text-gray-600">Showing 6 universities</p>
+              <p className="text-sm text-gray-600">Showing {universities.length} universities</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-              {universities.map((uni) => (
-                <div
-                  key={uni.id}
-                  className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-                >
-                  {/* Image Placeholder */}
-                  <div className="">
-                    <div>
-                      <img
-                        src={uni.image}
-                        className="w-full h-[150px]"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="flex bg-[#374151] items-center gap-4 px-4 py-2">
-                    <div className="w-10 h-10 bg-white rounded-full"></div>
-                    <h3 className="font-semibold text-white">{uni.name}</h3>
-                  </div>
-
-                  {/* Card Content */}
-                  <div className="p-4">
-                    <div className="flex items-center text-sm text-[#374151] mb-2">
-                      <PiGlobeSimpleBold className="mr-1 text-2xl" />
-                      <span>{uni.location}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm mb-3">
-                      <div className="flex items-center text-[#374151]">
-                        <PiBookOpenBold className="mr-1 text-2xl" />
-                        <span>{uni.programs} Programs</span>
+            {isLoading ? (
+              <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                {universities.map((uni) => (
+                  <div
+                    key={uni.id}
+                    className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                  >
+                    {/* Image Placeholder */}
+                    <div className="">
+                      <div>
+                        <img
+                          src={uni?.logo}
+                          className="w-full h-[150px] object-contain p-4"
+                          alt=""
+                        />
                       </div>
-                      <div className="flex items-center text-yellow-500">
-                        <Star size={14} className="mr-1 fill-current" />
-                        <span className="text-gray-900 font-medium">
-                          {uni.rating}
+                    </div>
+                    <div className="flex bg-[#374151] items-center gap-4 px-4 py-2">
+                      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden">
+                        {uni.logo && <img src={uni.logo} alt={uni.univ_name} className="w-full h-full object-contain" />}
+                      </div>
+                      <h3 className="font-semibold text-white truncate">{uni.univ_name}</h3>
+                    </div>
+
+                    {/* Card Content */}
+                    <div className="p-4">
+                      <div className="flex items-center text-sm text-[#374151] mb-2">
+                        <PiGlobeSimpleBold className="mr-1 text-2xl" />
+                        <span>{uni.address || "Location not specified"}</span>
+                      </div>
+
+                      <div className="flex items-center justify-between text-sm mb-3">
+                        <div className="flex items-center text-[#374151]">
+                          <PiBookOpenBold className="mr-1 text-2xl" />
+                          <span>{uni.programs_count} Programs</span>
+                        </div>
+                        <div className="flex items-center text-yellow-500">
+                          <Star size={14} className="mr-1 fill-current" />
+                          <span className="text-gray-900 font-medium">
+                            {uni.average_rating || 0}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs bg-[#BFDBFE] text-[#1E40AF] px-3 py-1 rounded-[4px] capitalize">
+                          {uni.univ_type}
                         </span>
+                        <Link to={`/universities/${uni.id}`}>
+                          <button className="text-[#002B5B] text-sm hover:scale-105 transition-transform font-medium">
+                            View Details
+                          </button>
+                        </Link>
                       </div>
                     </div>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs bg-[#BFDBFE] text-[#1E40AF] px-3 py-1 rounded-[4px]">
-                        {uni.badges[0]}
-                      </span>
-                      <Link to={`/universities/${uni.id}`}>
-                        <button className="text-[#002B5B] text-sm hover:scale-105 transition-transform font-medium">
-                          View Details
-                        </button>
-                      </Link>
-                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
             {/* Load More Button */}
             <div className="mt-8 text-center">

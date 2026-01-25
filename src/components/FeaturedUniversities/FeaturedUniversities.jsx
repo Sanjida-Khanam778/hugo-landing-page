@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import universities from "../../../public/data/universities.json";
 import { Link } from "react-router-dom";
-import logo from "../../assets/icons/uni_logo.png";
+import logo_icon from "../../assets/icons/uni_logo.png";
+import { useGetAllUniversitiesQuery } from "../../Api/universityApi";
+
 export default function FeaturedUniversities() {
+  const { data: universitiesData, isLoading } = useGetAllUniversitiesQuery();
+  const universitiesList = universitiesData || [];
+
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // responsive items per page: mobile=1, tablet=2, laptop+ = 4
@@ -30,24 +34,24 @@ export default function FeaturedUniversities() {
     setCurrentIndex((prev) =>
       Math.min(
         prev,
-        Math.max(0, universities.universities.length - itemsPerPage)
+        Math.max(0, universitiesList.length - itemsPerPage)
       )
     );
-  }, [itemsPerPage]);
+  }, [itemsPerPage, universitiesList.length]);
 
   const handlePrevious = () => {
     setCurrentIndex((prev) =>
-      prev === 0 ? universities.universities.length - itemsPerPage : prev - 1
+      prev === 0 ? Math.max(0, universitiesList.length - itemsPerPage) : prev - 1
     );
   };
 
   const handleNext = () => {
     setCurrentIndex((prev) =>
-      prev === universities.universities.length - itemsPerPage ? 0 : prev + 1
+      prev >= universitiesList.length - itemsPerPage ? 0 : prev + 1
     );
   };
 
-  const visibleUniversities = universities.universities.slice(
+  const visibleUniversities = universitiesList.slice(
     currentIndex,
     currentIndex + itemsPerPage
   );
@@ -90,48 +94,54 @@ export default function FeaturedUniversities() {
 
         {/* University Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {visibleUniversities.map((uni) => (
-            <div
-              key={uni.id}
-              className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
-            >
-              {/* University Image */}
-              <div className="relative w-full h-48 bg-gray-200 overflow-hidden">
-                <img
-                  src={uni.image || "/placeholder.svg"}
-                  alt={uni.name}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-
-              {/* Card Content */}
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <h3 className="text-lg font-semibold text-[#002B5B] mb-1">
-                      {uni.name}
-                    </h3>
-                    <p className="text-sm text-[#374151] mb-3">
-                      {uni.location}
-                    </p>
-                  </div>
-                  <img src={logo} alt="" />
-                </div>
-                {/* Programs and Rating */}
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-[#6B7280]">
-                    {uni.programs} Programs
-                  </span>
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm font-semibold text-gray-900">
-                      {uni.rating}
-                    </span>
-                  </div>
-                </div>
-              </div>
+          {isLoading ? (
+            <div className="col-span-full flex justify-center py-10">
+              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
             </div>
-          ))}
+          ) : (
+            visibleUniversities.map((uni) => (
+              <div
+                key={uni.id}
+                className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+              >
+                {/* University Image */}
+                <div className="relative w-full h-48 bg-gray-200 overflow-hidden">
+                  <img
+                    src={uni.logo || "/placeholder.svg"}
+                    alt={uni.univ_name}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+
+                {/* Card Content */}
+                <div className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg font-semibold text-[#002B5B] mb-1 truncate">
+                        {uni.univ_name}
+                      </h3>
+                      <p className="text-sm text-[#374151] mb-3 truncate">
+                        {uni.address || "Location not specified"}
+                      </p>
+                    </div>
+                    <img src={logo_icon} alt="" className="w-8 h-8 object-contain ml-2 flex-shrink-0" />
+                  </div>
+                  {/* Programs and Rating */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-[#6B7280]">
+                      {uni.programs_count} Programs
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <span className="text-sm font-semibold text-gray-900">
+                        {uni.average_rating || 0}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </section>
