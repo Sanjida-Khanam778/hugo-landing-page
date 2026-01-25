@@ -6,65 +6,59 @@ import {
   Calendar,
   DollarSign,
   Award,
+  BookOpen,
+  Clock,
+  Globe,
+  Monitor
 } from "lucide-react";
-import profile1 from "../../assets/images/profile1.png";
-import profile2 from "../../assets/images/speaker.png";
-export default function ProgramDetailsTab() {
+
+export default function ProgramDetailsTab({ program }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [showApplicationForm, setShowApplicationForm] = useState(false);
 
+  if (!program) return null;
+
+  // Helper to extract strings from nested requirements array
+  const flattenRequirements = (reqs) => {
+    if (!reqs) return [];
+    const result = [];
+    const recurse = (item) => {
+      if (typeof item === 'string') {
+        result.push(...item.split('\n'));
+      } else if (Array.isArray(item)) {
+        item.forEach(recurse);
+      }
+    };
+    recurse(reqs);
+    return result;
+  };
+
+  const requirementsList = flattenRequirements(program.requirements);
+
   return (
-    <div className="min-h-screen bg-base">
+    <div className="min-h-screen bg-base font-inter">
       {/* Navigation Tabs */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="flex gap-8">
-            <button
-              onClick={() => setActiveTab("overview")}
-              className={`py-4 font-medium border-b-2 transition-colors ${
-                activeTab === "overview"
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+          <div className="flex gap-4 sm:gap-8 overflow-x-auto no-scrollbar">
+            {["overview", "admission", "fees", "careers"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`py-4 font-bold border-b-2 transition-all whitespace-nowrap text-sm uppercase tracking-wide ${activeTab === tab
                   ? "border-blue text-blue"
-                  : "border-transparent text-gray hover:text-gray-900"
-              }`}
-            >
-              Overview & Curriculum
-            </button>
-            <button
-              onClick={() => setActiveTab("admission")}
-              className={`py-4 font-medium border-b-2 transition-colors ${
-                activeTab === "admission"
-                  ? "border-blue text-blue"
-                  : "border-transparent text-gray hover:text-gray-900"
-              }`}
-            >
-              Admission
-            </button>
-            <button
-              onClick={() => setActiveTab("fees")}
-              className={`py-4 font-medium border-b-2 transition-colors ${
-                activeTab === "fees"
-                  ? "border-blue text-blue"
-                  : "border-transparent text-gray hover:text-gray-900"
-              }`}
-            >
-              Fees & Scholarships
-            </button>
-            <button
-              onClick={() => setActiveTab("careers")}
-              className={`py-4 font-medium border-b-2 transition-colors ${
-                activeTab === "careers"
-                  ? "border-blue text-blue"
-                  : "border-transparent text-gray hover:text-gray-900"
-              }`}
-            >
-              Careers
-            </button>
+                  : "border-transparent text-gray-500 hover:text-gray-900"
+                  }`}
+              >
+                {tab === "fees" ? "Fees & Scholarships" : tab === "overview" ? "Overview & Curriculum" : tab === "admission" ? "Admission" : "Careers"}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-8 py-8">
+      <div className="py-8 max-w-7xl mx-auto px-4 sm:px-8">
         <div className="grid grid-cols-3 gap-8">
           {/* Left Content */}
           <div className="col-span-2 space-y-6">
@@ -74,99 +68,52 @@ export default function ProgramDetailsTab() {
                 <div className="bg-white rounded-lg p-6 ">
                   <h2 className="text-2xl font-bold mb-4">Program Overview</h2>
                   <p className="text-gray-700 leading-relaxed mb-6">
-                    The Bachelor of Arts in Economics program at Harvard
-                    University provides a comprehensive foundation in economic
-                    theory and its applications. Students will develop
-                    analytical skills and gain insights into microeconomic and
-                    macroeconomic principles, econometric techniques, and
-                    economic history and development. The program prepares
-                    graduates for careers in finance, consulting, public policy,
-                    research, data analytics, and development economics.
+                    {program?.description || "No description available."}
                   </p>
 
                   {/* Learning Outcomes */}
-                  <h3 className="text-lg font-bold mb-4">Learning Outcomes</h3>
-                  <div className="space-y-3 mb-6">
-                    <div className="flex items-start gap-3">
-                      <CheckCircle
-                        size={18}
-                        strokeWidth={3.0}
-                        className="text-[#16A34A] mt-0.5 flex-shrink-0"
-                      />
-                      <span className=" text-gray-700">
-                        Understand and apply macroeconomic and microeconomic
-                        theories
-                      </span>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <CheckCircle
-                        size={18}
-                        strokeWidth={3.0}
-                        className="text-[#16A34A] mt-0.5 flex-shrink-0"
-                      />
-                      <span className=" text-gray-700">
-                        Analyze economic data using statistical and econometric
-                        methods
-                      </span>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <CheckCircle
-                        size={18}
-                        strokeWidth={3.0}
-                        className="text-[#16A34A] mt-0.5 flex-shrink-0"
-                      />
-                      <span className=" text-gray-700">
-                        Evaluate economic policies and their impacts on society
-                      </span>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <CheckCircle
-                        size={18}
-                        strokeWidth={3.0}
-                        className="text-[#16A34A] mt-0.5 flex-shrink-0"
-                      />
-                      <span className=" text-gray-700">
-                        Develop critical thinking and problem-solving skills for
-                        economic issues
-                      </span>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <CheckCircle
-                        size={18}
-                        strokeWidth={3.0}
-                        className="text-[#16A34A] mt-0.5 flex-shrink-0"
-                      />
-                      <span className=" text-gray-700">
-                        Communicate economic concepts effectively in written and
-                        oral forms
-                      </span>
-                    </div>
-                  </div>
+                  {program?.learning_outcomes?.length > 0 && (
+                    <>
+                      <h3 className="text-lg font-bold mb-4">Learning Outcomes</h3>
+                      <div className="space-y-3 mb-6">
+                        {program.learning_outcomes.map((outcome) => (
+                          <div key={outcome.id} className="flex items-start gap-3">
+                            <CheckCircle
+                              size={18}
+                              strokeWidth={3.0}
+                              className="text-[#16A34A] mt-0.5 flex-shrink-0"
+                            />
+                            <span className=" text-gray-700">
+                              {outcome.outcome_text}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
 
                   {/* Key Faculty */}
-                  <h3 className="text-lg font-bold mb-4">Key Faculty</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex items-center gap-3">
-                      <img className="w-16 h-16" src={profile1} alt="" />{" "}
-                      <div>
-                        <p className="font-semibold">Dr. Jane Smith</p>
-                        <p className=" text-gray-600">Professor of Economics</p>
-                        <p className=" text-gray-500 mt-1">
-                          Macroeconomic Theory
-                        </p>
+                  {program?.faculties?.length > 0 && (
+                    <>
+                      <h3 className="text-lg font-bold mb-4">Key Faculty</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        {program.faculties.map((faculty, index) => (
+                          <div key={index} className="flex items-center gap-3">
+                            <div className="bg-blue/10 rounded-full w-16 h-16 flex items-center justify-center text-blue font-bold text-xl uppercase">
+                              {faculty.name?.charAt(0)}
+                            </div>
+                            <div>
+                              <p className="font-semibold">{faculty.name}</p>
+                              <p className=" text-gray-600">{faculty.department}</p>
+                              <p className=" text-gray-500 mt-1">
+                                {faculty.expertise}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <img className="w-16 h-16" src={profile2} alt="" />{" "}
-                      <div>
-                        <p className="font-semibold">Dr. Robert Johnson</p>
-                        <p className=" text-gray-600">Associate Professor</p>
-                        <p className=" text-gray-500 mt-1">
-                          Experimental Economics
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Program Curriculum */}
@@ -175,10 +122,7 @@ export default function ProgramDetailsTab() {
                     Program Curriculum
                   </h2>
                   <p className="text-gray-700 leading-relaxed mb-6">
-                    The curriculum is designed to provide a comprehensive
-                    understanding of economic principles and their applications.
-                    Students will progress through foundational courses to
-                    advanced topics and specialized electives.
+                    {program?.curriculum_overview || "The curriculum is designed to provide a comprehensive understanding of the subjects."}
                   </p>
 
                   <div className="grid grid-cols-2 gap-6">
@@ -188,46 +132,16 @@ export default function ProgramDetailsTab() {
                         First Year
                       </h4>
                       <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            1
+                        {(program?.first_year_courses || "").split(",").map((course, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
+                              {idx + 1}
+                            </div>
+                            <span className=" text-gray-700">
+                              {course.trim()}
+                            </span>
                           </div>
-                          <span className=" text-gray-700">
-                            Principles of Microeconomics
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            2
-                          </div>
-                          <span className=" text-gray-700">
-                            Principles of Macroeconomics
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            3
-                          </div>
-                          <span className=" text-gray-700">
-                            Calculus I & II
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            4
-                          </div>
-                          <span className=" text-gray-700">
-                            Introduction to Statistics
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            5
-                          </div>
-                          <span className=" text-gray-700">
-                            Writing and Communication
-                          </span>
-                        </div>
+                        ))}
                       </div>
                     </div>
 
@@ -237,42 +151,16 @@ export default function ProgramDetailsTab() {
                         Second Year
                       </h4>
                       <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            1
+                        {(program?.second_year_courses || "").split(",").map((course, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
+                              {idx + 1}
+                            </div>
+                            <span className=" text-gray-700">
+                              {course.trim()}
+                            </span>
                           </div>
-                          <span className=" text-gray-700">
-                            Intermediate Microeconomics
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            2
-                          </div>
-                          <span className=" text-gray-700">
-                            Intermediate Macroeconomics
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            3
-                          </div>
-                          <span className=" text-gray-700">Econometrics</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            4
-                          </div>
-                          <span className=" text-gray-700">
-                            Economic History
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            5
-                          </div>
-                          <span className=" text-gray-700">Electives</span>
-                        </div>
+                        ))}
                       </div>
                     </div>
 
@@ -282,46 +170,16 @@ export default function ProgramDetailsTab() {
                         Third Year
                       </h4>
                       <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            1
+                        {(program?.third_year_courses || "").split(",").map((course, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
+                              {idx + 1}
+                            </div>
+                            <span className="text-sm text-gray-700">
+                              {course.trim()}
+                            </span>
                           </div>
-                          <span className=" text-gray-700">
-                            Advanced Microeconomics
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            2
-                          </div>
-                          <span className=" text-gray-700">
-                            Advanced Macroeconomics
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            3
-                          </div>
-                          <span className="text-sm text-gray-700">
-                            Econometrics II
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            4
-                          </div>
-                          <span className="text-sm text-gray-700">
-                            International Economics
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            5
-                          </div>
-                          <span className="text-sm text-gray-700">
-                            Electives
-                          </span>
-                        </div>
+                        ))}
                       </div>
                     </div>
 
@@ -331,46 +189,16 @@ export default function ProgramDetailsTab() {
                         Fourth Year
                       </h4>
                       <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            1
+                        {(program?.fourth_year_courses || "").split(",").map((course, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
+                              {idx + 1}
+                            </div>
+                            <span className="text-sm text-gray-700">
+                              {course.trim()}
+                            </span>
                           </div>
-                          <span className="text-sm text-gray-700">
-                            Senior Seminar
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            2
-                          </div>
-                          <span className="text-sm text-gray-700">
-                            Economic Policy
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            3
-                          </div>
-                          <span className="text-sm text-gray-700">
-                            Development Economics
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            4
-                          </div>
-                          <span className="text-sm text-gray-700">
-                            Behavioral Economics
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-sky flex items-center justify-center text-xs font-medium text-blue rounded-full">
-                            5
-                          </div>
-                          <span className="text-sm text-gray-700">
-                            Capstone Project
-                          </span>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -384,23 +212,23 @@ export default function ProgramDetailsTab() {
                         <p className="text-xs text-gray-500 mb-1">
                           Total Credits
                         </p>
-                        <p className="text-sm font-medium">120 credits</p>
+                        <p className="text-sm font-medium">{program?.credits} credits</p>
                       </div>
                       <div>
                         <p className="text-xs text-gray-500 mb-1">
                           Program Duration
                         </p>
-                        <p className="text-sm font-medium">4 years</p>
+                        <p className="text-sm font-medium">{program?.duration}</p>
                       </div>
                       <div>
                         <p className="text-xs text-gray-500 mb-1">
                           Instruction Language
                         </p>
-                        <p className="text-sm font-medium">English</p>
+                        <p className="text-sm font-medium">{program?.language}</p>
                       </div>
                       <div>
                         <p className="text-xs text-gray-500 mb-1">Modality</p>
-                        <p className="text-sm font-medium">On-campus</p>
+                        <p className="text-sm font-medium">{program?.modality}</p>
                       </div>
                     </div>
                   </div>
@@ -417,189 +245,79 @@ export default function ProgramDetailsTab() {
                   </h2>
 
                   {/* Application Deadlines */}
-                  <div className="bg-[#EFF6FF] border border-[#EFF6FF] rounded-lg p-4 mb-6">
-                    <h3 className="font-semibold text-blue mb-3">
-                      Application Deadlines
-                    </h3>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-sm">
-                        <div className="">
-                          <Calendar
-                            size={16}
-                            strokeWidth={2.75}
-                            className="text-blue"
-                          />
-                        </div>
-                        <span className="text-gray-700">
-                          September 30th - (Early:{" "}
-                          <strong>January 1, 2025</strong>)
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <div className="">
-                          <Calendar
-                            size={16}
-                            strokeWidth={2.75}
-                            className="text-blue"
-                          />
-                        </div>
-                        <span className="text-gray-700">
-                          January 15th - (Regular:{" "}
-                          <strong>October 1, 2025</strong>)
-                        </span>
+                  {program?.deadlines?.length > 0 && (
+                    <div className="bg-[#EFF6FF] border border-[#EFF6FF] rounded-lg p-4 mb-6">
+                      <h3 className="font-semibold text-blue mb-3">
+                        Application Deadlines
+                      </h3>
+                      <div className="space-y-2">
+                        {program.deadlines.map((deadline, index) => (
+                          <div key={index} className="flex items-center gap-2 text-sm">
+                            <div className="">
+                              <Calendar
+                                size={16}
+                                strokeWidth={2.75}
+                                className="text-blue"
+                              />
+                            </div>
+                            <span className="text-gray-700">
+                              {deadline.batch_name} - (Start: <strong>{deadline.start_date}</strong>, End: <strong>{deadline.end_date}</strong>)
+                            </span>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Requirements List */}
-                  <h3 className="font-semibold mb-4">Requirements</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <CheckCircle
-                        strokeWidth={3.0}
-                        size={18}
-                        className="text-green mt-0.5 flex-shrink-0"
-                      />
-                      <span className=" text-gray-700">
-                        High school diploma or equivalent
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle
-                        strokeWidth={3.0}
-                        size={18}
-                        className="text-green mt-0.5 flex-shrink-0"
-                      />
-                      <span className=" text-gray-700">
-                        Completed GPA (typically 3.8 or higher)
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle
-                        strokeWidth={3.0}
-                        size={18}
-                        className="text-green mt-0.5 flex-shrink-0"
-                      />
-                      <span className=" text-gray-700">SAT/ACT scores</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle
-                        strokeWidth={3.0}
-                        size={18}
-                        className="text-green mt-0.5 flex-shrink-0"
-                      />
-                      <span className=" text-gray-700">Personal Statement</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle
-                        strokeWidth={3.0}
-                        size={18}
-                        className="text-green mt-0.5 flex-shrink-0"
-                      />
-                      <span className=" text-gray-700">
-                        Letters of recommendation
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <CheckCircle
-                        strokeWidth={3.0}
-                        size={18}
-                        className="text-green mt-0.5 flex-shrink-0"
-                      />
-                      <span className=" text-gray-700">
-                        Demonstrated interest in economics or related fields
-                      </span>
-                    </div>
-                  </div>
+                  {program?.requirements?.length > 0 && (
+                    <>
+                      <h3 className="font-semibold mb-4">Requirements</h3>
+                      <div className="space-y-3">
+                        {/* Flattening requirements based on the response structure provided */}
+                        {program.requirements.flat(Infinity).map((req, index) => (
+                          <div key={index} className="flex items-start gap-3">
+                            <CheckCircle
+                              strokeWidth={3.0}
+                              size={18}
+                              className="text-green mt-0.5 flex-shrink-0"
+                            />
+                            <span className=" text-gray-700">
+                              {req}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Application Process */}
-                <div className="bg-white rounded-lg">
-                  <h2 className="text-2xl font-bold mb-6">
-                    Application Process
-                  </h2>
+                {program?.steps?.length > 0 && (
+                  <div className="bg-white rounded-lg">
+                    <h2 className="text-2xl font-bold mb-6">
+                      Application Process
+                    </h2>
 
-                  <div className="space-y-4">
-                    {/* Step 1 */}
-                    <div className="flex gap-4">
-                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm">
-                        1
-                      </div>
-                      <div>
-                        <h4 className="font-semibold  mb-1">
-                          Create an Account
-                        </h4>
-                        <p className=" text-gray-600">
-                          Register on the university's application portal.
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Step 2 */}
-                    <div className="flex gap-4">
-                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0  ">
-                        2
-                      </div>
-                      <div>
-                        <h4 className="font-semibold  mb-1">
-                          Complete the Application Form
-                        </h4>
-                        <p className=" text-gray-600">
-                          Fill in your personal details, academic information,
-                          and program preferences.
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Step 3 */}
-                    <div className="flex gap-4">
-                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0 ">
-                        3
-                      </div>
-                      <div>
-                        <h4 className="font-semibold  mb-1">
-                          Upload Required Documents
-                        </h4>
-                        <p className=" text-gray-600">
-                          Submit transcripts, test scores, letters of
-                          recommendation, and personal statement.
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Step 4 */}
-                    <div className="flex gap-4">
-                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0  ">
-                        4
-                      </div>
-                      <div>
-                        <h4 className="font-semibold  mb-1">
-                          Pay Application Fee
-                        </h4>
-                        <p className=" text-gray-600">
-                          Complete payment of the application fee.
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Step 5 */}
-                    <div className="flex gap-4">
-                      <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0  ">
-                        5
-                      </div>
-                      <div>
-                        <h4 className="font-semibold  mb-1">
-                          Interview (if required)
-                        </h4>
-                        <p className=" text-gray-600">
-                          Selected applicants may be invited for an interview.
-                        </p>
-                      </div>
+                    <div className="space-y-4">
+                      {program.steps.map((step) => (
+                        <div key={step.order} className="flex gap-4">
+                          <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm">
+                            {step.order}
+                          </div>
+                          <div>
+                            <h4 className="font-semibold  mb-1">
+                              {step.step_title}
+                            </h4>
+                            <p className=" text-gray-600">
+                              {step.step_description}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-
-         
-                </div>
+                )}
               </div>
             )}
 
@@ -625,7 +343,7 @@ export default function ProgramDetailsTab() {
                             Domestic Students
                           </span>
                         </div>
-                        <p className="text-2xl font-bold">$52,000 per year</p>
+                        <p className="text-2xl font-bold">${program?.domestic_tuition} per year</p>
                       </div>
                       <div className="bg-base rounded-lg p-4">
                         <div className="flex items-center gap-2 mb-2">
@@ -634,7 +352,7 @@ export default function ProgramDetailsTab() {
                             International Students
                           </span>
                         </div>
-                        <p className="text-2xl font-bold">$55,000 per year</p>
+                        <p className="text-2xl font-bold">${program?.international_tuition} per year</p>
                       </div>
                     </div>
 
@@ -644,94 +362,71 @@ export default function ProgramDetailsTab() {
                   </div>
 
                   {/* Additional Expenses */}
-                  <h3 className="text-xl font-bold mb-4">
-                    Additional Expenses (Estimated)
-                  </h3>
+                  {program?.additional_expenses?.length > 0 && (
+                    <>
+                      <h3 className="text-xl font-bold mb-4">
+                        Additional Expenses (Estimated)
+                      </h3>
 
-                  <div className="space-y-3 mb-6 rounded-xl border border-[#CCCCCC]">
-                    <div className="flex justify-between items-center py-3 border-b rounded-t-xl border-[#CCCCCC] bg-base px-6">
-                      <span className="text-gray-700">Expense</span>
-                      <span className="">Cost (Annual)</span>
-                    </div>
-                    <div className="flex justify-between items-center py-3 border-b border-[#CCCCCC] px-6">
-                      <span className=" text-gray-700">Accommodation</span>
-                      <span className="">$16,000 - $18,000</span>
-                    </div>
-                    <div className="flex justify-between items-center py-3 border-b border-[#CCCCCC] px-6">
-                      <span className=" text-gray-700">Books & Supplies</span>
-                      <span className="">$1,000 - $1,500</span>
-                    </div>
-                    <div className="flex justify-between items-center py-3 border-b border-[#CCCCCC] px-6">
-                      <span className=" text-gray-700">Health Insurance</span>
-                      <span className="">$3,000</span>
-                    </div>
-                    <div className="flex justify-between items-center py-3 px-6">
-                      <span className=" text-gray-700">Personal Expenses</span>
-                      <span className="">$2,000 - $3,000</span>
-                    </div>
-                  </div>
+                      <div className="space-y-3 mb-6 rounded-xl border border-[#CCCCCC]">
+                        <div className="flex justify-between items-center py-3 border-b rounded-t-xl border-[#CCCCCC] bg-base px-6">
+                          <span className="text-gray-700">Expense</span>
+                          <span className="">Cost (Annual)</span>
+                        </div>
+                        {program.additional_expenses.map((expense) => (
+                          <div key={expense.id} className="flex justify-between items-center py-3 border-b border-[#CCCCCC] px-6">
+                            <span className=" text-gray-700">{expense.expense_name}</span>
+                            <span className="">{expense.cost_estimate}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
                   {/* Scholarships & Financial Aid */}
                   <div className="bg-white rounded-lg">
                     <h2 className="text-xl font-bold mb-4">
                       Scholarships & Financial Aid
                     </h2>
 
-                    {/* Merit-Based Scholarship */}
-                    <div className="border border-gray-200 rounded-lg p-4 mb-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Award className="text-[#CA8A04]" />
-                        <span className=" font-semibold text-gray-900">
-                          Merit-Based Scholarship
-                        </span>
+                    {/* Scholarships */}
+                    {program?.scholarships?.map((scholarship) => (
+                      <div key={scholarship.id} className="border border-gray-200 rounded-lg p-4 mb-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Award className="text-[#CA8A04]" />
+                          <span className=" font-semibold text-gray-900">
+                            {scholarship.name}
+                          </span>
+                        </div>
+                        <div className="  mb-2">
+                          <span className="font-medium">Amount:</span> {scholarship.amount}
+                        </div>
+                        <div className="">
+                          <span className="font-medium">Eligibility:</span> {scholarship.eligibility}
+                        </div>
                       </div>
-                      <div className="  mb-2">
-                        <span className="font-medium">Amount:</span> Up to
-                        $10,000
-                      </div>
-                      <div className="">
-                        <span className="font-medium">Eligibility:</span> Must
-                        have a GPA of 3.8 or higher
-                      </div>
-                    </div>
-
-                    {/* Need-Based Aid */}
-                    <div className="border border-gray-200 rounded-lg p-4 mb-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Award className="text-[#CA8A04]" />
-                        <span className=" font-semibold text-gray-900">
-                          Need-Based Aid
-                        </span>
-                      </div>
-                      <div className="mb-2">
-                        <span className="font-medium">Amount:</span> $5,000 -
-                        $20,000
-                      </div>
-                      <div className="">
-                        <span className="font-medium">Eligibility:</span> Based
-                        on financial need and academic performance
-                      </div>
-                    </div>
+                    ))}
 
                     {/* Financial Aid Office */}
-                    <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-lg p-4 mt-6">
-                      <h4 className="font-semibold text-[#1E40AF] mb-2">
-                        Financial Aid Office
-                      </h4>
-                      <p className=" text-gray-700 mb-3">
-                        For more information about scholarships, grants, and
-                        loans, please contact our Financial Aid Office.
-                      </p>
-                      <div className="space-y-1">
-                        <p className=" text-gray-700">
-                          <span className="font-medium">Email:</span>{" "}
-                          financialaid@harvard.edu
+                    {program?.financial_aid && (
+                      <div className="bg-[#EFF6FF] border border-[#BFDBFE] rounded-lg p-4 mt-6">
+                        <h4 className="font-semibold text-[#1E40AF] mb-2">
+                          Financial Aid
+                        </h4>
+                        <p className=" text-gray-700 mb-3">
+                          {program.financial_aid.description}
                         </p>
-                        <p className=" text-gray-700">
-                          <span className="font-medium">Phone:</span> +1 (123)
-                          456-7890
-                        </p>
+                        <div className="space-y-1">
+                          <p className=" text-gray-700">
+                            <span className="font-medium">Email:</span>{" "}
+                            {program.financial_aid.email}
+                          </p>
+                          <p className=" text-gray-700">
+                            <span className="font-medium">Phone:</span> {program.financial_aid.phone}
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </>
@@ -911,7 +606,7 @@ export default function ProgramDetailsTab() {
                   <h3 className="text-lg font-medium mb-3">Apply Now</h3>
                   <p className=" text-gray-600 mb-4">
                     Ready to take the next step in your education? Apply now for
-                    the Bachelor of Arts in Economics program.
+                    the {program?.title || "this"} program.
                   </p>
                   <button
                     onClick={() => setShowApplicationForm(true)}
@@ -1017,31 +712,31 @@ export default function ProgramDetailsTab() {
                   <h3 className="text-lg font-medium mb-3">Key Information</h3>
                   <div className="flex justify-between items-center">
                     <p className=" text-gray-500 mb-1">Level</p>
-                    <p className="">Bachelor's</p>
+                    <p className="">{program?.level}</p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-gray-500 mb-1">Duration</p>
-                    <p className="">4 years</p>
+                    <p className="">{program?.duration}</p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-gray-500 mb-1">Credits</p>
-                    <p className="">120</p>
+                    <p className="">{program?.credits}</p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-gray-500 mb-1">Language</p>
-                    <p className="">English</p>
+                    <p className="">{program?.language}</p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-gray-500 mb-1">Modality</p>
-                    <p className="">On-campus</p>
+                    <p className="">{program?.modality}</p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-gray-500 mb-1">Next Start</p>
-                    <p className="">September 2023</p>
+                    <p className="">{program?.next_start_date}</p>
                   </div>
                   <div className="flex justify-between items-center">
-                    <p className="text-gray-500 mb-1">Application Deadline</p>
-                    <p className="">January 1, 2023</p>
+                    <p className="text-gray-500 mb-1">Last Updated</p>
+                    <p className="">{program?.updated_at}</p>
                   </div>
                 </div>
 
@@ -1053,14 +748,18 @@ export default function ProgramDetailsTab() {
                     program.
                   </p>
                   <div className="space-y-2 text-blue">
-                    <div className="flex items-center gap-2 text-blue-600">
-                      <Mail size={14} />
-                      <span className="">admissions@harvard.edu</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-blue-600">
-                      <Phone size={14} />
-                      <span className="">+1 (123) 456-7890</span>
-                    </div>
+                    {program?.financial_aid?.email && (
+                      <div className="flex items-center gap-2 text-blue-600">
+                        <Mail size={14} />
+                        <span className="">{program.financial_aid.email}</span>
+                      </div>
+                    )}
+                    {program?.financial_aid?.phone && (
+                      <div className="flex items-center gap-2 text-blue-600">
+                        <Phone size={14} />
+                        <span className="">{program.financial_aid.phone}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </>

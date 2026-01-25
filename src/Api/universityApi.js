@@ -164,6 +164,14 @@ export const authapi = api.injectEndpoints({
             providesTags: (result, error, id) => [{ type: "UniversityPrograms", id }],
         }),
 
+        getDiscoveryPrograms: builder.query({
+            query: (params) => ({
+                url: "/get-programs/",
+                params: params,
+            }),
+            providesTags: ["DiscoveryPrograms"],
+        }),
+
         getProgramDetails: builder.query({
             query: (id) => `/program/${id}/`,
             providesTags: (result, error, id) => [{ type: "ProgramDetails", id }],
@@ -222,6 +230,7 @@ export const {
     useGetProgramsByUniIdQuery,
     useGetProgramDetailsQuery,
     useGetEventsByUniIdQuery,
+    useGetDiscoveryProgramsQuery,
     useGetJobsByUniIdQuery,
     useGetJobDetailsQuery,
     useGetDashboardStatsQuery,

@@ -17,12 +17,6 @@ export default function UniProgramDetails({ programId, onBack }) {
     const [activeTab, setActiveTab] = useState("overview");
     const [showApplicationForm, setShowApplicationForm] = useState(false);
 
-    const getFullUrl = (path) => {
-        if (!path) return "";
-        if (path.startsWith("http") || path.startsWith("blob:")) return path;
-        return `http://10.10.13.20:8005${path}`;
-    };
-
     if (isLoading) return <div className="p-8 text-center text-gray-500">Loading program details...</div>;
     if (error) return <div className="p-8 text-center text-red-500">Error loading program details.</div>;
     if (!programData) return <div className="p-8 text-center text-gray-500">No program details found.</div>;
