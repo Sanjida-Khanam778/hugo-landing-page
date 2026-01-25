@@ -4,6 +4,7 @@ import { Plus, Upload, X } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 
 export default function EventFormModal({ event, onSave, onClose, isEdit }) {
+  console.log(event);
   const logoInputRef = useRef(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);

@@ -10,9 +10,12 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import Jobs from "./Jobs";
 import UniProgramDetails from "./UniProgramDetails";
 
+import UniEventsDetails from "./UniEventsDetails";
+
 export default function UniversityTab({ data }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedProgramId, setSelectedProgramId] = useState(null);
+  const [selectedEventId, setSelectedEventId] = useState(null);
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -80,7 +83,10 @@ export default function UniversityTab({ data }) {
               Programs
             </button>
             <button
-              onClick={() => setActiveTab("events")}
+              onClick={() => {
+                setActiveTab("events");
+                setSelectedEventId(null);
+              }}
               className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "events"
                 ? "border-blue text-blue"
                 : "border-transparent text-gray-600 hover:text-gray-900"
@@ -120,7 +126,7 @@ export default function UniversityTab({ data }) {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-8 py-8">
+      <div className="w-10/12 mx-auto px-8 py-8">
         <div className="grid grid-cols-3 gap-8">
           {/* Left Content - Tabs */}
           <div className="col-span-2 space-y-6">
@@ -130,7 +136,7 @@ export default function UniversityTab({ data }) {
               <>
                 {selectedProgramId ? (
                   <UniProgramDetails
-                   programId={selectedProgramId}
+                    programId={selectedProgramId}
                     onBack={() => setSelectedProgramId(null)}
                   />
                 ) : (
@@ -142,7 +148,22 @@ export default function UniversityTab({ data }) {
               </>
             )}
 
-            {activeTab === "events" && <Events data={data} />}
+            {activeTab === "events" && (
+              <>
+                {selectedEventId ? (
+                  <UniEventsDetails
+                    eventId={selectedEventId}
+                    univId={data?.id}
+                    onBack={() => setSelectedEventId(null)}
+                  />
+                ) : (
+                  <Events
+                    data={data}
+                    onViewDetails={(id) => setSelectedEventId(id)}
+                  />
+                )}
+              </>
+            )}
 
             {activeTab === "jobs" && <Jobs data={data} />}
 

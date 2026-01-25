@@ -12,11 +12,7 @@ import {
   Users,
   ChevronDown,
   Clock,
-  Check,
-  Clock1,
-  Building,
-  Badge,
-  Award,
+
 } from "lucide-react";
 import background from "../../assets/images/uniBanner.png";
 import backgroundBanner from "../../assets/images/uni_directory.png";

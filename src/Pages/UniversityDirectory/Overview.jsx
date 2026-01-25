@@ -88,7 +88,7 @@ export default function Overview({ data }) {
 
       {/* Rankings Section */}
       {data?.rankings?.length > 0 && (
-        <div className="rounded-lg p-6 bg-white mt-6 shadow-sm">
+        <div className="rounded-lg p-6 mt-6 shadow-sm">
           <h3 className="text-xl font-semibold mb-4">Rankings</h3>
           <div className="space-y-3">
             {data.rankings.map((rank, index) => (

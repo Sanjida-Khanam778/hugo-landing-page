@@ -168,6 +168,21 @@ export const authapi = api.injectEndpoints({
             query: (id) => `/program/${id}/`,
             providesTags: (result, error, id) => [{ type: "ProgramDetails", id }],
         }),
+
+        getEventsByUniId: builder.query({
+            query: (id) => `/get-events/?univ_id=${id}`,
+            providesTags: (result, error, id) => [{ type: "UniversityEvents", id }],
+        }),
+
+        getJobsByUniId: builder.query({
+            query: (id) => `/get-jobs/?univ_id=${id}`,
+            providesTags: (result, error, id) => [{ type: "UniversityJobs", id }],
+        }),
+
+        getJobDetails: builder.query({
+            query: (id) => `/get-jobs/${id}/`,
+            providesTags: (result, error, id) => [{ type: "JobDetails", id }],
+        }),
     }),
 });
 
@@ -193,4 +208,7 @@ export const {
     useGetUniversityOverviewQuery,
     useGetProgramsByUniIdQuery,
     useGetProgramDetailsQuery,
+    useGetEventsByUniIdQuery,
+    useGetJobsByUniIdQuery,
+    useGetJobDetailsQuery,
 } = authapi;

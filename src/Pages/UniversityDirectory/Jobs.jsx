@@ -2,283 +2,115 @@ import { GraduationCap } from "lucide-react";
 import { BiDollarCircle } from "react-icons/bi";
 import { GrLocation } from "react-icons/gr";
 import { MdOutlineWatchLater } from "react-icons/md";
-import uni_logo from "../../assets/icons/uni_logo.png";
+import logoPlaceholder from "../../assets/icons/uni_logo.png";
 import { useState } from "react";
 import JobDetails from "../Jobs/JobDetails";
+import { useGetJobsByUniIdQuery } from "../../Api/universityApi";
 
-const jobs = [
-  {
-    id: 1,
-    title: "Software Engineering Intern",
-    company: "TechCorp Inc.",
-    location: "San Francisco, CA",
-    type: "Internship",
-    salary: "$4,000/month",
-    posted: "Posted 2 days ago",
-    badge: "Internship",
-    badgeColor: "green",
-    description:
-      "Join our dynamic software engineering team to work on cutting-edge projects. Gain hands-on experience with modern technologies and learn from experienced engineers and gain experience in software development.",
-    fullDescription:
-      "Join our dynamic software engineering team to work on cutting-edge projects. Gain hands-on experience with modern technologies and learn from experienced engineers. This internship will provide practical experience in software development that can complement your academic studies and prepare you for a successful career in the field of software engineering.",
-    requirements: [
-      "Currently pursuing a Bachelor's or Master's degree in Computer Science or related field",
-      "Strong programming skills in at least one language (e.g., Python, Java, C++)",
-      "Excellent problem-solving and analytical skills",
-      "Ability to work in a team environment",
-    ],
-    responsibilities: [
-      "Collaborate with senior engineers on real-world projects",
-      "Write clean, efficient, and maintainable code",
-      "Participate in code reviews and team meetings",
-      "Document code and processes according to company standards",
-      "Present project update in biweekly meetings",
-    ],
-    qualifications: [
-      "Familiarity with version control systems (Git)",
-      "Understanding of data structures and algorithms",
-      "Personal internship or project experience",
-      "Knowledge with cloud platforms (AWS, Azure, GCP)",
-      "Strong communication skills",
-      "Open-source contributions",
-    ],
-    benefits: [
-      "Competitive salary",
-      "Health insurance (medical, dental)",
-      "Flexible working environment",
-      "Professional development",
-      "Free meals and coffee lounge",
-    ],
-    applicationProcess: [
-      { step: "Submit Resume via online portal", icon: "file" },
-      { step: "Complete coding assessment", icon: "code" },
-      { step: "Participate in technical interview", icon: "phone" },
-      { step: "Final interview with hiring manager", icon: "users" },
-    ],
-    contact: {
-      email: "internship.recruiting@techcorp.com",
-      phone: "(415) - 555 - 0123",
-    },
-    details: {
-      category: "Technology",
-      experience: "Entry Level",
-      openings: "5 Positions",
-      deadline: "July 1, 2026",
-      duration: "3 months",
-    },
-  },
-  {
-    id: 2,
-    title: "Marketing Assistant",
-    company: "Brand Boost Agency",
-    location: "New York, NY",
-    type: "Part-time",
-    salary: "$25/hour",
-    posted: "Posted 5 days ago",
-    badge: "Part-time",
-    badgeColor: "blue",
-    description:
-      "Support the marketing team in campaign management, social media management, and email marketing campaigns and assist in content creation.",
-    fullDescription:
-      "Support the marketing team in campaign management, social media management, and email marketing campaigns.",
-    details: {
-      category: "Technology",
-      experience: "Entry Level",
-      openings: "5 Positions",
-      deadline: "July 1, 2026",
-      duration: "3 months",
-    },
-  },
-  {
-    id: 3,
-    title: "Research Assistant - AI Lab",
-    company: "University Research Center",
-    location: "Cambridge, MA",
-    type: "Full-time",
-    salary: "$50,000 - $60,000/year",
-    posted: "Posted 1 week ago",
-    badge: "Research",
-    badgeColor: "yellow",
-    description:
-      "Assist with cutting-edge research in artificial intelligence and machine learning. Contribute to experimental, data collection, and publication preparation.",
-    fullDescription:
-      "Assist with cutting-edge research in artificial intelligence and machine learning.",
-    details: {
-      category: "Technology",
-      experience: "Entry Level",
-      openings: "5 Positions",
-      deadline: "July 1, 2026",
-      duration: "3 months",
-    },
-  },
-  {
-    id: 4,
-    title: "UI/UX Designer Intern",
-    company: "Creative Studio Co.",
-    location: "Los Angeles, CA",
-    type: "Internship",
-    salary: "$3,500/month",
-    posted: "Posted 3 days ago",
-    badge: "Hybrid",
-    badgeColor: "purple",
-    description:
-      "Join our dynamic design team to support development, specifically product design research and product feature design.",
-    fullDescription:
-      "Join our dynamic design team to support development, specifically product design research and product feature design.",
-    details: {
-      category: "Technology",
-      experience: "Entry Level",
-      openings: "5 Positions",
-      deadline: "July 1, 2026",
-      duration: "3 months",
-    },
-  },
-  {
-    id: 5,
-    title: "Teaching Assistant - Physics Department",
-    company: "State University",
-    location: "Austin, TX",
-    type: "Part-time",
-    salary: "$20/hour",
-    posted: "Posted 4 days ago",
-    badge: "On-site",
-    badgeColor: "blue",
-    description:
-      "Assist professors in conducting theory labs, grading assignments, and supporting students in understanding advanced physics concepts.",
-    fullDescription:
-      "Assist professors in conducting theory labs, grading assignments, and supporting students in understanding advanced physics concepts.",
-    details: {
-      category: "Technology",
-      experience: "Entry Level",
-      openings: "5 Positions",
-      deadline: "July 1, 2026",
-      duration: "3 months",
-    },
-  },
-  {
-    id: 6,
-    title: "Business Development Associate (Remote)",
-    company: "Global Ventures Inc.",
-    location: "Remote",
-    type: "Full-time",
-    salary: "$60,000 - $75,000/year",
-    posted: "Posted 6 days ago",
-    badge: "Remote",
-    badgeColor: "green",
-    description:
-      "Identify and pursue new business opportunities, negotiate deals, prospective accounts, lead deal research and tracking opportunities.",
-    fullDescription:
-      "Identify and pursue new business opportunities, negotiate deals, prospective accounts.",
-    details: {
-      category: "Technology",
-      experience: "Entry Level",
-      openings: "5 Positions",
-      deadline: "July 1, 2026",
-      duration: "3 months",
-    },
-  },
-];
-
-export default function Jobs() {
+export default function Jobs({ data: universityData }) {
+  const { data: jobsData, isLoading, error } = useGetJobsByUniIdQuery(universityData?.id);
   const [view, setView] = useState("list");
-  const [selectedJob, setSelectedJob] = useState(null);
+  const [selectedJobId, setSelectedJobId] = useState(null);
 
-  const onViewDetails = (job) => {
-    setSelectedJob(job);
+  const onViewDetails = (jobId) => {
+    setSelectedJobId(jobId);
     setView("detail");
   };
 
   const handleBackToList = () => {
     setView("list");
-    setSelectedJob(null);
+    setSelectedJobId(null);
   };
-  const getBadgeColor = (color) => {
-    const colors = {
-      green: "bg-[#DCFCE7] text-[#16A34A]",
-      blue: "bg-[#BFDBFE] text-[#1E40AF]",
-      yellow: "bg-[#FEF9C3] text-[#854D0E]",
-      red: "bg-red-100 text-red-800",
-      purple: "bg-[#F3E8FF] text-[#6B21A8]",
+
+  const getBadgeColor = (type) => {
+    const types = {
+      "Full Time": "bg-[#DCFCE7] text-[#16A34A]",
+      "Part Time": "bg-[#BFDBFE] text-[#1E40AF]",
+      "Internship": "bg-[#FEF9C3] text-[#854D0E]",
+      "Remote": "bg-[#F3E8FF] text-[#6B21A8]",
     };
-    return colors[color] || "bg-[#F3F4F6] text-[#111827]";
+    return types[type] || "bg-[#F3F4F6] text-[#111827]";
   };
-    if (view === "detail" && selectedJob) {
-      return (
-        <JobDetails
-          job={selectedJob}
-          onBackClick={handleBackToList}
-          getBadgeColor={getBadgeColor}
-          uni_logo={uni_logo}
-        />
-      );
-    }
+
+  if (isLoading) return <div className="p-8 text-center text-gray-500">Loading jobs...</div>;
+  if (error) return <div className="p-8 text-center text-red-500">Error loading jobs.</div>;
+  if (!jobsData || jobsData.length === 0) return <div className="p-8 text-center text-gray-500">No jobs found for this university.</div>;
+
+  if (view === "detail" && selectedJobId) {
+    return (
+      <JobDetails
+        jobId={selectedJobId}
+        onBackClick={handleBackToList}
+        universityName={universityData?.title}
+      />
+    );
+  }
+
   return (
     <div className="flex-1">
       <div className="mb-4 flex justify-between items-center">
-        <p className=" text-gray-600">Showing {jobs.length} jobs</p>
+        <p className=" text-gray-600">Showing {jobsData.length} jobs</p>
       </div>
 
       <div className="space-y-4">
-        {jobs.map((job) => (
+        {jobsData.map((job) => (
           <div
             key={job.id}
             className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
           >
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-start gap-3">
-                <div className="w-12 h-12 rounded-lg flex-shrink-0">
-                  <img src={uni_logo} alt="" />
+                <div className="w-12 h-12 rounded-lg flex-shrink-0 overflow-hidden">
+                  <img src={job.univ_logo || logoPlaceholder} alt="" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="text-lg font-semibold">{job.title}</h3>
                   </div>
-                  <p className=" text-gray-600 flex gap-2">
-                    <GraduationCap strokeWidth={3.0} />
-                    {job.company}
+                  <p className=" text-gray-600 flex items-center gap-2">
+                    <GraduationCap strokeWidth={3.0} size={18} />
+                    {job.company_name}
                   </p>
                 </div>
               </div>
               <span
-                className={` px-3 py-1 rounded-md ${getBadgeColor(
-                  job.badgeColor
-                )}`}
+                className={` px-3 py-1 rounded-md ${getBadgeColor(job.job_type)}`}
               >
-                {job.badge}
+                {job.job_type}
               </span>
             </div>
 
-            <div className="flex items-center gap-4  text-gray-600 mb-3">
-              <span className="flex items-center">
+            <div className="flex items-center gap-4 text-gray-600 mb-3">
+              <span className="flex items-center text-sm">
                 <GrLocation className="mr-1 text-dark text-lg" />
                 {job.location}
               </span>
-              <span className="flex items-center">
+              <span className="flex items-center text-sm">
                 <MdOutlineWatchLater className="mr-1 text-dark text-lg" />
-                {job.details.duration}
+                Until {job.deadline}
               </span>
-              <span className="flex items-center">
+              <span className="flex items-center text-sm">
                 <BiDollarCircle className="mr-1 text-dark text-lg" />
                 {job.salary}
               </span>
             </div>
 
-            <p className=" text-gray-700 mb-4">{job.description}</p>
+            <p className=" text-gray-700 mb-4 line-clamp-2">{job.description}</p>
 
             <div className="flex items-center justify-between">
               <div className="space-x-4">
-                <span className="bg-base p-2 rounded-lg">
-                  {job.details.category}
+                <span className="bg-base p-2 rounded-lg text-sm text-gray-700">
+                  {job.category}
                 </span>
-                <span className=" text-gray-500">{job.posted}</span>
+                <span className=" text-gray-500 text-sm">Posted on {job.posted_date}</span>
               </div>
-              <div>
-                <span className=" text-gray-500 mr-4">
-                  Apply by: Jul 30, 2026
+              <div className="flex items-center gap-4">
+                <span className=" text-gray-500 text-sm">
+                  Apply by: {job.deadline}
                 </span>
                 <button
-                  onClick={() => onViewDetails(job)}
-                  className="bg-blue text-white px-4 py-2 rounded  transition-colors"
+                  onClick={() => onViewDetails(job.id)}
+                  className="bg-blue text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
                 >
                   View Details
                 </button>
