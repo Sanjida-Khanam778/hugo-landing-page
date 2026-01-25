@@ -8,7 +8,8 @@ import Gallery from "./Gallery";
 import Overview from "./Overview";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import Jobs from "./Jobs";
-export default function UniversityTab() {
+
+export default function UniversityTab({ data }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -38,12 +39,8 @@ export default function UniversityTab() {
     });
   };
 
-  // Campus locations data and helper to open Google Maps
-  const campuses = [
-    { id: 1, name: "1. ABC Campus", address: "Aqua tower, mohakhali, dhaka" },
-    { id: 2, name: "2. ABC Campus", address: "Road 01, Def street, City" },
-    { id: 3, name: "3. ABC Campus", address: "Road 02, Ghi avenue, City" },
-  ];
+  // Campus locations data from API
+  const campuses = data?.locations || [];
 
   function openMap(address) {
     if (!address) return;
@@ -61,61 +58,55 @@ export default function UniversityTab() {
           <div className="flex gap-8">
             <button
               onClick={() => setActiveTab("overview")}
-              className={`py-4 font-medium border-b-2 transition-colors ${
-                activeTab === "overview"
+              className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "overview"
                   ? "border-blue text-blue"
                   : "border-transparent text-gray-600 hover:text-gray-900"
-              }`}
+                }`}
             >
               Overview
             </button>
             <button
               onClick={() => setActiveTab("programs")}
-              className={`py-4 font-medium border-b-2 transition-colors ${
-                activeTab === "programs"
+              className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "programs"
                   ? "border-blue text-blue"
                   : "border-transparent text-gray-600 hover:text-gray-900"
-              }`}
+                }`}
             >
               Programs
             </button>
             <button
               onClick={() => setActiveTab("events")}
-              className={`py-4 font-medium border-b-2 transition-colors ${
-                activeTab === "events"
+              className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "events"
                   ? "border-blue text-blue"
                   : "border-transparent text-gray-600 hover:text-gray-900"
-              }`}
+                }`}
             >
               Events
             </button>
             <button
               onClick={() => setActiveTab("jobs")}
-              className={`py-4 font-medium border-b-2 transition-colors ${
-                activeTab === "jobs"
+              className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "jobs"
                   ? "border-blue text-blue"
                   : "border-transparent text-gray-600 hover:text-gray-900"
-              }`}
+                }`}
             >
               Jobs
             </button>
             <button
               onClick={() => setActiveTab("testimonials")}
-              className={`py-4 font-medium border-b-2 transition-colors ${
-                activeTab === "testimonials"
+              className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "testimonials"
                   ? "border-blue text-blue"
                   : "border-transparent text-gray-600 hover:text-gray-900"
-              }`}
+                }`}
             >
               Testimonials
             </button>
             <button
               onClick={() => setActiveTab("gallery")}
-              className={`py-4 font-medium border-b-2 transition-colors ${
-                activeTab === "gallery"
+              className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "gallery"
                   ? "border-blue text-blue"
                   : "border-transparent text-gray-600 hover:text-gray-900"
-              }`}
+                }`}
             >
               Student Life
             </button>
@@ -126,19 +117,19 @@ export default function UniversityTab() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-8 py-8">
         <div className="grid grid-cols-3 gap-8">
-          {/* Left Content - Overview Tab */}
+          {/* Left Content - Tabs */}
           <div className="col-span-2 space-y-6">
-            {activeTab === "overview" && <Overview />}
+            {activeTab === "overview" && <Overview data={data} />}
 
-            {activeTab === "programs" && <Program />}
+            {activeTab === "programs" && <Program data={data} />}
 
-            {activeTab === "events" && <Events />}
+            {activeTab === "events" && <Events data={data} />}
 
-            {activeTab === "jobs" && <Jobs />}
+            {activeTab === "jobs" && <Jobs data={data} />}
 
-            {activeTab === "testimonials" && <TestimonialTab />}
+            {activeTab === "testimonials" && <TestimonialTab data={data} />}
 
-            {activeTab === "gallery" && <Gallery />}
+            {activeTab === "gallery" && <Gallery data={data} />}
           </div>
 
           {/* Right Sidebar - Request Information (Stable) */}
@@ -148,7 +139,7 @@ export default function UniversityTab() {
                 {" "}
                 <h3 className="text-lg font-bold mb-3">Request Information</h3>
                 <p className="text-sm text-gray-600 mb-4">
-                  Interested in learning more about Harvard University? Fill out
+                  Interested in learning more about {data?.univ_name || "the university"}? Fill out
                   the form and a university representative will contact you!
                 </p>
                 <button
@@ -168,10 +159,10 @@ export default function UniversityTab() {
                 }}
               >
                 <div className="space-y-8">
-                  {campuses.map((c) => (
+                  {campuses.map((c, index) => (
                     <div
-                      key={c.id}
-                      className="flex items-start gap-3 cursor-pointer hover:bg-gray-50 rounded-md p-2"
+                      key={c.id || index}
+                      className="flex items-start gap-3 cursor-pointer hover:bg-white/10 rounded-md p-2"
                       role="button"
                       tabIndex={0}
                       onClick={() => openMap(c.address)}
@@ -179,13 +170,13 @@ export default function UniversityTab() {
                         if (e.key === "Enter" || e.key === " ")
                           openMap(c.address);
                       }}
-                      aria-label={`Open ${c.name} in Google Maps`}
+                      aria-label={`Open ${c.location_name} in Google Maps`}
                     >
-                      <div className=" bg-[#002B5B]/10 rounded-full w-12 h-12 flex items-center justify-center">
-                        <FaMapMarkerAlt className="text-primary text-xl mt-1 flex-shrink-0" />
+                      <div className=" bg-blue/10 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">
+                        <FaMapMarkerAlt className="text-blue text-xl mt-1 flex-shrink-0" />
                       </div>
                       <div>
-                        <p className="font-medium ">{c.name}</p>
+                        <p className="font-medium ">{c.location_name}</p>
                         <p className=" text-gray-600">{c.address}</p>
                       </div>
                     </div>

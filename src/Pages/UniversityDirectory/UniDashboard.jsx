@@ -2,11 +2,27 @@ import React from "react";
 import UniBanner from "./UniBanner";
 import { Award, Building, Calendar, Users } from "lucide-react";
 import UniversityTab from "./Universitytab";
+import { useParams } from "react-router-dom";
+import { useGetUniversityOverviewQuery } from "../../Api/universityApi";
 
 export default function UniDashboard() {
+  const { id } = useParams();
+  const { data: uniData, isLoading, error } = useGetUniversityOverviewQuery(id);
+
+  if (isLoading)
+    return (
+      <div className="h-screen flex items-center justify-center">Loading...</div>
+    );
+  if (error)
+    return (
+      <div className="h-screen flex items-center justify-center">
+        Error loading university data
+      </div>
+    );
+
   return (
     <div className="bg-base">
-      <UniBanner />
+      <UniBanner data={uniData} />
       {/* Tabs */}
       <div className="bg-white rounded-t-3xl relative -top-6 p-6 shadow-lg">
         <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,33 +32,33 @@ export default function UniDashboard() {
                 <Calendar size={22} className="text-blue" />
                 <p className="text-dark font-medium text-lg">Founded</p>
               </div>
-              <p className=" text-[#374151]">1636</p>
+              <p className=" text-[#374151]">{uniData?.year_founded || "N/A"}</p>
             </div>
             <div className="grid place-items-center gap-2">
               <div className="flex items-center gap-3">
                 <Building size={22} className="text-blue" />
                 <p className="text-dark font-medium text-lg">Campuses</p>
               </div>
-              <p className=" text-[#374151]">3</p>
+              <p className=" text-[#374151]">{uniData?.total_campuses || "0"}</p>
             </div>
             <div className="grid place-items-center gap-2">
               <div className="flex items-center gap-3">
                 <Users size={22} className="text-blue" />
                 <p className="text-dark font-medium text-lg">Students</p>
               </div>
-              <p className=" text-[#374151]">23,000</p>
+              <p className=" text-[#374151]">{uniData?.total_students || "0"}</p>
             </div>
             <div className="grid place-items-center gap-2">
               <div className="flex items-center gap-3">
                 <Award size={22} className="text-blue" />
                 <p className="text-dark font-medium text-lg">Faculty</p>
               </div>
-              <p className=" text-[#374151]">2,400</p>
+              <p className=" text-[#374151]">{uniData?.total_faculty || "0"}</p>
             </div>
           </div>
         </div>
       </div>
-      <UniversityTab />
+      <UniversityTab data={uniData} />
     </div>
   );
 }

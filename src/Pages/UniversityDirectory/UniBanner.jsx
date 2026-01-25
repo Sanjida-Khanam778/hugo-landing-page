@@ -1,42 +1,55 @@
 import React, { useState } from "react";
-import banner from "../../assets/video/uni_banner.mp4";
+import bannerVideo from "../../assets/video/uni_banner.mp4";
 import { MapPin } from "lucide-react";
-import uni_logo from "../../assets/icons/harvard.png";
+import defaultLogo from "../../assets/icons/harvard.png";
 import ApplyModal from "../../components/ApplyModal/ApplyModal";
 import { Link } from "react-router-dom";
 
-export default function UniBannerWrapper() {
+export default function UniBannerWrapper({ data }) {
   const [showApply, setShowApply] = useState(false);
 
   return (
     <>
-      <UniBannerInner setShowApply={setShowApply} />
+      <UniBannerInner setShowApply={setShowApply} data={data} />
       <ApplyModal
         open={showApply}
         onClose={() => setShowApply(false)}
-        uniName="Harvard University"
+        uniName={data?.univ_name || "University"}
       />
     </>
   );
 }
 
 // Split the component so we can use stateful wrapper while preserving original structure
-function UniBannerInner({ setShowApply }) {
+function UniBannerInner({ setShowApply, data }) {
+  const location = data?.locations?.[0];
+  const locationString = location
+    ? `${location.location_name}, ${location.address}`
+    : "Location not available";
+
   return (
     <div>
       <div className="relative overflow-hidden h-[50vh]">
-        {/* Video Background Container */}
+        {/* Background Container */}
         <div className="absolute inset-0 w-full h-full">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-cover"
-          >
-            <source src={banner} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+          {data?.picture ? (
+            <img
+              src={data.picture}
+              className="w-full h-full object-cover"
+              alt={data.univ_name}
+            />
+          ) : (
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full h-full object-cover"
+            >
+              <source src={bannerVideo} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          )}
           {/* Dark Overlay */}
           <div className="absolute inset-0 bg-black/10"></div>
         </div>
@@ -45,19 +58,23 @@ function UniBannerInner({ setShowApply }) {
       <div className="w-full flex border-opacity-40 bg-primary text-white font-medium lg:p-6 lg:pb-10 transition-colors backdrop-blur-md">
         <div className="flex w-11/12 mx-auto">
           <div className="flex">
-            <div className="w-28">
-              <img src={uni_logo} className="h-full w-full" alt="" />
+            <div className="w-28 h-28 p-2 bg-white rounded-lg mr-4 self-center">
+              <img
+                src={data?.logo || defaultLogo}
+                className="h-full w-full object-contain"
+                alt={data?.univ_name}
+              />
             </div>
             {/* Heading */}
-            <div>
+            <div className="self-center">
               <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight text-balance">
-                Harvard University
+                {data?.univ_name || "University Name"}
               </h1>
 
               {/* Subtitle */}
               <p className="sm:text-lg">
                 <MapPin className="inline mb-1 mr-2" />
-                Cambridge, Massachusetts, USA
+                {locationString}
               </p>
             </div>
           </div>

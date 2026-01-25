@@ -153,6 +153,11 @@ export const authapi = api.injectEndpoints({
             },
             providesTags: ["uni_users"],
         }),
+
+        getUniversityOverview: builder.query({
+            query: (id) => `/university/overview/${id}/`,
+            providesTags: (result, error, id) => [{ type: "University", id }],
+        }),
     }),
 });
 
@@ -175,4 +180,5 @@ export const {
     useDeleteJobMutation,
     useJobUpdateMutation,
     useGetAllUniversitiesQuery,
+    useGetUniversityOverviewQuery,
 } = authapi;
