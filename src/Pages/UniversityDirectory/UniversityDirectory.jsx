@@ -1,6 +1,6 @@
 import { Star, ChevronDown, X } from "lucide-react";
 import { PiBookOpenBold, PiGlobeSimpleBold } from "react-icons/pi";
-import { Link } from "react-router-dom";
+import { Link, ScrollRestoration } from "react-router-dom";
 import FiltersContent from "../../components/Shared/FiltersContent";
 import { useGetAllUniversitiesQuery } from "../../Api/universityApi";
 import { useState } from "react";
@@ -31,11 +31,15 @@ export default function UniversityDirectory() {
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  // reusable filters markup so we can render it in desktop sidebar and mobile panel
-
+  const getFullUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:")) return path;
+    return `http://10.10.13.20:8005${path}`;
+  };
 
   return (
     <div className="min-h-screen bg-[#F2F2F2] font-inter">
+      <ScrollRestoration />
       {/* Header Section */}
       <div className="text-white flex items-center justify-center relative overflow-hidden bg-primary h-[50vh]">
         <div className="w-11/12 mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
@@ -129,15 +133,17 @@ export default function UniversityDirectory() {
                     <div className="">
                       <div>
                         <img
-                          src={uni?.logo}
-                          className="w-full h-[150px] object-contain p-4"
+                          src={getFullUrl(uni?.picture)}
+
+                          className="w-fit object-contain"
                           alt=""
                         />
                       </div>
                     </div>
                     <div className="flex bg-[#374151] items-center gap-4 px-4 py-2">
                       <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden">
-                        {uni.logo && <img src={uni.logo} alt={uni.univ_name} className="w-full h-full object-contain" />}
+                        {uni.logo && <img src={getFullUrl(uni?.logo)}
+                          alt={uni.univ_name} className="w-full h-full object-contain" />}
                       </div>
                       <h3 className="font-semibold text-white truncate">{uni.univ_name}</h3>
                     </div>

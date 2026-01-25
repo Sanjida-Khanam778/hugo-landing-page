@@ -7,8 +7,9 @@ import { useGetAllUniversitiesQuery } from "../../Api/universityApi";
 export default function FeaturedUniversities() {
   const { data: universitiesData, isLoading } = useGetAllUniversitiesQuery();
   const universitiesList = universitiesData || [];
-
+  console.log(universitiesList);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [logo, setLogo] = useState({ preview: null, file: null });
 
   // responsive items per page: mobile=1, tablet=2, laptop+ = 4
   const getItemsPerPage = () => {
@@ -20,6 +21,11 @@ export default function FeaturedUniversities() {
   };
 
   const [itemsPerPage, setItemsPerPage] = useState(() => getItemsPerPage());
+  const getFullUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:")) return path;
+    return `http://10.10.13.20:8005${path}`;
+  };
 
   useEffect(() => {
     const update = () => setItemsPerPage(getItemsPerPage());
@@ -107,7 +113,8 @@ export default function FeaturedUniversities() {
                 {/* University Image */}
                 <div className="relative w-full h-48 bg-gray-200 overflow-hidden">
                   <img
-                    src={uni.logo || "/placeholder.svg"}
+                    src={getFullUrl(uni?.picture)}
+
                     alt={uni.univ_name}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   />
@@ -124,7 +131,8 @@ export default function FeaturedUniversities() {
                         {uni.address || "Location not specified"}
                       </p>
                     </div>
-                    <img src={logo_icon} alt="" className="w-8 h-8 object-contain ml-2 flex-shrink-0" />
+                    <img src={getFullUrl(uni.logo)}
+                      alt="" className="w-10 h-10 rounded-full object-contain ml-2 flex-shrink-0" />
                   </div>
                   {/* Programs and Rating */}
                   <div className="flex items-center justify-between">
