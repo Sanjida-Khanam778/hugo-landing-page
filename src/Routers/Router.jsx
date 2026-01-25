@@ -40,6 +40,7 @@ import AllUniversityPrograms from "../Pages/Programs/AllUniversityPrograms";
 import ForgetPass from "../Pages/Auth/ForgetPass";
 import VerifyOTP from "../Pages/Auth/VerifyOTP";
 import ResetPass from "../Pages/Auth/ResetPass";
+import UniProgramDetails from "../Pages/UniversityDirectory/UniProgramDetails";
 
 export const router = createBrowserRouter([
   {
@@ -67,6 +68,7 @@ export const router = createBrowserRouter([
             path: "programs",
             element: <Program />,
           },
+        
           {
             path: "events",
             element: <Events />,
@@ -82,7 +84,7 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: "/program-details",
+        path: "/program-details/:id",
         element: <ProgramDetails />,
       },
       {

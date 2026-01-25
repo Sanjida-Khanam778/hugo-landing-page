@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 export default function UniBannerWrapper({ data }) {
   const [showApply, setShowApply] = useState(false);
-
+ 
   return (
     <>
       <UniBannerInner setShowApply={setShowApply} data={data} />
@@ -26,19 +26,17 @@ function UniBannerInner({ setShowApply, data }) {
   const locationString = location
     ? `${location.location_name}, ${location.address}`
     : "Location not available";
-
+ const getFullUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:")) return path;
+    return `http://10.10.13.20:8005${path}`;
+  };
   return (
     <div>
       <div className="relative overflow-hidden h-[50vh]">
         {/* Background Container */}
         <div className="absolute inset-0 w-full h-full">
-          {data?.picture ? (
-            <img
-              src={data.picture}
-              className="w-full h-full object-cover"
-              alt={data.univ_name}
-            />
-          ) : (
+        
             <video
               autoPlay
               muted
@@ -46,10 +44,10 @@ function UniBannerInner({ setShowApply, data }) {
               playsInline
               className="w-full h-full object-cover"
             >
-              <source src={bannerVideo} type="video/mp4" />
+              <source src={getFullUrl(data?.banner_video)} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
-          )}
+        
           {/* Dark Overlay */}
           <div className="absolute inset-0 bg-black/10"></div>
         </div>
@@ -60,7 +58,7 @@ function UniBannerInner({ setShowApply, data }) {
           <div className="flex">
             <div className="w-28 h-28 p-2 bg-white rounded-lg mr-4 self-center">
               <img
-                src={data?.logo || defaultLogo}
+                src={getFullUrl(data?.logo || defaultLogo)}
                 className="h-full w-full object-contain"
                 alt={data?.univ_name}
               />

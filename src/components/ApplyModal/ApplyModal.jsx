@@ -322,7 +322,7 @@ export default function ApplyModal({ open, onClose, uniName = "University" }) {
                 />
               </div>
 
-              <div className="md:col-span-2 flex items-center space-x-2">
+              {/* <div className="md:col-span-2 flex items-center space-x-2">
                 <input
                   id="dataProcessing"
                   name="dataProcessingAccepted"
@@ -333,7 +333,7 @@ export default function ApplyModal({ open, onClose, uniName = "University" }) {
                 <label htmlFor="dataProcessing" className="text-sm">
                   I authorize processing of my data for admissions purposes.
                 </label>
-              </div>
+              </div> */}
             </div>
 
             <div className="flex justify-end space-x-2">

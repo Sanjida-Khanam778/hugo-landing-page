@@ -8,9 +8,11 @@ import Gallery from "./Gallery";
 import Overview from "./Overview";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import Jobs from "./Jobs";
+import UniProgramDetails from "./UniProgramDetails";
 
 export default function UniversityTab({ data }) {
   const [activeTab, setActiveTab] = useState("overview");
+  const [selectedProgramId, setSelectedProgramId] = useState(null);
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -19,7 +21,7 @@ export default function UniversityTab({ data }) {
     program: "",
     message: "",
   });
-
+  console.log(data?.id);
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -59,17 +61,20 @@ export default function UniversityTab({ data }) {
             <button
               onClick={() => setActiveTab("overview")}
               className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "overview"
-                  ? "border-blue text-blue"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
+                ? "border-blue text-blue"
+                : "border-transparent text-gray-600 hover:text-gray-900"
                 }`}
             >
               Overview
             </button>
             <button
-              onClick={() => setActiveTab("programs")}
+              onClick={() => {
+                setActiveTab("programs");
+                setSelectedProgramId(null);
+              }}
               className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "programs"
-                  ? "border-blue text-blue"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
+                ? "border-blue text-blue"
+                : "border-transparent text-gray-600 hover:text-gray-900"
                 }`}
             >
               Programs
@@ -77,8 +82,8 @@ export default function UniversityTab({ data }) {
             <button
               onClick={() => setActiveTab("events")}
               className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "events"
-                  ? "border-blue text-blue"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
+                ? "border-blue text-blue"
+                : "border-transparent text-gray-600 hover:text-gray-900"
                 }`}
             >
               Events
@@ -86,8 +91,8 @@ export default function UniversityTab({ data }) {
             <button
               onClick={() => setActiveTab("jobs")}
               className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "jobs"
-                  ? "border-blue text-blue"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
+                ? "border-blue text-blue"
+                : "border-transparent text-gray-600 hover:text-gray-900"
                 }`}
             >
               Jobs
@@ -95,8 +100,8 @@ export default function UniversityTab({ data }) {
             <button
               onClick={() => setActiveTab("testimonials")}
               className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "testimonials"
-                  ? "border-blue text-blue"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
+                ? "border-blue text-blue"
+                : "border-transparent text-gray-600 hover:text-gray-900"
                 }`}
             >
               Testimonials
@@ -104,8 +109,8 @@ export default function UniversityTab({ data }) {
             <button
               onClick={() => setActiveTab("gallery")}
               className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "gallery"
-                  ? "border-blue text-blue"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
+                ? "border-blue text-blue"
+                : "border-transparent text-gray-600 hover:text-gray-900"
                 }`}
             >
               Student Life
@@ -121,7 +126,21 @@ export default function UniversityTab({ data }) {
           <div className="col-span-2 space-y-6">
             {activeTab === "overview" && <Overview data={data} />}
 
-            {activeTab === "programs" && <Program data={data} />}
+            {activeTab === "programs" && (
+              <>
+                {selectedProgramId ? (
+                  <UniProgramDetails
+                   programId={selectedProgramId}
+                    onBack={() => setSelectedProgramId(null)}
+                  />
+                ) : (
+                  <Program
+                    data={data}
+                    onViewDetails={(id) => setSelectedProgramId(id)}
+                  />
+                )}
+              </>
+            )}
 
             {activeTab === "events" && <Events data={data} />}
 

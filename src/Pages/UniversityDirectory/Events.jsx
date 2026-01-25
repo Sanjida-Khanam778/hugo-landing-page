@@ -1,7 +1,8 @@
 import { Calendar, Clock, MapPin } from "lucide-react";
 import event from "../../assets/images/event1.png";
 import logo from "../../assets/icons/uni_logo.png";
-export default function Events() {
+export default function Events({data}) {
+    console.log(data.id)
   return (
     <div>
       {/* Events Header */}
