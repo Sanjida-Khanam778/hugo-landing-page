@@ -63,7 +63,7 @@ const jobs = [
       category: "Technology",
       experience: "Entry Level",
       openings: "5 Positions",
-      deadline: "July 1, 2025",
+      deadline: "July 1, 2026",
       duration: "3 months",
     },
   },
@@ -85,7 +85,7 @@ const jobs = [
       category: "Technology",
       experience: "Entry Level",
       openings: "5 Positions",
-      deadline: "July 1, 2025",
+      deadline: "July 1, 2026",
       duration: "3 months",
     },
   },
@@ -107,7 +107,7 @@ const jobs = [
       category: "Technology",
       experience: "Entry Level",
       openings: "5 Positions",
-      deadline: "July 1, 2025",
+      deadline: "July 1, 2026",
       duration: "3 months",
     },
   },
@@ -129,7 +129,7 @@ const jobs = [
       category: "Technology",
       experience: "Entry Level",
       openings: "5 Positions",
-      deadline: "July 1, 2025",
+      deadline: "July 1, 2026",
       duration: "3 months",
     },
   },
@@ -151,7 +151,7 @@ const jobs = [
       category: "Technology",
       experience: "Entry Level",
       openings: "5 Positions",
-      deadline: "July 1, 2025",
+      deadline: "July 1, 2026",
       duration: "3 months",
     },
   },
@@ -173,7 +173,7 @@ const jobs = [
       category: "Technology",
       experience: "Entry Level",
       openings: "5 Positions",
-      deadline: "July 1, 2025",
+      deadline: "July 1, 2026",
       duration: "3 months",
     },
   },
@@ -274,7 +274,7 @@ export default function Jobs() {
               </div>
               <div>
                 <span className=" text-gray-500 mr-4">
-                  Apply by: Jul 30, 2023
+                  Apply by: Jul 30, 2026
                 </span>
                 <button
                   onClick={() => onViewDetails(job)}

@@ -127,14 +127,14 @@ export const authapi = api.injectEndpoints({
         }),
 
         getUniversityProfile: builder.query({
-            query: () => "/profile/",
+            query: () => "/profile/setup/",
             providesTags: ["uni_profile"],
         }),
 
         setupProfile: builder.mutation({
             query: (data) => ({
                 url: "/profile/setup/",
-                method: "POST",
+                method: "PATCH",
                 body: data,
             }),
             invalidatesTags: ["uni_profile"],

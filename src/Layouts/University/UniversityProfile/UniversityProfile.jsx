@@ -10,7 +10,8 @@ import { useGetUniversityProfileQuery, useSetupProfileMutation } from "../../../
 import { toast } from "react-hot-toast";
 
 export default function UniversityProfile() {
-  const { data: profile, isLoading: profileLoading } = useGetUniversityProfileQuery();
+  const { data: profileResponse, isLoading: profileLoading } = useGetUniversityProfileQuery();
+  const profile = profileResponse?.data || profileResponse;
   const [setupProfile, { isLoading: isUpdating }] = useSetupProfileMutation();
   const [activeModal, setActiveModal] = useState(null);
   const [editorContent, setEditorContent] = useState("");
@@ -19,25 +20,22 @@ export default function UniversityProfile() {
   const [bannerVideo, setBannerVideo] = useState({ preview: null, file: null });
 
   const [basicInfo, setBasicInfo] = useState({
-    name: "",
-    university_type: "Private",
+    univ_name: "",
+    tagline: "",
+    univ_type: "private",
     total_campuses: "",
     about: "",
     year_founded: "",
     total_faculty: "",
     total_students: "",
+    total_programs: "",
   });
 
   const logoInputRef = useRef(null);
   const sectionVideoInputRef = useRef(null);
   const bannerVideoInputRef = useRef(null);
-  const [rankings, setRankings] = useState([
-    { id: 1, org: "QS World University Rankings", rank: "#45", year: "2024" },
-    { id: 2, org: "Times Higher Education", rank: "#67", year: "2024" },
-  ]);
-  const [locations, setLocations] = useState([
-    { id: 1, name: "LARC Campus", address: "Main St, City, Country" },
-  ]);
+  const [rankings, setRankings] = useState([]);
+  const [locations, setLocations] = useState([]);
   const [accreditations, setAccreditations] = useState([]);
 
   const handleInputChange = (e) => {
@@ -48,15 +46,18 @@ export default function UniversityProfile() {
   useEffect(() => {
     if (profile) {
       setBasicInfo({
-        name: profile.name || "",
-        university_type: profile.university_type || "Private",
+        univ_name: profile.univ_name || "",
+        tagline: profile.tagline || "",
+        univ_type: profile.univ_type || "private",
         total_campuses: profile.total_campuses || "",
         about: profile.about || "",
         year_founded: profile.year_founded || "",
         total_faculty: profile.total_faculty || "",
         total_students: profile.total_students || "",
+        total_programs: profile.total_programs || "",
       });
-      setRankings(profile.rankings || []);
+      // Map 'title' from backend to 'org' for local state/modals if needed
+      setRankings(profile.rankings?.map(r => ({ ...r, org: r.title })) || []);
       setLocations(profile.locations || []);
       setAccreditations(profile.accreditations || []);
       setEditorContent(profile.what_makes_us_different || "");
@@ -96,7 +97,7 @@ export default function UniversityProfile() {
   // File upload handlers
   const handleLogoUpload = (e) => {
     const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
+    if (file && (file.type.startsWith("image/") || file.type.startsWith("video/"))) {
       setLogo({
         preview: URL.createObjectURL(file),
         file: file,
@@ -125,12 +126,12 @@ export default function UniversityProfile() {
   };
 
   const handleRemoveLogo = () => {
-    setLogo(null);
+    setLogo({ preview: null, file: null });
     if (logoInputRef.current) logoInputRef.current.value = "";
   };
 
   const handleRemoveSectionVideo = () => {
-    setSectionVideo(null);
+    setSectionVideo({ preview: null, file: null });
     if (sectionVideoInputRef.current) sectionVideoInputRef.current.value = "";
   };
 
@@ -141,31 +142,104 @@ export default function UniversityProfile() {
 
   const handleSave = async () => {
     const fd = new FormData();
-    // Basic Info
+
+    // 1. Basic Info - Send all fields as strings (ensure empty strings instead of skipping)
     Object.keys(basicInfo).forEach((key) => {
-      fd.append(key, basicInfo[key]);
+      fd.append(key, basicInfo[key] !== null && basicInfo[key] !== undefined ? String(basicInfo[key]) : "");
     });
 
-    // Content
-    fd.append("what_makes_us_different", editorContent);
+    // 2. Editor Content
+    fd.append("what_makes_us_different", editorContent || "");
 
-    // Lists (JSON stringify for mixed arrays in FormData)
-    fd.append("rankings", JSON.stringify(rankings.map(({ id, ...rest }) => rest)));
-    fd.append("locations", JSON.stringify(locations.map(({ id, ...rest }) => rest)));
-    fd.append("accreditations", JSON.stringify(accreditations.map(({ id, ...rest }) => rest)));
+    // 3. Rankings List - Ensure numeric 'year' and mapping org -> title
+    const rankings_data = rankings.map((r) => ({
+      id: r.id && r.id < 1000000000000 ? r.id : undefined, // Keep existing IDs, ignore local timestamps
+      title: r.org || r.title || "",
+      rank: r.rank || "",
+      year: parseInt(r.year) || r.year || 0,
+    }));
+    fd.append("rankings_list", JSON.stringify(rankings_data));
 
-    // Files
-    if (logo.file) fd.append("logo", logo.file);
-    if (sectionVideo.file) fd.append("section_video", sectionVideo.file);
-    if (bannerVideo.file) fd.append("banner_video", bannerVideo.file);
+    // 4. Locations List
+    const locations_data = locations.map((l) => ({
+      id: l.id && l.id < 1000000000000 ? l.id : undefined,
+      name: l.name || "",
+      address: l.address || "",
+    }));
+    fd.append("locations_list", JSON.stringify(locations_data));
+
+    // 5. Accreditations List
+    const accreditations_data = accreditations.map((a) => ({
+      id: a.id && a.id < 1000000000000 ? a.id : undefined,
+      name: a.name || "",
+      valid_until: a.valid_until || "",
+    }));
+    fd.append("accreditations_list", JSON.stringify(accreditations_data));
+
+    // 6. Files - Only append if there's a NEW file object selected
+    if (logo.file instanceof File) {
+      fd.append("logo", logo.file);
+    }
+    if (sectionVideo.file instanceof File) {
+      fd.append("section_video", sectionVideo.file);
+    }
+    if (bannerVideo.file instanceof File) {
+      fd.append("banner_video", bannerVideo.file);
+    }
+
+    // Debug: Log EXACTLY what is being sent to identify why the server returns 500
+    console.log("--- SUBMITTING PROFILE DATA ---");
+    for (const [key, value] of fd.entries()) {
+      if (value instanceof File) {
+        console.log(`${key}: [File] ${value.name} (${value.size} bytes, ${value.type})`);
+      } else {
+        console.log(`${key}:`, value);
+      }
+    }
 
     try {
       await setupProfile(fd).unwrap();
       toast.success("Profile updated successfully!");
+
+      // Clear all form data after successful update
+      setBasicInfo({
+        univ_name: "",
+        tagline: "",
+        univ_type: "private",
+        total_campuses: "",
+        about: "",
+        year_founded: "",
+        total_faculty: "",
+        total_students: "",
+        total_programs: "",
+      });
+      setRankings([]);
+      setLocations([]);
+      setAccreditations([]);
+      setEditorContent("");
+      setLogo({ preview: null, file: null });
+      setSectionVideo({ preview: null, file: null });
+      setBannerVideo({ preview: null, file: null });
+
+      // Clear file input values
+      if (logoInputRef.current) logoInputRef.current.value = "";
+      if (sectionVideoInputRef.current) sectionVideoInputRef.current.value = "";
+      if (bannerVideoInputRef.current) bannerVideoInputRef.current.value = "";
+
     } catch (err) {
-      toast.error(err?.data?.message || "Failed to update profile");
-      console.error("Profile update error:", err);
+      console.error("Profile update error detail:", err);
+      // Detailed error for 500 parsing error or other server issues
+      const errorMessage = err?.data?.message || err?.data?.detail || "Server Error (500). Please check console for payload data.";
+      toast.error(errorMessage);
     }
+  };
+
+  if (profileLoading) return <div className="p-8">Loading profile...</div>;
+
+  const getFullUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:")) return path;
+    return `http://10.10.13.20:8005${path}`;
   };
 
   return (
@@ -193,7 +267,7 @@ export default function UniversityProfile() {
               {logo.preview ? (
                 <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden group">
                   <img
-                    src={logo.preview}
+                    src={getFullUrl(logo.preview)}
                     alt="Logo"
                     className="w-full h-full object-cover"
                   />
@@ -231,7 +305,7 @@ export default function UniversityProfile() {
               {sectionVideo.preview ? (
                 <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden group">
                   <video
-                    src={sectionVideo.preview}
+                    src={getFullUrl(sectionVideo.preview)}
                     className="w-full h-full object-cover"
                     controls
                   />
@@ -269,7 +343,7 @@ export default function UniversityProfile() {
               {bannerVideo.preview ? (
                 <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden group">
                   <video
-                    src={bannerVideo.preview}
+                    src={getFullUrl(bannerVideo.preview)}
                     className="w-full h-full object-cover"
                     controls
                   />
@@ -308,17 +382,30 @@ export default function UniversityProfile() {
           <h2 className="text-xl font-bold text-gray-800 mb-6">
             University Information
           </h2>
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 University Name
               </label>
               <input
                 type="text"
-                name="name"
-                value={basicInfo.name}
+                name="univ_name"
+                value={basicInfo.univ_name}
                 onChange={handleInputChange}
                 placeholder="Harvard University"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Tagline
+              </label>
+              <input
+                type="text"
+                name="tagline"
+                value={basicInfo.tagline}
+                onChange={handleInputChange}
+                placeholder="The Future starts Here"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -327,13 +414,13 @@ export default function UniversityProfile() {
                 University Type
               </label>
               <select
-                name="university_type"
-                value={basicInfo.university_type}
+                name="univ_type"
+                value={basicInfo.univ_type}
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="Private">Private</option>
-                <option value="Public">Public</option>
+                <option value="private">Private</option>
+                <option value="public">Public</option>
               </select>
             </div>
             <div>
@@ -345,21 +432,8 @@ export default function UniversityProfile() {
                 name="total_campuses"
                 value={basicInfo.total_campuses}
                 onChange={handleInputChange}
-                placeholder="2"
+                placeholder="3"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-            <div className="col-span-3">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                About
-              </label>
-              <textarea
-                name="about"
-                value={basicInfo.about}
-                onChange={handleInputChange}
-                placeholder="Description about your university..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                rows="4"
               />
             </div>
             <div>
@@ -371,7 +445,7 @@ export default function UniversityProfile() {
                 name="year_founded"
                 value={basicInfo.year_founded}
                 onChange={handleInputChange}
-                placeholder="1636"
+                placeholder="2005"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -384,7 +458,7 @@ export default function UniversityProfile() {
                 name="total_faculty"
                 value={basicInfo.total_faculty}
                 onChange={handleInputChange}
-                placeholder="200"
+                placeholder="65"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -397,8 +471,34 @@ export default function UniversityProfile() {
                 name="total_students"
                 value={basicInfo.total_students}
                 onChange={handleInputChange}
-                placeholder="21000"
+                placeholder="15,000+"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Total Programs
+              </label>
+              <input
+                type="number"
+                name="total_programs"
+                value={basicInfo.total_programs}
+                onChange={handleInputChange}
+                placeholder="100"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+            <div className="col-span-1 md:col-span-3">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                About
+              </label>
+              <textarea
+                name="about"
+                value={basicInfo.about}
+                onChange={handleInputChange}
+                placeholder="Description about your university..."
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows="4"
               />
             </div>
           </div>
@@ -417,23 +517,16 @@ export default function UniversityProfile() {
             </button>
           </div>
           <div className="space-y-3">
-            {accreditations.map((acc) => (
+            {accreditations.map((acc, index) => (
               <div
-                key={acc.id}
+                key={acc.id || index}
                 className="flex justify-between items-center p-4 border rounded-lg"
               >
                 <div>
                   <p className="font-medium text-gray-800">{acc.name}</p>
-                  <p className="text-sm text-grey">Valid until Dec 2025</p>
+                  <p className="text-sm text-grey">Valid until {acc.valid_until || "N/A"}</p>
                 </div>
                 <div>
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal("accreditation")}
-                    className="text-blue mr-4"
-                  >
-                    Edit
-                  </button>
                   <button
                     type="button"
                     onClick={() => handleDeleteAccreditation(acc.id)}
@@ -450,13 +543,6 @@ export default function UniversityProfile() {
           <h2 className="text-xl font-bold text-gray-800 mb-4">What makes us different</h2>
 
           <div className="col-span-2">
-
-            {/* <textarea
-
-              placeholder="Description about your university..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              rows="4"
-            /> */}
             <TextEditor htmlElement={editorContent} onChange={(value) => setEditorContent(value)} isEditable={true} />
           </div>
         </div>
@@ -475,23 +561,16 @@ export default function UniversityProfile() {
             </button>
           </div>
           <div className="space-y-3">
-            {rankings.map((rank) => (
+            {rankings.map((rank, index) => (
               <div
-                key={rank.id}
+                key={rank.id || index}
                 className="flex justify-between items-center p-4 border rounded-lg"
               >
                 <div>
-                  <p className="font-medium text-gray-800">{rank.org}</p>
-                  <p className="text-sm text-gray-600">Rank: {rank.rank}</p>
+                  <p className="font-medium text-gray-800">{rank.org || rank.title}</p>
+                  <p className="text-sm text-gray-600">Rank: {rank.rank} ({rank.year})</p>
                 </div>
                 <div>
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal("ranking")}
-                    className="text-blue mr-4"
-                  >
-                    Edit
-                  </button>
                   <button
                     type="button"
                     onClick={() => handleDeleteRanking(rank.id)}
@@ -518,9 +597,9 @@ export default function UniversityProfile() {
             </button>
           </div>
           <div className="space-y-3">
-            {locations.map((loc) => (
+            {locations.map((loc, index) => (
               <div
-                key={loc.id}
+                key={loc.id || index}
                 className="flex justify-between items-center p-4 border rounded-lg"
               >
                 <div>
@@ -528,13 +607,6 @@ export default function UniversityProfile() {
                   <p className="text-sm text-grey">{loc.address}</p>
                 </div>
                 <div>
-                  <button
-                    type="button"
-                    onClick={() => setActiveModal("location")}
-                    className="text-blue mr-4"
-                  >
-                    Edit
-                  </button>{" "}
                   <button
                     type="button"
                     onClick={() => handleDeleteLocation(loc.id)}

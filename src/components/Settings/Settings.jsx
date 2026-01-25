@@ -15,23 +15,11 @@ export default function Settings() {
   // Only allow editing if on /admin/settings route; view-only on /university/settings
   const isAdmin = location.pathname === "/admin/settings";
 
-  const [activeTab, setActiveTab] = useState("general");
+  const [activeTab, setActiveTab] = useState("terms");
   // Per-tab editing flags so editing state doesn't interfere across tabs
-  const [editingGeneral, setEditingGeneral] = useState(isAdmin);
   const [editingPrivacy, setEditingPrivacy] = useState(isAdmin);
   const [editingTerms, setEditingTerms] = useState(isAdmin);
 
-  const [generalSettings, setGeneralSettings] = useState({
-    platformName: "UniConnect",
-    description: "A platform connecting students with universities worldwide.",
-    briefDescription:
-      "A platform connecting students with universities worldwide.",
-    contactEmail: "support@uniconnect.com",
-    welcomeEmail: true,
-    applicationStatusNotification: true,
-  });
-
-  const [tempSettings, setTempSettings] = useState(generalSettings);
 
   const [privacyPolicy, setPrivacyPolicy] = useState(
     `Your privacy is important to us. It is Brainstorming's policy to respect your privacy regarding any information we may collect from you across our website, and other sites we own and operate.
@@ -107,23 +95,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
     }
   };
 
-  const handleGeneralChange = (field, value) => {
-    setTempSettings({
-      ...tempSettings,
-      [field]: value,
-    });
-  };
-
-  const handleSaveGeneral = () => {
-    setGeneralSettings(tempSettings);
-    setEditingGeneral(false);
-  };
-
-  const handleCancelGeneral = () => {
-    setTempSettings(generalSettings);
-    setEditingGeneral(false);
-  };
-
   const handleSavePrivacy = () => {
     setPrivacyPolicy(tempPrivacyPolicy);
     setEditingPrivacy(false);
@@ -150,27 +121,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
 
       {/* Tabs */}
       <div className="flex gap-8 border-b border-gray-200 mb-8">
-        <button
-          onClick={() => {
-            setActiveTab("general");
-          }}
-          className={`pb-3 px-1 font-medium  border-b-2 transition ${
-            activeTab === "general"
-              ? "border-blue text-blue"
-              : "border-transparent text-gray-600 hover:text-gray-900"
-          }`}
-        >
-          General
-        </button>
+
         <button
           onClick={() => {
             setActiveTab("terms");
           }}
-          className={`pb-3 px-1 font-medium  border-b-2 transition ${
-            activeTab === "terms"
-              ? "border-blue text-blue"
-              : "border-transparent text-gray-600 hover:text-gray-900"
-          }`}
+          className={`pb-3 px-1 font-medium  border-b-2 transition ${activeTab === "terms"
+            ? "border-blue text-blue"
+            : "border-transparent text-gray-600 hover:text-gray-900"
+            }`}
         >
           Terms & Conditions
         </button>
@@ -178,192 +137,16 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
           onClick={() => {
             setActiveTab("privacy");
           }}
-          className={`pb-3 px-1 font-medium  border-b-2 transition ${
-            activeTab === "privacy"
-              ? "border-blue text-blue"
-              : "border-transparent text-gray-600 hover:text-gray-900"
-          }`}
+          className={`pb-3 px-1 font-medium  border-b-2 transition ${activeTab === "privacy"
+            ? "border-blue text-blue"
+            : "border-transparent text-gray-600 hover:text-gray-900"
+            }`}
         >
           Privacy Policy
         </button>
       </div>
 
-      {/* General Tab */}
-      {activeTab === "general" && (
-        <div className="bg-white rounded-lg p-8">
-          <div className="max-w-2xl">
-            {/* Platform Information Section */}
-            <div className="mb-8">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                Platform Information
-              </h2>
-              <p className=" text-gray-600 mb-6">
-                Basic information about your platform.
-              </p>
 
-              <div className="space-y-6">
-                <div>
-                  <label className="block  font-medium text-gray-700 mb-2">
-                    Platform Name
-                  </label>
-                  <input
-                    type="text"
-                    disabled={!editingGeneral || !isAdmin}
-                    value={
-                      editingGeneral
-                        ? tempSettings.platformName
-                        : generalSettings.platformName
-                    }
-                    onChange={(e) =>
-                      handleGeneralChange("platformName", e.target.value)
-                    }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-600 disabled:cursor-not-allowed"
-                  />
-                </div>
-
-                <div>
-                  <label className="block  font-medium text-gray-700 mb-2">
-                    Description
-                  </label>
-                  <textarea
-                    disabled={!editingGeneral || !isAdmin}
-                    value={
-                      editingGeneral
-                        ? tempSettings.description
-                        : generalSettings.description
-                    }
-                    onChange={(e) =>
-                      handleGeneralChange("description", e.target.value)
-                    }
-                    rows="3"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-600 disabled:cursor-not-allowed"
-                  />
-                </div>
-
-                <div>
-                  <label className="block  font-medium text-gray-700 mb-2">
-                    Brief description of your platform for SEO and social
-                    sharing.
-                  </label>
-                  <textarea
-                    disabled={!editingGeneral || !isAdmin}
-                    value={
-                      editingGeneral
-                        ? tempSettings.briefDescription
-                        : generalSettings.briefDescription
-                    }
-                    onChange={(e) =>
-                      handleGeneralChange("briefDescription", e.target.value)
-                    }
-                    rows="2"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-600 disabled:cursor-not-allowed"
-                  />
-                </div>
-
-                <div>
-                  <label className="block  font-medium text-gray-700 mb-2">
-                    Contact Email
-                  </label>
-                  <input
-                    type="email"
-                    disabled={!editingGeneral || !isAdmin}
-                    value={
-                      editingGeneral
-                        ? tempSettings.contactEmail
-                        : generalSettings.contactEmail
-                    }
-                    onChange={(e) =>
-                      handleGeneralChange("contactEmail", e.target.value)
-                    }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-600 disabled:cursor-not-allowed"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Notifications Section */}
-            <div className="border-t border-gray-200 pt-8">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                Notifications
-              </h2>
-              <p className=" text-gray-600 mb-6">
-                Configure email notifications sent to users.
-              </p>
-
-              <div className="space-y-4">
-                <label className="flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    disabled={!editingGeneral || !isAdmin}
-                    checked={
-                      editingGeneral
-                        ? tempSettings.welcomeEmail
-                        : generalSettings.welcomeEmail
-                    }
-                    onChange={(e) =>
-                      handleGeneralChange("welcomeEmail", e.target.checked)
-                    }
-                    className="w-5 h-5 rounded border-gray-300 text-blue-600 disabled:cursor-not-allowed"
-                  />
-                  <span className="ml-3  font-medium text-gray-700">
-                    Send welcome email to new users
-                  </span>
-                </label>
-
-                <label className="flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    disabled={!editingGeneral || !isAdmin}
-                    checked={
-                      editingGeneral
-                        ? tempSettings.applicationStatusNotification
-                        : generalSettings.applicationStatusNotification
-                    }
-                    onChange={(e) =>
-                      handleGeneralChange(
-                        "applicationStatusNotification",
-                        e.target.checked
-                      )
-                    }
-                    className="w-5 h-5 rounded border-gray-300 text-blue-600 disabled:cursor-not-allowed"
-                  />
-                  <span className="ml-3  font-medium text-gray-700">
-                    Send notification when application status changes
-                  </span>
-                </label>
-              </div>
-            </div>
-
-            {isAdmin && (
-              <div className="flex gap-3 justify-end mt-8 pt-8">
-                {editingGeneral ? (
-                  <>
-                    <button
-                      onClick={handleCancelGeneral}
-                      className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={handleSaveGeneral}
-                      className="px-6 py-2 bg-blue text-white rounded-lg font-medium"
-                    >
-                      Save
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={() => setEditingGeneral(true)}
-                    className="px-6 py-2 bg-blue text-white rounded-lg font-medium"
-                  >
-                    Edit
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Privacy Policy Tab */}
       {activeTab === "privacy" && (

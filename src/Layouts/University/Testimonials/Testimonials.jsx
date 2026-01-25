@@ -339,12 +339,7 @@ export default function Testimonials() {
                   >
                     View Details
                   </button>
-                  <button
-                    onClick={() => handleDeleteTestimonial(testimonial.id)}
-                    className={`${testimonial.status === "approved" ? "text-[#B91C1C]": "text-[#15803D]"} text-red-600 hover:text-red-700 text-sm font-medium`}
-                  >
-                    {testimonial.status === "approved" ? "Unpublish" : "Reconsider"}
-                  </button>
+                
                 </div>
               </div>
             ))

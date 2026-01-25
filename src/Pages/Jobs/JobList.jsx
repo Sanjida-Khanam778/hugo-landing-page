@@ -285,7 +285,7 @@ export default function JobList({
                     </div>
                     <div>
                       <span className=" text-gray-500 mr-4">
-                        Apply by: Jul 30, 2023
+                        Apply by: Jul 30, 2026
                       </span>
                       <button
                         onClick={() => onViewDetails(job)}

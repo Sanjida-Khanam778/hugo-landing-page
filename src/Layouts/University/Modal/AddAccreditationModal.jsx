@@ -6,13 +6,18 @@ import { X } from "lucide-react";
 export default function AddAccreditationModal({ onAdd, onClose }) {
   const [formData, setFormData] = useState({
     name: "",
-    status: "",
+    valid_until: "",
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAdd(formData);
-    setFormData({ name: "", status: "" });
+    // Ensure dashes for yyyy-mm-dd format
+    const cleanedData = {
+      ...formData,
+      valid_until: formData.valid_until.replaceAll("/", "-"),
+    };
+    onAdd(cleanedData);
+    setFormData({ name: "", valid_until: "" });
   };
 
   return (
@@ -50,11 +55,11 @@ export default function AddAccreditationModal({ onAdd, onClose }) {
               Valid Until
             </label>
             <input
-              type="text"
-              placeholder="e.g. Dec 2025"
-              value={formData.status}
+              type="date"
+              placeholder="yyyy-mm-dd"
+              value={formData.valid_until}
               onChange={(e) =>
-                setFormData({ ...formData, status: e.target.value })
+                setFormData({ ...formData, valid_until: e.target.value })
               }
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required

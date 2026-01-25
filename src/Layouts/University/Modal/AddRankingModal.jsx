@@ -42,7 +42,7 @@ export default function AddRankingModal({ onAdd, onClose }) {
           <div className="p-6 py-0">
             <label className="block text-sm font-medium text-gray-700 mb-2">Rank</label>
             <input
-              type="text"
+              type="number"
               placeholder="e.g. #5"
               value={formData.rank}
               onChange={(e) => setFormData({ ...formData, rank: e.target.value })}
@@ -54,7 +54,7 @@ export default function AddRankingModal({ onAdd, onClose }) {
           <div className="p-6 py-0">
             <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
             <input
-              type="text"
+              type="number"
               placeholder="e.g. 2023"
               value={formData.year}
               onChange={(e) => setFormData({ ...formData, year: e.target.value })}
