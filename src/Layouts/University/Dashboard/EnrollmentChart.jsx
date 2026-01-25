@@ -1,15 +1,10 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
 
-const data = [
-  { month: "Jan", enrollment: 40, applications: 24 },
-  { month: "Feb", enrollment: 30, applications: 13 },
-  { month: "Mar", enrollment: 20, applications: 98 },
-  { month: "Apr", enrollment: 27, applications: 39 },
-  { month: "May", enrollment: 20, applications: 48 },
-  { month: "Jun", enrollment: 36, applications: 38 },
-]
+export default function EnrollmentChart({ data }) {
+  if (!data || data.length === 0) {
+    return <div className="h-[300px] flex items-center justify-center text-gray-500">No chart data available</div>;
+  }
 
-export default function EnrollmentChart() {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart data={data}>

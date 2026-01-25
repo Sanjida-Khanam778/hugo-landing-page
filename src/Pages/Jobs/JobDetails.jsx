@@ -9,11 +9,13 @@ import {
 import ApplyJobModal from "../../Layouts/University/Modal/ApplyJobModal";
 import { useGetJobDetailsQuery } from "../../Api/universityApi";
 import logoPlaceholder from "../../assets/icons/uni_logo.png";
+import { useParams } from "react-router-dom";
 
-export default function JobDetails({ jobId, onBackClick, universityName }) {
+export default function JobDetails({ universityData, jobId, onBackClick, universityName }) {
+  console.log(universityData);
   const { data: job, isLoading, error } = useGetJobDetailsQuery(jobId);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
-
+  console.log(job);
   // Check if job application deadline has passed
   const isExpired = useMemo(() => {
     if (!job?.deadline) return false;
@@ -32,7 +34,11 @@ export default function JobDetails({ jobId, onBackClick, universityName }) {
   if (isLoading) return <div className="min-h-screen bg-base p-8 text-center text-gray-500">Loading job details...</div>;
   if (error) return <div className="min-h-screen bg-base p-8 text-center text-red-500">Error loading job details.</div>;
   if (!job) return <div className="min-h-screen bg-base p-8 text-center text-gray-500">Job not found.</div>;
-
+ const getFullUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:")) return path;
+    return `http://10.10.13.20:8005${path}`;
+  };
   return (
     <div className="min-h-screen bg-base font-inter">
       {/* Header */}
@@ -262,7 +268,7 @@ export default function JobDetails({ jobId, onBackClick, universityName }) {
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-xl bg-gray-50 p-2 flex-shrink-0 border border-gray-100 overflow-hidden">
-                  <img src={logoPlaceholder} alt="University Logo" className="w-full h-full object-contain" />
+                  <img src={getFullUrl(universityData?.logo)} alt="University Logo" className="w-full h-full object-contain" />
                 </div>
                 <h3 className="font-bold text-gray-900 leading-tight">{job.university_name || universityName}</h3>
               </div>

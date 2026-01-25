@@ -19,8 +19,8 @@ export default function SignIn() {
         console.log("Login successful", res);
         navigate("/");
       } catch (err) {
-        console.error("Failed to login:", err.data.error[0]);
-        toast.error(err.data?.email[0] || err.data?.error?.[0], {
+        console.error( err.data.error[0]);
+        toast.error(err.data?.error?.[0], {
           position: "bottom-center",
         });
       }

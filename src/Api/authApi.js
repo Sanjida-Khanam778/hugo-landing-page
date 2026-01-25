@@ -6,7 +6,7 @@ export const authapi = api.injectEndpoints({
   endpoints: (builder) => ({
     signup: builder.mutation({
       query: (data) => ({
-        url: "/accounts/signup/",
+        url: "/accounts/signup/student/",
         method: "POST",
         body: data,
       }),
@@ -110,18 +110,19 @@ export const authapi = api.injectEndpoints({
       }),
     }),
 
-    // profileUpdate: builder.mutation({
-    //   query: (data) => ({
-    //     url: "/user/update-profile/",
-    //     method: "PUT",
-    //     body: data,
-    //   }),
-    // }),
+    profileUpdate: builder.mutation({
+      query: (data) => ({
+        url: "/accounts/profile/",
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["user_profile"],
+    }),
 
-    // getUserProfile: builder.query({
-    //   query: () => "/user/profile/",
-    //   invalidatesTags: ["chats"],
-    // }),
+    getUserProfile: builder.query({
+      query: () => "/accounts/profile/",
+      providesTags: ["user_profile"],
+    }),
   }),
 });
 

@@ -183,6 +183,19 @@ export const authapi = api.injectEndpoints({
             query: (id) => `/get-jobs/${id}/`,
             providesTags: (result, error, id) => [{ type: "JobDetails", id }],
         }),
+
+        getDashboardStats: builder.query({
+            query: () => "/university/dashboard/stats/",
+            providesTags: ["dashboard_stats"],
+        }),
+
+        addTestimonial: builder.mutation({
+            query: (data) => ({
+                url: "/testimonials/add/",
+                method: "POST",
+                body: data,
+            }),
+        }),
     }),
 });
 
@@ -211,4 +224,6 @@ export const {
     useGetEventsByUniIdQuery,
     useGetJobsByUniIdQuery,
     useGetJobDetailsQuery,
+    useGetDashboardStatsQuery,
+    useAddTestimonialMutation,
 } = authapi;

@@ -10,6 +10,17 @@ export default function AllUniversityPrograms() {
   const [levelFilter, setLevelFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState({
+    univ_type: "all",
+    location: "all",
+    study_type: "all",
+    field: "all",
+  });
+
+  const handleFilterChange = (name, value) => {
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
+
 
   const programs = [
     {
@@ -101,7 +112,7 @@ export default function AllUniversityPrograms() {
 
           {/* Desktop sidebar (hidden on small) */}
           <div className="w-68 flex-shrink-0 hidden lg:block">
-            <FiltersContent />
+            <FiltersContent filters={filters} onFilterChange={handleFilterChange} />
           </div>
 
           {/* Mobile filter panel (overlay) */}
@@ -117,7 +128,7 @@ export default function AllUniversityPrograms() {
                     <X />
                   </button>
                 </div>
-                <FiltersContent />
+                <FiltersContent filters={filters} onFilterChange={handleFilterChange} />
               </div>
             </>
           )}
@@ -128,7 +139,7 @@ export default function AllUniversityPrograms() {
               <p className="text-sm text-gray-600">Showing 3 programs</p>
             </div>
             <div className="border p-6 bg-white rounded-xl">
-      
+
 
               {/* Program Cards (rendered from data) */}
               {programs.map((p) => (
@@ -142,8 +153,8 @@ export default function AllUniversityPrograms() {
                       {p.level === "bachelor"
                         ? "Bachelor's"
                         : p.level === "master"
-                        ? "Master's"
-                        : "Doctorate"}
+                          ? "Master's"
+                          : "Doctorate"}
                     </span>
                   </div>
                   <div className="flex gap-6 p-6">

@@ -9,7 +9,6 @@ export default function FeaturedUniversities() {
   const universitiesList = universitiesData || [];
   console.log(universitiesList);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [logo, setLogo] = useState({ preview: null, file: null });
 
   // responsive items per page: mobile=1, tablet=2, laptop+ = 4
   const getItemsPerPage = () => {

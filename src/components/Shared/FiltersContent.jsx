@@ -2,6 +2,8 @@ import { useState } from "react";
 
 export default function FiltersContent({ filters, onFilterChange }) {
   const { study_type, location, univ_type, field: selectedField } = filters;
+  
+  console.log(filters)
   return (
     <div className="bg-[#ECF5FF] text-black p-6 shadow-sm z-[10000]">
       <h3 className="font-bold text-xl mb-4">Filters</h3>

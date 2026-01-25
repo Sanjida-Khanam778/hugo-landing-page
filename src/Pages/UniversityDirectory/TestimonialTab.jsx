@@ -2,8 +2,11 @@ import React, { useState, useRef } from "react";
 import comment from "../../assets/images/comment.png";
 import profile1 from "../../assets/images/profile1.png";
 import profile2 from "../../assets/images/profile2.png";
+import { useAddTestimonialMutation } from "../../Api/universityApi";
+import { toast } from "react-hot-toast";
 
-export default function TestimonialTab() {
+export default function TestimonialTab({ data: universityData }) {
+  const [addTestimonial, { isLoading }] = useAddTestimonialMutation();
   const [sortOrder, setSortOrder] = useState("newest"); // newest or oldest
   const [testimonials, setTestimonials] = useState([
     {
@@ -26,15 +29,8 @@ export default function TestimonialTab() {
     },
   ]);
 
-  // form state
-  // Simulated current user/profile info - replace with real auth data when available
-  const currentUser = {
-    name: "You",
-    meta: "Prospective Student",
-    avatar: profile1,
-  };
-
   const [newText, setNewText] = useState("");
+  const [studentTitle, setStudentTitle] = useState("");
   const [newPhoto, setNewPhoto] = useState(null); // review image
   const [preview, setPreview] = useState(null);
   const fileRef = useRef();
@@ -47,28 +43,42 @@ export default function TestimonialTab() {
     setPreview(URL.createObjectURL(f));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!newText) {
-      alert("Please enter your testimonial.");
+      toast.error("Please enter your testimonial.");
       return;
     }
-    const id = Date.now();
-    const entry = {
-      id,
-      text: newText,
-      author: currentUser.name,
-      meta: currentUser.meta,
-      date: new Date().toISOString().slice(0, 10), // default to today
-      avatar: currentUser.avatar,
-      reviewImage: preview || null,
-    };
-    setTestimonials((t) => [entry, ...t]);
-    // reset form
-    setNewText("");
-    setNewPhoto(null);
-    setPreview(null);
-    if (fileRef.current) fileRef.current.value = null;
+    if (!studentTitle) {
+      toast.error("Please enter your title (e.g., Computer Science, Class of 2024).");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("university", universityData?.id);
+    formData.append("student_title", studentTitle);
+    formData.append("content", newText);
+    if (newPhoto) {
+      formData.append("photo", newPhoto);
+    }
+
+    try {
+      const res = await addTestimonial(formData);
+      console.log(res);
+      toast.success(res.message || "Submitted and awaiting approval!", {
+        position: "bottom-center",
+      });
+
+      // Reset form
+      setNewText("");
+      setStudentTitle("");
+      setNewPhoto(null);
+      setPreview(null);
+      if (fileRef.current) fileRef.current.value = null;
+    } catch (err) {
+      console.error(err);
+      toast.error(err.data?.error?.[0] || "Failed to submit testimonial.");
+    }
   }
 
   const sorted = [...testimonials].sort((a, b) => {
@@ -154,14 +164,29 @@ export default function TestimonialTab() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
+              Student Title (e.g. Major, Class of Year)
+            </label>
+            <input
+              type="text"
+              placeholder="Computer Science, Class of 2024"
+              value={studentTitle}
+              onChange={(e) => setStudentTitle(e.target.value)}
+              className="w-full px-4 py-2 bg-base rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Your testimonial
             </label>
             <textarea
-              placeholder="My time at ..."
+              placeholder="This university has changed my life!..."
               rows="5"
               value={newText}
               onChange={(e) => setNewText(e.target.value)}
               className="w-full px-4 py-3 bg-base rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm"
+              required
             ></textarea>
           </div>
 
@@ -188,9 +213,10 @@ export default function TestimonialTab() {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="bg-blue text-white px-6 py-2.5 rounded-lg text-sm transition-colors"
+              disabled={isLoading}
+              className="bg-blue text-white px-8 py-2.5 rounded-lg text-sm transition-colors font-bold disabled:opacity-50"
             >
-              Submit
+              {isLoading ? "Submitting..." : "Submit Testimonial"}
             </button>
           </div>
         </form>

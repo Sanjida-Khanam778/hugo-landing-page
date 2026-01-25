@@ -14,10 +14,10 @@ export default function UniEventsDetails({ eventId, onBack, univId }) {
     // We fetch all events for the university and find the specific one by ID. 
     // Normally there might be a separate API but based on the provided info we use this.
     const { data: eventsData, isLoading, error } = useGetEventsByUniIdQuery(univId);
-
     const selectedEvent = useMemo(() => {
         return eventsData?.find(e => e.id === eventId);
     }, [eventsData, eventId]);
+    console.log(selectedEvent)
 
     const getFullUrl = (path) => {
         if (!path) return "";
@@ -107,7 +107,7 @@ export default function UniEventsDetails({ eventId, onBack, univId }) {
                                 <div className="space-y-6">
                                     {selectedEvent.agendas.map((item, index) => (
                                         <div key={index} className="flex gap-4">
-                                            <div className="border-r-2 border-[#BFDBFE] pr-4 w-40 flex-shrink-0">
+                                            <div className="border-r-2 border-[#BFDBFE] pr-4 w-44 flex-shrink-0">
                                                 <p className="text-gray-600 font-medium">{item.time_slot}</p>
                                             </div>
 
