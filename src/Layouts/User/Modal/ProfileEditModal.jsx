@@ -6,7 +6,7 @@ import { useSetupStudentProfileMutation } from "../../../Api/authapi";
 export default function ProfileEditModal({ profile, onClose }) {
     const [setupProfile, { isLoading }] = useSetupStudentProfileMutation();
     const [formData, setFormData] = useState({
-        full_name: profile?.full_name || "",
+        full_name: profile?.student_name || "",
     });
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(profile?.image || null);

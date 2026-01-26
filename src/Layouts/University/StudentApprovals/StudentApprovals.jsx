@@ -47,7 +47,6 @@ export default function StudentApprovals() {
     if (app.id_photo_front) docs.push({ name: "ID Front", url: getFullUrl(app.id_photo_front) });
     if (app.id_photo_back) docs.push({ name: "ID Back", url: getFullUrl(app.id_photo_back) });
     if (app.supporting_documents) docs.push({ name: "Support Doc", url: getFullUrl(app.supporting_documents) });
-    if (app.letter_of_interest) docs.push({ name: "Interest Letter", url: getFullUrl(app.letter_of_interest) });
     return docs;
   };
 

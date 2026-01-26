@@ -10,7 +10,7 @@ export default function UserDashboard() {
   console.log(user);
   const { data: profile, isLoading, error } = useGetUserProfileQuery();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
+console.log(profile);
   const getFullUrl = (path) => {
     if (!path) return "";
     if (path.startsWith("http") || path.startsWith("blob:")) return path;
@@ -41,7 +41,7 @@ export default function UserDashboard() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="font-semibold text-lg">{profile?.full_name || user?.full_name || "New User"}</h2>
+                    <h2 className="font-semibold text-lg">{profile?.student_name}</h2>
                     <button
                       onClick={() => setIsEditModalOpen(true)}
                       className="p-1 hover:bg-gray-100 rounded-full transition-colors text-blue"
@@ -51,10 +51,10 @@ export default function UserDashboard() {
                     </button>
                   </div>
                   <p className="text-gray-600 text-sm">
-                    {user?.role || "Student"}
+                    {profile?.role || "Student"}
                   </p>
                   <p className="text-gray-400 text-xs mt-1">
-                    {user?.email}
+                    {profile?.email}
                   </p>
                 </div>
               </div>

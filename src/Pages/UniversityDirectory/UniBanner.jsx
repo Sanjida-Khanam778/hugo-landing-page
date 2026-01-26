@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 export default function UniBannerWrapper({ data }) {
   const [showApply, setShowApply] = useState(false);
- 
+
   return (
     <>
       <UniBannerInner setShowApply={setShowApply} data={data} />
@@ -15,6 +15,7 @@ export default function UniBannerWrapper({ data }) {
         open={showApply}
         onClose={() => setShowApply(false)}
         uniName={data?.univ_name || "University"}
+        uniId={data?.id}
       />
     </>
   );
@@ -26,7 +27,7 @@ function UniBannerInner({ setShowApply, data }) {
   const locationString = location
     ? `${location.location_name}, ${location.address}`
     : "Location not available";
- const getFullUrl = (path) => {
+  const getFullUrl = (path) => {
     if (!path) return "";
     if (path.startsWith("http") || path.startsWith("blob:")) return path;
     return `http://10.10.13.20:8005${path}`;
@@ -36,18 +37,18 @@ function UniBannerInner({ setShowApply, data }) {
       <div className="relative overflow-hidden h-[50vh]">
         {/* Background Container */}
         <div className="absolute inset-0 w-full h-full">
-        
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="w-full h-full object-cover"
-            >
-              <source src={getFullUrl(data?.banner_video)} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-        
+
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src={getFullUrl(data?.banner_video)} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+
           {/* Dark Overlay */}
           <div className="absolute inset-0 bg-black/10"></div>
         </div>

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useApplyToUniversityMutation } from "../../Api/universityApi";
+import { toast } from "react-hot-toast";
 
-export default function ApplyModal({ open, onClose, uniName = "University" }) {
+export default function ApplyModal({ open, onClose, uniName = "University", uniId }) {
+  const [applyToUni, { isLoading }] = useApplyToUniversityMutation();
   const [step, setStep] = useState("form"); // form | summary | chat
   const [form, setForm] = useState({
     fullName: "",
@@ -11,7 +14,7 @@ export default function ApplyModal({ open, onClose, uniName = "University" }) {
     program: "",
     campus: "",
     address: "",
-    phone: "",     
+    phone: "",
     email: "",
     nationality: "",
     previousStudies: "",
@@ -84,16 +87,52 @@ export default function ApplyModal({ open, onClose, uniName = "University" }) {
     setPreviews((p) => ({ ...p, docs: docPreviews }));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    // Basic validation (require name and email)
-    if (!form.fullName || !form.email) {
-      alert("Please provide at least your full name and email.");
+    // Basic validation
+    if (!form.fullName || !form.email || !uniId) {
+      toast.error("Please provide at least your full name, email and ensure university information is loaded.");
       return;
     }
 
-    // In a real app, send to API here. For now, move to summary step.
-    setStep("summary");
+    const formData = new FormData();
+    formData.append("full_name", form.fullName);
+    formData.append("email", form.email);
+    formData.append("phone", form.phone);
+    formData.append("date_of_birth", form.dob);
+    formData.append("place_of_birth", form.placeOfBirth);
+    formData.append("nationality", form.nationality);
+    formData.append("address", form.address);
+    formData.append("desired_program", form.program);
+    formData.append("campus", form.campus);
+    formData.append("previous_studies", form.previousStudies);
+    formData.append("current_situation", form.currentSituation);
+    formData.append("is_authorized", String(form.dataProcessingAccepted));
+
+    if (form.specialNeeds) formData.append("special_needs", form.specialNeeds);
+    if (form.letterOfInterest) formData.append("letter_of_interest", form.letterOfInterest);
+
+    if (idFront) formData.append("id_photo_front", idFront);
+    if (idBack) formData.append("id_photo_back", idBack);
+
+    if (documents.length > 0) {
+      // If the backend expects multiple files with the same key
+      documents.forEach(doc => {
+        formData.append("supporting_documents", doc);
+      });
+    }
+
+    try {
+      await applyToUni({ id: uniId, body: formData }).unwrap();
+      toast.success("Application submitted successfully!", {
+        position: "bottom-center",
+      });
+      setStep("summary");
+    } catch (err) {
+      console.error("Application error:", err);
+      const msg = err?.data?.message || err?.data?.error || "Failed to submit application. Please try again.";
+      toast.error(msg);
+    }
   }
 
   return (

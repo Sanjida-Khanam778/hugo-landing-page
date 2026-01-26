@@ -152,6 +152,16 @@ export default function StudentApplicationDetailsModal({
                 </div>
               </div>
             </div>
+            <div className="space-y-4 col-span-2">
+              <h4 className=" text-blue uppercase">Letter of Interest</h4>
+              <div className="space-y-3 border w-full p-4 rounded">
+                <div>
+                  <p className="font-medium text-gray-900">{application.letter_of_interest || "None Specified"}</p>
+                </div>
+                <div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Documents Section */}
