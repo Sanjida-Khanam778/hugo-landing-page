@@ -1,26 +1,42 @@
 import {
-  MapPin,
-  Briefcase,
-  DollarSign,
-  Building,
-  ChevronDown,
   GraduationCap,
 } from "lucide-react";
 import { useState } from "react";
 import { BiDollarCircle } from "react-icons/bi";
 import { GrLocation } from "react-icons/gr";
 import { MdOutlineWatchLater } from "react-icons/md";
+import { useGetDiscoveryJobsQuery } from "../../Api/universityApi";
+import logoPlaceholder from "../../assets/icons/uni_logo.png";
 
-export default function JobList({
-  jobs,
-  onViewDetails,
-  getBadgeColor,
-  uni_logo,
-}) {
+export default function JobList({ onViewDetails }) {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
-  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [selectedType, setSelectedType] = useState("All Types");
-  const [showTypeDropdown, setShowTypeDropdown] = useState(false);
+  const { data: jobsData, isLoading, error } = useGetDiscoveryJobsQuery();
+
+  const getFullUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:")) return path;
+    return `http://10.10.13.20:8005${path}`;
+  };
+
+  const getBadgeColor = (type) => {
+    switch (type?.toLowerCase()) {
+      case "full time":
+        return "bg-blue/10 text-blue";
+      case "part time":
+        return "bg-[#DCFCE7] text-[#16A34A]";
+      case "internship":
+        return "bg-yellow/10 text-yellow-600";
+      default:
+        return "bg-gray-100 text-gray-600";
+    }
+  };
+
+  if (isLoading) return <div className="min-h-screen bg-base p-8 text-center text-gray-500">Loading jobs...</div>;
+  if (error) return <div className="min-h-screen bg-base p-8 text-center text-red-500">Error loading jobs.</div>;
+
+  const jobs = jobsData || [];
+
   return (
     <div className="min-h-screen bg-base">
       <div className="text-white flex items-center justify-center relative overflow-hidden bg-primary h-[50vh] px-8">
@@ -66,30 +82,23 @@ export default function JobList({
                       type="radio"
                       name="jobType"
                       className="mr-2 text-blue-600"
-                      defaultChecked
+                      checked={selectedType === "All Types"}
+                      onChange={() => setSelectedType("All Types")}
                     />
                     <span>All Types</span>
                   </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="jobType" className="mr-2" />
-                    <span>Full-time</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="jobType" className="mr-2" />
-                    <span>Part-time</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="jobType" className="mr-2" />
-                    <span>Internship</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="jobType" className="mr-2" />
-                    <span>Research</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="jobType" className="mr-2" />
-                    <span>PhD Positions</span>
-                  </label>
+                  {["Full Time", "Part Time", "Internship", "Research", "PhD Positions"].map(type => (
+                    <label key={type} className="flex items-center  text-gray-700">
+                      <input
+                        type="radio"
+                        name="jobType"
+                        className="mr-2"
+                        checked={selectedType === type}
+                        onChange={() => setSelectedType(type)}
+                      />
+                      <span>{type}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
 
@@ -104,94 +113,23 @@ export default function JobList({
                       type="radio"
                       name="category"
                       className="mr-2 text-blue-600"
-                      defaultChecked
+                      checked={selectedCategory === "All Categories"}
+                      onChange={() => setSelectedCategory("All Categories")}
                     />
                     <span>All Categories</span>
                   </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Business Management and Administration</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Legal and Social Sciences</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Healthcare</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Natural Sciences and Mathematics</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Humanities and Letter</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Education</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Technology and Telecommunications</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Economics and Finance</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Languages</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Commerce and Marketing</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Hospitality and Tourism</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Sports and Physical Activity</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Agriculture, Mining, and Gardening</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Image, Film, and Sound</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span> Fine Arts</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span> Security and Civil Protection</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span> Logistics and Transportation</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span> Graphic Arts</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span> Fashion and Textile Production</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span>Music, Performing Arts, and Dance</span>
-                  </label>
-                  <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="category" className="mr-2" />
-                    <span> Veterinary Medicine and Animals</span>
-                  </label>
+                  {["Technology", "Healthcare", "Business", "Healthcare", "Natural Sciences", "Humanities", "Education", "Legal"].map(cat => (
+                    <label key={cat} className="flex items-center  text-gray-700">
+                      <input
+                        type="radio"
+                        name="category"
+                        className="mr-2"
+                        checked={selectedCategory === cat}
+                        onChange={() => setSelectedCategory(cat)}
+                      />
+                      <span>{cat}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
 
@@ -236,60 +174,60 @@ export default function JobList({
                   className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-start gap-3">
-                      <div className="w-12 h-12 rounded-lg flex-shrink-0">
-                        <img src={uni_logo} alt="" />
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-lg flex-shrink-0 bg-base p-1 border">
+                        <img src={getFullUrl(job.univ_logo) || logoPlaceholder} alt="logo" className="w-full h-full object-contain" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <h3 className="text-lg font-semibold">{job.title}</h3>
                         </div>
-                        <p className=" text-gray-600 flex gap-2">
-                          <GraduationCap strokeWidth={3.0} />
-                          {job.company}
+                        <p className=" text-gray-600 flex items-center gap-2">
+                          <GraduationCap size={22} strokeWidth={3} />
+                          {job.company_name}
                         </p>
                       </div>
                     </div>
                     <span
-                      className={` px-3 py-1 rounded-md ${getBadgeColor(
-                        job.badgeColor
+                      className={` px-3 py-1 rounded-md text-sm font-medium ${getBadgeColor(
+                        job.job_type
                       )}`}
                     >
-                      {job.badge}
+                      {job.job_type}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-4  text-gray-600 mb-3">
+                  <div className="flex items-center gap-6  text-gray-600 mb-4">
                     <span className="flex items-center">
-                      <GrLocation className="mr-1 text-dark text-lg" />
+                      <GrLocation className="mr-1.5 text-dark" />
                       {job.location}
                     </span>
                     <span className="flex items-center">
-                      <MdOutlineWatchLater className="mr-1 text-dark text-lg" />
-                      {job.details.duration}
+                      <MdOutlineWatchLater className="mr-1.5 text-dark" />
+                      {job.job_type}
                     </span>
                     <span className="flex items-center">
-                      <BiDollarCircle className="mr-1 text-dark text-lg" />
+                      <BiDollarCircle className="mr-1.5 text-dark text-lg" />
                       {job.salary}
                     </span>
                   </div>
 
-                  <p className=" text-gray-700 mb-4">{job.description}</p>
+                  <p className=" text-gray-700 mb-6 line-clamp-2 leading-relaxed">{job.description}</p>
 
-                  <div className="flex items-center justify-between">
-                    <div className="space-x-4">
-                      <span className="bg-base p-2 rounded-lg">
-                        {job.details.category}
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                    <div className="flex items-center gap-4">
+                      <span className="bg-base px-3 py-1 rounded-full text-sm text-gray-600 border border-gray-100">
+                        {job.category}
                       </span>
-                      <span className=" text-gray-500">{job.posted}</span>
+                      <span className="text-gray-500">Posted: {job.posted_date}</span>
                     </div>
-                    <div>
-                      <span className=" text-gray-500 mr-4">
-                        Apply by: Jul 30, 2026
+                    <div className="flex items-center gap-4">
+                      <span className="text-gray-500">
+                        Apply by: {job.deadline}
                       </span>
                       <button
-                        onClick={() => onViewDetails(job)}
-                        className="bg-blue text-white px-4 py-2 rounded  transition-colors"
+                        onClick={() => onViewDetails && onViewDetails(job)}
+                        className="bg-blue text-white px-5 py-2 rounded-lg text-sm font-medium transition-all hover:bg-blue-700 shadow-sm"
                       >
                         View Details
                       </button>

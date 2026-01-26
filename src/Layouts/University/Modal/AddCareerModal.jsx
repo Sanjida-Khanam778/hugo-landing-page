@@ -1,30 +1,63 @@
 "use client";
 
 import { useState } from "react";
+import {
+  useGetAllProgramsQuery,
+  useCreateCareerRoadmapMutation,
+} from "../../../Api/universityApi";
+import toast from "react-hot-toast";
 
 export default function AddCareerModal({
   onSave,
   onClose,
   initialData = null,
 }) {
-  const [formData, setFormData] = useState(
-    initialData || {
-      title: "",
-      description: "",
-      careerPaths: [""],
-      employmentRate: "",
-      averageSalary: "",
-      graduatePlacement: "",
-      careerServices: [""],
-    }
-  );
+  const [formData, setFormData] = useState({
+    program_id: "",
+    description: "",
+    careerPaths: [""],
+    employmentRate: "",
+    averageSalary: "",
+    graduatePlacement: "",
+    careerServices: [""],
+    service_description: "",
+  });
 
-  const handleSubmit = () => {
-    if (!formData.title || !formData.description) {
-      alert("Please fill in all required fields");
+  const { data: programsData, isLoading: programsLoading } = useGetAllProgramsQuery();
+  const [createRoadmap, { isLoading: isSaving }] = useCreateCareerRoadmapMutation();
+
+  const handleSubmit = async () => {
+    if (!formData.program_id || !formData.description) {
+      toast.error("Please select a program and provide a description");
       return;
     }
-    onSave(formData);
+
+    const payload = {
+      program_id: parseInt(formData.program_id),
+      description: formData.description,
+      employment_rate: formData.employmentRate,
+      avg_starting_salary: formData.averageSalary,
+      graduate_school_placement: formData.graduatePlacement,
+      service_description: formData.service_description || formData.description,
+      career_paths: formData.careerPaths.filter(p => p.trim()).map(p => ({ name: p })),
+      career_services: formData.careerServices.filter(s => s.trim()).map(s => ({ title: s })),
+      career_service_overview: formData.service_description || formData.description
+    };
+
+    try {
+      const res = await createRoadmap(payload);
+      console.log(res);
+      if (res.error) {
+        toast.error(res.error.data.error);
+        return;
+      }
+      toast.success("Career Roadmap saved successfully!");
+      if (onSave) onSave(payload);
+      onClose();
+    } catch (err) {
+      console.error(err);
+      toast.error("An unexpected error occurred");
+    }
   };
 
   const handleChange = (field, value) => {
@@ -48,6 +81,25 @@ export default function AddCareerModal({
 
         <div className="overflow-y-auto flex-1 p-6">
           <div className="space-y-5">
+            <div>
+              <label className="block font-semibold text-gray-900 mb-2">
+                Select Program *
+              </label>
+              <select
+                value={formData.program_id}
+                onChange={(e) => handleChange("program_id", e.target.value)}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                required
+              >
+                <option value="">Choose a program</option>
+                {programsData?.map((prog) => (
+                  <option key={prog.id} value={prog.id}>
+                    {prog.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div>
               <label className="block font-semibold text-gray-900 mb-2">
                 Description *
@@ -166,9 +218,9 @@ export default function AddCareerModal({
                   Service Description *
                 </label>
                 <textarea
-                  value={formData.description}
-                  onChange={(e) => handleChange("description", e.target.value)}
-                  placeholder="Describe this career path..."
+                  value={formData.service_description}
+                  onChange={(e) => handleChange("service_description", e.target.value)}
+                  placeholder="Describe your career services..."
                   rows="4"
                   className="w-full mb-3 px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                   required
@@ -226,9 +278,10 @@ export default function AddCareerModal({
           </button>
           <button
             onClick={handleSubmit}
-            className="px-5 py-2.5 bg-blue text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+            disabled={isSaving}
+            className="px-5 py-2.5 bg-blue text-white rounded-lg hover:bg-blue-700 font-medium transition-colors disabled:opacity-50"
           >
-            {initialData ? "Update" : "Add"}
+            {isSaving ? "Saving..." : (initialData ? "Update" : "Add")}
           </button>
         </div>
       </div>

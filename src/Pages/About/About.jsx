@@ -24,7 +24,7 @@ export default function About() {
           <div className="max-w-4xl mx-auto">
             {/* About Us Label */}
             <div className="flex items-center gap-2 mb-6">
-                <img src={icon} alt="" />
+              <img src={icon} alt="" />
               <span className="text-blue uppercase">
                 About Us
               </span>
@@ -32,14 +32,16 @@ export default function About() {
 
             {/* Main Heading */}
             <h1 className="text-5xl font-bold text-[#0E2A46] leading-snug">
-              Benefit From Our Online Learning Expertise Earn
-              <span className="text-blue ml-2">Professional</span>
+              Your Gateway to a Brighter Future in Global
+              <span className="text-blue ml-2">Education</span>
             </h1>
 
             {/* Description */}
             <p className="text-gray-600 text-lg my-10 leading-relaxed">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore.
+              We empower students by providing a unified platform to explore top
+              universities, specialized academic programs, and career-defining
+              internships. Our platform is designed to simplify your educational
+              journey and help you unlock world-class opportunities.
             </p>
 
             {/* Mission and Vision Cards */}
@@ -50,19 +52,22 @@ export default function About() {
                   OUR MISSION:
                 </h2>
                 <p className="text-gray-600 leading-relaxed">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore.
+                  To bridge the gap between students and prestigious
+                  institutions, ensuring every learner has access to the right
+                  resources, events, and jobs to achieve their academic and
+                  professional goals.
                 </p>
               </div>
 
               {/* Our Vision Card */}
               <div className="">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                  OUR VISSION:
+                  OUR VISION:
                 </h2>
                 <p className="text-gray-600 leading-relaxed">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore.
+                  To be the most trusted global destination for student
+                  empowerment, where education meets opportunity, and every
+                  ambition finds its perfect path to success.
                 </p>
               </div>
             </div>

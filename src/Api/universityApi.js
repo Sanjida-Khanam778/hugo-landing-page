@@ -209,6 +209,25 @@ export const authapi = api.injectEndpoints({
             query: () => "/get-events/",
             providesTags: ["DiscoveryEvents"],
         }),
+
+        getDiscoveryJobs: builder.query({
+            query: () => "/get-jobs/",
+            providesTags: ["DiscoveryJobs"],
+        }),
+
+        createCareerRoadmap: builder.mutation({
+            query: (data) => ({
+                url: "/create/career/roadmap/",
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["CareerRoadmap"],
+        }),
+
+        getCareerRoadmap: builder.query({
+            query: (programId) => `/career/roadmap/${programId}/`,
+            providesTags: (result, error, programId) => [{ type: "CareerRoadmap", id: programId }],
+        }),
     }),
 });
 
@@ -241,4 +260,7 @@ export const {
     useGetDashboardStatsQuery,
     useAddTestimonialMutation,
     useGetDiscoveryEventsQuery,
+    useGetDiscoveryJobsQuery,
+    useCreateCareerRoadmapMutation,
+    useGetCareerRoadmapQuery,
 } = authapi;

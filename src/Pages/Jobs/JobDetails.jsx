@@ -9,13 +9,12 @@ import {
 import ApplyJobModal from "../../Layouts/University/Modal/ApplyJobModal";
 import { useGetJobDetailsQuery } from "../../Api/universityApi";
 import logoPlaceholder from "../../assets/icons/uni_logo.png";
-import { useParams } from "react-router-dom";
 
-export default function JobDetails({ universityData, jobId, onBackClick, universityName }) {
-  console.log(universityData);
+export default function JobDetails({ jobId, onBackClick, all = false }) {
   const { data: job, isLoading, error } = useGetJobDetailsQuery(jobId);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   console.log(job);
+  console.log(all);
   // Check if job application deadline has passed
   const isExpired = useMemo(() => {
     if (!job?.deadline) return false;
@@ -34,7 +33,7 @@ export default function JobDetails({ universityData, jobId, onBackClick, univers
   if (isLoading) return <div className="min-h-screen bg-base p-8 text-center text-gray-500">Loading job details...</div>;
   if (error) return <div className="min-h-screen bg-base p-8 text-center text-red-500">Error loading job details.</div>;
   if (!job) return <div className="min-h-screen bg-base p-8 text-center text-gray-500">Job not found.</div>;
- const getFullUrl = (path) => {
+  const getFullUrl = (path) => {
     if (!path) return "";
     if (path.startsWith("http") || path.startsWith("blob:")) return path;
     return `http://10.10.13.20:8005${path}`;
@@ -58,7 +57,7 @@ export default function JobDetails({ universityData, jobId, onBackClick, univers
             </span>
             <span className="flex items-center">
               <GraduationCap size={22} className="mr-2" />
-              {job.university_name || universityName}
+              {job.university_name}
             </span>
             <span className="flex items-center">
               <MapPin size={20} className="mr-2" />
@@ -76,7 +75,7 @@ export default function JobDetails({ universityData, jobId, onBackClick, univers
       </div>
 
       {/* Content */}
-      <div className="py-8">
+      <div className={`py-8 ${all ? "max-w-7xl mx-auto" : ""}`}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6 bg-white rounded-lg p-6 h-fit">
@@ -266,14 +265,14 @@ export default function JobDetails({ universityData, jobId, onBackClick, univers
 
             {/* University Card */}
             <div className="bg-white rounded-lg p-6 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gray-50 p-2 flex-shrink-0 border border-gray-100 overflow-hidden">
-                  <img src={getFullUrl(universityData?.logo)} alt="University Logo" className="w-full h-full object-contain" />
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-gray-50 p-1 flex-shrink-0 border border-gray-100 overflow-hidden">
+                  <img src={job.univ_logo} alt="University Logo" className="w-full h-full object-contain" />
                 </div>
-                <h3 className="font-bold text-gray-900 leading-tight">{job.university_name || universityName}</h3>
+                <h3 className="font-bold text-gray-900 leading-tight">{job.university_name}</h3>
               </div>
               <p className="text-sm text-gray-600 leading-relaxed mb-6">
-                This position is posted through {job.university_name || universityName}'s career
+                This position is posted through {job.university_name}'s career
                 services. Join our global community of scholars and innovators.
               </p>
               <button

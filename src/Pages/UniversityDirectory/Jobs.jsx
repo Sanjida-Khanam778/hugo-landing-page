@@ -39,10 +39,10 @@ export default function Jobs({ data: universityData }) {
   if (view === "detail" && selectedJobId) {
     return (
       <JobDetails
-        universityData={universityData}
+
         jobId={selectedJobId}
         onBackClick={handleBackToList}
-        universityName={universityData?.title}
+
       />
     );
   }
