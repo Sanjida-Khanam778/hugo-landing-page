@@ -3,6 +3,7 @@
 import { useState } from "react";
 import UploadModal from "../Modal/UploadModal";
 import ViewMediaModal from "../Modal/ViewMediaModal";
+import DeleteMediaModal from "../Modal/DeleteMediaModal";
 import {
   Upload,
   Layers,
@@ -16,7 +17,8 @@ import {
 import { useSelector } from "react-redux";
 import {
   useGetUniversityMediaQuery,
-  useUploadUniversityMediaMutation
+  useUploadUniversityMediaMutation,
+  useDeleteUniversityMediaMutation
 } from "../../../Api/universityApi";
 import toast from "react-hot-toast";
 
@@ -24,10 +26,12 @@ export default function UniGallery() {
   const { data: mediaResponse, isLoading, error } = useGetUniversityMediaQuery();
   console.log(mediaResponse);
   const [uploadMedia] = useUploadUniversityMediaMutation();
+  const [deleteMedia, { isLoading: isDeleting }] = useDeleteUniversityMediaMutation();
 
   const [activeTab, setActiveTab] = useState("all");
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [viewingMedia, setViewingMedia] = useState(null);
+  const [deletingMedia, setDeletingMedia] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const getFullUrl = (path) => {
@@ -74,9 +78,16 @@ export default function UniGallery() {
     }
   };
 
-  const handleDeleteMedia = (id) => {
-    // Mutation for delete will be linked later if API exists
-    toast.error("Delete functionality not linked to API yet");
+  const handleConfirmDelete = async () => {
+    if (!deletingMedia) return;
+    try {
+      await deleteMedia(deletingMedia.id).unwrap();
+      toast.success("Media file deleted successfully");
+      setDeletingMedia(null);
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.data?.message || "Failed to delete media");
+    }
   };
 
   const filteredMedia = getFilteredMedia();
@@ -194,7 +205,7 @@ export default function UniGallery() {
                     <Eye className="w-5 h-5" />
                   </button>
                   <button
-                    onClick={() => handleDeleteMedia(media.id)}
+                    onClick={() => setDeletingMedia(media)}
                     className="bg-white text-red-600 p-3 rounded-xl hover:bg-red-600 hover:text-white transition-all transform hover:scale-110"
                     title="Delete"
                   >
@@ -237,6 +248,16 @@ export default function UniGallery() {
           media={viewingMedia}
           onClose={() => setViewingMedia(null)}
           getFullUrl={getFullUrl}
+        />
+      )}
+
+      {/* Delete Media Modal */}
+      {deletingMedia && (
+        <DeleteMediaModal
+          media={deletingMedia}
+          isDeleting={isDeleting}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setDeletingMedia(null)}
         />
       )}
     </div>

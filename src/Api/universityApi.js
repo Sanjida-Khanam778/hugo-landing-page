@@ -270,6 +270,14 @@ export const authapi = api.injectEndpoints({
             }),
             invalidatesTags: ["uni_testimonials"],
         }),
+
+        deleteUniversityMedia: builder.mutation({
+            query: (id) => ({
+                url: `/university/media/delete/${id}/`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["uni_media"],
+        }),
     }),
 });
 
@@ -311,4 +319,5 @@ export const {
     useGetUniversityMediaQuery,
     useGetUniversityTestimonialsQuery,
     useUpdateTestimonialStatusMutation,
+    useDeleteUniversityMediaMutation,
 } = authapi;
