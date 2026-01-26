@@ -289,6 +289,10 @@ export const authapi = api.injectEndpoints({
                 body: body,
             }),
         }),
+        getPublicUniversityGallery: builder.query({
+            query: (id) => `/university/university/${id}/gallery/`,
+            providesTags: (result, error, id) => [{ type: "PublicGallery", id }],
+        }),
     }),
 });
 
@@ -333,4 +337,5 @@ export const {
     useDeleteUniversityMediaMutation,
     useGetTestimonialsByUniIdQuery,
     useApplyToUniversityMutation,
+    useGetPublicUniversityGalleryQuery,
 } = authapi;
