@@ -54,8 +54,13 @@ export default function TestimonialTab({ data: universityData }) {
       return;
     }
 
+    if (!universityData?.id) {
+      toast.error("University information is missing. Please refresh and try again.");
+      return;
+    }
+
     const formData = new FormData();
-    formData.append("university", universityData?.id);
+    formData.append("university", universityData.id);
     formData.append("student_title", studentTitle);
     formData.append("content", newText);
     if (newPhoto) {
@@ -63,9 +68,9 @@ export default function TestimonialTab({ data: universityData }) {
     }
 
     try {
-      const res = await addTestimonial(formData);
-      console.log(res);
-      toast.success(res.message || "Submitted and awaiting approval!", {
+      const res = await addTestimonial(formData).unwrap();
+      console.log("Success:", res);
+      toast.success(res?.message || "Submitted and awaiting approval!", {
         position: "bottom-center",
       });
 
@@ -76,8 +81,16 @@ export default function TestimonialTab({ data: universityData }) {
       setPreview(null);
       if (fileRef.current) fileRef.current.value = null;
     } catch (err) {
-      console.error(err);
-      toast.error(err.data?.error?.[0] || "Failed to submit testimonial.");
+      console.error("Submission error:", err);
+      const errorMessage = err?.data?.non_field_errors[0] || err?.data?.error || err?.error || "Failed to submit testimonial.";
+      toast.error(errorMessage,{
+        position: "bottom-center",
+      });
+
+      setNewText("");
+      setStudentTitle("");
+      setNewPhoto(null);
+      setPreview(null);
     }
   }
 

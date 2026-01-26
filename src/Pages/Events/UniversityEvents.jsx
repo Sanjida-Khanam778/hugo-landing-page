@@ -1,145 +1,30 @@
 import { useState } from "react";
 import speakerImg from "../../assets/images/speaker.png";
-import event1 from "../../assets/images/event1.png";
-import event2 from "../../assets/images/event2.png";
-import event3 from "../../assets/images/event3.png";
-import event from "../../assets/icons/event.png";
-import uni_logo from "../../assets/icons/uni_logo.png";
+import eventPlaceholder from "../../assets/icons/event.png";
+import uni_logo_placeholder from "../../assets/icons/uni_logo.png";
+import { useGetDiscoveryEventsQuery } from "../../Api/universityApi";
 
 import {
   MapPin,
   Calendar,
   Users,
-  ChevronDown,
   Clock,
-
 } from "lucide-react";
 import background from "../../assets/images/uniBanner.png";
-import backgroundBanner from "../../assets/images/uni_directory.png";
-import { FiCalendar } from "react-icons/fi";
 
 export default function UniversityEvents() {
   const [view, setView] = useState("list"); // 'list' or 'detail'
   const [selectedEvent, setSelectedEvent] = useState(null);
-  // single-select filters
   const [eventFormat, setEventFormat] = useState("all");
   const [eventType, setEventType] = useState("all");
 
-  const events = [
-    {
-      id: 1,
-      title: "Harvard Business School Open Day",
-      university: "Harvard University",
-      date: "August 15, 2025",
-      time: "10:00 AM - 4:00 PM",
-      location: "Harvard Business School, Boston, MA",
-      attendees: "200 Students",
-      category: "Open Day",
-      badge: "In-person",
-      image: event1,
-      description:
-        "Explore the Harvard Business School campus and learn about our MBA programs.",
-      fullDescription:
-        "Explore the Harvard Business School campus and learn about our MBA programs. This open day provides students with the opportunity to tour the facilities, meet faculty and current students, and learn about the admissions process.",
-      agenda: [
-        {
-          time: "10:00 AM - 10:30 AM",
-          title: "Welcome and Introduction",
-          description: "Opening remarks by the Dean of Harvard Business School",
-        },
-        {
-          time: "10:30 AM - 11:30 AM",
-          title: "MBA Program Overview",
-          description:
-            "Presentation on curriculum, learning approach, and student life",
-        },
-        {
-          time: "11:30 AM - 12:30 PM",
-          title: "Campus Tour",
-          description:
-            "Guided tour of classrooms, libraries, and student facilities",
-        },
-        {
-          time: "12:30 PM - 01:30 PM",
-          title: "Lunch Break",
-          description:
-            "Casual networking opportunity with MBA field candidates",
-        },
-        {
-          time: "01:30 PM - 02:30 PM",
-          title: "Admissions Workshop",
-          description: "Tips and guidance on the application process",
-        },
-        {
-          time: "02:30 PM - 03:30 PM",
-          title: "Career Opportunities Panel",
-          description: "Alumni share career success stories and MBA prospects",
-        },
-        {
-          time: "03:30 PM - 04:00 PM",
-          title: "Q&A Session",
-          description: "Open forum for questions with admissions team",
-        },
-      ],
-      events: [
-        {
-          name: "Dr. James Wilson",
-          title: "Dean of Harvard Business School",
-          bio: "Dr. Wilson has led Harvard Business School for over a decade, fostering innovation and global partnerships.",
-        },
-        {
-          name: "Dr. Sarah Martinez",
-          title: "Director of Admissions",
-          bio: "Dr. Martinez has led Harvard Business School admissions for several years, fostering innovation and global partnerships.",
-        },
-        {
-          name: "Dr. David Johnson",
-          title: "Professor of Finance",
-          bio: "An expert in corporate finance with over 20 years of experience in academia and industry.",
-        },
-      ],
-      venue: {
-        name: "Harvard Business School, Boston, MA",
-        address: "Harvard Business School, Boston, Massachusetts 02163",
-        parking: "Paid parking available at the HBS Parking Garage",
-        accessibility: "All venue are wheelchair accessible",
-        transport:
-          "Public transportation available via the Red Line and shuttle buses (Shuttle)",
-      },
-    },
-    {
-      id: 2,
-      title: "International Students Webinar",
-      university: "Stanford University",
-      date: "August 20, 2025",
-      time: "2:00 PM - 5:00 PM",
-      location: "Virtual Event",
-      attendees: "500 Students",
-      category: "Webinar",
-      badge: "Online",
-      image: event2,
-      description:
-        "Join us for an online webinar to learn about studying at Stanford for international students.",
-      fullDescription:
-        "Join us for an online webinar to learn about studying at Stanford for international students. This webinar will cover admissions process, visa requirements, and student life.",
-    },
-    {
-      id: 3,
-      title: "Engineering Graduate Programs Info Session",
-      university: "MIT",
-      date: "August 25, 2025",
-      time: "1:00 PM - 6:00 PM",
-      location: "MIT Campus",
-      attendees: "150 Students",
-      category: "Info Session",
-      badge: "Online",
-      image: event3,
-      description:
-        "Learn about MIT's graduate programs in engineering, including application requirements and research opportunities.",
-      fullDescription:
-        "Learn about MIT's graduate programs in engineering, including application requirements and research opportunities.",
-    },
-  ];
+  const { data: eventsData, isLoading, error } = useGetDiscoveryEventsQuery();
+  console.log(eventsData);
+  const getFullUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:")) return path;
+    return `http://10.10.13.20:8005${path}`;
+  };
 
   const handleViewDetails = (event) => {
     setSelectedEvent(event);
@@ -151,30 +36,38 @@ export default function UniversityEvents() {
     setSelectedEvent(null);
   };
 
+  if (isLoading) return <div className="min-h-screen bg-base p-8 text-center text-gray-500">Loading events...</div>;
+  if (error) return <div className="min-h-screen bg-base p-8 text-center text-red-500">Error loading events.</div>;
+
+  const events = eventsData || [];
+
   if (view === "detail" && selectedEvent) {
     return (
       <div className="min-h-screen bg-base">
         {/* Header */}
         <div
-          style={{ backgroundImage: `url(${background})` }}
+          style={{ backgroundImage: `url(${getFullUrl(selectedEvent.image) || background})` }}
           className="bg-cover bg-no-repeat h-[50vh] text-white py-12 px-8 relative overflow-hidden flex items-center justify-center"
         >
+          <div className="absolute inset-0 bg-black/40" />
           <div className="w-11/12 mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
             <button
               onClick={handleBackToList}
-              className="mb-10 text-white/80 hover:text-white "
+              className="mb-10 text-white/80 hover:text-white flex items-center gap-2"
             >
               ← Back to Events
             </button>
             <div className="flex items-center gap-4">
-              <div className="w-20 h-20 bg-white rounded-full flex-shrink-0"></div>
+              <div className="w-20 h-20 bg-white rounded-full flex-shrink-0 flex items-center justify-center p-2">
+                <img src={getFullUrl(selectedEvent.univ_logo) || uni_logo_placeholder} alt="uni logo" className="max-h-full" />
+              </div>
               <div>
-                <h1 className="text-3xl xl:text-5xl font-bold mb-2">
+                <h1 className="text-3xl xl:text-5xl  mb-2">
                   {selectedEvent.title}
                 </h1>
                 <p className="text-blue-100 flex items-center">
                   <MapPin size={16} className="mr-2" />
-                  {selectedEvent.location}
+                  {selectedEvent.address}
                 </p>
               </div>
             </div>
@@ -183,57 +76,56 @@ export default function UniversityEvents() {
 
         {/* Content */}
         <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content */}
-            <div className="col-span-2 bg-white rounded-lg">
+            <div className="lg:col-span-2 space-y-6">
               {/* About This Event */}
-              <div className=" rounded-lg p-6">
-                <h2 className="text-xl font-bold mb-4">About This Event</h2>
-                <p className="text-gray-700 mb-6">
-                  {selectedEvent.fullDescription}
+              <div className="bg-white rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl  mb-4">About This Event</h2>
+                <p className="text-gray-700 mb-6 whitespace-pre-line">
+                  {selectedEvent.description}
                 </p>
 
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-inter">
                   <div className="flex items-start gap-3 bg-[#EFF6FF] p-4 rounded-lg">
-                    <Calendar className="text-blue mt-2" size={20} />
+                    <Calendar className="text-blue mt-1" size={20} />
                     <div>
-                      <p className=" text-grey">Date</p>
-                      <p className=" font-medium">{selectedEvent.date}</p>
+                      <p className=" text-grey text-xs">Date</p>
+                      <p className=" font-medium text-sm">{selectedEvent.date}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 bg-[#EFF6FF] p-4 rounded-lg">
-                    <Clock className="text-blue mt-2" size={20} />
+                    <Clock className="text-blue mt-1" size={20} />
                     <div>
-                      <p className=" text-grey">Time</p>
-                      <p className=" font-medium">{selectedEvent.time}</p>
+                      <p className=" text-grey text-xs">Time</p>
+                      <p className=" font-medium text-sm">{selectedEvent.time}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 bg-[#EFF6FF] p-4 rounded-lg">
-                    <Users className="text-blue mt-2" size={20} />
+                    <Users className="text-blue mt-1" size={20} />
                     <div>
-                      <p className=" text-grey">Category</p>
-                      <p className=" font-medium">Open Day</p>
+                      <p className=" text-grey text-xs">Category</p>
+                      <p className=" font-medium text-sm">{selectedEvent.category || "General Event"}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Event Agenda */}
-              {selectedEvent.agenda && (
-                <div className="bg-white rounded-lg p-6">
-                  <h2 className="text-xl font-bold mb-4">Event Agenda</h2>
+              {selectedEvent.agendas && selectedEvent.agendas.length > 0 && (
+                <div className="bg-white rounded-lg p-6 shadow-sm">
+                  <h2 className="text-xl  mb-4">Event Agenda</h2>
                   <div className="space-y-6">
-                    {selectedEvent.agenda.map((item, index) => (
-                      <div className="flex gap-4">
-                        <div className="border-r-2 border-[#BFDBFE] pr-4 w-40">
-                          <p className=" text-grey">{item.time}</p>
-                        </div>
-
-                        <div key={index} className="pl-4 pb-6">
-                          <p className="font-medium text-[#111827]">
-                            {item.title}
+                    {selectedEvent.agendas.map((item, index) => (
+                      <div key={index} className="flex gap-4 border-l-2 border-blue-100 ml-2">
+                        <div className="pl-6 pb-2">
+                          <p className=" text-blue text-sm tracking-wider mb-1">
+                            {item.time_slot}
                           </p>
-                          <p className=" text-[#374151] mt-2">
+                          <p className=" text-[#111827] text-lg">
+                            {item.task_title}
+                          </p>
+                          <p className=" text-[#374151] mt-2 text-sm leading-relaxed">
                             {item.description}
                           </p>
                         </div>
@@ -243,85 +135,51 @@ export default function UniversityEvents() {
                 </div>
               )}
 
-              {/* Speakers */}
-              {selectedEvent.speakers && (
-                <div className="bg-white rounded-lg p-6">
-                  <h2 className="text-2xl font-semibold mb-4">Speakers</h2>
-                  <div className="grid grid-cols-2 gap-6">
-                    {selectedEvent.speakers.map((speaker, index) => (
-                      <div
-                        key={index}
-                        className="flex gap-6 border border-[#CCCCCC] p-4 rounded-lg"
-                      >
-                        <div className="w-16 h-16 flex-shrink-0">
-                          <img src={event} className="w-full h-full" alt="" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold">{speaker.name}</h3>
-                          <p className=" text-gray-600">{speaker.title}</p>
-                          <p className=" text-gray-700 mt-2">{speaker.bio}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+              {/* Additional Information */}
+              {selectedEvent.additional_info && (
+                <div className="bg-white rounded-lg p-6 shadow-sm">
+                  <h2 className="text-xl  mb-4">
+                    Additional Information
+                  </h2>
+                  <p className=" text-gray-700 leading-relaxed italic">
+                    {selectedEvent.additional_info}
+                  </p>
                 </div>
               )}
-
-           
-
-              {/* Additional Information */}
-              <div className="bg-white rounded-lg p-6">
-                <h2 className="text-xl font-bold mb-4">
-                  Additional Information
-                </h2>
-                <p className=" text-gray-700">
-                  Business casual attire recommended. Bring government-issued ID
-                  for campus access.
-                </p>
-              </div>
             </div>
 
             {/* Sidebar */}
             <div className="space-y-6">
-              {/* Event Registration */}
-              <div className="bg-white rounded-lg p-6">
-                <h3 className="font-semibold mb-4">Event Registration</h3>
-                <img src={event} className="mx-auto" alt="" />
-                <p className="font-medium text-center my-4">Event Ended</p>
-                <p className=" text-gray-600 mb-4 text-center">
-                  This event has already taken place. Check out our upcoming
-                  events.
+              {/* Event Status */}
+              <div className="bg-white rounded-lg p-6 shadow-sm text-center">
+                <h3 className=" mb-4 tracking-widest text-gray-500 text-sm">Status</h3>
+                <div className="inline-block px-4 py-2 bg-blue/10 text-blue rounded-full  mb-4">
+                  {selectedEvent.status}
+                </div>
+                <p className=" text-gray-600 text-sm mb-6">
+                  {selectedEvent.registration_count} Students Registered
                 </p>
-                <button className="w-full bg-white text-blue py-2 rounded-lg font-medium hover:bg-blue-50 transition-colors">
-                  Browse Events
+                <button className="w-full bg-blue text-white py-3 rounded-lg  shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all">
+                  Register For Event
                 </button>
               </div>
 
               {/* About the Host */}
-              <div className="bg-white rounded-lg p-6">
-                <h3 className="font-semibold mb-4">About the Host</h3>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="">
-                    <img src={uni_logo} className="h-full w-full" alt="" />
+              <div className="bg-white rounded-lg p-6 shadow-sm">
+                <h3 className=" mb-4">About the Host</h3>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 flex-shrink-0 bg-base rounded-md p-1 border">
+                    <img src={getFullUrl(selectedEvent.univ_logo) || uni_logo_placeholder} className="h-full w-full object-contain" alt="" />
                   </div>
                   <div>
-                    <p className="font-medium">Harvard University</p>
+                    <p className="">{selectedEvent.univ_name}</p>
                   </div>
                 </div>
-                <p className=" text-gray-700 mb-4">
-                  Learn more about programs, admissions, and life as a Harvard
-                  student at University.
+                <p className=" text-gray-700 text-sm leading-relaxed mb-6">
+                  Learn more about programs, admissions, and life as a student at {selectedEvent.univ_name}.
                 </p>
-                <button className="text-blue-600 bg-base w-full p-3 rounded-lg ">
+                <button className="text-blue  bg-base w-full py-3 rounded-lg hover:bg-gray-100 transition-colors">
                   Visit University Profile
-                </button>
-              </div>
-
-              {/* Related Events */}
-              <div className="bg-white rounded-lg p-6">
-                <h3 className="font-semibold mb-4">Related Events</h3>
-                <button className="text-blue text-center w-full  font-medium">
-                  View All Events
                 </button>
               </div>
             </div>
@@ -335,219 +193,167 @@ export default function UniversityEvents() {
     <div className="min-h-screen bg-base">
       {/* Header */}
       <div
-        className="bg-primary h-[50vh] text-white py-12 px-8 relative overflow-hidden flex items-center justify-center"
+        className="bg-primary h-[50vh] text-white py-12 px-8 relative overflow-hidden flex items-center justify-center font-inter"
       >
-        <div className="w-11/12 mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl xl:text-5xl font-bold mb-2">
-            University Directory
+        <div className="w-11/12 mx-auto relative z-10 px-4 sm:px-6 lg:px-8 text-center sm:text-left">
+          <h1 className="text-4xl xl:text-6xl  mb-4">
+            University Events
           </h1>
-          <p className="text-sky xl:text-xl mt-10">
-            Explore our comprehensive directory of top universities worldwide.
-            Filter by location, programs, and more to find your perfect match.
+          <p className="text-sky xl:text-xl max-w-2xl font-light">
+            Stay updated with the latest webinars, open days, and workshops from top universities around the globe.
           </p>
         </div>
       </div>
 
       {/* Main Content */}
       <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex gap-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
-          <div className="w-64 flex-shrink-0">
-            <div className="bg-white rounded-lg p-4">
-              <h3 className="font-semibold mb-3 text-lg">Filters</h3>
+          <div className="w-full lg:w-64 flex-shrink-0">
+            <div className="bg-white rounded-xl p-6 shadow-sm sticky top-4">
+              <h3 className=" mb-4 text-xl border-b pb-2">Filters</h3>
 
-              <div className="mb-4">
-                <h4 className=" font-medium mb-2 text-gray-700">
+              <div className="mb-6">
+                <h4 className="  mb-3 text-gray-900 text-sm tracking-wider">
                   Event Format
                 </h4>
-                <div className="space-y-1.5">
-                  <label className="flex items-center cursor-pointer select-none">
-                    <input
-                      type="radio"
-                      name="eventFormat"
-                      className="mr-2 cursor-pointer"
-                      checked={eventFormat === "all"}
-                      onChange={() => setEventFormat("all")}
-                    />
-                    <span className="text-sm">All Events</span>
-                  </label>
-                  <label className="flex items-center cursor-pointer select-none">
-                    <input
-                      type="radio"
-                      name="eventFormat"
-                      className="mr-2 cursor-pointer"
-                      checked={eventFormat === "in-person"}
-                      onChange={() => setEventFormat("in-person")}
-                    />
-                    <span className="text-sm">In-Person</span>
-                  </label>
-                  <label className="flex items-center cursor-pointer select-none">
-                    <input
-                      type="radio"
-                      name="eventFormat"
-                      className="mr-2 cursor-pointer"
-                      checked={eventFormat === "virtual"}
-                      onChange={() => setEventFormat("virtual")}
-                    />
-                    <span className="text-sm">Virtual</span>
-                  </label>
+                <div className="space-y-2">
+                  {[
+                    { id: "all", label: "All Events" },
+                    { id: "In-Person", label: "In-Person" },
+                    { id: "Online", label: "Online" }
+                  ].map((fm) => (
+                    <label key={fm.id} className="flex items-center cursor-pointer group">
+                      <input
+                        type="radio"
+                        name="eventFormat"
+                        className="w-4 h-4 text-blue border-gray-300 focus:ring-blue"
+                        checked={(eventFormat === "all" && fm.id === "all") || eventFormat === fm.id}
+                        onChange={() => setEventFormat(fm.id)}
+                      />
+                      <span className="ml-2 text-sm text-gray-600 group-hover:text-blue transition-colors">{fm.label}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
 
-              <div className="mb-4">
-                <h4 className=" font-medium mb-2 text-gray-700">Event Type</h4>
-                <div className="space-y-1.5">
-                  <label className="flex items-center cursor-pointer select-none">
-                    <input
-                      type="radio"
-                      name="eventType"
-                      className="mr-2 cursor-pointer"
-                      checked={eventType === "all"}
-                      onChange={() => setEventType("all")}
-                    />
-                    <span className="text-sm">All Types</span>
-                  </label>
-                  <label className="flex items-center cursor-pointer select-none">
-                    <input
-                      type="radio"
-                      name="eventType"
-                      className="mr-2 cursor-pointer"
-                      checked={eventType === "open-day"}
-                      onChange={() => setEventType("open-day")}
-                    />
-                    <span className="text-sm">Open Day</span>
-                  </label>
-                  <label className="flex items-center cursor-pointer select-none">
-                    <input
-                      type="radio"
-                      name="eventType"
-                      className="mr-2 cursor-pointer"
-                      checked={eventType === "webinar"}
-                      onChange={() => setEventType("webinar")}
-                    />
-                    <span className="text-sm">Webinar</span>
-                  </label>
-                  <label className="flex items-center cursor-pointer select-none">
-                    <input
-                      type="radio"
-                      name="eventType"
-                      className="mr-2 cursor-pointer"
-                      checked={eventType === "info-session"}
-                      onChange={() => setEventType("info-session")}
-                    />
-                    <span className="text-sm">Info Session</span>
-                  </label>
-                  <label className="flex items-center cursor-pointer select-none">
-                    <input
-                      type="radio"
-                      name="eventType"
-                      className="mr-2 cursor-pointer"
-                      checked={eventType === "workshop"}
-                      onChange={() => setEventType("workshop")}
-                    />
-                    <span className="text-sm">Workshop</span>
-                  </label>
-                  <label className="flex items-center cursor-pointer select-none">
-                    <input
-                      type="radio"
-                      name="eventType"
-                      className="mr-2 cursor-pointer"
-                      checked={eventType === "conference"}
-                      onChange={() => setEventType("conference")}
-                    />
-                    <span className="text-sm">Conference</span>
-                  </label>
+              <div className="mb-6">
+                <h4 className="  mb-3 text-gray-900 text-sm tracking-wider">Event Type</h4>
+                <div className="space-y-2">
+                  {["all", "Open Day", "Webinar", "Info Session", "Workshop", "Conference", "Bootcamp"].map((type) => (
+                    <label key={type} className="flex items-center cursor-pointer group">
+                      <input
+                        type="radio"
+                        name="eventType"
+                        className="w-4 h-4 text-blue border-gray-300 focus:ring-blue"
+                        checked={(eventType === "all" && type === "all") || eventType === type}
+                        onChange={() => setEventType(type)}
+                      />
+                      <span className="ml-2 text-sm text-gray-600 group-hover:text-blue transition-colors">
+                        {type === "all" ? "All Types" : type}
+                      </span>
+                    </label>
+                  ))}
                 </div>
               </div>
 
               <div>
-                <h4 className=" font-medium mb-2 text-gray-700">Date</h4>
-                <input type="date" className="border p-2 rounded-lg w-full" />
+                <h4 className="  mb-3 text-gray-900 text-sm tracking-wider">Date</h4>
+                <input type="date" className="border border-gray-200 p-2.5 rounded-lg w-full text-sm focus:ring-2 focus:ring-blue focus:outline-none" />
               </div>
             </div>
           </div>
 
           {/* Events List */}
           <div className="flex-1">
-            {/* Events Header */}
-            <div className="mb-4">
-              <p className="text-sm text-gray-600">Showing 3 events</p>
+            <div className="mb-6 flex justify-between items-center bg-white p-4 rounded-xl shadow-sm">
+              <p className="text-sm  text-gray-500 tracking-widest">
+                Showing {events.length} events
+              </p>
             </div>
-            <div className="space-y-4">
-              {events.map((event) => (
-                <div
-                  key={event.id}
-                  className={`${
-                    event.id % 2 === 0 ? "bg-[#EEEAE6]" : "bg-[#DFF0EC]"
-                  } rounded-lg overflow-hidden flex`}
-                >
-                  {/* Image Placeholder */}
-                  <div className=" flex-shrink-0">
-                    <img src={event.image} className="h-full" alt="" />
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1 p-4 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <div className="">
-                              <img src={uni_logo} alt="" />
-                            </div>
-                            <span className=" text-gray-600">
-                              {event.university}
-                            </span>
-                          </div>
-                          <h3 className="text-lg font-semibold">
-                            {event.title}
-                          </h3>
-                        </div>
-                        {event.badge && (
-                          <span
-                            className={` px-3 py-1 rounded-md ${
-                              event.badge === "In-person"
-                                ? "bg-[#BFDBFE] text-[#1E40AF]"
-                                : "bg-[#DCFCE7] text-[#16A34A]"
-                            }`}
-                          >
-                            {event.badge}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="flex items-center gap-4  text-[#374151] mb-2">
-                        <span className="flex items-center">
-                          <Calendar size={16} className="mr-1 text-dark" />
-                          {event.date}
-                        </span>
-                        <span className="flex items-center">
-                          <Clock size={16} className="mr-1 text-dark" />
-                          {event.time}
-                        </span>
-                      </div>
-                      <div className="flex items-center  text-[#374151] mb-4">
-                        <MapPin size={16} className="mr-1 text-dark" />
-                        {event.location}
-                      </div>
-
-                      <p className=" text-gray-700">{event.description}</p>
-                    </div>
-
-                    <div className="flex items-center justify-between mt-3">
-                      <span className=" text-dark bg-[#F3F4F6] px-2 py-1 rounded-md">
-                        {event.category}
-                      </span>
-                      <button
-                        onClick={() => handleViewDetails(event)}
-                        className="bg-blue text-white px-4 py-2 rounded  transition-colors"
-                      >
-                        View Details
-                      </button>
-                    </div>
-                  </div>
+            <div className="space-y-6">
+              {events.length === 0 ? (
+                <div className="bg-white rounded-xl p-12 text-center text-gray-500 shadow-sm">
+                  No events found.
                 </div>
-              ))}
+              ) : (
+                events.map((event, idx) => (
+                  <div
+                    key={event.id}
+                    className={`${idx % 2 === 0 ? "bg-[#EEEAE6]" : "bg-[#DFF0EC]"
+                      } rounded-2xl overflow-hidden flex flex-col md:flex-row hover:shadow-xl transition-all group`}
+                  >
+                    {/* Image */}
+                    <div className="md:w-72 h-48 md:h-auto flex-shrink-0 relative overflow-hidden">
+                      <img
+                        src={getFullUrl(event.image) || eventPlaceholder}
+                        className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        alt={event.title}
+                      />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 p-6 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="w-10 h-10 bg-white rounded-full p-0.5 border">
+                                <img src={getFullUrl(event.univ_logo) || uni_logo_placeholder} alt="uni logo" className="w-full h-full object-contain" />
+                              </div>
+                              <span className="text-gray-500 tracking-wide">
+                                {event.univ_name}
+                              </span>
+                            </div>
+                            <h3 className="text-2xl text-gray-900 font-semibold leading-tight">
+                              {event.title}
+                            </h3>
+                          </div>
+                          {event.event_type && (
+                            <span
+                              className={` px-3 py-1 rounded-full text-sm tracking-widest ${event.event_type === "In-Person"
+                                ? "bg-sky text-blue"
+                                : "bg-green text-white"
+                                }`}
+                            >
+                              {event.event_type}
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-gray-700 mb-4  text-sm">
+                          <span className="flex items-center">
+                            <Calendar size={16} className="mr-2 text-blue" />
+                            {event.date}
+                          </span>
+                          <span className="flex items-center">
+                            <Clock size={16} className="mr-2 text-blue" />
+                            {event.time}
+                          </span>
+                        </div>
+                        <div className="flex items-center  text-gray-600 mb-4 text-sm font-medium">
+                          <MapPin size={16} className="mr-2 text-blue" />
+                          {event.address}
+                        </div>
+
+                        <p className=" text-gray-600 text-sm line-clamp-2 leading-relaxed font-inter">{event.description}</p>
+                      </div>
+
+                      <div className="flex items-center justify-between mt-6 pt-6 border-t border-black/5">
+                        <span className="text-blue text-sm bg-blue/5 px-3 py-1.5 rounded-full border border-blue/10">
+                          {event.category || "General"}
+                        </span>
+                        <button
+                          onClick={() => handleViewDetails(event)}
+                          className="bg-blue text-white px-6 py-2.5 rounded-xl  transition-all shadow-lg hover:shadow-blue-200 active:scale-95"
+                        >
+                          Event Details
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

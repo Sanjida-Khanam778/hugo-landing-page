@@ -204,6 +204,11 @@ export const authapi = api.injectEndpoints({
                 body: data,
             }),
         }),
+
+        getDiscoveryEvents: builder.query({
+            query: () => "/events/",
+            providesTags: ["DiscoveryEvents"],
+        }),
     }),
 });
 
@@ -235,4 +240,5 @@ export const {
     useGetJobDetailsQuery,
     useGetDashboardStatsQuery,
     useAddTestimonialMutation,
+    useGetDiscoveryEventsQuery,
 } = authapi;
