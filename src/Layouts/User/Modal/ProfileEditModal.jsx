@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { X, Upload, Eye, EyeOff } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { useProfileUpdateMutation } from "../../../Api/authapi";
+import { useSetupStudentProfileMutation } from "../../../Api/authapi";
 
 export default function ProfileEditModal({ profile, onClose }) {
-    const [updateProfile, { isLoading }] = useProfileUpdateMutation();
-    const [showPassword, setShowPassword] = useState(false);
+    const [setupProfile, { isLoading }] = useSetupStudentProfileMutation();
     const [formData, setFormData] = useState({
         full_name: profile?.full_name || "",
-        about: profile?.about || "",
-        password: "",
     });
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(profile?.image || null);
@@ -35,16 +32,12 @@ export default function ProfileEditModal({ profile, onClose }) {
         e.preventDefault();
         const data = new FormData();
         data.append("full_name", formData.full_name);
-        data.append("about", formData.about);
-        if (formData.password) {
-            data.append("password", formData.password);
-        }
         if (imageFile) {
             data.append("image", imageFile);
         }
 
         try {
-            await updateProfile(data).unwrap();
+            await setupProfile(data).unwrap();
             toast.success("Profile updated successfully!");
             onClose();
         } catch (err) {

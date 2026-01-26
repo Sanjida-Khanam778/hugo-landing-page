@@ -2,32 +2,16 @@ import React, { useState, useRef } from "react";
 import comment from "../../assets/images/comment.png";
 import profile1 from "../../assets/images/profile1.png";
 import profile2 from "../../assets/images/profile2.png";
-import { useAddTestimonialMutation } from "../../Api/universityApi";
+import { useAddTestimonialMutation, useGetTestimonialsByUniIdQuery } from "../../Api/universityApi";
 import { toast } from "react-hot-toast";
 
 export default function TestimonialTab({ data: universityData }) {
-  const [addTestimonial, { isLoading }] = useAddTestimonialMutation();
+  const [addTestimonial, { isLoading: isSubmitting }] = useAddTestimonialMutation();
+  const { data: testimonialsData, isLoading: isFetching } = useGetTestimonialsByUniIdQuery(universityData?.id, {
+    skip: !universityData?.id
+  });
+
   const [sortOrder, setSortOrder] = useState("newest"); // newest or oldest
-  const [testimonials, setTestimonials] = useState([
-    {
-      id: 1,
-      text: "My time at Harvard Business School transformed my career trajectory and provided me with an incredible network of peers and mentors.",
-      author: "Sarah Johnson",
-      meta: "MBA, Class of 2022",
-      date: "2022-06-15",
-      avatar: profile2,
-      reviewImage: null,
-    },
-    {
-      id: 2,
-      text: "The research opportunities and faculty mentorship at Harvard prepared me exceptionally well for my career in AI research.",
-      author: "David Chen",
-      meta: "Computer Science, Class of 2021",
-      date: "2021-09-10",
-      avatar: profile1,
-      reviewImage: null,
-    },
-  ]);
 
   const [newText, setNewText] = useState("");
   const [studentTitle, setStudentTitle] = useState("");
@@ -35,6 +19,12 @@ export default function TestimonialTab({ data: universityData }) {
   const [preview, setPreview] = useState(null);
   const fileRef = useRef();
   const [lightbox, setLightbox] = useState(null);
+
+  const getFullUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:")) return path;
+    return `http://10.10.13.20:8005${path}`;
+  };
 
   function handlePhotoChange(e) {
     const f = e.target.files && e.target.files[0];
@@ -82,8 +72,8 @@ export default function TestimonialTab({ data: universityData }) {
       if (fileRef.current) fileRef.current.value = null;
     } catch (err) {
       console.error("Submission error:", err);
-      const errorMessage = err?.data?.non_field_errors[0] || err?.data?.error || err?.error || "Failed to submit testimonial.";
-      toast.error(errorMessage,{
+      const errorMessage = err?.data?.non_field_errors?.[0] || err?.data?.error || err?.error || "Failed to submit testimonial.";
+      toast.error(errorMessage, {
         position: "bottom-center",
       });
 
@@ -94,9 +84,11 @@ export default function TestimonialTab({ data: universityData }) {
     }
   }
 
+  const testimonials = testimonialsData || [];
+
   const sorted = [...testimonials].sort((a, b) => {
-    if (sortOrder === "newest") return new Date(b.date) - new Date(a.date);
-    return new Date(a.date) - new Date(b.date);
+    if (sortOrder === "newest") return new Date(b.created_at) - new Date(a.created_at);
+    return new Date(a.created_at) - new Date(b.created_at);
   });
 
   return (
@@ -118,49 +110,55 @@ export default function TestimonialTab({ data: universityData }) {
           </div>
         </div>
 
-        <div className="space-y-6">
-          {sorted.map((t) => (
-            <div key={t.id} className="bg-base p-4 rounded-lg">
-              <div className="flex gap-4 mb-4">
-                <div>
-                  {/* author avatar */}
-                  <img
-                    className="w-12 h-12 object-cover rounded-full"
-                    src={t.avatar || comment}
-                    alt="author"
-                  />
-                </div>
-                <div className="flex-1">
-                  <div className="flex gap-4">
-                    <p className="text-gray-700 text-base">{t.text}</p>
-                    {t.reviewImage && (
-                      <button
-                        type="button"
-                        onClick={() => setLightbox(t.reviewImage)}
-                        className="ml-2 flex-shrink-0"
-                      >
-                        <img
-                          src={t.reviewImage}
-                          alt="review"
-                          className="w-20 h-20 object-cover rounded"
-                        />
-                      </button>
-                    )}
+        {isFetching ? (
+          <div className="py-10 text-center text-gray-500">Loading testimonials...</div>
+        ) : sorted.length === 0 ? (
+          <div className="py-10 text-center text-gray-500">No testimonials found.</div>
+        ) : (
+          <div className="space-y-6">
+            {sorted.map((t) => (
+              <div key={t.id} className="bg-base p-4 rounded-lg">
+                <div className="flex gap-4 mb-4">
+                  <div>
+                    {/* author avatar */}
+                    <img
+                      className="w-12 h-12 object-cover rounded-full"
+                      src={getFullUrl(t.profile_picture) || comment}
+                      alt="author"
+                    />
                   </div>
-                  <div className="mt-3 flex items-center gap-3">
-                    <div>
-                      <p className="font-semibold text-sm">{t.author}</p>
-                      <p className="text-sm text-gray-600">{t.meta}</p>
+                  <div className="flex-1">
+                    <div className="flex gap-4">
+                      <p className="text-gray-700 text-base">{t.content}</p>
+                      {t.photo && (
+                        <button
+                          type="button"
+                          onClick={() => setLightbox(getFullUrl(t.photo))}
+                          className="ml-2 flex-shrink-0"
+                        >
+                          <img
+                            src={getFullUrl(t.photo)}
+                            alt="review"
+                            className="w-20 h-20 object-cover rounded"
+                          />
+                        </button>
+                      )}
                     </div>
-                    <div className="ml-auto text-sm text-gray-500">
-                      {new Date(t.date).toLocaleDateString()}
+                    <div className="mt-3 flex items-center gap-3">
+                      <div>
+                        <p className="font-semibold text-sm">{t.student_name}</p>
+                        <p className="text-sm text-gray-600">{t.student_title}</p>
+                      </div>
+                      <div className="ml-auto text-sm text-gray-500">
+                        {new Date(t.created_at).toLocaleDateString()}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Add Testimonial Button */}
@@ -226,10 +224,10 @@ export default function TestimonialTab({ data: universityData }) {
           <div className="flex justify-end">
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isSubmitting}
               className="bg-blue text-white px-8 py-2.5 rounded-lg text-sm transition-colors font-bold disabled:opacity-50"
             >
-              {isLoading ? "Submitting..." : "Submit Testimonial"}
+              {isSubmitting ? "Submitting..." : "Submit Testimonial"}
             </button>
           </div>
         </form>

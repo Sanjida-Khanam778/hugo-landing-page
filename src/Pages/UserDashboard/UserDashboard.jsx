@@ -41,7 +41,7 @@ export default function UserDashboard() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="font-semibold text-lg">{user?.full_name || "New User"}</h2>
+                    <h2 className="font-semibold text-lg">{profile?.full_name || user?.full_name || "New User"}</h2>
                     <button
                       onClick={() => setIsEditModalOpen(true)}
                       className="p-1 hover:bg-gray-100 rounded-full transition-colors text-blue"

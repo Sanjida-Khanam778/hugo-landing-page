@@ -119,6 +119,15 @@ export const authapi = api.injectEndpoints({
       invalidatesTags: ["user_profile"],
     }),
 
+    setupStudentProfile: builder.mutation({
+      query: (data) => ({
+        url: "/student/profile/setup/",
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["user_profile"],
+    }),
+
     getUserProfile: builder.query({
       query: () => "/accounts/profile/",
       providesTags: ["user_profile"],
@@ -135,5 +144,6 @@ export const {
   useResetPasswordMutation,
   useVerifyOtpMutation,
   useGetUserProfileQuery,
-  useUniversitySignupMutation
+  useUniversitySignupMutation,
+  useSetupStudentProfileMutation
 } = authapi;

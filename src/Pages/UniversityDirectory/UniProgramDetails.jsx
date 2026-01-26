@@ -10,13 +10,16 @@ import {
 } from "lucide-react";
 import profile1 from "../../assets/images/profile1.png";
 import profile2 from "../../assets/images/speaker.png";
-import { useGetProgramDetailsQuery } from "../../Api/universityApi";
+import { useGetCareerRoadmapQuery, useGetProgramDetailsQuery } from "../../Api/universityApi";
 
 export default function UniProgramDetails({ programId, onBack }) {
     const { data: programData, isLoading, error } = useGetProgramDetailsQuery(programId);
     const [activeTab, setActiveTab] = useState("overview");
     const [showApplicationForm, setShowApplicationForm] = useState(false);
-
+    const { data: careerData } = useGetCareerRoadmapQuery(programData?.id, {
+        skip: !programData?.id,
+    });
+    console.log(careerData)
     if (isLoading) return <div className="p-8 text-center text-gray-500">Loading program details...</div>;
     if (error) return <div className="p-8 text-center text-red-500">Error loading program details.</div>;
     if (!programData) return <div className="p-8 text-center text-gray-500">No program details found.</div>;
@@ -462,165 +465,88 @@ export default function UniProgramDetails({ programId, onBack }) {
 
                         {activeTab === "careers" && (
                             <div className="bg-white p-6 rounded-xl">
-                                {/* Career Opportunities */}
-                                <div className="bg-white rounded-lg mt-6">
-                                    <h2 className="text-4xl font-bold mb-4">
-                                        Career Opportunities
-                                    </h2>
-                                    <p className="text-gray-700 leading-relaxed mb-6">
-                                        Graduates of the Bachelor of Arts in Economics program at
-                                        Harvard University are well-prepared to compete in various
-                                        sectors. The strong analytical skills and knowledge in
-                                        economics, data analysis, and policy analysis make graduates
-                                        highly sought after.
-                                    </p>
-
-                                    {/* Career Paths */}
-                                    <h3 className="text-2xl font-medium mb-4">Career Paths</h3>
-                                    <div className="grid grid-cols-3 gap-4 mb-6">
-                                        <div className="text-center p-4 border border-gray-200 rounded-lg">
-                                            <div className="w-12 h-12 bg-sky text-blue rounded-full flex items-center justify-center mx-auto mb-3">
-                                                <span className="text-xl font-medium text-blue-600">
-                                                    1
-                                                </span>
-                                            </div>
-                                            <p className=" font-medium">Economic Researcher</p>
-                                        </div>
-                                        <div className="text-center p-4 border border-gray-200 rounded-lg">
-                                            <div className="w-12 h-12 bg-sky text-blue rounded-full flex items-center justify-center mx-auto mb-3">
-                                                <span className="text-xl font-medium text-blue-600">
-                                                    2
-                                                </span>
-                                            </div>
-                                            <p className=" font-medium">Financial Consultant</p>
-                                        </div>
-                                        <div className="text-center p-4 border border-gray-200 rounded-lg">
-                                            <div className="w-12 h-12 bg-sky text-blue rounded-full flex items-center justify-center mx-auto mb-3">
-                                                <span className="text-xl font-medium text-blue-600">
-                                                    3
-                                                </span>
-                                            </div>
-                                            <p className=" font-medium">Market Research Analyst</p>
-                                        </div>
-                                        <div className="text-center p-4 border border-gray-200 rounded-lg">
-                                            <div className="w-12 h-12 bg-sky text-blue rounded-full flex items-center justify-center mx-auto mb-3">
-                                                <span className="text-xl font-medium text-blue-600">
-                                                    4
-                                                </span>
-                                            </div>
-                                            <p className=" font-medium">Policy Advisor</p>
-                                        </div>
-                                        <div className="text-center p-4 border border-gray-200 rounded-lg">
-                                            <div className="w-12 h-12 bg-sky text-blue rounded-full flex items-center justify-center mx-auto mb-3">
-                                                <span className="text-xl font-medium text-blue-600">
-                                                    5
-                                                </span>
-                                            </div>
-                                            <p className=" font-medium">
-                                                Graduate studies in Economics, Business, or Law
+                                {careerData?.[0] ? (
+                                    <>
+                                        {/* Career Opportunities */}
+                                        <div className="bg-white rounded-lg mt-6">
+                                            <h2 className="text-4xl font-bold mb-4">
+                                                Career Opportunities
+                                            </h2>
+                                            <p className="text-gray-700 leading-relaxed mb-6">
+                                                {careerData[0].description}
                                             </p>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                {/* Employment Statistics */}
-                                <div className="bg-white rounded-lg mb-6">
-                                    <h3 className="text-2xl font-medium mb-4">
-                                        Employment Statistics
-                                    </h3>
-                                    <div className="space-y-3 border border-[#CCCCCC] rounded-xl">
-                                        <div className="flex justify-between items-center px-6 py-3 font-medium bg-base rounded-t-xl text-grey border-b border-[#CCCCCC]">
-                                            <span className="">Metric</span>
-                                            <span className="">Value</span>
+                                            {/* Career Paths */}
+                                            <h3 className="text-2xl font-medium mb-4">Career Paths</h3>
+                                            <div className="grid grid-cols-3 gap-4 mb-6">
+                                                {careerData[0].career_paths?.map((path, index) => (
+                                                    <div key={path.id || index} className="text-center p-4 border border-gray-200 rounded-lg">
+                                                        <div className="w-12 h-12 bg-sky text-blue rounded-full flex items-center justify-center mx-auto mb-3">
+                                                            <span className="text-xl font-medium text-blue-600">
+                                                                {index + 1}
+                                                            </span>
+                                                        </div>
+                                                        <p className="font-medium">{path.name}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
-                                        <div className="flex justify-between items-center px-6 py-3 border-b border-[#CCCCCC]">
-                                            <span className="">
-                                                Employed or Not Active (3 months)
-                                            </span>
-                                            <span className="">95%</span>
-                                        </div>
-                                        <div className="flex justify-between items-center px-6 py-3 border-b border-[#CCCCCC]">
-                                            <span className="">Average Starting Salary</span>
-                                            <span className="">$75K</span>
-                                        </div>
-                                        <div className="flex justify-between items-center px-6 py-3">
-                                            <span className="">Graduate School Placement</span>
-                                            <span className="">20%</span>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                {/* Career Services */}
-                                <div className="bg-white rounded-lg mb-6">
-                                    <h3 className="text-2xl font-medium mb-4">Career Services</h3>
-                                    <p className="text-gray-700  leading-relaxed mb-4">
-                                        Harvard University's Career Services provides career
-                                        services to help students prepare for and find employment.
-                                    </p>
+                                        {/* Employment Statistics */}
+                                        <div className="bg-white rounded-lg mb-6">
+                                            <h3 className="text-2xl font-medium mb-4">
+                                                Employment Statistics
+                                            </h3>
+                                            <div className="space-y-3 border border-[#CCCCCC] rounded-xl">
+                                                <div className="flex justify-between items-center px-6 py-3 font-medium bg-base rounded-t-xl text-grey border-b border-[#CCCCCC]">
+                                                    <span className="">Metric</span>
+                                                    <span className="">Value</span>
+                                                </div>
+                                                <div className="flex justify-between items-center px-6 py-3 border-b border-[#CCCCCC]">
+                                                    <span className="">
+                                                        Employment Rate
+                                                    </span>
+                                                    <span className="">{careerData[0].employment_rate}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center px-6 py-3 border-b border-[#CCCCCC]">
+                                                    <span className="">Average Starting Salary</span>
+                                                    <span className="">{careerData[0].avg_starting_salary}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center px-6 py-3">
+                                                    <span className="">Graduate School Placement</span>
+                                                    <span className="">{careerData[0].graduate_school_placement}</span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                    <div className="space-y-3">
-                                        <div className="flex items-start gap-3">
-                                            <CheckCircle
-                                                strokeWidth={3.0}
-                                                size={18}
-                                                className="text-green mt-0.5 flex-shrink-0"
-                                            />
-                                            <span className=" text-gray-700">
-                                                One-on-one career counseling
-                                            </span>
+                                        {/* Career Services */}
+                                        <div className="bg-white rounded-lg mb-6">
+                                            <h3 className="text-2xl font-medium mb-4">Career Services</h3>
+                                            <p className="text-gray-700 leading-relaxed mb-4">
+                                                {careerData[0].career_service_overview}
+                                            </p>
+
+                                            <div className="space-y-3">
+                                                {careerData[0].career_services?.map((service, index) => (
+                                                    <div key={service.id || index} className="flex items-start gap-3">
+                                                        <CheckCircle
+                                                            strokeWidth={3.0}
+                                                            size={18}
+                                                            className="text-green mt-0.5 flex-shrink-0"
+                                                        />
+                                                        <span className="text-gray-700">
+                                                            {service.title}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
-                                        <div className="flex items-start gap-3">
-                                            <CheckCircle
-                                                strokeWidth={3.0}
-                                                size={18}
-                                                className="text-green mt-0.5 flex-shrink-0"
-                                            />
-                                            <span className=" text-gray-700">
-                                                Resume and cover letter workshops
-                                            </span>
-                                        </div>
-                                        <div className="flex items-start gap-3">
-                                            <CheckCircle
-                                                strokeWidth={3.0}
-                                                size={18}
-                                                className="text-green mt-0.5 flex-shrink-0"
-                                            />
-                                            <span className=" text-gray-700">
-                                                Interview preparation and mock interviews
-                                            </span>
-                                        </div>
-                                        <div className="flex items-start gap-3">
-                                            <CheckCircle
-                                                strokeWidth={3.0}
-                                                size={18}
-                                                className="text-green mt-0.5 flex-shrink-0"
-                                            />
-                                            <span className=" text-gray-700">
-                                                Job and internship fairs
-                                            </span>
-                                        </div>
-                                        <div className="flex items-start gap-3">
-                                            <CheckCircle
-                                                strokeWidth={3.0}
-                                                size={18}
-                                                className="text-green mt-0.5 flex-shrink-0"
-                                            />
-                                            <span className=" text-gray-700">
-                                                Networking events with alumni and industry professionals
-                                            </span>
-                                        </div>
-                                        <div className="flex items-start gap-3">
-                                            <CheckCircle
-                                                strokeWidth={3.0}
-                                                size={18}
-                                                className="text-green mt-0.5 flex-shrink-0"
-                                            />
-                                            <span className=" text-gray-700">
-                                                Access to exclusive job postings database
-                                            </span>
-                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="text-center py-10 text-gray-500">
+                                        <p>No career roadmap data available for this program.</p>
                                     </div>
-                                </div>
+                                )}
                             </div>
                         )}
                     </div>

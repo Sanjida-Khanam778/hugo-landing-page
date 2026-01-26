@@ -278,6 +278,10 @@ export const authapi = api.injectEndpoints({
             }),
             invalidatesTags: ["uni_media"],
         }),
+        getTestimonialsByUniId: builder.query({
+            query: (id) => `/testimonials/?univ_id=${id}`,
+            providesTags: (result, error, id) => ["uni_testimonials", { type: "UniversityTestimonials", id }],
+        }),
     }),
 });
 
@@ -320,4 +324,5 @@ export const {
     useGetUniversityTestimonialsQuery,
     useUpdateTestimonialStatusMutation,
     useDeleteUniversityMediaMutation,
+    useGetTestimonialsByUniIdQuery,
 } = authapi;

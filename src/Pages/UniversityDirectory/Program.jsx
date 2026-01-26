@@ -48,9 +48,12 @@ export default function Program({ data, onViewDetails }) {
             className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All Levels</option>
-            <option value="bachelor">Bachelor's</option>
-            <option value="master">Master's</option>
-            <option value="doctorate">Doctorate</option>
+            <option value="college">College</option>
+            <option value="Master">Master</option>
+            <option value="PhD">PhD</option>
+            <option value="degree">Degree</option>
+            <option value="online-courses">Online Courses</option>
+            <option value="professional-formation">Professional Formation</option>
           </select>
         </div>
       </div>
