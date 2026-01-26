@@ -13,105 +13,70 @@ import {
   Trash2,
   Folder,
 } from "lucide-react";
+import { useSelector } from "react-redux";
+import {
+  useGetUniversityMediaQuery,
+  useUploadUniversityMediaMutation
+} from "../../../Api/universityApi";
+import toast from "react-hot-toast";
 
 export default function UniGallery() {
+  const { data: mediaResponse, isLoading, error } = useGetUniversityMediaQuery();
+  console.log(mediaResponse);
+  const [uploadMedia] = useUploadUniversityMediaMutation();
+
   const [activeTab, setActiveTab] = useState("all");
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [viewingMedia, setViewingMedia] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const [mediaFiles, setMediaFiles] = useState([
-    {
-      id: 1,
-      name: "Campus Tour Video",
-      type: "video",
-      date: "2025-09-15",
-      size: "245 MB",
-      url: "/modern-video-player.png",
-    },
-    {
-      id: 2,
-      name: "University Brochure 2025",
-      type: "document",
-      date: "2025-09-15",
-      size: "3.2 MB",
-      url: "/pdf-document.png",
-    },
-    {
-      id: 3,
-      name: "Campus New Building",
-      type: "image",
-      date: "2025-09-15",
-      size: "5.6 MB",
-      url: "/modern-building-campus.jpg",
-    },
-    {
-      id: 4,
-      name: "Student Life Collage",
-      type: "image",
-      date: "2025-09-14",
-      size: "8.3 MB",
-      url: "/diverse-students-campus.png",
-    },
-    {
-      id: 5,
-      name: "Research Highlights PDF",
-      type: "document",
-      date: "2025-09-14",
-      size: "2.1 MB",
-      url: "/research-paper-stack.png",
-    },
-    {
-      id: 6,
-      name: "Graduation Ceremony",
-      type: "video",
-      date: "2025-09-13",
-      size: "512 MB",
-      url: "/graduation-ceremony.png",
-    },
-    {
-      id: 7,
-      name: "Library Tour",
-      type: "image",
-      date: "2025-09-13",
-      size: "4.2 MB",
-      url: "/library-interior.png",
-    },
-    {
-      id: 8,
-      name: "Academic Calendar",
-      type: "document",
-      date: "2025-09-12",
-      size: "1.5 MB",
-      url: "/calendar-schedule.png",
-    },
-  ]);
-
-  const getFilteredMedia = () => {
-    if (activeTab === "all") return mediaFiles;
-    if (activeTab === "images")
-      return mediaFiles.filter((m) => m.type === "image");
-    if (activeTab === "videos")
-      return mediaFiles.filter((m) => m.type === "video");
-    if (activeTab === "documents")
-      return mediaFiles.filter((m) => m.type === "document");
-    return mediaFiles;
+  const getFullUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+    return `http://10.10.13.20:8005${path}`;
   };
 
-  const handleUpload = (newFiles) => {
-    const uploadedMedia = newFiles.map((file) => ({
-      id: Math.max(...mediaFiles.map((m) => m.id), 0) + 1,
-      name: file.name,
-      type: file.type,
-      date: new Date().toISOString().split("T")[0],
-      size: file.size,
-      url: file.url,
-    }));
-    setMediaFiles([...uploadedMedia, ...mediaFiles]);
-    setShowUploadModal(false);
+  const getFilteredMedia = () => {
+    let files = mediaResponse || [];
+
+    // Apply tab filter
+    if (activeTab === "images") {
+      files = files.filter((m) => m.media_type === "image");
+    } else if (activeTab === "videos") {
+      files = files.filter((m) => m.media_type === "video");
+    } else if (activeTab === "documents") {
+      files = files.filter((m) => m.media_type === "document");
+    }
+
+    // Apply search filter
+    if (searchTerm) {
+      files = files.filter((m) =>
+        m.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    return files;
+  };
+
+  const handleUpload = async (uploadData) => {
+    const formData = new FormData();
+    formData.append("file", uploadData.file);
+    formData.append("title", uploadData.title);
+    formData.append("media_type", uploadData.media_type);
+
+    try {
+      await uploadMedia(formData).unwrap();
+      toast.success("Media uploaded successfully");
+      setShowUploadModal(false);
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.data?.message || "Failed to upload media");
+    }
   };
 
   const handleDeleteMedia = (id) => {
-    setMediaFiles(mediaFiles.filter((m) => m.id !== id));
+    // Mutation for delete will be linked later if API exists
+    toast.error("Delete functionality not linked to API yet");
   };
 
   const filteredMedia = getFilteredMedia();
@@ -119,15 +84,18 @@ export default function UniGallery() {
   const getIconForType = (type) => {
     switch (type) {
       case "image":
-        return <Image className="w-5 h-5" />;
+        return <Image className="w-5 h-5 text-blue" />;
       case "video":
-        return <Video className="w-5 h-5" />;
+        return <Video className="w-5 h-5 text-purple-600" />;
       case "document":
-        return <FileText className="w-5 h-5" />;
+        return <FileText className="w-5 h-5 text-orange-500" />;
       default:
-        return <Layers className="w-5 h-5" />;
+        return <Layers className="w-5 h-5 text-gray-500" />;
     }
   };
+
+  if (isLoading) return <div className="p-8 text-center text-gray-500">Loading gallery...</div>;
+  if (error) return <div className="p-8 text-center text-red-500">Error loading media gallery.</div>;
 
   return (
     <div className="p-6">
@@ -135,9 +103,9 @@ export default function UniGallery() {
         <h1 className="text-3xl font-bold text-gray-900">Gallery</h1>
         <button
           onClick={() => setShowUploadModal(true)}
-          className="bg-blue text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          className="bg-blue text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-colors"
         >
-          <Upload size={18} strokeWidth={2.5} /> Upload Files
+          <Upload size={18} strokeWidth={2.5} /> Upload Media
         </button>
       </div>
 
@@ -145,104 +113,115 @@ export default function UniGallery() {
       <div className="flex justify-between items-center mb-6">
         <input
           type="text"
-          placeholder="Search media..."
+          placeholder="Search media by title..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-4 mb-6 overflow-x-auto">
-        {["all", "images", "videos", "documents", "new-folder"].map((tab) => (
+      <div className="flex gap-4 mb-6 overflow-x-auto pb-2">
+        {["all", "images", "videos", "documents"].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 transition-colors whitespace-nowrap ${
-              activeTab === tab
-                ? "text-blue bg-[#DBEAFE] rounded-lg"
-                : ""
-            }`}
+            className={`px-4 py-2 transition-all whitespace-nowrap font-medium flex items-center gap-2 rounded-lg ${activeTab === tab
+              ? "text-blue bg-blue/10 shadow-sm"
+              : "text-gray-600 hover:bg-gray-100"
+              }`}
           >
-            {tab === "all" && (
-              <span className="inline-flex items-center gap-2">
-                <Folder className="w-4 h-4" />
-                All Media
-              </span>
-            )}
-            {tab === "images" && (
-              <span className="inline-flex items-center gap-2">
-                <Image className="w-4 h-4" />
-                Images
-              </span>
-            )}
-            {tab === "videos" && (
-              <span className="inline-flex items-center gap-2">
-                <Video className="w-4 h-4" />
-                Videos
-              </span>
-            )}
-            {tab === "documents" && (
-              <span className="inline-flex items-center gap-2">
-                <FileText className="w-4 h-4" />
-                Documents
-              </span>
-            )}
+            {tab === "all" && <Folder className="w-4 h-4" />}
+            {tab === "images" && <Image className="w-4 h-4" />}
+            {tab === "videos" && <Video className="w-4 h-4" />}
+            {tab === "documents" && <FileText className="w-4 h-4" />}
+            <span className="capitalize">{tab === 'all' ? 'All Media' : tab}</span>
           </button>
         ))}
       </div>
 
       {/* Media Grid */}
-      {activeTab !== "new-folder" && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredMedia.map((media) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {filteredMedia.length === 0 ? (
+          <div className="col-span-full py-20 text-center bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+            <Layers className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+            <p className="text-gray-500">No media files found in this category.</p>
+          </div>
+        ) : (
+          filteredMedia.map((media) => (
             <div
               key={media.id}
-              className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow group"
+              className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border group"
             >
               {/* Thumbnail */}
-              <div className="relative bg-gray-200 aspect-square overflow-hidden">
-                <img
-                  src={media.url || "/placeholder.svg"}
-                  alt={media.name}
-                  className="w-full h-full object-cover"
-                />
+              <div className="relative bg-gray-100 aspect-square overflow-hidden flex items-center justify-center">
+                {media.media_type === "image" ? (
+                  <img
+                    src={getFullUrl(media.file)}
+                    alt={media.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                ) : media.media_type === "video" ? (
+                  <video
+                    src={getFullUrl(media.file)}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    muted
+                    preload="metadata"
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 group-hover:bg-gray-100 transition-colors">
+                    {media.file?.toLowerCase().endsWith('.pdf') ? (
+                      <iframe
+                        src={`${getFullUrl(media.file)}#toolbar=0&navpanes=0&scrollbar=0`}
+                        className="w-full h-full border-none pointer-events-none opacity-60 scale-90 group-hover:scale-100 transition-transform"
+                        title={media.title}
+                      />
+                    ) : (
+                      <div className="text-5xl text-blue-300">
+                        📄
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {/* Overlay with actions on hover */}
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all flex items-center justify-center gap-3">
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3 backdrop-blur-sm">
                   <button
                     onClick={() => setViewingMedia(media)}
-                    className="opacity-0 group-hover:opacity-100 bg-white text-gray-900 p-2 rounded-lg hover:bg-gray-100 transition-all"
+                    className="bg-white text-gray-900 p-3 rounded-xl hover:bg-blue hover:text-white transition-all transform hover:scale-110"
                     title="View"
                   >
-                    <Eye className="w-4 h-4" />
+                    <Eye className="w-5 h-5" />
                   </button>
                   <button
                     onClick={() => handleDeleteMedia(media.id)}
-                    className="opacity-0 group-hover:opacity-100 bg-red-600 text-white p-2 rounded-lg hover:bg-red-700 transition-all"
+                    className="bg-white text-red-600 p-3 rounded-xl hover:bg-red-600 hover:text-white transition-all transform hover:scale-110"
                     title="Delete"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
               </div>
 
               {/* File Info */}
-              <div className="p-4">
-                <div className="flex items-start gap-2 mb-2">
-                  <span className="text-xl">{getIconForType(media.type)}</span>
+              <div className="p-4 border-t">
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 mt-1">{getIconForType(media.media_type)}</span>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 truncate">
-                      {media.name}
+                    <p className="font-bold text-gray-900 truncate" title={media.title}>
+                      {media.title}
+                    </p>
+                    <p className="text-[10px] text-gray-400 mt-1 font-medium flex items-center gap-1">
+                      <Folder size={10} />
+                      {new Date(media.created_at).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
-                <p className="text-xs text-gray-500">
-                  Uploaded on {media.date}
-                </p>
-                <p className="text-xs text-gray-500">{media.size}</p>
               </div>
             </div>
-          ))}
-        </div>
-      )}
+          ))
+        )}
+      </div>
 
       {/* Upload Modal */}
       {showUploadModal && (
@@ -257,6 +236,7 @@ export default function UniGallery() {
         <ViewMediaModal
           media={viewingMedia}
           onClose={() => setViewingMedia(null)}
+          getFullUrl={getFullUrl}
         />
       )}
     </div>

@@ -1,12 +1,15 @@
 "use client";
 
-import { Download } from "lucide-react";
+import { Download, User, MapPin, Calendar, BookOpen, Building, Briefcase, Info } from "lucide-react";
 
 export default function StudentApplicationDetailsModal({
   application,
   onClose,
+  getDocumentsList,
+  formatDate
 }) {
   const getInitials = (name) => {
+    if (!name) return "S";
     return name
       .split(" ")
       .map((n) => n[0])
@@ -14,96 +17,170 @@ export default function StudentApplicationDetailsModal({
       .toUpperCase();
   };
 
+  const docs = getDocumentsList ? getDocumentsList(application) : [];
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 overflow-y-auto">
-        <div className="flex justify-between items-center mb-6 border-b pb-3">
-          <h2 className="text-xl font-medium text-gray-900">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+        {/* Header */}
+        <div className="flex justify-between items-center p-6 border-b bg-gray-50 flex-shrink-0">
+          <h2 className="text-xl  text-gray-900">
             Student Application Details
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-3xl leading-none"
+            className="text-gray-400 hover:text-gray-600 text-3xl leading-none transition-colors"
           >
             ×
           </button>
         </div>
 
-        <div className="mb-6 border-b pb-4">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-sky rounded-full flex items-center justify-center">
-              <span className="text-2xl text-blue font-medium">
-                {getInitials(application.name)}
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-8">
+          {/* Profile Section */}
+          <div className="flex items-center gap-6 pb-6 border-b">
+            <div className="w-20 h-20 bg-blue/10 rounded-full flex items-center justify-center border-2 border-blue/20">
+              <span className="text-3xl text-blue">
+                {getInitials(application.full_name)}
               </span>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">
-                {application.name}
+              <h3 className="text-2xl mb-1 font-semibold text-gray-900">
+                {application.full_name}
               </h3>
-              <p className="text-gray-600">{application.email}</p>
-              <div className="mt-2">
-                <span className="inline-block bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
-                  {application.status} Review
+              <p className="text-gray-600 flex items-center gap-2">
+                <span className={`px-3 py-1 rounded-full text-sm tracking-wider ${application.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' :
+                  application.status === 'Approved' ? 'bg-green/20 text-green-700' : 'bg-red text-white'
+                  }`}>
+                  {application.status}
                 </span>
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Personal Info */}
+            <div className="space-y-4">
+              <h4 className=" text-blue uppercase flex items-center gap-2">
+                <User size={14} /> Personal Information
+              </h4>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-gray-500">Email Address</p>
+                  <p className="font-semibold text-gray-900">{application.email}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500">Phone Number</p>
+                  <p className="font-semibold text-gray-900">{application.phone || "N/A"}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500">Date of Birth</p>
+                  <p className="font-semibold text-gray-900">{application.date_of_birth || "N/A"}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500">Place of Birth & Nationality</p>
+                  <p className="font-semibold text-gray-900">
+                    {application.place_of_birth} / {application.nationality}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-500 flex items-center gap-1">
+                    <MapPin size={12} /> Residential Address
+                  </p>
+                  <p className="font-semibold text-gray-900">{application.address || "N/A"}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Application Data */}
+            <div className="space-y-4">
+              <h4 className=" text-blue uppercase tracking-widest  flex items-center gap-2">
+                <Info size={14} /> Application Details
+              </h4>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-gray-500 flex items-center gap-1"><BookOpen size={12} /> Desired Program</p>
+                  <p className=" text-gray-900 text-base">{application.desired_program}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 flex items-center gap-1"><Building size={12} /> Preferred Campus</p>
+                  <p className="font-semibold text-gray-900">{application.campus || "N/A"}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500 flex items-center gap-1"><Calendar size={12} /> Submission Date</p>
+                  <p className="font-semibold text-gray-900">{formatDate(application.created_at)}</p>
+                </div>
+                <div>
+                  <p className="text-gray-500">Application ID</p>
+                  <p className="font-mono font-semibold text-gray-700 bg-gray-100 px-2 py-1 rounded w-fit">
+                    #{application.id}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="mb-6 border-b pb-4">
-          <div className="grid grid-cols-2 gap-4">
-          <div>
-            <p className="text-sm text-gray-500">Applied Program</p>
-            <p className="font-medium text-gray-900">{application.program}</p>
-          </div>
-            <div>
-              <p className="text-sm text-gray-500">Country</p>
-              <p className="font-medium text-gray-900">{application.country}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Application Date</p>
-              <p className="font-medium text-gray-900">
-                {application.applicationDate}
-              </p>
-            </div>
-          <div className="sm:col-span-2 lg:col-span-1">
-            <p className="text-sm text-gray-500">Application ID</p>
-            <p className="font-medium text-gray-900">
-              {application.applicationId}
-            </p>
-          </div>
-          </div>
-        </div>
-
-        {application.documents && (
-          <div className="mb-6">
-            <p className=" text-grey mb-3">Documents</p>
-            <div className="space-y-2">
-              {application.documents.map((doc, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center justify-between p-3 hover:bg-gray-50 border rounded-lg"
-                >
-                  <span className="text-gray-700">{doc.name}</span>
-                  <a
-                    href={doc.url}
-                    className="text-blue hover:underline text-sm flex items-center gap-2"
-                  >
-                    <Download size={18} strokeWidth={3.0} /> Download
-                  </a>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Academic Background */}
+            <div className="space-y-4">
+              <h4 className="text-blue uppercase flex items-center gap-2">
+                <BookOpen size={14} /> Background
+              </h4>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-gray-500 mb-1">Previous Studies</p>
+                  <p className="font-medium text-gray-900">
+                    {application.previous_studies || "N/A"}
+                  </p>
                 </div>
-              ))}
+                <div>
+                  <p className="text-gray-500 flex items-center gap-1 mb-1"><Briefcase size={12} /> Current Situation</p>
+                  <p className="font-medium text-gray-900">{application.current_situation || "N/A"}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Info */}
+            <div className="space-y-4">
+              <h4 className=" text-blue uppercase">Other Details</h4>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-gray-500 mb-1">Special Needs</p>
+                  <p className="font-medium text-gray-900">{application.special_needs || "None Specified"}</p>
+                </div>
+                <div>
+                </div>
+              </div>
             </div>
           </div>
-        )}
 
-        <div className="flex justify-end">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-blue text-white rounded-lg"
-          >
-            Close
-          </button>
+          {/* Documents Section */}
+          {docs.length > 0 && (
+            <div className="space-y-4">
+              <h4 className=" text-blue uppercase">Attached Documents</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {docs.map((doc, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 border rounded-xl transition-all group"
+                  >
+                    <div className="truncate pr-4">
+                      <p className=" text-gray-500">{doc.name}</p>
+                      <p className="text-sm font-semibold text-gray-900 truncate">Document {idx + 1}</p>
+                    </div>
+                    <a
+                      href={doc.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue bg-white p-2 rounded-lg shadow-sm group-hover:bg-blue group-hover:text-white transition-all transform group-hover:scale-110"
+                    >
+                      <Download size={18} strokeWidth={2.5} />
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

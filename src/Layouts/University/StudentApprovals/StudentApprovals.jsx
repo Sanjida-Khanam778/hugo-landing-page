@@ -2,120 +2,59 @@
 
 import { CheckCircle, CirclePlus, Eye, Mail } from "lucide-react";
 import { useState } from "react";
-import RejectApplicationModal from "../Modal/RejectApplicationModal";
 import StudentApplicationDetailsModal from "../Modal/StudentApplicationDetailsModal";
-import ApproveApplicationModal from "../Modal/ApproveApplicationModal";
+import {
+  useGetUniversityApplicationsQuery,
+  useUpdateApplicationStatusMutation
+} from "../../../Api/universityApi";
+import toast from "react-hot-toast";
 
 export default function StudentApprovals() {
-  const [applications, setApplications] = useState([
-    {
-      id: 1,
-      name: "Alexander Smith",
-      email: "alex.smith@email.com",
-      program: "Master of Computer Science",
-      country: "United States",
-      applicationDate: "2023-10-08",
-      applicationId: "APP-000001",
-      status: "Pending",
-      documents: [
-        { name: "Transcript", url: "#" },
-        { name: "CV", url: "#" },
-        { name: "Recommendation Letter", url: "#" },
-      ],
-    },
-    {
-      id: 2,
-      name: "Maria Rodriguez",
-      email: "maria@email.com",
-      program: "Bachelor of Business Administration",
-      country: "Spain",
-      applicationDate: "2023-10-07",
-      applicationId: "APP-000002",
-      status: "Pending",
-      documents: [
-        { name: "Transcript", url: "#" },
-        { name: "CV", url: "#" },
-        { name: "Personal Statement", url: "#" },
-      ],
-    },
-  ]);
+  const { data: applicationsResponse, isLoading, error } = useGetUniversityApplicationsQuery();
+  const [updateStatus, { isLoading: isUpdating }] = useUpdateApplicationStatusMutation();
 
-  const [processedApplications, setProcessedApplications] = useState([
-    {
-      id: 3,
-      name: "Hiroshi Tanaka",
-      email: "h.tanaka@email.com",
-      program: "PhD in Economics",
-      country: "Japan",
-      applicationDate: "2023-10-05",
-      status: "Approved",
-    },
-    {
-      id: 4,
-      name: "Priya Patel",
-      email: "priya.patel@email.com",
-      program: "Master of Public Health",
-      country: "India",
-      applicationDate: "2023-10-03",
-      status: "Rejected",
-    },
-  ]);
-
-  const [rejectingApp, setRejectingApp] = useState(null);
-  const [approvingApp, setApprovingApp] = useState(null);
   const [viewingApp, setViewingApp] = useState(null);
 
-  const handleReject = (application) => {
-    setRejectingApp(application);
+  const getFullUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+    return `http://10.10.13.20:8005${path}`;
   };
 
-  const handleConfirmReject = (reason, comments) => {
-    const updated = applications.filter((a) => a.id !== rejectingApp.id);
-    setApplications(updated);
-    setProcessedApplications([
-      ...processedApplications,
-      {
-        ...rejectingApp,
-        status: "Rejected",
-      },
-    ]);
-    setRejectingApp(null);
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return new Date(dateString).toLocaleDateString();
   };
 
-  const handleApprove = (application) => {
-    setApprovingApp(application);
+  if (isLoading) return <div className="p-8 text-center text-gray-500">Loading applications...</div>;
+  if (error) return <div className="p-8 text-center text-red-500">Error loading applications.</div>;
+
+  const applications = applicationsResponse?.pending_applications || [];
+  const processedApplications = applicationsResponse?.recently_processed || [];
+
+  const handleStatusUpdate = async (id, status) => {
+    try {
+      await updateStatus({ id, status }).unwrap();
+      toast.success(`Application ${status.toLowerCase()} successfully!`);
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.data?.error || `Failed to ${status.toLowerCase()} application`);
+    }
   };
 
-  const handleConfirmApprove = (notes) => {
-    const updated = applications.filter((a) => a.id !== approvingApp.id);
-    setApplications(updated);
-    setProcessedApplications([
-      ...processedApplications,
-      {
-        ...approvingApp,
-        status: "Approved",
-      },
-    ]);
-    setApprovingApp(null);
-  };
-
-  const getInitials = (name) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase();
+  const getDocumentsList = (app) => {
+    const docs = [];
+    if (app.id_photo_front) docs.push({ name: "ID Front", url: getFullUrl(app.id_photo_front) });
+    if (app.id_photo_back) docs.push({ name: "ID Back", url: getFullUrl(app.id_photo_back) });
+    if (app.supporting_documents) docs.push({ name: "Support Doc", url: getFullUrl(app.supporting_documents) });
+    if (app.letter_of_interest) docs.push({ name: "Interest Letter", url: getFullUrl(app.letter_of_interest) });
+    return docs;
   };
 
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Student Approvals</h1>
-        <div className="flex gap-2">
-          <button className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
-            All Applications
-          </button>
-        </div>
       </div>
 
       {/* Pending Applications Section */}
@@ -125,7 +64,7 @@ export default function StudentApprovals() {
         </h2>
 
         {applications.length === 0 ? (
-          <p className="text-gray-500">No pending applications</p>
+          <p className="p-8 text-gray-500 text-center">No pending applications</p>
         ) : (
           <div className="divide-y-2">
             {applications.map((app) => (
@@ -135,7 +74,7 @@ export default function StudentApprovals() {
                     <div className="flex items-start gap-4 flex-1">
                       <div className="flex-1">
                         <h3 className="font-semibold text-gray-900">
-                          {app.name}
+                          {app.full_name}
                         </h3>
                         <p className="text-gray-600 flex items-center gap-1">
                           <Mail size={18} strokeWidth={3.0} />
@@ -144,28 +83,30 @@ export default function StudentApprovals() {
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
                     <div>
                       <p className="text-gray-500">Applied Program</p>
-                      <p className="font-medium text-gray-900">{app.program}</p>
+                      <p className="font-medium text-gray-900">{app.desired_program}</p>
                     </div>
                     <div>
-                      <p className="text-gray-500">Country</p>
-                      <p className="font-medium text-gray-900">{app.country}</p>
+                      <p className="text-gray-500">Nationality</p>
+                      <p className="font-medium text-gray-900">{app.nationality}</p>
                     </div>
                     <div>
                       <p className="text-gray-500">Application Date</p>
                       <p className="font-medium text-gray-900">
-                        {app.applicationDate}
+                        {formatDate(app.created_at)}
                       </p>
                     </div>
                     <div className="">
                       <p className="text-gray-500 mb-2">Documents</p>
-                      <div className="flex gap-4">
-                        {app.documents.map((doc, idx) => (
+                      <div className="flex gap-4 flex-wrap">
+                        {getDocumentsList(app).map((doc, idx) => (
                           <a
                             key={idx}
                             href={doc.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="text-blue hover:underline"
                           >
                             {doc.name}
@@ -178,14 +119,16 @@ export default function StudentApprovals() {
 
                 <div className="flex flex-col gap-3 items-end justify-center col-span-1">
                   <button
-                    onClick={() => handleApprove(app)}
-                    className="px-4 py-2 bg-[#DCFCE7] w-1/2 justify-center items-center gap-2 flex text-[#15803D] rounded-lg hover:bg-green-700"
+                    onClick={() => handleStatusUpdate(app.id, "Approved")}
+                    disabled={isUpdating}
+                    className="px-4 py-2 bg-[#DCFCE7] w-full max-w-[160px] justify-center items-center gap-2 flex text-[#15803D] rounded-lg hover:bg-[#d1fadf] disabled:opacity-50"
                   >
                     <CheckCircle size={20} strokeWidth={3.0} /> Approve
                   </button>
                   <button
-                    onClick={() => handleReject(app)}
-                    className="px-4 py-2 bg-[#FEE2E2] w-1/2 justify-center items-center gap-2 flex text-[#B91C1C] rounded-lg hover:bg-red-700"
+                    onClick={() => handleStatusUpdate(app.id, "Rejected")}
+                    disabled={isUpdating}
+                    className="px-4 py-2 bg-[#FEE2E2] w-full max-w-[160px] justify-center items-center gap-2 flex text-[#B91C1C] rounded-lg hover:bg-[#fec8c8] disabled:opacity-50"
                   >
                     <CirclePlus
                       size={20}
@@ -196,15 +139,15 @@ export default function StudentApprovals() {
                   </button>
                   <button
                     onClick={() => setViewingApp(app)}
-                    className="px-4 py-2 bg-[#DBEAFE] w-1/2 justify-center items-center gap-2 flex text-blue rounded-lg hover:bg-blue-200"
+                    className="px-4 py-2 bg-[#DBEAFE] w-full max-w-[160px] justify-center items-center gap-2 flex text-blue rounded-lg hover:bg-blue-200"
                   >
                     <Eye size={20} strokeWidth={3.0} /> View Details
                   </button>
                   <a
                     href={`mailto:${app.email}`}
-                    className="px-4 py-2 flex w-1/2 justify-center items-center gap-2 bg-gray-100 text-gray-700 rounded-lg"
+                    className="px-4 py-2 flex w-full max-w-[160px] justify-center items-center gap-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
                   >
-                   <Mail size={20} strokeWidth={3.0} /> Contact
+                    <Mail size={20} strokeWidth={3.0} /> Contact
                   </a>
                 </div>
               </div>
@@ -220,7 +163,7 @@ export default function StudentApprovals() {
         </h2>
 
         {processedApplications.length === 0 ? (
-          <p className="text-gray-500">No processed applications</p>
+          <p className="text-gray-500 text-center">No processed applications</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -233,15 +176,15 @@ export default function StudentApprovals() {
                     Program
                   </th>
                   <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                    Country
+                    Nationality
                   </th>
                   <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                    Applied Date
+                    Date
                   </th>
                   <th className="text-left py-3 px-4 font-semibold text-gray-700">
                     Status
                   </th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">
+                  <th className="text-left py-3 px-4 font-semibold text-gray-700 text-right">
                     Actions
                   </th>
                 </tr>
@@ -254,37 +197,36 @@ export default function StudentApprovals() {
                   >
                     <td className="py-3 px-4">
                       <div>
-                        <p className="font-medium text-gray-900">{app.name}</p>
-                        <p className="text-gray-600">{app.email}</p>
+                        <p className="font-medium text-gray-900">{app.full_name}</p>
+                        <p className="text-gray-600 text-sm">{app.email}</p>
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-gray-900">{app.program}</td>
-                    <td className="py-3 px-4 text-gray-900">{app.country}</td>
+                    <td className="py-3 px-4 text-gray-900">{app.desired_program}</td>
+                    <td className="py-3 px-4 text-gray-900">{app.nationality}</td>
                     <td className="py-3 px-4 text-gray-900">
-                      {app.applicationDate}
+                      {formatDate(app.created_at)}
                     </td>
                     <td className="py-3 px-4">
                       <span
-                        className={`px-3 py-2 rounded-full ${
-                          app.status === "Approved"
-                            ? " bg-[#DCFCE7] text-[#15803D] "
-                            : "bg-[#FEE2E2] text-[#B91C1C]"
-                        }`}
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${app.status === "Approved"
+                          ? " bg-[#DCFCE7] text-[#15803D] "
+                          : "bg-[#FEE2E2] text-[#B91C1C]"
+                          }`}
                       >
                         {app.status}
                       </span>
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="flex gap-3">
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex gap-3 justify-end">
                         <button
                           onClick={() => setViewingApp(app)}
-                          className="text-blue  hover:underline"
+                          className="text-blue hover:underline"
                         >
                           View
                         </button>
                         <a
                           href={`mailto:${app.email}`}
-                          className="text-blue  hover:underline"
+                          className="text-blue hover:underline"
                         >
                           Email
                         </a>
@@ -299,26 +241,12 @@ export default function StudentApprovals() {
       </div>
 
       {/* Modals */}
-      {rejectingApp && (
-        <RejectApplicationModal
-          application={rejectingApp}
-          onConfirm={handleConfirmReject}
-          onClose={() => setRejectingApp(null)}
-        />
-      )}
-
-      {approvingApp && (
-        <ApproveApplicationModal
-          application={approvingApp}
-          onConfirm={handleConfirmApprove}
-          onClose={() => setApprovingApp(null)}
-        />
-      )}
-
       {viewingApp && (
         <StudentApplicationDetailsModal
           application={viewingApp}
           onClose={() => setViewingApp(null)}
+          getDocumentsList={getDocumentsList}
+          formatDate={formatDate}
         />
       )}
     </div>

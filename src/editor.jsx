@@ -134,9 +134,7 @@ export default function TextEditor(
             "bold",
             "italic",
             "underline",
-         
-           
-          
+       
             "|",
             "horizontalLine",
             "link",

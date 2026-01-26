@@ -228,6 +228,34 @@ export const authapi = api.injectEndpoints({
             query: (programId) => `/career/roadmap/${programId}/`,
             providesTags: (result, error, programId) => [{ type: "CareerRoadmap", id: programId }],
         }),
+
+        getUniversityApplications: builder.query({
+            query: () => "/university/applications/",
+            providesTags: ["UniversityApplications"],
+        }),
+
+        updateApplicationStatus: builder.mutation({
+            query: ({ id, status }) => ({
+                url: `/university/applications/${id}/update/status/`,
+                method: "POST",
+                body: { status },
+            }),
+            invalidatesTags: ["UniversityApplications"],
+        }),
+
+        uploadUniversityMedia: builder.mutation({
+            query: (data) => ({
+                url: "/university/upload/university/media/",
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["uni_media"],
+        }),
+
+        getUniversityMedia: builder.query({
+            query: () => "/university/gallery/",
+            providesTags: ["uni_media"],
+        }),
     }),
 });
 
@@ -263,4 +291,8 @@ export const {
     useGetDiscoveryJobsQuery,
     useCreateCareerRoadmapMutation,
     useGetCareerRoadmapQuery,
+    useGetUniversityApplicationsQuery,
+    useUpdateApplicationStatusMutation,
+    useUploadUniversityMediaMutation,
+    useGetUniversityMediaQuery,
 } = authapi;

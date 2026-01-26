@@ -19,6 +19,7 @@ export default function Settings() {
   // Per-tab editing flags so editing state doesn't interfere across tabs
   const [editingPrivacy, setEditingPrivacy] = useState(isAdmin);
   const [editingTerms, setEditingTerms] = useState(isAdmin);
+  const [editorContent, setEditorContent] = useState("");
 
 
   const [privacyPolicy, setPrivacyPolicy] = useState(
