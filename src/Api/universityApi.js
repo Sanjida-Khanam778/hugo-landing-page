@@ -256,6 +256,20 @@ export const authapi = api.injectEndpoints({
             query: () => "/university/gallery/",
             providesTags: ["uni_media"],
         }),
+
+        getUniversityTestimonials: builder.query({
+            query: (status) => `/university/get-testimonials/${status ? `?status=${status}` : ""}`,
+            providesTags: ["uni_testimonials"],
+        }),
+
+        updateTestimonialStatus: builder.mutation({
+            query: ({ id, action }) => ({
+                url: `/university/testimonials/${id}/moderate/`,
+                method: "PATCH",
+                body: { action },
+            }),
+            invalidatesTags: ["uni_testimonials"],
+        }),
     }),
 });
 
@@ -295,4 +309,6 @@ export const {
     useUpdateApplicationStatusMutation,
     useUploadUniversityMediaMutation,
     useGetUniversityMediaQuery,
+    useGetUniversityTestimonialsQuery,
+    useUpdateTestimonialStatusMutation,
 } = authapi;
