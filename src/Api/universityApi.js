@@ -173,7 +173,7 @@ export const authapi = api.injectEndpoints({
         }),
 
         getProgramDetails: builder.query({
-            query: (id) => `/program/${id}/`,
+            query: (id) => `/program/detail/${id}/`,
             providesTags: (result, error, id) => [{ type: "ProgramDetails", id }],
         }),
 
@@ -206,7 +206,7 @@ export const authapi = api.injectEndpoints({
         }),
 
         getDiscoveryEvents: builder.query({
-            query: () => "/events/",
+            query: () => "/get-events/",
             providesTags: ["DiscoveryEvents"],
         }),
     }),

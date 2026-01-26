@@ -26,6 +26,14 @@ export default function UniversityEvents() {
     return `http://10.10.13.20:8005${path}`;
   };
 
+  const isPastEvent = (eventDate) => {
+    if (!eventDate) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const target = new Date(eventDate);
+    return target < today;
+  };
+
   const handleViewDetails = (event) => {
     setSelectedEvent(event);
     setView("detail");
@@ -114,20 +122,23 @@ export default function UniversityEvents() {
               {/* Event Agenda */}
               {selectedEvent.agendas && selectedEvent.agendas.length > 0 && (
                 <div className="bg-white rounded-lg p-6 shadow-sm">
-                  <h2 className="text-xl  mb-4">Event Agenda</h2>
+                  <h2 className="text-xl font-medium mb-4">Event Agenda</h2>
                   <div className="space-y-6">
                     {selectedEvent.agendas.map((item, index) => (
-                      <div key={index} className="flex gap-4 border-l-2 border-blue-100 ml-2">
-                        <div className="pl-6 pb-2">
-                          <p className=" text-blue text-sm tracking-wider mb-1">
-                            {item.time_slot}
-                          </p>
-                          <p className=" text-[#111827] text-lg">
-                            {item.task_title}
-                          </p>
-                          <p className=" text-[#374151] mt-2 text-sm leading-relaxed">
-                            {item.description}
-                          </p>
+                      <div key={index} className="flex gap-4">
+                        <p className="text-grey tracking-wider w-44">
+                          {item.time_slot}
+                        </p>
+                        <div className="flex gap-4 border-l-[3px] border-sky ml-2">
+                          <div className="pl-6 pb-2">
+
+                            <p className=" text-[#111827] font-medium text-lg">
+                              {item.task_title}
+                            </p>
+                            <p className=" text-[#374151] mt-2 leading-relaxed">
+                              {item.description}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -150,18 +161,39 @@ export default function UniversityEvents() {
 
             {/* Sidebar */}
             <div className="space-y-6">
-              {/* Event Status */}
+              {/* Event Registration / Status */}
               <div className="bg-white rounded-lg p-6 shadow-sm text-center">
-                <h3 className=" mb-4 tracking-widest text-gray-500 text-sm">Status</h3>
-                <div className="inline-block px-4 py-2 bg-blue/10 text-blue rounded-full  mb-4">
-                  {selectedEvent.status}
-                </div>
-                <p className=" text-gray-600 text-sm mb-6">
-                  {selectedEvent.registration_count} Students Registered
-                </p>
-                <button className="w-full bg-blue text-white py-3 rounded-lg  shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all">
-                  Register For Event
-                </button>
+                {!isPastEvent(selectedEvent.date) ? (
+                  <>
+                    <h3 className=" mb-4 tracking-widest text-gray-500 text-sm uppercase">Status</h3>
+                    <div className="inline-block px-4 py-2 bg-blue/10 text-blue rounded-full mb-4">
+                      {selectedEvent.status}
+                    </div>
+                    <p className=" text-gray-600 text-sm mb-6">
+                      {selectedEvent.registration_count} Students Registered
+                    </p>
+                    <button className="w-full bg-blue text-white py-3 rounded-lg shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all">
+                      Register For Event
+                    </button>
+                  </>
+                ) : (
+                  <div className="text-center">
+                    <h3 className="text-lg font-semibold mb-6 text-left">Event Registration</h3>
+                    <div className="w-16 h-16 bg-[#F3F4F6] rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Calendar size={24} className="text-[#1F2937]" />
+                    </div>
+                    <p className="font-medium text-lg mb-2">Event Ended</p>
+                    <p className="text-gray-600 text-sm mb-6">
+                      This event has already taken place. Check out our upcoming events.
+                    </p>
+                    <button
+                      onClick={handleBackToList}
+                      className="text-blue font-semibold hover:underline"
+                    >
+                      Browse Events
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* About the Host */}
