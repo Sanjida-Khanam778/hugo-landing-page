@@ -1,78 +1,34 @@
-import { useState } from "react";
-
 export default function FiltersContent({ filters, onFilterChange }) {
-  const { study_type, location, univ_type, field: selectedField } = filters;
-  
-  console.log(filters)
+  const { level, location, univ_type, field: selectedField } = filters;
+
   return (
     <div className="bg-[#ECF5FF] text-black p-6 shadow-sm z-[10000]">
       <h3 className="font-bold text-xl mb-4">Filters</h3>
 
-      {/* Study type Filter */}
+      {/* Level Filter */}
       <div className="mb-6">
-        <h4 className="font-semibold mb-3">Study Type</h4>
+        <h4 className="font-semibold mb-3">Academic Level</h4>
         <div className="space-y-2">
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="type"
-              className="mr-2 cursor-pointer"
-              checked={study_type === "all"}
-              onChange={() => onFilterChange("study_type", "all")}
-            />
-            <span className="text-sm cursor-pointer">All Type</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="type"
-              className="mr-2 cursor-pointer"
-              checked={study_type === "college"}
-              onChange={() => onFilterChange("study_type", "college")}
-            />
-            <span className="text-sm cursor-pointer">College</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="type"
-              className="mr-2 cursor-pointer"
-              checked={study_type === "master"}
-              onChange={() => onFilterChange("study_type", "master")}
-            />
-            <span className="text-sm cursor-pointer">Master</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="type"
-              className="mr-2 cursor-pointer"
-              checked={study_type === "degree"}
-              onChange={() => onFilterChange("study_type", "degree")}
-            />
-            <span className="text-sm cursor-pointer">Degree</span>
-          </label>
-
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="type"
-              className="mr-2 cursor-pointer"
-              checked={study_type === "online courses"}
-              onChange={() => onFilterChange("study_type", "online courses")}
-            />
-            <span className="text-sm cursor-pointer">Online courses</span>
-          </label>
-          <label className="flex items-center cursor-pointer select-none">
-            <input
-              type="radio"
-              name="type"
-              className="mr-2 cursor-pointer"
-              checked={study_type === "professional Formation"}
-              onChange={() => onFilterChange("study_type", "professional Formation")}
-            />
-            <span className="text-sm cursor-pointer">Professional Formation</span>
-          </label>
+          {[
+            { id: "all", label: "All Levels" },
+            { id: "college", label: "College" },
+            { id: "Master", label: "Master" },
+            { id: "PhD", label: "PhD" },
+            { id: "degree", label: "Degree" },
+            { id: "online-courses", label: "Online Courses" },
+            { id: "professional-formation", label: "Professional Formation" },
+          ].map((opt) => (
+            <label key={opt.id} className="flex items-center cursor-pointer select-none">
+              <input
+                type="radio"
+                name="level"
+                className="mr-2 cursor-pointer"
+                checked={level === opt.id}
+                onChange={() => onFilterChange("level", opt.id)}
+              />
+              <span className="text-sm cursor-pointer">{opt.label}</span>
+            </label>
+          ))}
         </div>
       </div>
 
@@ -80,28 +36,38 @@ export default function FiltersContent({ filters, onFilterChange }) {
       <div>
         <h4 className="font-semibold mb-3">Programs</h4>
         <div className="space-y-2">
+          <label className="flex items-center cursor-pointer select-none">
+            <input
+              type="radio"
+              name="field"
+              className="mr-2 cursor-pointer"
+              checked={selectedField === "all"}
+              onChange={() => onFilterChange("field", "all")}
+            />
+            <span className="text-sm cursor-pointer">All Programs</span>
+          </label>
           {[
-            { id: "bma", label: "Business Management and Administration" },
-            { id: "lss", label: "Legal and Social Sciences" },
-            { id: "healthcare", label: "Healthcare" },
-            { id: "mathematics", label: "Natural Sciences and Mathematics" },
-            { id: "humanities", label: "Humanities and Letters" },
-            { id: "education", label: "Education" },
-            { id: "technology", label: "Technology and Telecommunications" },
-            { id: "economics", label: "Economics and Finance" },
-            { id: "languages", label: "Languages" },
-            { id: "marketing", label: "Commerce and Marketing" },
-            { id: "tourism", label: "Hospitality and Tourism" },
-            { id: "sports", label: "Sports and Physical Activity" },
-            { id: "agriculture", label: "Agriculture, Mining, and Gardening" },
-            { id: "image", label: "Image, Film, and Sound" },
-            { id: "arts", label: "Fine Arts" },
-            { id: "civil", label: "Security and Civil Protection" },
-            { id: "logistics", label: "Logistics and Transportation" },
-            { id: "graphic", label: "Graphic Arts" },
-            { id: "textile", label: "Fashion and Textile Production" },
-            { id: "music", label: "Music, Performing Arts, and Dance" },
-            { id: "animals", label: "Veterinary Medicine and Animals" },
+            { id: "Business Management and Administration", label: "Business Management and Administration" },
+            { id: "Legal and Social Sciences", label: "Legal and Social Sciences" },
+            { id: "Healthcare", label: "Healthcare" },
+            { id: "Natural Sciences and Mathematics", label: "Natural Sciences and Mathematics" },
+            { id: "Humanities and Letters", label: "Humanities and Letters" },
+            { id: "Education", label: "Education" },
+            { id: "Technology and Telecommunications", label: "Technology and Telecommunications" },
+            { id: "Economics and Finance", label: "Economics and Finance" },
+            { id: "Languages", label: "Languages" },
+            { id: "Commerce and Marketing", label: "Commerce and Marketing" },
+            { id: "Hospitality and Tourism", label: "Hospitality and Tourism" },
+            { id: "Sports and Physical Activity", label: "Sports and Physical Activity" },
+            { id: "Agriculture, Mining, and Gardening", label: "Agriculture, Mining, and Gardening" },
+            { id: "Image, Film, and Sound", label: "Image, Film, and Sound" },
+            { id: "Fine Arts", label: "Fine Arts" },
+            { id: "Security and Civil Protection", label: "Security and Civil Protection" },
+            { id: "Logistics and Transportation", label: "Logistics and Transportation" },
+            { id: "Graphic Arts", label: "Graphic Arts" },
+            { id: "Fashion and Textile Production", label: "Fashion and Textile Production" },
+            { id: "Music, Performing Arts, and Dance", label: "Music, Performing Arts, and Dance" },
+            { id: "Veterinary Medicine and Animals", label: "Veterinary Medicine and Animals" },
           ].map((item) => (
             <label key={item.id} className="flex items-center cursor-pointer select-none">
               <input
@@ -116,11 +82,13 @@ export default function FiltersContent({ filters, onFilterChange }) {
           ))}
         </div>
       </div>
+
       {/* Locations Filter */}
       <div className="my-6">
         <h4 className="font-semibold mb-3">Locations</h4>
         <div className="space-y-2">
           {[
+            { id: "all", label: "All Locations" },
             { id: "madrid", label: "Comunidad de Madrid" },
             { id: "barcelona", label: "Barcelona" },
             { id: "valencia", label: "Valencia" },
@@ -147,25 +115,35 @@ export default function FiltersContent({ filters, onFilterChange }) {
           ))}
         </div>
       </div>
-      {/* Condition */}
+
+      {/* Condition (Univ Type) Filter */}
       <div className="my-6">
         <h4 className="font-semibold mb-3">Condition</h4>
         <div className="space-y-2">
           <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
-              name="level"
+              name="univ_type"
+              className="mr-2 cursor-pointer"
+              checked={univ_type === "all"}
+              onChange={() => onFilterChange("univ_type", "all")}
+            />
+            <span className="text-sm cursor-pointer">All Types</span>
+          </label>
+          <label className="flex items-center cursor-pointer select-none">
+            <input
+              type="radio"
+              name="univ_type"
               className="mr-2 cursor-pointer"
               checked={univ_type === "public"}
               onChange={() => onFilterChange("univ_type", "public")}
             />
             <span className="text-sm cursor-pointer">Public</span>
           </label>
-
           <label className="flex items-center cursor-pointer select-none">
             <input
               type="radio"
-              name="level"
+              name="univ_type"
               className="mr-2 cursor-pointer"
               checked={univ_type === "private"}
               onChange={() => onFilterChange("univ_type", "private")}

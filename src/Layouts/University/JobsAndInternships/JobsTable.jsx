@@ -1,5 +1,4 @@
 "use client";
-
 import { Calendar } from "lucide-react";
 
 export default function JobsTable({ jobs, onView, onEdit, onDelete }) {

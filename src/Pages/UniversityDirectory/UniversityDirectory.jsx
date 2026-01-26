@@ -11,19 +11,19 @@ export default function UniversityDirectory() {
   const [filters, setFilters] = useState({
     univ_type: "all",
     location: "all",
-    study_type: "all",
+    level: "all",
     field: "all",
   });
 
-  const { data: universitiesData, isLoading } = useGetAllUniversitiesQuery({
+  // Mapping the UI filters to the API query parameters
+  const apiParams = {
     univ_type: filters.univ_type === "all" ? "" : filters.univ_type,
     location: filters.location === "all" ? "" : filters.location,
-    study_type: filters.study_type === "all" ? "" : filters.study_type,
-    field: filters.field === "all" ? "" : filters.field,
-    search: searchQuery,
-  });
+    level: filters.level === "all" ? "" : filters.level,
+    title: filters.field !== "all" ? filters.field : searchQuery,
+  };
 
-  console.log(universitiesData);
+  const { data: universitiesData, isLoading } = useGetAllUniversitiesQuery(apiParams);
 
   const universities = universitiesData || [];
 
@@ -63,10 +63,6 @@ export default function UniversityDirectory() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {/* <div className="ml-4 flex items-center space-x-2">
-            <span className="text-sm text-gray-600">Sort by Ranking</span>
-            <ChevronDown size={16} className="text-gray-600" />
-          </div> */}
         </div>
       </div>
 
@@ -134,7 +130,6 @@ export default function UniversityDirectory() {
                       <div>
                         <img
                           src={getFullUrl(uni?.picture)}
-
                           className="w-fit object-contain"
                           alt=""
                         />

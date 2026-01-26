@@ -120,10 +120,10 @@ export const authapi = api.injectEndpoints({
 
         deleteJob: builder.mutation({
             query: (id) => ({
-                url: `/events/cancel/${id}/`,
+                url: `/job/${id}/delete/`,
                 method: "DELETE",
             }),
-            invalidatesTags: (result, error, id) => ["uni_users", { type: "Program", id }],
+            invalidatesTags: ["uni_users"],
         }),
 
         getUniversityProfile: builder.query({
@@ -193,7 +193,7 @@ export const authapi = api.injectEndpoints({
         }),
 
         getDashboardStats: builder.query({
-            query: () => "/university/dashboard/stats/",
+            query: () => "/university/dashboard/statistics/",
             providesTags: ["dashboard_stats"],
         }),
 

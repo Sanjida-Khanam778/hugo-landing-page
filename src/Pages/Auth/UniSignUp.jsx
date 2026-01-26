@@ -40,7 +40,10 @@ export default function UniSignUp() {
 
       try {
         const res = await universitySignupMutation(newUser).unwrap();
-        navigate("/university/dashboard");
+        toast.success("Sign up successful. Please login to continue.", {
+          position: "bottom-center"
+        })
+        navigate("/university-login");
         // window.location.reload(); // Removed reload to allow SPA navigation
       } catch (err) {
         console.error("Sign up failed:", err.data.email[0]);

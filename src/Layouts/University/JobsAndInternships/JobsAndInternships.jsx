@@ -9,8 +9,10 @@ import {
   useGetAllJobsQuery,
   useCreateJobMutation,
   useJobUpdateMutation,
-  useGetJobByIdQuery
+  useGetJobByIdQuery,
+  useDeleteJobMutation
 } from "../../../Api/universityApi";
+import DeleteJobModal from "../Modal/DeleteJobModal";
 import toast from "react-hot-toast";
 
 export default function JobsAndInternships() {
@@ -18,10 +20,12 @@ export default function JobsAndInternships() {
 
   const [createJob] = useCreateJobMutation();
   const [updateJob] = useJobUpdateMutation();
-
+  const [deleteJob, { isLoading: isDeleting }] = useDeleteJobMutation();
+  // ... (skipping some lines)
   const [showPostJobModal, setShowPostJobModal] = useState(false);
   const [viewingJob, setViewingJob] = useState(null);
   const [editingJob, setEditingJob] = useState(null);
+  const [deletingJob, setDeletingJob] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSaveJob = async (jobData) => {
@@ -47,7 +51,20 @@ export default function JobsAndInternships() {
   };
 
   const handleDeleteJob = (id) => {
-    // Mutation will be handled later
+    const job = jobs.find(j => j.id === id);
+    setDeletingJob(job);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deletingJob) return;
+    try {
+      await deleteJob(deletingJob.id).unwrap();
+      toast.success("Job deleted successfully");
+      setDeletingJob(null);
+    } catch (err) {
+      console.error("Failed to delete job:", err);
+      toast.error(err?.data?.message || "Failed to delete job");
+    }
   };
 
   const filteredJobs = jobs.filter(
@@ -107,6 +124,15 @@ export default function JobsAndInternships() {
 
       {viewingJob && (
         <JobDetailsModal job={viewingJob} onClose={() => setViewingJob(null)} />
+      )}
+
+      {deletingJob && (
+        <DeleteJobModal
+          job={deletingJob}
+          isDeleting={isDeleting}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setDeletingJob(null)}
+        />
       )}
     </div>
   );
