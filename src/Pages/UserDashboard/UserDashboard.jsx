@@ -73,22 +73,22 @@ console.log(profile);
             <h3 className="font-semibold mb-3">Your Activity</h3>
             <div className="grid grid-cols-3 gap-4">
               <div className="bg-base rounded-lg  p-4">
-                <p className="text-gray-600 text-sm mb-1">Applications</p>
+                <p className="text-gray-600 text-sm mb-1"> Applied Program</p>
                 <p className="text-blue  text-2xl font-bold">3</p>
               </div>
               <div className="bg-base rounded-lg  p-4">
-                <p className="text-gray-600 text-sm mb-1">Saved Universities</p>
+                <p className="text-gray-600 text-sm mb-1"> Applied Job</p>
                 <p className="text-blue  text-2xl font-bold">7</p>
               </div>
               <div className="bg-base rounded-lg  p-4">
-                <p className="text-gray-600 text-sm mb-1">Upcoming Events</p>
+                <p className="text-gray-600 text-sm mb-1">Event Registered</p>
                 <p className="text-blue  text-2xl font-bold">2</p>
               </div>
             </div>
           </div>
         </div>
         {/* Main Content Grid */}
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {/* Recent Applications */}
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="font-semibold mb-4">Recent Applications</h3>
@@ -127,23 +127,7 @@ console.log(profile);
             </div>
           </div>
 
-          {/* Upcoming Events */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="font-semibold mb-4">Upcoming Events</h3>
-            <div className="space-y-4 divide-y-2 divide-[#CCCCCC]">
-              <div>
-                <h4 className="font-semibold">Virtual University Fair</h4>
-                <p className="text-gray-600 text-sm">Tomorrow, 10:00 AM</p>
-              </div>
-
-              <div className="pt-4 ">
-                <h4 className="font-semibold">
-                  Scholarship Application Workshop
-                </h4>
-                <p className="text-gray-600 text-sm">May 15, 2025, 3:00 PM</p>
-              </div>
-            </div>
-          </div>
+        
         </div>
       </div>
       {isEditModalOpen && (

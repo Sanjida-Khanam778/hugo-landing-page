@@ -26,7 +26,7 @@ export default function Universities() {
   const [selectedUniversity, setSelectedUniversity] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 5;
 
   if (isLoading) return <div className="p-8 text-center text-gray-500">Loading onboardings...</div>;
   if (error) return <div className="p-8 text-center text-red-500">Error loading onboarding list.</div>;
@@ -65,7 +65,7 @@ export default function Universities() {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 h-[calc(100vh-5rem)]">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>

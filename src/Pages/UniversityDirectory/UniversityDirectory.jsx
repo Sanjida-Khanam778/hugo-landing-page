@@ -1,13 +1,15 @@
 import { Star, ChevronDown, X } from "lucide-react";
 import { PiBookOpenBold, PiGlobeSimpleBold } from "react-icons/pi";
-import { Link, ScrollRestoration } from "react-router-dom";
+import { Link, ScrollRestoration, useSearchParams } from "react-router-dom";
 import FiltersContent from "../../components/Shared/FiltersContent";
 import { useGetAllUniversitiesQuery } from "../../Api/universityApi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function UniversityDirectory() {
   const [showFilters, setShowFilters] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchParams] = useSearchParams();
+  const initialSearch = searchParams.get("search") || "";
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [filters, setFilters] = useState({
     univ_type: "all",
     location: "all",
@@ -15,12 +17,18 @@ export default function UniversityDirectory() {
     field: "all",
   });
 
+  useEffect(() => {
+    if (initialSearch) {
+      setSearchQuery(initialSearch);
+    }
+  }, [initialSearch]);
+
   // Mapping the UI filters to the API query parameters
   const apiParams = {
     univ_type: filters.univ_type === "all" ? "" : filters.univ_type,
     location: filters.location === "all" ? "" : filters.location,
     level: filters.level === "all" ? "" : filters.level,
-    title: filters.field !== "all" ? filters.field : searchQuery,
+    search: searchQuery,
   };
 
   const { data: universitiesData, isLoading } = useGetAllUniversitiesQuery(apiParams);

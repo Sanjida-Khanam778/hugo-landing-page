@@ -10,12 +10,29 @@ import {
   MessageCircleMore,
   Bot,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 export default function Hero() {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/universities?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      navigate("/universities");
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   const handleCompare = () => {
+    // ... existing handleCompare ...
     // Logic to navigate to compare centers page
     toast("It will be available soon", {
       icon: <ShieldPlus />,
@@ -61,6 +78,7 @@ export default function Hero() {
                 placeholder="Search universities..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
                 className="flex-1 bg-transparent outline-none text-black"
               />
             </div>
@@ -69,7 +87,10 @@ export default function Hero() {
               University
             </div>
 
-            <button className="bg-blue text-white px-6 rounded transition-colors">
+            <button
+              onClick={handleSearch}
+              className="bg-blue text-white px-6 rounded transition-colors"
+            >
               Search
             </button>
           </div>
