@@ -9,6 +9,13 @@ import {
 } from "react-icons/lu";
 import { MdOutlineFormatAlignLeft } from "react-icons/md";
 import { useLocation } from "react-router-dom";
+import {
+  useGetPrivacyPolicyQuery,
+  useUpdatePrivacyPolicyMutation,
+  useGetTermsConditionsQuery,
+  useUpdateTermsConditionsMutation
+} from "../../Api/universityApi";
+import toast from "react-hot-toast";
 
 export default function Settings() {
   const location = useLocation();
@@ -17,62 +24,33 @@ export default function Settings() {
 
   const [activeTab, setActiveTab] = useState("terms");
   // Per-tab editing flags so editing state doesn't interfere across tabs
-  const [editingPrivacy, setEditingPrivacy] = useState(isAdmin);
-  const [editingTerms, setEditingTerms] = useState(isAdmin);
-  const [editorContent, setEditorContent] = useState("");
+  const [editingPrivacy, setEditingPrivacy] = useState(false);
+  const [editingTerms, setEditingTerms] = useState(false);
 
+  const { data: privacyData, isLoading: isPrivacyLoading } = useGetPrivacyPolicyQuery();
+  const { data: termsData, isLoading: isTermsLoading } = useGetTermsConditionsQuery();
 
-  const [privacyPolicy, setPrivacyPolicy] = useState(
-    `Your privacy is important to us. It is Brainstorming's policy to respect your privacy regarding any information we may collect from you across our website, and other sites we own and operate.
+  const [updatePrivacy, { isLoading: isUpdatingPrivacy }] = useUpdatePrivacyPolicyMutation();
+  const [updateTerms, { isLoading: isUpdatingTerms }] = useUpdateTermsConditionsMutation();
 
-We only ask for personal information when we truly need it to provide a service to you. We collect it by fair and lawful means, with your knowledge and consent. We also let you know why we're collecting it and how it will be used.
-
-We only retain collected information for as long as necessary to provide you with your requested service. What data we store, we'll protect within commercially acceptable means to prevent loss and theft, as well as unauthorized access, disclosure, copying, use or modification.`
-  );
-
-  const [termsConditions, setTermsConditions] = useState(
-    `Clause 1
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet, sed in viverra pretium tellus neque. Ullamcorper suspendisse aenean leo phaatra in temperat. Amet quam placerat sem.
-
-Clause 2
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet, sed in viverra pretium tellus neque. Ullamcorper suspendisse aenean leo phaatra in temperat. Amet quam placerat sem.
-
-Clause 3
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum eget purus in. Consectetur eget id morbi amet, sed in viverra pretium tellus neque. Ullamcorper suspendisse aenean leo phaatra in temperat. Amet quam placerat sem.`
-  );
-
-  const [tempPrivacyPolicy, setTempPrivacyPolicy] = useState(privacyPolicy);
-  const [tempTermsConditions, setTempTermsConditions] =
-    useState(termsConditions);
+  const [tempPrivacyPolicy, setTempPrivacyPolicy] = useState("");
+  const [tempTermsConditions, setTempTermsConditions] = useState("");
 
   // refs for rich text editors
   const privacyRef = useRef(null);
   const termsRef = useRef(null);
 
-  // helper to escape plain text -> html
-  const escapeHtml = (unsafe) =>
-    unsafe
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-
-  const plainToHtml = (text) => text.split("\n").map(escapeHtml).join("<br/>");
+  useEffect(() => {
+    if (privacyData?.content && !editingPrivacy) {
+      setTempPrivacyPolicy(privacyData.content);
+    }
+  }, [privacyData, editingPrivacy]);
 
   useEffect(() => {
-    // initialize temp HTML values if they are plain text
-    if (!tempPrivacyPolicy.includes("<") && tempPrivacyPolicy.includes("\n")) {
-      setTempPrivacyPolicy(plainToHtml(tempPrivacyPolicy));
+    if (termsData?.content && !editingTerms) {
+      setTempTermsConditions(termsData.content);
     }
-    if (
-      !tempTermsConditions.includes("<") &&
-      tempTermsConditions.includes("\n")
-    ) {
-      setTempTermsConditions(plainToHtml(tempTermsConditions));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [termsData, editingTerms]);
 
   useEffect(() => {
     if (editingPrivacy && privacyRef.current) {
@@ -96,25 +74,39 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
     }
   };
 
-  const handleSavePrivacy = () => {
-    setPrivacyPolicy(tempPrivacyPolicy);
-    setEditingPrivacy(false);
+  const handleSavePrivacy = async (content) => {
+    try {
+      await updatePrivacy({ content }).unwrap();
+      setEditingPrivacy(false);
+      toast.success("Privacy policy updated successfully", { position: "bottom-center" });
+    } catch (err) {
+      toast.error("Failed to update privacy policy", { position: "bottom-center" });
+    }
   };
 
   const handleCancelPrivacy = () => {
-    setTempPrivacyPolicy(privacyPolicy);
+    setTempPrivacyPolicy(privacyData?.content || "");
     setEditingPrivacy(false);
   };
 
-  const handleSaveTerms = () => {
-    setTermsConditions(tempTermsConditions);
-    setEditingTerms(false);
+  const handleSaveTerms = async (content) => {
+    try {
+      await updateTerms({ content }).unwrap();
+      setEditingTerms(false);
+      toast.success("Terms & conditions updated successfully", { position: "bottom-center" });
+    } catch (err) {
+      toast.error("Failed to update terms & conditions", { position: "bottom-center" });
+    }
   };
 
   const handleCancelTerms = () => {
-    setTempTermsConditions(termsConditions);
+    setTempTermsConditions(termsData?.content || "");
     setEditingTerms(false);
   };
+
+  if (isPrivacyLoading || isTermsLoading) {
+    return <div className="p-8 text-center text-gray-500">Loading settings...</div>;
+  }
 
   return (
     <div className="p-6">
@@ -244,9 +236,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
               <div className="flex gap-3 justify-end">
                 <button
                   onClick={() => {
-                    // reset editor content
-                    if (privacyRef.current)
-                      privacyRef.current.innerHTML = privacyPolicy;
                     handleCancelPrivacy();
                   }}
                   className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50"
@@ -254,16 +243,16 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
                   Cancel
                 </button>
                 <button
+                  disabled={isUpdatingPrivacy}
                   onClick={() => {
                     const html = privacyRef.current
                       ? privacyRef.current.innerHTML
                       : tempPrivacyPolicy;
-                    setTempPrivacyPolicy(html);
-                    handleSavePrivacy();
+                    handleSavePrivacy(html);
                   }}
-                  className="px-6 py-2 bg-blue text-white rounded-lg font-medium"
+                  className="px-6 py-2 bg-blue text-white rounded-lg font-medium disabled:opacity-50"
                 >
-                  Save
+                  {isUpdatingPrivacy ? "Saving..." : "Save"}
                 </button>
               </div>
             </div>
@@ -271,7 +260,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
             <div className="prose prose-sm max-w-none">
               <div
                 className="text-gray-700 leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: privacyPolicy }}
+                dangerouslySetInnerHTML={{ __html: privacyData?.content || "" }}
               />
             </div>
           )}
@@ -366,8 +355,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
               <div className="flex gap-3 justify-end">
                 <button
                   onClick={() => {
-                    if (termsRef.current)
-                      termsRef.current.innerHTML = termsConditions;
                     handleCancelTerms();
                   }}
                   className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50"
@@ -375,16 +362,16 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
                   Cancel
                 </button>
                 <button
+                  disabled={isUpdatingTerms}
                   onClick={() => {
                     const html = termsRef.current
                       ? termsRef.current.innerHTML
                       : tempTermsConditions;
-                    setTempTermsConditions(html);
-                    handleSaveTerms();
+                    handleSaveTerms(html);
                   }}
-                  className="px-6 py-2 bg-blue text-white rounded-lg font-medium"
+                  className="px-6 py-2 bg-blue text-white rounded-lg font-medium disabled:opacity-50"
                 >
-                  Save
+                  {isUpdatingTerms ? "Saving..." : "Save"}
                 </button>
               </div>
             </div>
@@ -392,7 +379,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra condimentum ege
             <div className="prose prose-sm max-w-none space-y-4">
               <div
                 className="text-gray-700 leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: termsConditions }}
+                dangerouslySetInnerHTML={{ __html: termsData?.content || "" }}
               />
             </div>
           )}

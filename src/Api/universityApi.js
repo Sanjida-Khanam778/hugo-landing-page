@@ -310,6 +310,30 @@ export const authapi = api.injectEndpoints({
             query: () => "/dashboard/stats/",
             providesTags: ["AdminDashboardStats"],
         }),
+        getTermsConditions: builder.query({
+            query: () => "/university/terms-conditions/",
+            providesTags: ["TermsConditions"],
+        }),
+        updateTermsConditions: builder.mutation({
+            query: (data) => ({
+                url: "/university/terms-conditions/update/",
+                method: "PATCH",
+                body: data,
+            }),
+            invalidatesTags: ["TermsConditions"],
+        }),
+        getPrivacyPolicy: builder.query({
+            query: () => "/university/privacy-policy/",
+            providesTags: ["PrivacyPolicy"],
+        }),
+        updatePrivacyPolicy: builder.mutation({
+            query: (data) => ({
+                url: "/university/privacy-policy/update/",
+                method: "PATCH",
+                body: data,
+            }),
+            invalidatesTags: ["PrivacyPolicy"],
+        }),
         getPublicUniversityGallery: builder.query({
             query: (id) => `/university/university/${id}/gallery/`,
             providesTags: (result, error, id) => [{ type: "PublicGallery", id }],
@@ -370,4 +394,8 @@ export const {
     useApplyToJobMutation,
     useGetJobApplicationsQuery,
     useGetAdminDashboardStatsQuery,
+    useGetTermsConditionsQuery,
+    useUpdateTermsConditionsMutation,
+    useGetPrivacyPolicyQuery,
+    useUpdatePrivacyPolicyMutation,
 } = authapi;
