@@ -8,7 +8,8 @@ import {
     Clock,
 } from "lucide-react";
 import background from "../../assets/images/uniBanner.png";
-import { useGetEventsByUniIdQuery } from "../../Api/universityApi";
+import { useGetEventsByUniIdQuery, useRegisterForEventMutation } from "../../Api/universityApi";
+import { toast } from "react-hot-toast";
 
 export default function UniEventsDetails({ eventId, onBack, univId }) {
     // We fetch all events for the university and find the specific one by ID. 
@@ -17,7 +18,24 @@ export default function UniEventsDetails({ eventId, onBack, univId }) {
     const selectedEvent = useMemo(() => {
         return eventsData?.find(e => e.id === eventId);
     }, [eventsData, eventId]);
-    console.log(selectedEvent)
+
+    const [registerForEvent, { isLoading: isRegistering }] = useRegisterForEventMutation();
+
+    const handleRegister = async () => {
+        if (!selectedEvent) return;
+        try {
+            const res = await registerForEvent(selectedEvent.id).unwrap();
+            toast.success(res.message || "Successfully registered for the event!", {
+                position: "bottom-center",
+            });
+        } catch (err) {
+            console.error("Registration error:", err);
+            const msg = err?.data?.message || err?.data?.error || "Failed to register for event.";
+            toast.error(msg, {
+                position: "bottom-center",
+            });
+        }
+    };
 
     const getFullUrl = (path) => {
         if (!path) return "";
@@ -156,8 +174,12 @@ export default function UniEventsDetails({ eventId, onBack, univId }) {
                             <p className="text-gray-600 mb-4 text-center text-sm">
                                 Registered: {selectedEvent.registration_count} students
                             </p>
-                            <button className="w-full bg-blue text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                                {selectedEvent.status === "Upcoming" ? "Register Now" : "Browse Events"}
+                            <button
+                                onClick={selectedEvent.status === "Upcoming" ? handleRegister : onBack}
+                                disabled={isRegistering}
+                                className="w-full bg-blue text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isRegistering ? "Registering..." : (selectedEvent.status === "Upcoming" ? "Register Now" : "Browse Events")}
                             </button>
                         </div>
 

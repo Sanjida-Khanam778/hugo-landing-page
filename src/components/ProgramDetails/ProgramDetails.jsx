@@ -7,7 +7,7 @@ import { useGetProgramDetailsQuery } from "../../Api/universityApi";
 export default function ProgramDetails() {
   const { id } = useParams();
   const { data: program, isLoading, error } = useGetProgramDetailsQuery(id);
-
+console.log(program)
   const getFullUrl = (path) => {
     if (!path) return "";
     if (path.startsWith("http") || path.startsWith("blob:")) return path;

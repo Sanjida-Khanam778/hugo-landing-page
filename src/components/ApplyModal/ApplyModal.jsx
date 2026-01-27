@@ -25,6 +25,8 @@ export default function ApplyModal({ open, onClose, uniName, uniId, programTitle
     dataProcessingAccepted: false,
   });
 
+  const [errors, setErrors] = useState({});
+
   const [idFront, setIdFront] = useState(null);
   const [idBack, setIdBack] = useState(null);
   const [documents, setDocuments] = useState([]);
@@ -54,6 +56,7 @@ export default function ApplyModal({ open, onClose, uniName, uniId, programTitle
         letterOfInterest: "",
         dataProcessingAccepted: false,
       });
+      setErrors({});
       setIdFront(null);
       setIdBack(null);
       setDocuments([]);
@@ -66,6 +69,10 @@ export default function ApplyModal({ open, onClose, uniName, uniId, programTitle
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
     setForm((s) => ({ ...s, [name]: type === "checkbox" ? checked : value }));
+    // Clear error for the field being edited
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   }
 
   function handleFileChange(e, which) {
@@ -75,9 +82,11 @@ export default function ApplyModal({ open, onClose, uniName, uniId, programTitle
     if (which === "front") {
       setIdFront(file);
       setPreviews((p) => ({ ...p, front: url }));
+      setErrors((prev) => ({ ...prev, idFront: "" }));
     } else if (which === "back") {
       setIdBack(file);
       setPreviews((p) => ({ ...p, back: url }));
+      setErrors((prev) => ({ ...prev, idBack: "" }));
     }
   }
 
@@ -86,13 +95,54 @@ export default function ApplyModal({ open, onClose, uniName, uniId, programTitle
     setDocuments(files);
     const docPreviews = files.map((f) => ({ name: f.name }));
     setPreviews((p) => ({ ...p, docs: docPreviews }));
+    if (files.length > 0) {
+      setErrors((prev) => ({ ...prev, docs: "" }));
+    }
+  }
+
+  function validate() {
+    const newErrors = {};
+    const requiredFields = [
+      "fullName",
+      "email",
+      "phone",
+      "dob",
+      "placeOfBirth",
+      "nationality",
+      "previousStudies",
+      "currentSituation",
+      "address",
+    ];
+
+    requiredFields.forEach((field) => {
+      if (!form[field] || (typeof form[field] === "string" && !form[field].trim())) {
+        newErrors[field] = "This field is required";
+      }
+    });
+
+    // Desired program check (taking programTitle into account)
+    if (!form.program && !programTitle) {
+      newErrors.program = "This field is required";
+    }
+
+    if (!idFront) newErrors.idFront = "This field is required";
+    if (!idBack) newErrors.idBack = "This field is required";
+    if (documents.length === 0) newErrors.docs = "This field is required";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // Basic validation
-    if (!form.fullName || !form.email || !uniId) {
-      toast.error("Please provide at least your full name, email and ensure university information is loaded.");
+
+    if (!validate()) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+
+    if (!uniId) {
+      toast.error("Ensure university information is loaded.");
       return;
     }
 
@@ -155,197 +205,199 @@ export default function ApplyModal({ open, onClose, uniName, uniId, programTitle
           <form onSubmit={handleSubmit} className="space-y-6 pt-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700">Full name</label>
+                <label className="block text-sm font-semibold text-gray-700">Full name <span className="text-red">*</span></label>
                 <input
                   name="fullName"
                   placeholder="John Doe"
                   value={form.fullName}
                   onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  className={`mt-1 block w-full border ${errors.fullName ? 'border-red-500' : 'border-gray-300'} rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all`}
                 />
+                {errors.fullName && <p className="text-red text-xs mt-1">{errors.fullName}</p>}
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-gray-700">Email</label>
+                <label className="block text-sm font-semibold text-gray-700">Email <span className="text-red">*</span></label>
                 <input
                   name="email"
                   type="email"
                   placeholder="john@example.com"
                   value={form.email}
                   onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  className={`mt-1 block w-full border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all`}
                 />
+                {errors.email && <p className="text-red text-xs mt-1">{errors.email}</p>}
               </div>
-              {/* Rest of the form remains same but with improved styling */}
 
-
-              <div>
-                <label className="block text-sm font-medium">Phone</label>
+              <div className="space-y-1">
+                <label className="block text-sm font-medium">Phone <span className="text-red">*</span></label>
                 <input
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
-                  className="mt-1 block w-full border rounded px-3 py-2"
+                  className={`mt-1 block w-full border ${errors.phone ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
                 />
+                {errors.phone && <p className="text-red text-xs mt-1">{errors.phone}</p>}
               </div>
 
-              <div>
+              <div className="space-y-1">
                 <label className="block text-sm font-medium">
-                  Date of birth
+                  Date of birth <span className="text-red">*</span>
                 </label>
                 <input
                   name="dob"
                   type="date"
                   value={form.dob}
                   onChange={handleChange}
-                  className="mt-1 block w-full border rounded px-3 py-2"
+                  className={`mt-1 block w-full border ${errors.dob ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
                 />
+                {errors.dob && <p className="text-red text-xs mt-1">{errors.dob}</p>}
               </div>
 
-              <div>
+              <div className="space-y-1">
                 <label className="block text-sm font-medium">
-                  Place of birth
+                  Place of birth <span className="text-red">*</span>
                 </label>
                 <input
                   name="placeOfBirth"
                   value={form.placeOfBirth}
                   onChange={handleChange}
-                  className="mt-1 block w-full border rounded px-3 py-2"
+                  className={`mt-1 block w-full border ${errors.placeOfBirth ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
                 />
+                {errors.placeOfBirth && <p className="text-red text-xs mt-1">{errors.placeOfBirth}</p>}
               </div>
 
-              <div>
-                <label className="block text-sm font-medium">Nationality</label>
+              <div className="space-y-1">
+                <label className="block text-sm font-medium">Nationality <span className="text-red">*</span></label>
                 <input
                   name="nationality"
                   value={form.nationality}
                   onChange={handleChange}
-                  className="mt-1 block w-full border rounded px-3 py-2"
+                  className={`mt-1 block w-full border ${errors.nationality ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
                 />
+                {errors.nationality && <p className="text-red text-xs mt-1">{errors.nationality}</p>}
               </div>
 
-              <div>
+              <div className="space-y-1">
                 <label className="block text-sm font-medium">
-                  Desired program of study
+                  Desired program of study <span className="text-red">*</span>
                 </label>
                 <input
                   name="program"
                   value={form.program || programTitle}
                   onChange={handleChange}
-                  className="mt-1 block w-full border rounded px-3 py-2"
+                  className={`mt-1 block w-full border ${errors.program ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
                 />
+                {errors.program && <p className="text-red text-xs mt-1">{errors.program}</p>}
               </div>
 
-              {/* <div>
-                <label className="block text-sm font-medium">Campus</label>
-                <input
-                  name="campus"
-                  value={form.campus}
-                  onChange={handleChange}
-                  className="mt-1 block w-full border rounded px-3 py-2"
-                />
-              </div> */}
-
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium">Address</label>
+              <div className="md:col-span-2 space-y-1">
+                <label className="block text-sm font-medium">Address <span className="text-red">*</span></label>
                 <input
                   name="address"
                   value={form.address}
                   onChange={handleChange}
-                  className="mt-1 block w-full border rounded px-3 py-2"
+                  className={`mt-1 block w-full border ${errors.address ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
                 />
+                {errors.address && <p className="text-red text-xs mt-1">{errors.address}</p>}
               </div>
 
-              <div className="md:col-span-2">
+              <div className="md:col-span-2 space-y-1">
                 <label className="block text-sm font-medium">
-                  Previous studies
+                  Previous studies <span className="text-red">*</span>
                 </label>
                 <textarea
                   name="previousStudies"
                   value={form.previousStudies}
                   onChange={handleChange}
-                  className="mt-1 block w-full border rounded px-3 py-2"
+                  className={`mt-1 block w-full border ${errors.previousStudies ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
                   rows={3}
                 />
+                {errors.previousStudies && <p className="text-red text-xs mt-1">{errors.previousStudies}</p>}
               </div>
 
-              <div className="md:col-span-2">
+              <div className="md:col-span-2 space-y-1">
                 <label className="block text-sm font-medium">
-                  Current situation
+                  Current situation <span className="text-red">*</span>
                 </label>
                 <textarea
                   name="currentSituation"
                   value={form.currentSituation}
                   onChange={handleChange}
-                  className="mt-1 block w-full border rounded px-3 py-2"
+                  className={`mt-1 block w-full border ${errors.currentSituation ? 'border-red-500' : 'border-gray-300'} rounded px-3 py-2`}
                   rows={2}
                 />
+                {errors.currentSituation && <p className="text-red text-xs mt-1">{errors.currentSituation}</p>}
               </div>
 
-              <div className="md:col-span-2">
+              <div className="md:col-span-2 space-y-1">
                 <label className="block text-sm font-medium">
-                  Special needs (if any)
+                  Special needs (optional)
                 </label>
                 <textarea
                   name="specialNeeds"
                   value={form.specialNeeds}
                   onChange={handleChange}
-                  className="mt-1 block w-full border rounded px-3 py-2"
+                  className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
                   rows={2}
                 />
               </div>
 
-              <div>
+              <div className="space-y-1">
                 <label className="block text-sm font-medium">
-                  ID photo (front)
+                  ID photo (front) <span className="text-red">*</span>
                 </label>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => handleFileChange(e, "front")}
-                  className="mt-1 block w-full"
+                  className={`mt-1 block w-full text-sm ${errors.idFront ? 'text-red' : ''}`}
                 />
+                {errors.idFront && <p className="text-red text-xs mt-1">{errors.idFront}</p>}
                 {previews.front && (
                   <img
                     src={previews.front}
                     alt="id-front"
-                    className="mt-2 h-24 object-contain"
+                    className="mt-2 h-24 object-contain rounded border"
                   />
                 )}
               </div>
 
-              <div>
+              <div className="space-y-1">
                 <label className="block text-sm font-medium">
-                  ID photo (back)
+                  ID photo (back) <span className="text-red">*</span>
                 </label>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => handleFileChange(e, "back")}
-                  className="mt-1 block w-full"
+                  className={`mt-1 block w-full text-sm ${errors.idBack ? 'text-red' : ''}`}
                 />
+                {errors.idBack && <p className="text-red text-xs mt-1">{errors.idBack}</p>}
                 {previews.back && (
                   <img
                     src={previews.back}
                     alt="id-back"
-                    className="mt-2 h-24 object-contain"
+                    className="mt-2 h-24 object-contain rounded border"
                   />
                 )}
               </div>
 
-              <div className="md:col-span-2">
+              <div className="md:col-span-2 space-y-1">
                 <label className="block text-sm font-medium">
                   Upload supporting documents (transcripts, health insurance,
-                  birth certificate, etc.)
+                  birth certificate, etc.) <span className="text-red">*</span>
                 </label>
                 <input
                   type="file"
                   multiple
                   onChange={handleDocsChange}
-                  className="mt-1 block w-full"
+                  className="mt-1 block w-full text-sm"
                 />
+                {errors.docs && <p className="text-red text-xs mt-1">{errors.docs}</p>}
+
                 {previews.docs.length > 0 && (
-                  <ul className="mt-2 list-disc list-inside text-sm">
+                  <ul className="mt-2 list-disc list-inside text-sm text-gray-600">
                     {previews.docs.map((d, i) => (
                       <li key={i}>{d.name}</li>
                     ))}
@@ -353,15 +405,15 @@ export default function ApplyModal({ open, onClose, uniName, uniId, programTitle
                 )}
               </div>
 
-              <div className="md:col-span-2">
+              <div className="md:col-span-2 space-y-1">
                 <label className="block text-sm font-medium">
-                  Letter of interest (optional)
+                  Letter of interest <span className="text-gray-400 text-xs">(optional)</span>
                 </label>
                 <textarea
                   name="letterOfInterest"
                   value={form.letterOfInterest}
                   onChange={handleChange}
-                  className="mt-1 block w-full border rounded px-3 py-2"
+                  className="mt-1 block w-full border border-gray-300 rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                   rows={4}
                 />
               </div>

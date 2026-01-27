@@ -2,7 +2,8 @@ import { useState } from "react";
 import speakerImg from "../../assets/images/speaker.png";
 import eventPlaceholder from "../../assets/icons/event.png";
 import uni_logo_placeholder from "../../assets/icons/uni_logo.png";
-import { useGetDiscoveryEventsQuery } from "../../Api/universityApi";
+import { useGetDiscoveryEventsQuery, useRegisterForEventMutation } from "../../Api/universityApi";
+import { toast } from "react-hot-toast";
 
 import {
   MapPin,
@@ -49,6 +50,23 @@ export default function UniversityEvents() {
   const handleViewDetails = (event) => {
     setSelectedEvent(event);
     setView("detail");
+  };
+
+  const [registerForEvent, { isLoading: isRegistering }] = useRegisterForEventMutation();
+
+  const handleRegister = async (eventId) => {
+    try {
+      const res = await registerForEvent(eventId).unwrap();
+      toast.success(res.message || "Successfully registered for the event!", {
+        position: "bottom-center",
+      });
+    } catch (err) {
+      console.error("Registration error:", err);
+      const msg = err?.data?.message || err?.data?.error || "Failed to register for event.";
+      toast.error(msg, {
+        position: "bottom-center",
+      });
+    }
   };
 
   const handleBackToList = () => {
@@ -184,8 +202,12 @@ export default function UniversityEvents() {
                     <p className=" text-gray-600 text-sm mb-6">
                       {selectedEvent.registration_count} Students Registered
                     </p>
-                    <button className="w-full bg-blue text-white py-3 rounded-lg shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all">
-                      Register For Event
+                    <button
+                      disabled={selectedEvent.status === "Cancelled" || isRegistering}
+                      onClick={() => handleRegister(selectedEvent.id)}
+                      className="w-full bg-blue text-white py-3 rounded-lg shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isRegistering ? "Registering..." : "Register For Event"}
                     </button>
                   </>
                 ) : (

@@ -528,7 +528,7 @@ export default function ProgramDetailsTab({ program }) {
                         open={showApplicationForm}
                         onClose={() => setShowApplicationForm(false)}
                         uniName={program?.university_name}
-                        uniId={program?.id}
+                        uniId={program?.university_id}
                       />
                     )
                   }

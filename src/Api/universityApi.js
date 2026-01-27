@@ -296,6 +296,13 @@ export const authapi = api.injectEndpoints({
             query: (id) => `/university/university/${id}/gallery/`,
             providesTags: (result, error, id) => [{ type: "PublicGallery", id }],
         }),
+        registerForEvent: builder.mutation({
+            query: (id) => ({
+                url: `/event/${id}/register/`,
+                method: "POST",
+            }),
+            invalidatesTags: ["DiscoveryEvents", "UniversityEvents"],
+        }),
     }),
 });
 
@@ -341,4 +348,5 @@ export const {
     useGetTestimonialsByUniIdQuery,
     useApplyToUniversityMutation,
     useGetPublicUniversityGalleryQuery,
+    useRegisterForEventMutation,
 } = authapi;

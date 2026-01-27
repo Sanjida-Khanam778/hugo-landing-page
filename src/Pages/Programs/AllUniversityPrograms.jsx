@@ -25,7 +25,6 @@ export default function AllUniversityPrograms() {
   }, [filters, searchTerm]);
 
   const { data: programsData, isLoading, error } = useGetDiscoveryProgramsQuery(queryParams);
-
   const handleFilterChange = (name, value) => {
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
