@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { Link } from "react-router-dom";
-import logo_icon from "../../assets/icons/uni_logo.png";
+import uni_default from "../../assets/images/uni_default.jpg";
 import { useGetAllUniversitiesQuery } from "../../Api/universityApi";
 
 export default function FeaturedUniversities() {
@@ -112,7 +112,7 @@ export default function FeaturedUniversities() {
                 {/* University Image */}
                 <div className="relative w-full h-48 bg-gray-200 overflow-hidden">
                   <img
-                    src={getFullUrl(uni?.picture)}
+                    src={getFullUrl(uni?.picture) || uni_default }
 
                     alt={uni.univ_name}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"

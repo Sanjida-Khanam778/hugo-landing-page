@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { MapPin } from "lucide-react";
 import defaultLogo from "../../assets/icons/harvard.png";
-import ApplyModal from "../../components/ApplyModal/ApplyModal";
 import { Link } from "react-router-dom";
 
 export default function UniBannerWrapper({ data, setShowApply }) {

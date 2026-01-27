@@ -4,6 +4,7 @@ import { Link, ScrollRestoration, useSearchParams } from "react-router-dom";
 import FiltersContent from "../../components/Shared/FiltersContent";
 import { useGetAllUniversitiesQuery } from "../../Api/universityApi";
 import { useState, useEffect } from "react";
+import uni_default from "../../assets/images/uni_default.jpg";
 
 export default function UniversityDirectory() {
   const [showFilters, setShowFilters] = useState(false);
@@ -137,8 +138,8 @@ export default function UniversityDirectory() {
                     <div className="">
                       <div>
                         <img
-                          src={getFullUrl(uni?.picture)}
-                          className="w-fit object-contain"
+                          src={getFullUrl(uni?.picture) || uni_default}
+                          className="w-full h-[200px] object-cover"
                           alt=""
                         />
                       </div>

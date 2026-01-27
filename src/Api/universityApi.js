@@ -357,6 +357,13 @@ export const authapi = api.injectEndpoints({
             }),
             invalidatesTags: ["DiscoveryEvents", "UniversityEvents"],
         }),
+        postRequestInfo: builder.mutation({
+            query: (data) => ({
+                url: "/post/request/info/",
+                method: "POST",
+                body: data,
+            }),
+        }),
     }),
 });
 
@@ -412,4 +419,5 @@ export const {
     useUpdatePrivacyPolicyMutation,
     useGetOnboardingListQuery,
     useManageOnboardingMutation,
+    usePostRequestInfoMutation,
 } = authapi;

@@ -10,14 +10,20 @@ import Overview from "./Overview";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import Jobs from "./Jobs";
 import UniProgramDetails from "./UniProgramDetails";
-
 import UniEventsDetails from "./UniEventsDetails";
+import { useGetProgramsByUniIdQuery, usePostRequestInfoMutation } from "../../Api/universityApi";
+import toast from "react-hot-toast";
 
 export default function UniversityTab({ data, setShowApply }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedProgramId, setSelectedProgramId] = useState(null);
   const [selectedEventId, setSelectedEventId] = useState(null);
   const [showRequestForm, setShowRequestForm] = useState(false);
+  const { data: programsData, isLoading: isProgramsLoading } = useGetProgramsByUniIdQuery(data?.id, {
+    skip: !data?.id || !showRequestForm
+  });
+  console.log(programsData);
+  const [postRequestInfo, { isLoading: isSubmitting }] = usePostRequestInfoMutation();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -33,16 +39,30 @@ export default function UniversityTab({ data, setShowApply }) {
     });
   };
 
-  const handleSubmit = () => {
-    console.log("Form submitted:", formData);
-    setShowRequestForm(false);
-    setFormData({
-      fullName: "",
-      email: "",
-      phone: "",
-      program: "",
-      message: "",
-    });
+  const handleSubmit = async () => {
+    try {
+      const payload = {
+        full_name: formData.fullName,
+        email_address: formData.email,
+        phone_number: formData.phone,
+        program_of_interest: parseInt(formData.program),
+        message: formData.message,
+      };
+
+      const res = await postRequestInfo(payload).unwrap();
+      toast.success(res.message || "Your request has been sent successfully!", { position: "bottom-center" });
+
+      setShowRequestForm(false);
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        program: "",
+        message: "",
+      });
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to send request. Please try again.", { position: "bottom-center" });
+    }
   };
 
   // Campus locations data from API
@@ -304,12 +324,12 @@ export default function UniversityTab({ data, setShowApply }) {
                     onChange={handleInputChange}
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all"
                   >
-                    <option value="">Select a program</option>
-                    <option value="business">Business Administration</option>
-                    <option value="cs">Computer Science</option>
-                    <option value="engineering">Engineering</option>
-                    <option value="medicine">Medicine</option>
-                    <option value="law">Law</option>
+                    <option value="">{isProgramsLoading ? "Loading programs..." : "Select a program"}</option>
+                    {programsData?.map((prog) => (
+                      <option key={prog.id} value={prog.id}>
+                        {prog.title}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -330,14 +350,16 @@ export default function UniversityTab({ data, setShowApply }) {
 
               <div className="flex gap-3 mt-6">
                 <button
+                  disabled={isSubmitting}
                   onClick={handleSubmit}
-                  className="flex-1 bg-blue text-white py-3 rounded-lg font-bold hover:bg-blue-600 transition-colors shadow-md"
+                  className="flex-1 bg-blue text-white py-3 rounded-lg font-bold hover:bg-blue-600 transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Send Message
+                  {isSubmitting ? "Sending..." : "Send Message"}
                 </button>
                 <button
+                  disabled={isSubmitting}
                   onClick={() => setShowRequestForm(false)}
-                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-lg font-bold transition-colors"
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-lg font-bold transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>
