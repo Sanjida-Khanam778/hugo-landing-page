@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   CheckCircle,
   Phone,
@@ -6,12 +6,9 @@ import {
   Calendar,
   DollarSign,
   Award,
-  BookOpen,
-  Clock,
-  Globe,
-  Monitor
 } from "lucide-react";
 import { useGetCareerRoadmapQuery } from "../../Api/universityApi";
+import ApplyModal from "../ApplyModal/ApplyModal";
 
 export default function ProgramDetailsTab({ program }) {
   const [activeTab, setActiveTab] = useState("overview");
@@ -19,25 +16,8 @@ export default function ProgramDetailsTab({ program }) {
   const { data: careerData } = useGetCareerRoadmapQuery(program?.id, {
     skip: !program?.id,
   });
-console.log(careerData)
+  console.log(careerData)
   if (!program) return null;
-
-  // Helper to extract strings from nested requirements array
-  const flattenRequirements = (reqs) => {
-    if (!reqs) return [];
-    const result = [];
-    const recurse = (item) => {
-      if (typeof item === 'string') {
-        result.push(...item.split('\n'));
-      } else if (Array.isArray(item)) {
-        item.forEach(recurse);
-      }
-    };
-    recurse(reqs);
-    return result;
-  };
-
-  const requirementsList = flattenRequirements(program.requirements);
 
   return (
     <div className="min-h-screen bg-base font-inter">
@@ -528,7 +508,7 @@ console.log(careerData)
           <div className="space-y-6">
             {/* Apply Now */}
             <div className=" rounded-lg sticky top-16">
-              {!showApplicationForm ? (
+              
                 <div className="bg-white p-6 rounded-lg">
                   <h3 className="text-lg font-medium mb-3">Apply Now</h3>
                   <p className=" text-gray-600 mb-4">
@@ -541,97 +521,19 @@ console.log(careerData)
                   >
                     Start Application
                   </button>
+                  {
+                    showApplicationForm && (
+                      <ApplyModal
+                        programTitle={program?.title}
+                        open={showApplicationForm}
+                        onClose={() => setShowApplicationForm(false)}
+                        uniName={program?.university_name}
+                        uniId={program?.id}
+                      />
+                    )
+                  }
                 </div>
-              ) : (
-                <>
-                  <h3 className="text-lg font-bold mb-4">Apply Now</h3>
-
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block  font-medium text-gray-700 mb-2">
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block  font-medium text-gray-700 mb-2">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block  font-medium text-gray-700 mb-2">
-                        Documents
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="text"
-                          placeholder="CV, Transcript, ..."
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
-                        />
-                        <button className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                          <svg
-                            className="w-5 h-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block  font-medium text-gray-700 mb-2">
-                        Highest Education
-                      </label>
-                      <select className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500  text-gray-500">
-                        <option>Select education level</option>
-                        <option>High School</option>
-                        <option>Bachelor's Degree</option>
-                        <option>Master's Degree</option>
-                        <option>PhD</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block  font-medium text-gray-700 mb-2">
-                        Additional Information
-                      </label>
-                      <textarea
-                        rows="3"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none "
-                      ></textarea>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-2 mt-4">
-                    <button className="flex-1 bg-blue hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors ">
-                      Submit Application
-                    </button>
-                    <button
-                      onClick={() => setShowApplicationForm(false)}
-                      className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-lg font-medium transition-colors "
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </>
-              )}
+          
 
               <>
                 {/* Key Information */}

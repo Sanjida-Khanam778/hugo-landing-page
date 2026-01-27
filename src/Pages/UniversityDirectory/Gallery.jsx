@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import { useGetPublicUniversityGalleryQuery } from "../../Api/universityApi";
 import { X, Play, FileText } from "lucide-react";
 
@@ -77,13 +78,13 @@ export default function Gallery({ data: universityData }) {
       </div>
 
       {/* Lightbox Overlay */}
-      {selectedMedia && (
+      {selectedMedia && createPortal(
         <div
-          className="fixed inset-0 z-[100000] bg-black/95 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[999999999] bg-black/95 flex items-center justify-center p-4"
           onClick={() => setSelectedMedia(null)}
         >
           <button
-            className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+            className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors z-[1000000000]"
             onClick={() => setSelectedMedia(null)}
           >
             <X size={24} />
@@ -103,7 +104,7 @@ export default function Gallery({ data: universityData }) {
             ) : selectedMedia.media_type === "document" ? (
               <div className="bg-white p-8 rounded-lg text-center max-w-md">
                 <FileText size={64} className="text-blue mx-auto mb-4" />
-                <h3 className="text-xl font-bold mb-2">{selectedMedia.title}</h3>
+                <h3 className="text-xl font-bold mb-2 text-dark">{selectedMedia.title}</h3>
                 <p className="text-gray-500 mb-6 font-medium">This is a document file. You can view or download it using the link below.</p>
                 <a
                   href={getFullUrl(selectedMedia.file)}
@@ -126,7 +127,8 @@ export default function Gallery({ data: universityData }) {
               <h3 className="text-white text-xl font-bold">{selectedMedia.title}</h3>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -1,22 +1,13 @@
-import React, { useState } from "react";
-import bannerVideo from "../../assets/video/uni_banner.mp4";
+import { useState } from "react";
 import { MapPin } from "lucide-react";
 import defaultLogo from "../../assets/icons/harvard.png";
 import ApplyModal from "../../components/ApplyModal/ApplyModal";
 import { Link } from "react-router-dom";
 
-export default function UniBannerWrapper({ data }) {
-  const [showApply, setShowApply] = useState(false);
-
+export default function UniBannerWrapper({ data, setShowApply }) {
   return (
     <>
       <UniBannerInner setShowApply={setShowApply} data={data} />
-      <ApplyModal
-        open={showApply}
-        onClose={() => setShowApply(false)}
-        uniName={data?.univ_name || "University"}
-        uniId={data?.id}
-      />
     </>
   );
 }

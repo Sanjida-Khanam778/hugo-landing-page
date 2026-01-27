@@ -4,7 +4,6 @@ import { useGetProgramsByUniIdQuery } from "../../Api/universityApi";
 
 export default function Program({ data, onViewDetails }) {
   const { id } = useParams();
-  console.log(data);
   const { data: programsData, isLoading, error } = useGetProgramsByUniIdQuery(id);
   console.log(programsData);
   const [levelFilter, setLevelFilter] = useState("all");

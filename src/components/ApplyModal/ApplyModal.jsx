@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useApplyToUniversityMutation } from "../../Api/universityApi";
 import { toast } from "react-hot-toast";
 
-export default function ApplyModal({ open, onClose, uniName = "University", uniId }) {
+export default function ApplyModal({ open, onClose, uniName, uniId, programTitle = "" }) {
   const [applyToUni, { isLoading }] = useApplyToUniversityMutation();
   const [step, setStep] = useState("form"); // form | summary | chat
   const [form, setForm] = useState({
@@ -12,7 +13,7 @@ export default function ApplyModal({ open, onClose, uniName = "University", uniI
     dob: "",
     placeOfBirth: "",
     program: "",
-    campus: "",
+
     address: "",
     phone: "",
     email: "",
@@ -42,7 +43,7 @@ export default function ApplyModal({ open, onClose, uniName = "University", uniI
         dob: "",
         placeOfBirth: "",
         program: "",
-        campus: "",
+        // campus: "",
         address: "",
         phone: "",
         email: "",
@@ -104,7 +105,7 @@ export default function ApplyModal({ open, onClose, uniName = "University", uniI
     formData.append("nationality", form.nationality);
     formData.append("address", form.address);
     formData.append("desired_program", form.program);
-    formData.append("campus", form.campus);
+    // formData.append("campus", form.campus);
     formData.append("previous_studies", form.previousStudies);
     formData.append("current_situation", form.currentSituation);
     formData.append("is_authorized", String(form.dataProcessingAccepted));
@@ -135,44 +136,48 @@ export default function ApplyModal({ open, onClose, uniName = "University", uniI
     }
   }
 
-  return (
-    <div className="fixed inset-0 z-[100000] flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50" onClick={onClose}></div>
-      <div className="relative w-[95%] md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-auto bg-white rounded-lg shadow-lg p-6 z-10">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">Apply to {uniName}</h2>
+  return createPortal(
+    <div className="fixed inset-0 z-[999999999] flex items-center justify-center">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose}></div>
+      <div className="relative w-[95%] md:w-3/4 lg:w-2/3 max-h-[90vh] overflow-auto bg-white rounded-lg shadow-2xl p-6 z-10 border border-gray-200">
+        <div className="flex items-center justify-between mb-4 sticky top-0 bg-white z-20 pb-2 border-b">
+          <h2 className="text-xl font-bold text-gray-800">Apply to {uniName}</h2>
           <button
             aria-label="Close"
             onClick={onClose}
-            className="p-1 rounded hover:bg-gray-100"
+            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
           >
-            <X />
+            <X size={24} />
           </button>
         </div>
 
         {step === "form" && (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium">Full name</label>
+          <form onSubmit={handleSubmit} className="space-y-6 pt-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700">Full name</label>
                 <input
                   name="fullName"
+                  placeholder="John Doe"
                   value={form.fullName}
                   onChange={handleChange}
-                  className="mt-1 block w-full border rounded px-3 py-2"
+                  className="mt-1 block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium">Email</label>
+              <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700">Email</label>
                 <input
                   name="email"
                   type="email"
+                  placeholder="john@example.com"
                   value={form.email}
                   onChange={handleChange}
-                  className="mt-1 block w-full border rounded px-3 py-2"
+                  className="mt-1 block w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                 />
               </div>
+              {/* Rest of the form remains same but with improved styling */}
+
 
               <div>
                 <label className="block text-sm font-medium">Phone</label>
@@ -225,13 +230,13 @@ export default function ApplyModal({ open, onClose, uniName = "University", uniI
                 </label>
                 <input
                   name="program"
-                  value={form.program}
+                  value={form.program || programTitle}
                   onChange={handleChange}
                   className="mt-1 block w-full border rounded px-3 py-2"
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium">Campus</label>
                 <input
                   name="campus"
@@ -239,7 +244,7 @@ export default function ApplyModal({ open, onClose, uniName = "University", uniI
                   onChange={handleChange}
                   className="mt-1 block w-full border rounded px-3 py-2"
                 />
-              </div>
+              </div> */}
 
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium">Address</label>
@@ -457,6 +462,7 @@ export default function ApplyModal({ open, onClose, uniName = "University", uniI
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -1,4 +1,4 @@
-export default function FiltersContent({ filters, onFilterChange }) {
+export default function FiltersContent({ filters, onFilterChange, isLocation = true }) {
   const { level, location, univ_type, field: selectedField } = filters;
 
   return (
@@ -82,39 +82,42 @@ export default function FiltersContent({ filters, onFilterChange }) {
           ))}
         </div>
       </div>
-
-      {/* Locations Filter */}
-      <div className="my-6">
-        <h4 className="font-semibold mb-3">Locations</h4>
-        <div className="space-y-2">
-          {[
-            { id: "all", label: "All Locations" },
-            { id: "madrid", label: "Comunidad de Madrid" },
-            { id: "barcelona", label: "Barcelona" },
-            { id: "valencia", label: "Valencia" },
-            { id: "alicante", label: "Alicante" },
-            { id: "sevilla", label: "Sevilla" },
-            { id: "salamanca", label: "Salamanca" },
-            { id: "málaga", label: "Málaga" },
-            { id: "murcia", label: "Murcia" },
-            { id: "cádiz", label: "Cádiz" },
-            { id: "vizcaya", label: "Vizcaya" },
-            { id: "asturias", label: "Asturias" },
-            { id: "zaragoza", label: "Zaragoza" },
-          ].map((item) => (
-            <label key={item.id} className="flex items-center cursor-pointer select-none">
-              <input
-                type="radio"
-                name="location"
-                className="mr-2 cursor-pointer"
-                checked={location === item.id}
-                onChange={() => onFilterChange("location", item.id)}
-              />
-              <span className="text-sm cursor-pointer">{item.label}</span>
-            </label>
-          ))}
-        </div>
-      </div>
+      {isLocation && (
+        <>
+          {/* Locations Filter */}
+          <div className="my-6">
+            <h4 className="font-semibold mb-3">Locations</h4>
+            <div className="space-y-2">
+              {[
+                { id: "all", label: "All Locations" },
+                { id: "madrid", label: "Comunidad de Madrid" },
+                { id: "barcelona", label: "Barcelona" },
+                { id: "valencia", label: "Valencia" },
+                { id: "alicante", label: "Alicante" },
+                { id: "sevilla", label: "Sevilla" },
+                { id: "salamanca", label: "Salamanca" },
+                { id: "málaga", label: "Málaga" },
+                { id: "murcia", label: "Murcia" },
+                { id: "cádiz", label: "Cádiz" },
+                { id: "vizcaya", label: "Vizcaya" },
+                { id: "asturias", label: "Asturias" },
+                { id: "zaragoza", label: "Zaragoza" },
+              ].map((item) => (
+                <label key={item.id} className="flex items-center cursor-pointer select-none">
+                  <input
+                    type="radio"
+                    name="location"
+                    className="mr-2 cursor-pointer"
+                    checked={location === item.id}
+                    onChange={() => onFilterChange("location", item.id)}
+                  />
+                  <span className="text-sm cursor-pointer">{item.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Condition (Univ Type) Filter */}
       <div className="my-6">

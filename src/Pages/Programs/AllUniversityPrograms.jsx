@@ -7,23 +7,20 @@ import FiltersContent from "../../components/Shared/FiltersContent";
 import { useGetDiscoveryProgramsQuery } from "../../Api/universityApi";
 
 export default function AllUniversityPrograms() {
-  const [levelFilter, setLevelFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     univ_type: "all",
-    location: "all",
-    study_type: "all",
+    level: "all",
     field: "all",
   });
 
   const queryParams = useMemo(() => {
     const params = {};
     if (filters.univ_type !== "all") params.univ_type = filters.univ_type;
-    if (filters.location !== "all") params.location = filters.location;
-    if (filters.study_type !== "all") params.study_type = filters.study_type;
-    if (filters.field !== "all") params.field = filters.field;
-    if (searchTerm) params.search = searchTerm;
+    if (filters.level !== "all") params.level = filters.level;
+    const effectiveTitle = searchTerm || (filters.field !== "all" ? filters.field : "");
+    if (effectiveTitle) params.title = effectiveTitle;
     return params;
   }, [filters, searchTerm]);
 
@@ -89,7 +86,7 @@ export default function AllUniversityPrograms() {
 
           {/* Desktop sidebar */}
           <div className="w-68 flex-shrink-0 hidden lg:block">
-            <FiltersContent filters={filters} onFilterChange={handleFilterChange} />
+            <FiltersContent isLocation={false} filters={filters} onFilterChange={handleFilterChange} />
           </div>
 
           {/* Mobile filter panel */}
@@ -105,7 +102,7 @@ export default function AllUniversityPrograms() {
                     <X />
                   </button>
                 </div>
-                <FiltersContent filters={filters} onFilterChange={handleFilterChange} />
+                <FiltersContent isLocation={false} filters={filters} onFilterChange={handleFilterChange} />
               </div>
             </>
           )}

@@ -5,6 +5,7 @@ import { X, Upload, Calendar } from "lucide-react";
 import { toast } from "react-hot-toast";
 
 export default function ApplyJobModal({ job, onClose }) {
+    console.log(job)
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         firstName: "",
@@ -37,7 +38,7 @@ export default function ApplyJobModal({ job, onClose }) {
             console.log("Application Submitted:", {
                 ...formData,
                 jobTitle: job.title,
-                department: job.details?.category || "General",
+                department: job?.category || "General",
                 jobType: job.type,
             });
             setIsSubmitting(false);
@@ -47,7 +48,7 @@ export default function ApplyJobModal({ job, onClose }) {
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100000] p-4">
             <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                 {/* Header */}
                 <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center z-10">
@@ -68,11 +69,11 @@ export default function ApplyJobModal({ job, onClose }) {
                     <div className="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
                         <div>
                             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Department</label>
-                            <p className="text-sm font-medium text-gray-900">{job.details?.category || "N/A"}</p>
+                            <p className="text-sm font-medium text-gray-900">{job?.category || "N/A"}</p>
                         </div>
                         <div>
                             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Job Type</label>
-                            <p className="text-sm font-medium text-gray-900">{job.type}</p>
+                            <p className="text-sm font-medium text-gray-900">{job?.job_type}</p>
                         </div>
                     </div>
 

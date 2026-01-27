@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import req from "../../assets/images/reqInfo.png";
 import Program from "./Program";
@@ -12,7 +13,7 @@ import UniProgramDetails from "./UniProgramDetails";
 
 import UniEventsDetails from "./UniEventsDetails";
 
-export default function UniversityTab({ data }) {
+export default function UniversityTab({ data, setShowApply }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedProgramId, setSelectedProgramId] = useState(null);
   const [selectedEventId, setSelectedEventId] = useState(null);
@@ -24,7 +25,7 @@ export default function UniversityTab({ data }) {
     program: "",
     message: "",
   });
-  console.log(data?.id);
+  console.log(data);
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -136,6 +137,7 @@ export default function UniversityTab({ data }) {
               <>
                 {selectedProgramId ? (
                   <UniProgramDetails
+                    UniData={data}
                     programId={selectedProgramId}
                     onBack={() => setSelectedProgramId(null)}
                   />
@@ -183,8 +185,14 @@ export default function UniversityTab({ data }) {
                   the form and a university representative will contact you!
                 </p>
                 <button
+                  onClick={() => setShowApply(true)}
+                  className="w-full bg-blue text-white py-3 rounded-lg font-medium transition-colors mb-3"
+                >
+                  Apply Now
+                </button>
+                <button
                   onClick={() => setShowRequestForm(true)}
-                  className="w-full bg-blue text-white py-3 rounded-lg font-medium transition-colors"
+                  className="w-full border border-blue text-blue hover:bg-blue/5 py-3 rounded-lg font-medium transition-colors"
                 >
                   Request Information
                 </button>
@@ -229,15 +237,15 @@ export default function UniversityTab({ data }) {
       </div>
 
       {/* Request Information Modal */}
-      {showRequestForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg w-full max-w-md relative">
+      {showRequestForm && createPortal(
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[99999999] p-4">
+          <div className="bg-white rounded-lg w-full max-w-md relative shadow-2xl border border-gray-100">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold">Request Information</h2>
+                <h2 className="text-xl font-bold text-gray-800">Request Information</h2>
                 <button
                   onClick={() => setShowRequestForm(false)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 p-1 hover:bg-gray-100 rounded-full transition-all"
                 >
                   <X size={24} />
                 </button>
@@ -245,53 +253,56 @@ export default function UniversityTab({ data }) {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Full Name
                   </label>
                   <input
                     type="text"
                     name="fullName"
+                    placeholder="Enter your full name"
                     value={formData.fullName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Email Address
                   </label>
                   <input
                     type="email"
                     name="email"
+                    placeholder="example@mail.com"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Phone Number
                   </label>
                   <input
                     type="tel"
                     name="phone"
+                    placeholder="+123 456 7890"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Program of Interest
                   </label>
                   <select
                     name="program"
                     value={formData.program}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all"
                   >
                     <option value="">Select a program</option>
                     <option value="business">Business Administration</option>
@@ -303,7 +314,7 @@ export default function UniversityTab({ data }) {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Message
                   </label>
                   <textarea
@@ -311,7 +322,8 @@ export default function UniversityTab({ data }) {
                     value={formData.message}
                     onChange={handleInputChange}
                     rows="4"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    placeholder="How can we help you?"
+                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none transition-all"
                   ></textarea>
                 </div>
               </div>
@@ -319,20 +331,21 @@ export default function UniversityTab({ data }) {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={handleSubmit}
-                  className="flex-1 bg-blue  text-white py-2.5 rounded-lg font-medium transition-colors"
+                  className="flex-1 bg-blue text-white py-3 rounded-lg font-bold hover:bg-blue-600 transition-colors shadow-md"
                 >
                   Send Message
                 </button>
                 <button
                   onClick={() => setShowRequestForm(false)}
-                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2.5 rounded-lg font-medium transition-colors"
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-lg font-bold transition-colors"
                 >
                   Cancel
                 </button>
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

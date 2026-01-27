@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import UniBanner from "./UniBanner";
 import { Award, Building, Calendar, Users } from "lucide-react";
 import UniversityTab from "./Universitytab";
 import { useParams } from "react-router-dom";
 import { useGetUniversityOverviewQuery } from "../../Api/universityApi";
+import ApplyModal from "../../components/ApplyModal/ApplyModal";
 
 export default function UniDashboard() {
   const { id } = useParams();
   const { data: uniData, isLoading, error } = useGetUniversityOverviewQuery(id);
+  const [showApply, setShowApply] = useState(false);
 
   if (isLoading)
     return (
@@ -21,10 +23,10 @@ export default function UniDashboard() {
     );
 
   return (
-    <div className="bg-base">
-      <UniBanner data={uniData} />
+    <div className="bg-base min-h-screen">
+      <UniBanner data={uniData} setShowApply={setShowApply} />
       {/* Tabs */}
-      <div className="bg-white rounded-t-3xl relative -top-6 p-6 shadow-lg">
+      <div className="bg-white rounded-t-3xl relative -top-6 p-6 shadow-lg z-10">
         <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between gap-8">
             <div className="grid place-items-center gap-2">
@@ -58,7 +60,13 @@ export default function UniDashboard() {
           </div>
         </div>
       </div>
-      <UniversityTab data={uniData} />
+      <UniversityTab data={uniData} setShowApply={setShowApply} />
+      <ApplyModal
+        open={showApply}
+        onClose={() => setShowApply(false)}
+        uniName={uniData?.univ_name || "University"}
+        uniId={uniData?.id}
+      />
     </div>
   );
 }

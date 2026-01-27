@@ -8,6 +8,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import background from "../../assets/images/background4.png";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -70,44 +71,39 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="#"
+                <Link to={'/'}
                   className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
                 >
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link to={'/universities'}
                   className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
                 >
                   Universities
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link to={'/programs'}
                   className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
                 >
                   Programs
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link to={'/events'}
                   className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
                 >
                   Events
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link to={'/jobs'}
                   className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
                 >
                   Jobs
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -117,12 +113,9 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Resources</h3>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="#"
-                  className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors"
-                >
+                <Link to={'/about'} className="text-[#CCCCCC] hover:text-[#CCCCCC] transition-colors">
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
                 <a
