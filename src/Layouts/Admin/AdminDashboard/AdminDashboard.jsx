@@ -4,7 +4,6 @@ import {
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
@@ -13,23 +12,28 @@ import icon2 from "../../../assets/icons/universities.png";
 import icon3 from "../../../assets/icons/students.png";
 import icon4 from "../../../assets/icons/upcoming-event.png";
 import AdminStat from "./AdminStat";
-
-const monthlyData = [
-  { month: "Jan", universityUsers: 400, studentUsers: 300 },
-  { month: "Feb", universityUsers: 300, studentUsers: 200 },
-  { month: "Mar", universityUsers: 200, studentUsers: 221 },
-  { month: "Apr", universityUsers: 278, studentUsers: 229 },
-  { month: "May", universityUsers: 190, studentUsers: 200 },
-  { month: "Jun", universityUsers: 239, studentUsers: 221 },
-  { month: "Jul", universityUsers: 349, studentUsers: 250 },
-  { month: "Aug", universityUsers: 430, studentUsers: 410 },
-  { month: "Sep", universityUsers: 350, studentUsers: 300 },
-  { month: "Oct", universityUsers: 280, studentUsers: 270 },
-  { month: "Nov", universityUsers: 320, studentUsers: 290 },
-  { month: "Dec", universityUsers: 400, studentUsers: 350 },
-];
+import { useGetAdminDashboardStatsQuery } from "../../../Api/universityApi";
+import { useMemo } from "react";
 
 export default function AdminDashboard() {
+  const { data: statsData, isLoading, error } = useGetAdminDashboardStatsQuery();
+
+  const formattedChartData = useMemo(() => {
+    if (!statsData?.charts) return [];
+
+    const { labels, university_user, student_user } = statsData.charts;
+    return labels.map((label, index) => ({
+      month: label,
+      universityUsers: university_user[index] || 0,
+      studentUsers: student_user[index] || 0,
+    }));
+  }, [statsData]);
+
+  if (isLoading) return <div className="p-8 text-center text-gray-500">Loading dashboard stats...</div>;
+  if (error) return <div className="p-8 text-center text-red-500">Error loading dashboard stats.</div>;
+
+  const summary = statsData?.summary || {};
+
   return (
     <div className="space-y-8 p-6">
       <div>
@@ -40,21 +44,21 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <AdminStat
           title="Total Universities"
-          value="124"
+          value={summary.total_universities || "0"}
           icon={icon2}
           bgColor="bg-blue-50"
           iconBg="bg-blue-100"
         />
         <AdminStat
           title="Active Students"
-          value="45,231"
+          value={summary.active_students || "0"}
           icon={icon3}
           bgColor="bg-green-50"
           iconBg="bg-green-100"
         />
         <AdminStat
-          title="Active Offers"
-          value="1,892"
+          title="Active Jobs"
+          value={summary.active_jobs || "0"}
           icon={icon1}
           bgColor="bg-purple-50"
           iconBg="bg-purple-100"
@@ -62,7 +66,7 @@ export default function AdminDashboard() {
         <AdminStat
           title="Upcoming Events"
           icon={icon4}
-          value="26"
+          value={summary.upcoming_events || "0"}
           bgColor="bg-yellow-50"
           iconBg="bg-yellow-100"
         />
@@ -76,7 +80,7 @@ export default function AdminDashboard() {
             University User
           </h2>
           <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={monthlyData}>
+            <BarChart data={formattedChartData}>
               <XAxis dataKey="month" stroke="#6b7280" />
               <YAxis stroke="#6b7280" />
               <Tooltip
@@ -97,7 +101,7 @@ export default function AdminDashboard() {
             Student User
           </h2>
           <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={monthlyData}>
+            <BarChart data={formattedChartData}>
               <XAxis dataKey="month" stroke="#6b7280" />
               <YAxis stroke="#6b7280" />
               <Tooltip

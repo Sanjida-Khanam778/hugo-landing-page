@@ -106,11 +106,6 @@ export default function JobsAndInternships() {
                 }`}
             >
               Recent Applications
-              {applications.length > 0 && (
-                <span className="ml-2 bg-blue text-white text-[10px] px-1.5 py-0.5 rounded-full">
-                  {applications.length}
-                </span>
-              )}
             </button>
           </div>
         </div>
@@ -127,18 +122,12 @@ export default function JobsAndInternships() {
         </div>
       </div>
 
-      <div className="mb-6 flex gap-4">
-        <input
-          type="text"
-          placeholder="Search jobs..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+
 
       {activeTab === "all-jobs" ? (
         <JobsTable
+          setSearchTerm={setSearchTerm}
+          searchTerm={searchTerm}
           jobs={filteredJobs}
           onView={setViewingJob}
           onEdit={handleEditJob}

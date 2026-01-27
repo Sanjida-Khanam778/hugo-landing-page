@@ -24,7 +24,6 @@ import toast from "react-hot-toast";
 
 export default function UniGallery() {
   const { data: mediaResponse, isLoading, error } = useGetUniversityMediaQuery();
-  console.log(mediaResponse);
   const [uploadMedia] = useUploadUniversityMediaMutation();
   const [deleteMedia, { isLoading: isDeleting }] = useDeleteUniversityMediaMutation();
 
