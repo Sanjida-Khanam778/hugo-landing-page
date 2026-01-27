@@ -2,11 +2,15 @@
 import { Calendar } from "lucide-react";
 
 export default function JobsTable({ jobs, onView, onEdit, onDelete }) {
+  console.log(jobs);
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
       <table className="w-full">
         <thead className="bg-gray-50 border-b border-gray-200">
           <tr>
+            <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">
+              Job ID
+            </th>
             <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
               Job Title
             </th>
@@ -33,6 +37,7 @@ export default function JobsTable({ jobs, onView, onEdit, onDelete }) {
         <tbody className="divide-y divide-gray-200">
           {jobs.map((job) => (
             <tr key={job.id} className="hover:bg-gray-50">
+              <td className="px-6 py-4 text-center text-gray-600">{job.id}</td>
               <td className="px-6 py-4 text-sm flex flex-col gap-1">
                 <span className="font-medium">{job.title}</span>
                 <span className="text-gray-500 flex items-center gap-1">

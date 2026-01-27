@@ -302,6 +302,10 @@ export const authapi = api.injectEndpoints({
                 body: data,
             }),
         }),
+        getJobApplications: builder.query({
+            query: () => "/job/applications/",
+            providesTags: ["JobApplications"],
+        }),
         getPublicUniversityGallery: builder.query({
             query: (id) => `/university/university/${id}/gallery/`,
             providesTags: (result, error, id) => [{ type: "PublicGallery", id }],
@@ -360,4 +364,5 @@ export const {
     useGetPublicUniversityGalleryQuery,
     useRegisterForEventMutation,
     useApplyToJobMutation,
+    useGetJobApplicationsQuery,
 } = authapi;

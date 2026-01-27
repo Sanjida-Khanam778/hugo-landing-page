@@ -13,8 +13,8 @@ export default function EnrollmentChart({ data }) {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="enrollment" fill="#3b82f6" />
         <Bar dataKey="applications" fill="#10b981" />
+        <Bar dataKey="enrollment" fill="#3b82f6" />
       </BarChart>
     </ResponsiveContainer>
   )

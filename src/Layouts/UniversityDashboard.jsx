@@ -83,15 +83,6 @@ export default function UniversityDashboard() {
         <EnrollmentChart data={chartData} />
       </div>
 
-      {/* Bottom Section */}
-      {/* <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2">
-          <RecentActivity />
-        </div>
-        <div>
-          <QuickActions />
-        </div>
-      </div> */}
     </div>
   );
 }
