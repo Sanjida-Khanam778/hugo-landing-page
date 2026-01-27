@@ -3,169 +3,11 @@
 import { useState } from "react";
 import UniversityDetailsModal from "../Modal/UniversityDetailsModal";
 import uni_logo from "../../../assets/icons/uni_logo.png";
-// Sample universities data
-const universitiesData = [
-  {
-    id: 1,
-    name: "Oxford University",
-    logo: "🎓",
-    status: "pending",
-    appliedDate: "2023-10-15",
-    description: "One of the world's oldest universities...",
-    foundedDate: "1096",
-    applicationSeats: 150,
-    applicationDeadline: "2024-03-15",
-    email: "admissions@oxford.ac.uk",
-  },
-  {
-    id: 2,
-    name: "Stanford University",
-    logo: "🎓",
-    status: "approved",
-    appliedDate: "2023-09-20",
-    description: "A private research university...",
-    foundedDate: "1891",
-    applicationSeats: 200,
-    applicationDeadline: "2024-04-30",
-    email: "admissions@stanford.edu",
-  },
-  {
-    id: 3,
-    name: "ETH Zurich",
-    logo: "🎓",
-    status: "approved",
-    appliedDate: "2023-08-10",
-    description: "Swiss Federal Institute of Technology...",
-    foundedDate: "1855",
-    applicationSeats: 120,
-    applicationDeadline: "2024-05-15",
-    email: "admissions@ethz.ch",
-  },
-  {
-    id: 4,
-    name: "University of Tokyo",
-    logo: "🎓",
-    status: "pending",
-    appliedDate: "2023-11-05",
-    description: "Japan's leading comprehensive university...",
-    foundedDate: "1877",
-    applicationSeats: 180,
-    applicationDeadline: "2024-06-30",
-    email: "admissions@tokyo.ac.jp",
-  },
-  {
-    id: 5,
-    name: "University of Melbourne",
-    logo: "🎓",
-    status: "rejected",
-    appliedDate: "2023-07-12",
-    description: "Australia's premier research university...",
-    foundedDate: "1853",
-    applicationSeats: 100,
-    applicationDeadline: "2024-02-28",
-    email: "admissions@unimelb.edu.au",
-  },
-  {
-    id: 6,
-    name: "National University of Singapore",
-    logo: "🎓",
-    status: "approved",
-    appliedDate: "2023-06-20",
-    description: "Asia's leading research university...",
-    foundedDate: "1905",
-    applicationSeats: 160,
-    applicationDeadline: "2024-07-15",
-    email: "admissions@nus.edu.sg",
-  },
-  {
-    id: 1,
-    name: "Oxford University",
-    logo: "🎓",
-    status: "pending",
-    appliedDate: "2023-10-15",
-    description: "One of the world's oldest universities...",
-    foundedDate: "1096",
-    applicationSeats: 150,
-    applicationDeadline: "2024-03-15",
-    email: "admissions@oxford.ac.uk",
-  },
-  {
-    id: 2,
-    name: "Stanford University",
-    logo: "🎓",
-    status: "approved",
-    appliedDate: "2023-09-20",
-    description: "A private research university...",
-    foundedDate: "1891",
-    applicationSeats: 200,
-    applicationDeadline: "2024-04-30",
-    email: "admissions@stanford.edu",
-  },
-  {
-    id: 3,
-    name: "ETH Zurich",
-    logo: "🎓",
-    status: "approved",
-    appliedDate: "2023-08-10",
-    description: "Swiss Federal Institute of Technology...",
-    foundedDate: "1855",
-    applicationSeats: 120,
-    applicationDeadline: "2024-05-15",
-    email: "admissions@ethz.ch",
-  },
-  {
-    id: 4,
-    name: "University of Tokyo",
-    logo: "🎓",
-    status: "pending",
-    appliedDate: "2023-11-05",
-    description: "Japan's leading comprehensive university...",
-    foundedDate: "1877",
-    applicationSeats: 180,
-    applicationDeadline: "2024-06-30",
-    email: "admissions@tokyo.ac.jp",
-  },
-  {
-    id: 5,
-    name: "University of Melbourne",
-    logo: "🎓",
-    status: "rejected",
-    appliedDate: "2023-07-12",
-    description: "Australia's premier research university...",
-    foundedDate: "1853",
-    applicationSeats: 100,
-    applicationDeadline: "2024-02-28",
-    email: "admissions@unimelb.edu.au",
-  },
-  {
-    id: 6,
-    name: "National University of Singapore",
-    logo: "🎓",
-    status: "approved",
-    appliedDate: "2023-06-20",
-    description: "Asia's leading research university...",
-    foundedDate: "1905",
-    applicationSeats: 160,
-    applicationDeadline: "2024-07-15",
-    email: "admissions@nus.edu.sg",
-  },
-];
-
-const getStatusColor = (status) => {
-  switch (status) {
-    case "approved":
-      return "bg-green-50 text-green-700";
-    case "pending":
-      return "bg-yellow-50 text-yellow-700";
-    case "rejected":
-      return "bg-red-50 text-red-700";
-    default:
-      return "bg-gray-50 text-gray-700";
-  }
-};
+import { useGetOnboardingListQuery, useManageOnboardingMutation } from "../../../Api/universityApi";
+import toast from "react-hot-toast";
 
 const getStatusBadgeColor = (status) => {
-  switch (status) {
+  switch (status?.toLowerCase()) {
     case "approved":
       return "bg-[#DCFCE7] text-[#166534]";
     case "pending":
@@ -178,14 +20,20 @@ const getStatusBadgeColor = (status) => {
 };
 
 export default function Universities() {
+  const { data: universitiesData = [], isLoading, error } = useGetOnboardingListQuery();
+  const [manageOnboarding, { isLoading: isManaging }] = useManageOnboardingMutation();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUniversity, setSelectedUniversity] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
+  if (isLoading) return <div className="p-8 text-center text-gray-500">Loading onboardings...</div>;
+  if (error) return <div className="p-8 text-center text-red-500">Error loading onboarding list.</div>;
+
   const filteredUniversities = universitiesData.filter((uni) =>
-    uni.name.toLowerCase().includes(searchTerm.toLowerCase())
+    uni.univ_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    uni.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredUniversities.length / itemsPerPage);
@@ -200,9 +48,20 @@ export default function Universities() {
     setShowModal(true);
   };
 
-  const handleAddUniversity = () => {
-    setSelectedUniversity(null);
-    setShowModal(true);
+  const handleAction = async (id, action) => {
+    try {
+      const res = await manageOnboarding({ id, action }).unwrap();
+      toast.success(res.message || `University ${action}ed successfully`, { position: "bottom-center" });
+      setShowModal(false);
+    } catch (err) {
+      toast.error(err?.data?.message || `Failed to ${action} university`, { position: "bottom-center" });
+    }
+  };
+
+  const getFullUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http") || path.startsWith("blob:")) return path;
+    return `http://10.10.13.20:8005${path}`;
   };
 
   return (
@@ -217,91 +76,100 @@ export default function Universities() {
       </div>
 
       {/* Search Bar */}
-      <div className="p-6 bg-white">
+      <div className="p-6 bg-white rounded-lg shadow-sm border border-gray-100 mb-6">
         <input
           type="text"
-          placeholder="Search universities..."
+          placeholder="Search by name or email..."
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
             setCurrentPage(1);
           }}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
         />
       </div>
 
       {/* Universities List */}
-      <div className="divide-y">
-        {paginatedUniversities.map((university) => (
-          <div
-            key={university.id}
-            className="bg-white shadow p-6 flex items-center justify-between"
-          >
-            <div className="flex items-center gap-4 flex-1">
-              <img src={uni_logo} alt="" />
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {university.name}
-                </h3>
-                <p className="text-grey">United Kingdom </p>
+      <div className="space-y-4">
+        {paginatedUniversities.length > 0 ? (
+          paginatedUniversities.map((university) => (
+            <div
+              key={university.id}
+              className="bg-white border border-gray-100 rounded-lg shadow-sm p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-center gap-4 flex-1">
+                <div className="w-12 h-12 rounded-lg bg-gray-50 flex items-center justify-center overflow-hidden border border-gray-100">
+                  <img
+                    src={university?.logo ? getFullUrl(university.logo) : uni_logo}
+                    alt={university.univ_name}
+                    className="w-full h-full object-contain p-1"
+                  />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {university.univ_name}
+                  </h3>
+                  <p className="text-gray-500 text-sm">{university.location || "No address provided"}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center flex-wrap gap-4 w-full md:w-auto justify-between md:justify-end">
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${getStatusBadgeColor(
+                    university.status
+                  )}`}
+                >
+                  {university.status}
+                </span>
+                <span className="text-sm text-gray-500 font-medium whitespace-nowrap">
+                  Applied on: {university.applied_on}
+                </span>
+                <button
+                  onClick={() => handleViewUniversity(university)}
+                  className="text-blue font-semibold text-sm px-5 py-2 bg-blue/5 hover:bg-blue/10 rounded-lg transition-colors border border-blue/10"
+                >
+                  View Detail
+                </button>
               </div>
             </div>
-
-            <div className="flex items-center gap-4">
-              <span
-                className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusBadgeColor(
-                  university.status
-                )}`}
-              >
-                {university.status.charAt(0).toUpperCase() +
-                  university.status.slice(1)}
-              </span>
-              <span>
-                <p className=" text-gray-600">
-                  Applied on: {university.appliedDate}
-                </p>
-              </span>
-              <button
-                onClick={() => handleViewUniversity(university)}
-                className="text-[#4338CA] font-medium text-sm px-4 py-2 bg-[#E0E7FF] rounded-lg transition-colors"
-              >
-                View
-              </button>
-            </div>
+          ))
+        ) : (
+          <div className="bg-white p-12 text-center rounded-lg border border-dashed border-gray-300">
+            <p className="text-gray-500">No universities found matching your search.</p>
           </div>
-        ))}
+        )}
       </div>
+
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-end bg-white p-6 py-3 border-t">
+        <div className="flex justify-center items-center gap-2 mt-8">
           <button
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
-            className="p-3 px-4 border border-gray-300 rounded disabled:opacity-50"
+            className="p-2 border border-gray-300 rounded-lg disabled:opacity-50 hover:bg-gray-50 transition-colors"
           >
-            ←
+            ← Previous
           </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`p-3 px-4 border rounded ${
-                currentPage === page
-                  ? "bg-[#E0E7FF] border text-[#4338CA] border-[#4338CA]"
-                  : "border-gray-300"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
+          <div className="flex gap-1">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`w-10 h-10 flex items-center justify-center rounded-lg border transition-all ${currentPage === page
+                    ? "bg-blue border-blue text-white shadow-md shadow-blue/20"
+                    : "border-gray-300 hover:border-blue hover:text-blue"
+                  }`}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
           <button
-            onClick={() =>
-              setCurrentPage(Math.min(totalPages, currentPage + 1))
-            }
+            onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
             disabled={currentPage === totalPages}
-            className="p-3 px-4 border border-gray-300 rounded disabled:opacity-50"
+            className="p-2 border border-gray-300 rounded-lg disabled:opacity-50 hover:bg-gray-50 transition-colors"
           >
-            →
+            Next →
           </button>
         </div>
       )}
@@ -311,14 +179,9 @@ export default function Universities() {
         <UniversityDetailsModal
           university={selectedUniversity}
           onClose={() => setShowModal(false)}
-          onApprove={() => {
-            console.log("University approved");
-            setShowModal(false);
-          }}
-          onReject={() => {
-            console.log("University rejected");
-            setShowModal(false);
-          }}
+          onApprove={() => handleAction(selectedUniversity.id, "approve")}
+          onReject={() => handleAction(selectedUniversity.id, "reject")}
+          isProcessing={isManaging}
         />
       )}
     </div>

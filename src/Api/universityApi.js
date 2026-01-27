@@ -334,6 +334,18 @@ export const authapi = api.injectEndpoints({
             }),
             invalidatesTags: ["PrivacyPolicy"],
         }),
+        getOnboardingList: builder.query({
+            query: () => "/dashboard/onboarding-list/",
+            providesTags: ["OnboardingList"],
+        }),
+        manageOnboarding: builder.mutation({
+            query: ({ id, action }) => ({
+                url: `/dashboard/manage/onboarding/${id}/`,
+                method: "PATCH",
+                body: { action },
+            }),
+            invalidatesTags: ["OnboardingList"],
+        }),
         getPublicUniversityGallery: builder.query({
             query: (id) => `/university/university/${id}/gallery/`,
             providesTags: (result, error, id) => [{ type: "PublicGallery", id }],
@@ -398,4 +410,6 @@ export const {
     useUpdateTermsConditionsMutation,
     useGetPrivacyPolicyQuery,
     useUpdatePrivacyPolicyMutation,
+    useGetOnboardingListQuery,
+    useManageOnboardingMutation,
 } = authapi;
