@@ -214,7 +214,10 @@ export const authapi = api.injectEndpoints({
         }),
 
         getDiscoveryJobs: builder.query({
-            query: () => "/get-jobs/",
+            query: (params) => ({
+                url: "/get-jobs/",
+                params: params,
+            }),
             providesTags: ["DiscoveryJobs"],
         }),
 

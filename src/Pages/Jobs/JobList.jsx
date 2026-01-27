@@ -1,7 +1,7 @@
 import {
   GraduationCap,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { BiDollarCircle } from "react-icons/bi";
 import { GrLocation } from "react-icons/gr";
 import { MdOutlineWatchLater } from "react-icons/md";
@@ -11,7 +11,19 @@ import logoPlaceholder from "../../assets/icons/uni_logo.png";
 export default function JobList({ onViewDetails }) {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [selectedType, setSelectedType] = useState("All Types");
-  const { data: jobsData, isLoading, error } = useGetDiscoveryJobsQuery();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [postedWithin, setPostedWithin] = useState("Any Time");
+
+  const queryParams = useMemo(() => {
+    const params = {};
+    if (selectedCategory !== "All Categories") params.category = selectedCategory;
+    if (selectedType !== "All Types") params.job_type = selectedType;
+    if (postedWithin !== "Any Time") params.posted_within = postedWithin;
+    if (searchTerm) params.search = searchTerm;
+    return params;
+  }, [selectedCategory, selectedType, postedWithin, searchTerm]);
+
+  const { data: jobsData, isLoading, error } = useGetDiscoveryJobsQuery(queryParams);
 
   const getFullUrl = (path) => {
     if (!path) return "";
@@ -58,6 +70,8 @@ export default function JobList({ onViewDetails }) {
           <input
             type="text"
             placeholder="Search for job title, company, keywords..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
           />
         </div>
@@ -118,7 +132,7 @@ export default function JobList({ onViewDetails }) {
                     />
                     <span>All Categories</span>
                   </label>
-                  {["Technology", "Healthcare", "Business", "Healthcare", "Natural Sciences", "Humanities", "Education", "Legal"].map(cat => (
+                  {["Technology", "Business", "Healthcare", "Natural Sciences", "Humanities", "Education", "Legal"].map(cat => (
                     <label key={cat} className="flex items-center  text-gray-700">
                       <input
                         type="radio"
@@ -144,16 +158,29 @@ export default function JobList({ onViewDetails }) {
                       type="radio"
                       name="posted"
                       className="mr-2 text-blue-600"
-                      defaultChecked
+                      checked={postedWithin === "Any Time"}
+                      onChange={() => setPostedWithin("Any Time")}
                     />
                     <span>Any Time</span>
                   </label>
                   <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="posted" className="mr-2" />
+                    <input
+                      type="radio"
+                      name="posted"
+                      className="mr-2"
+                      checked={postedWithin === "Past Week"}
+                      onChange={() => setPostedWithin("Past Week")}
+                    />
                     <span>Past Week</span>
                   </label>
                   <label className="flex items-center  text-gray-700">
-                    <input type="radio" name="posted" className="mr-2" />
+                    <input
+                      type="radio"
+                      name="posted"
+                      className="mr-2"
+                      checked={postedWithin === "Past Month"}
+                      onChange={() => setPostedWithin("Past Month")}
+                    />
                     <span>Past Month</span>
                   </label>
                 </div>
