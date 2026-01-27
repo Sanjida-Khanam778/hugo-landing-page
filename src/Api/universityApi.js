@@ -206,7 +206,10 @@ export const authapi = api.injectEndpoints({
         }),
 
         getDiscoveryEvents: builder.query({
-            query: () => "/view-events/",
+            query: (params) => ({
+                url: "/view-events/",
+                params: params,
+            }),
             providesTags: ["DiscoveryEvents"],
         }),
 

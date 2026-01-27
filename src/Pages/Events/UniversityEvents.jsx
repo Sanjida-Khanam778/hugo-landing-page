@@ -11,14 +11,26 @@ import {
   Clock,
 } from "lucide-react";
 import background from "../../assets/images/uniBanner.png";
+import { useMemo } from "react";
 
 export default function UniversityEvents() {
   const [view, setView] = useState("list"); // 'list' or 'detail'
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [eventFormat, setEventFormat] = useState("all");
   const [eventType, setEventType] = useState("all");
+  const [eventDate, setEventDate] = useState("");
 
-  const { data: eventsData, isLoading, error } = useGetDiscoveryEventsQuery();
+  const queryParams = useMemo(() => {
+    const params = {};
+    if (eventFormat !== "all") {
+      params.event_type = eventFormat === "In-Person" ? "Person" : eventFormat;
+    }
+    if (eventType !== "all") params.type = eventType;
+    if (eventDate) params.date = eventDate;
+    return params;
+  }, [eventFormat, eventType, eventDate]);
+
+  const { data: eventsData, isLoading, error } = useGetDiscoveryEventsQuery(queryParams);
   console.log(eventsData);
   const getFullUrl = (path) => {
     if (!path) return "";
@@ -253,7 +265,7 @@ export default function UniversityEvents() {
                   {[
                     { id: "all", label: "All Events" },
                     { id: "In-Person", label: "In-Person" },
-                    { id: "Online", label: "Online" }
+                    { id: "Online", label: "Online" },
                   ].map((fm) => (
                     <label key={fm.id} className="flex items-center cursor-pointer group">
                       <input
@@ -291,15 +303,20 @@ export default function UniversityEvents() {
 
               <div>
                 <h4 className="  mb-3 text-gray-900 text-sm tracking-wider">Date</h4>
-                <input type="date" className="border border-gray-200 p-2.5 rounded-lg w-full text-sm focus:ring-2 focus:ring-blue focus:outline-none" />
+                <input
+                  type="date"
+                  value={eventDate}
+                  onChange={(e) => setEventDate(e.target.value)}
+                  className="border border-gray-200 p-2.5 rounded-lg w-full text-sm focus:ring-2 focus:ring-blue focus:outline-none"
+                />
               </div>
             </div>
           </div>
 
           {/* Events List */}
           <div className="flex-1">
-            <div className="mb-6 flex justify-between items-center bg-white p-4 rounded-xl shadow-sm">
-              <p className="text-sm  text-gray-500 tracking-widest">
+            <div className="flex justify-between items-center p-4 rounded-xl">
+              <p className="text-sm text-gray-500 tracking-widest">
                 Showing {events.length} events
               </p>
             </div>
@@ -343,12 +360,12 @@ export default function UniversityEvents() {
                           </div>
                           {event.event_type && (
                             <span
-                              className={` px-3 py-1 rounded-full text-sm tracking-widest ${event.event_type === "In-Person"
+                              className={` px-3 py-1 rounded-full text-sm tracking-widest ${event.event_type === "In-Person" || event.event_type === "Person"
                                 ? "bg-sky text-blue"
                                 : "bg-green text-white"
                                 }`}
                             >
-                              {event.event_type}
+                              {event.event_type === "Person" || event.event_type === "In-Person" ? "In-Person" : "Online"}
                             </span>
                           )}
                         </div>
