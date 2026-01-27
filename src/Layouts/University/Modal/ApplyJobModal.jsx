@@ -1,19 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { X, Upload, Calendar } from "lucide-react";
+import { X, Upload, Calendar, FileText } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { useApplyToJobMutation } from "../../../Api/universityApi";
 
 export default function ApplyJobModal({ job, onClose }) {
     console.log(job)
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [applyToJob, { isLoading: isSubmitting }] = useApplyToJobMutation();
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
         email: "",
         phone: "",
         resume: null,
-        coverLetter: "",
+        coverLetter: null,
         applicationDate: new Date().toISOString().split("T")[0],
     });
 
@@ -22,29 +23,45 @@ export default function ApplyJobModal({ job, onClose }) {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleFileChange = (e) => {
+    const handleFileChange = (e, field) => {
         const file = e.target.files[0];
         if (file) {
-            setFormData((prev) => ({ ...prev, resume: file }));
+            setFormData((prev) => ({ ...prev, [field]: file }));
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
 
-        // Simulate API call
-        setTimeout(() => {
-            console.log("Application Submitted:", {
-                ...formData,
-                jobTitle: job.title,
-                department: job?.category || "General",
-                jobType: job.type,
+        if (!formData.resume) {
+            toast.error("Please upload your resume");
+            return;
+        }
+
+        const data = new FormData();
+        data.append("job", job.id);
+        data.append("first_name", formData.firstName);
+        data.append("last_name", formData.lastName);
+        data.append("email", formData.email);
+        data.append("phone_number", formData.phone);
+        if (formData.resume) data.append("resume", formData.resume);
+        if (formData.coverLetter) data.append("cover_letter", formData.coverLetter);
+
+        try {
+            const res = await applyToJob(data).unwrap();
+            toast.success(res.message || "Application submitted successfully!", {
+                position: "bottom-center",
             });
-            setIsSubmitting(false);
-            toast.success("Application submitted successfully!");
             onClose();
-        }, 1500);
+        } catch (err) {
+            console.error("Application error:", err);
+            const msg = err?.data?.message || err?.data?.error || "Failed to submit application.";
+                        onClose();
+
+            toast.error(msg, {
+                position: "bottom-center",
+            });
+        }
     };
 
     return (
@@ -150,7 +167,7 @@ export default function ApplyJobModal({ job, onClose }) {
                                 type="file"
                                 accept=".pdf,.doc,.docx"
                                 required
-                                onChange={handleFileChange}
+                                onChange={(e) => handleFileChange(e, "resume")}
                                 className="absolute inset-0 opacity-0 cursor-pointer"
                             />
                             <Upload className="text-gray-400 mb-2" size={32} />
@@ -158,24 +175,33 @@ export default function ApplyJobModal({ job, onClose }) {
                                 {formData.resume ? (
                                     <span className="text-blue font-medium">{formData.resume.name}</span>
                                 ) : (
-                                    "Click to upload or drag and drop"
+                                    "Click to upload or drag and drop resume"
                                 )}
                             </p>
                             <p className="text-xs text-gray-400 mt-1">PDF, DOC, DOCX up to 10MB</p>
                         </div>
                     </div>
 
-                    {/* Cover Letter */}
+                    {/* Cover Letter Upload */}
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">Cover Letter (Optional)</label>
-                        <textarea
-                            name="coverLetter"
-                            rows="4"
-                            value={formData.coverLetter}
-                            onChange={handleInputChange}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
-                            placeholder="Tell us why you're a great fit..."
-                        />
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center hover:border-blue-500 hove:bg-blue-50 transition-all cursor-pointer relative">
+                            <input
+                                type="file"
+                                accept=".pdf,.doc,.docx"
+                                onChange={(e) => handleFileChange(e, "coverLetter")}
+                                className="absolute inset-0 opacity-0 cursor-pointer"
+                            />
+                            <FileText className="text-gray-400 mb-2" size={32} />
+                            <p className="text-sm text-gray-600">
+                                {formData.coverLetter ? (
+                                    <span className="text-blue font-medium">{formData.coverLetter.name}</span>
+                                ) : (
+                                    "Click to upload cover letter"
+                                )}
+                            </p>
+                            <p className="text-xs text-gray-400 mt-1">PDF, DOC, DOCX up to 10MB</p>
+                        </div>
                     </div>
 
                     {/* Actions */}

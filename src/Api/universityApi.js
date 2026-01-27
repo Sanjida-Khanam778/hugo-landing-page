@@ -295,6 +295,13 @@ export const authapi = api.injectEndpoints({
                 body: body,
             }),
         }),
+        applyToJob: builder.mutation({
+            query: (data) => ({
+                url: "/apply-job/",
+                method: "POST",
+                body: data,
+            }),
+        }),
         getPublicUniversityGallery: builder.query({
             query: (id) => `/university/university/${id}/gallery/`,
             providesTags: (result, error, id) => [{ type: "PublicGallery", id }],
@@ -352,4 +359,5 @@ export const {
     useApplyToUniversityMutation,
     useGetPublicUniversityGalleryQuery,
     useRegisterForEventMutation,
+    useApplyToJobMutation,
 } = authapi;
