@@ -41,6 +41,8 @@ import ForgetPass from "../Pages/Auth/ForgetPass";
 import VerifyOTP from "../Pages/Auth/VerifyOTP";
 import ResetPass from "../Pages/Auth/ResetPass";
 import UniProgramDetails from "../Pages/UniversityDirectory/UniProgramDetails";
+import PrivacyPolicy from "../Pages/Policies/PrivacyPolicy";
+import TermsConditions from "../Pages/Policies/TermsConditions";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +53,14 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/privacy-policy",
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: "/terms-conditions",
+        element: <TermsConditions />,
       },
       {
         path: "/universities",
@@ -68,7 +78,7 @@ export const router = createBrowserRouter([
             path: "programs",
             element: <Program />,
           },
-        
+
           {
             path: "events",
             element: <Events />,

@@ -453,8 +453,8 @@ export default function ApplyModal({ open, onClose, uniName, uniId, programTitle
         {step === "summary" && (
           <div className="space-y-4">
             <h3 className="text-md font-semibold">Enrollment process</h3>
-            <p className="text-sm">
-              Thank you for your application. Below is an overview of the next
+            <p className="">
+             <span className="text-green font-semibold">Thank you for your application.</span> Below is an overview of the next
               steps (example):
             </p>
             <ul className="list-disc list-inside text-sm space-y-1">
