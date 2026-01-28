@@ -38,7 +38,7 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
           title: a.task_title,
           subtitle: a.description
         })) || event.agenda || [],
-        type: event.event_type || event.type || "Online",
+        type: (event.event_type === "In-Person" || event.event_type === "Campus") ? "Person" : (event.event_type || event.type || "Online"),
         additional: event.additional_info || event.additional || ""
       });
       if (event.image) setImagePreview(event.image);
@@ -98,7 +98,7 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
     fd.append("category", formData.category);
     fd.append("date", formData.date);
     fd.append("time", formData.time);
-    fd.append("event_type", formData.type === "Campus" ? "In-Person" : formData.type);
+    fd.append("event_type", formData.type);
     fd.append("status", formData.status);
     fd.append("description", formData.description);
     fd.append("additional_info", formData.additional);
@@ -246,7 +246,7 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="Online">Online</option>
-                <option value="Campus">In-Person</option>
+                <option value="Person">In-Person</option>
               </select>
             </div>
             <div>

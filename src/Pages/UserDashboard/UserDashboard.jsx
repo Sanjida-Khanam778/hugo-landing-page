@@ -95,7 +95,8 @@ export default function UserDashboard() {
                 profile.recent_applications.map((app, index) => (
                   <div key={app.id} className={`flex justify-between items-start ${index === 0 ? '' : 'pt-4'}`}>
                     <div>
-                      <h4 className="font-semibold">{app.university_name}</h4>
+                      <h4 className="text-lg">{app?.desired_program}</h4>
+                      <h4 className="font-semibold">{app?.university_name}</h4>
                       <p className="text-gray-600 text-sm">
                         {new Date(app.created_at).toLocaleDateString("en-US", {
                           year: 'numeric',

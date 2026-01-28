@@ -83,9 +83,9 @@ export default function Hero() {
               />
             </div>
 
-            <div className="text-black my-auto px-4 h-full border-l border-[#CCCCCC] py-3">
+            {/* <div className="text-black my-auto px-4 h-full border-l border-[#CCCCCC] py-3">
               University
-            </div>
+            </div> */}
 
             <button
               onClick={handleSearch}

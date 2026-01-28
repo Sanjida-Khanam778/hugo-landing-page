@@ -377,13 +377,14 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                   >
-                    <option value="all">All Levels</option>
-                    <option value="college">College</option>
+                    <option value="">Select Level</option>
+                    <option value="Bachelor">Bachelor</option>
                     <option value="Master">Master</option>
                     <option value="PhD">PhD</option>
-                    <option value="degree">Degree</option>
-                    <option value="online-courses">Online Courses</option>
-                    <option value="professional-formation">Professional Formation</option>
+                    <option value="College">College</option>
+                    <option value="Degree">Degree</option>
+                    <option value="Online Courses">Online Courses</option>
+                    <option value="Professional Formation">Professional Formation</option>
                   </select>
                 </div>
                 <div>
@@ -712,7 +713,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                       <span className="text-sm font-semibold uppercase">Domestic Students</span>
                     </div>
                     <input
-                      type="text"
+                      type="number"
                       name="domestic_tuition"
                       value={formData.domestic_tuition}
                       onChange={handleInputChange}
@@ -726,7 +727,7 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                       <span className="text-sm font-semibold uppercase">International Students</span>
                     </div>
                     <input
-                      type="text"
+                      type="number"
                       name="international_tuition"
                       value={formData.international_tuition}
                       onChange={handleInputChange}

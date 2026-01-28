@@ -73,7 +73,7 @@ export default function UniGallery() {
       setShowUploadModal(false);
     } catch (err) {
       console.error(err);
-      toast.error(err?.data?.message || "Failed to upload media");
+      toast.error(err?.data?.detail || "Failed to upload media");
     }
   };
 

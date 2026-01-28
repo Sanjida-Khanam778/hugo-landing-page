@@ -1,15 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { X, Upload, Eye, EyeOff } from "lucide-react";
+import { X, Upload } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { useSetupStudentProfileMutation } from "../../../Api/authapi";
 
 export default function ProfileEditModal({ profile, onClose }) {
     const [setupProfile, { isLoading }] = useSetupStudentProfileMutation();
+
+    // Initialize with the most likely field name, fallback to empty string
     const [formData, setFormData] = useState({
-        full_name: profile?.student_name || "",
+        full_name: profile?.full_name || profile?.student_name || "",
     });
+
     const [imageFile, setImageFile] = useState(null);
-    const [imagePreview, setImagePreview] = useState(profile?.image || null);
+    const [imagePreview, setImagePreview] = useState(null);
+
+    // Sync state if profile changes
+    useEffect(() => {
+        if (profile) {
+            setFormData({
+                full_name: profile.full_name || profile.student_name || "",
+            });
+        }
+    }, [profile]);
+
+    const getFullUrl = (path) => {
+        if (!path) return "";
+        if (path.startsWith("http") || path.startsWith("blob:") || path.startsWith("data:")) return path;
+        return `http://10.10.13.20:8005${path}`;
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -30,15 +48,24 @@ export default function ProfileEditModal({ profile, onClose }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!formData.full_name.trim()) {
+            toast.error("Full name is required");
+            return;
+        }
+
         const data = new FormData();
-        data.append("full_name", formData.full_name);
+        data.append("full_name", formData.full_name.trim());
         if (imageFile) {
             data.append("image", imageFile);
         }
 
         try {
             await setupProfile(data).unwrap();
-            toast.success("Profile updated successfully!");
+            toast.success("Profile updated successfully!", {
+                duration: 3000,
+                position: "bottom-center",
+            });
             onClose();
         } catch (err) {
             console.error(err);
@@ -54,7 +81,7 @@ export default function ProfileEditModal({ profile, onClose }) {
                     <h2 className="text-xl font-bold">Edit Profile</h2>
                     <button
                         onClick={onClose}
-                        className="text-gray-400 hover:text-gray-600"
+                        className="text-gray-400 hover:text-gray-600 focus:outline-none"
                     >
                         <X size={24} />
                     </button>
@@ -65,7 +92,9 @@ export default function ProfileEditModal({ profile, onClose }) {
                     <div className="flex flex-col items-center gap-4 mb-4">
                         <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-blue bg-gray-100 flex items-center justify-center relative group">
                             {imagePreview ? (
-                                <img src={imagePreview} alt="Profile" className="w-full h-full object-cover" />
+                                <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                            ) : profile?.image ? (
+                                <img src={getFullUrl(profile.image)} alt="Profile" className="w-full h-full object-cover" />
                             ) : (
                                 <span className="text-2xl font-bold text-blue">
                                     {formData.full_name?.charAt(0) || "U"}
@@ -93,7 +122,7 @@ export default function ProfileEditModal({ profile, onClose }) {
                             type="email"
                             value={profile?.email || ""}
                             readOnly
-                            className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-500 cursor-not-allowed"
+                            className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-500 cursor-not-allowed outline-none"
                         />
                     </div>
 
@@ -108,24 +137,24 @@ export default function ProfileEditModal({ profile, onClose }) {
                             value={formData.full_name}
                             onChange={handleInputChange}
                             required
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue outline-none"
+                            placeholder="Enter your full name"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue outline-none transition-all"
                         />
                     </div>
-
 
                     {/* Actions */}
                     <div className="flex gap-4 pt-4 border-t">
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 py-2 border border-gray-300 rounded-lg font-medium text-gray-600 hover:bg-gray-50"
+                            className="flex-1 py-2 border border-gray-300 rounded-lg font-medium text-gray-600 hover:bg-gray-50 transition-colors"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="flex-1 py-2 bg-blue text-white rounded-lg font-bold hover:bg-blue-700 disabled:opacity-50"
+                            className="flex-1 py-2 bg-blue text-white rounded-lg font-bold hover:bg-blue-700 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
                         >
                             {isLoading ? "Saving..." : "Save Changes"}
                         </button>

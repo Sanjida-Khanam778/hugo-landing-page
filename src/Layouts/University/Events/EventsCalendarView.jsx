@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function EventsCalendarView({
   events,
@@ -9,6 +9,23 @@ export default function EventsCalendarView({
   onDelete,
 }) {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [showMonthPicker, setShowMonthPicker] = useState(false);
+  const pickerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (pickerRef.current && !pickerRef.current.contains(event.target)) {
+        setShowMonthPicker(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
 
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -60,16 +77,64 @@ export default function EventsCalendarView({
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
+    <div className="bg-white rounded-lg border border-gray-200 p-6 relative">
       {/* Month Navigation */}
-      <div className="flex justify-center items-center gap-4 mb-6 border-b pb-4">
+      <div className="flex justify-center items-center gap-4 mb-6 border-b pb-4 relative">
         <button
           onClick={handlePrevMonth}
           className="text-gray-600 hover:text-gray-900 text-lg"
         >
           ‹
         </button>
-        <h2 className="text-lg font-semibold text-gray-900">{monthName}</h2>
+        <div className="relative">
+          <h2
+            className="text-lg font-semibold text-gray-900 cursor-pointer hover:text-blue transition-colors flex items-center gap-2"
+            onClick={() => setShowMonthPicker(!showMonthPicker)}
+          >
+            {monthName}
+            <span className={`text-[10px] transition-transform ${showMonthPicker ? 'rotate-180' : ''}`}>▼</span>
+          </h2>
+
+          {showMonthPicker && (
+            <div
+              ref={pickerRef}
+              className="absolute top-full mt-2 left-1/2 -translate-x-1/2 bg-white shadow-2xl border border-gray-100 rounded-xl p-4 z-[100] w-64"
+            >
+              <div className="flex justify-between items-center mb-4 border-b border-gray-50 pb-2">
+                <button
+                  onClick={() => setCurrentDate(new Date(currentDate.getFullYear() - 1, currentDate.getMonth()))}
+                  className="hover:bg-gray-100 p-1.5 rounded-lg transition-colors text-gray-600"
+                >
+                  ‹
+                </button>
+                <span className="font-bold text-gray-900">{currentDate.getFullYear()}</span>
+                <button
+                  onClick={() => setCurrentDate(new Date(currentDate.getFullYear() + 1, currentDate.getMonth()))}
+                  className="hover:bg-gray-100 p-1.5 rounded-lg transition-colors text-gray-600"
+                >
+                  ›
+                </button>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {months.map((m, i) => (
+                  <button
+                    key={m}
+                    onClick={() => {
+                      setCurrentDate(new Date(currentDate.getFullYear(), i));
+                      setShowMonthPicker(false);
+                    }}
+                    className={`py-2 text-[10px] font-medium rounded-lg transition-all ${currentDate.getMonth() === i
+                      ? 'bg-blue text-white shadow-md shadow-blue/20 scale-105'
+                      : 'hover:bg-blue/5 text-gray-600 hover:text-blue'
+                      }`}
+                  >
+                    {m.substring(0, 3)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
         <button
           onClick={handleNextMonth}
           className="text-gray-600 hover:text-gray-900 text-lg"
