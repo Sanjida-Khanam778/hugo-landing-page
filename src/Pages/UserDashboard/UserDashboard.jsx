@@ -7,10 +7,8 @@ import { useSelector } from "react-redux";
 
 export default function UserDashboard() {
   const user = useSelector((state) => state.auth.user);
-  console.log(user);
   const { data: profile, isLoading, error } = useGetUserProfileQuery();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-console.log(profile);
   const getFullUrl = (path) => {
     if (!path) return "";
     if (path.startsWith("http") || path.startsWith("blob:")) return path;
@@ -41,7 +39,7 @@ console.log(profile);
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="font-semibold text-lg">{profile?.student_name}</h2>
+                    <h2 className="font-semibold text-lg">{profile?.full_name}</h2>
                     <button
                       onClick={() => setIsEditModalOpen(true)}
                       className="p-1 hover:bg-gray-100 rounded-full transition-colors text-blue"
@@ -74,15 +72,15 @@ console.log(profile);
             <div className="grid grid-cols-3 gap-4">
               <div className="bg-base rounded-lg  p-4">
                 <p className="text-gray-600 text-sm mb-1"> Applied Program</p>
-                <p className="text-blue  text-2xl font-bold">3</p>
+                <p className="text-blue  text-2xl font-bold">{profile?.applied_program_count || 0}</p>
               </div>
               <div className="bg-base rounded-lg  p-4">
                 <p className="text-gray-600 text-sm mb-1"> Applied Job</p>
-                <p className="text-blue  text-2xl font-bold">7</p>
+                <p className="text-blue  text-2xl font-bold">{profile?.applied_job_count || 0}</p>
               </div>
               <div className="bg-base rounded-lg  p-4">
                 <p className="text-gray-600 text-sm mb-1">Event Registered</p>
-                <p className="text-blue  text-2xl font-bold">2</p>
+                <p className="text-blue  text-2xl font-bold">{profile?.event_registered_count || 0}</p>
               </div>
             </div>
           </div>
@@ -93,41 +91,34 @@ console.log(profile);
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="font-semibold mb-4">Recent Applications</h3>
             <div className="space-y-4 divide-y-2 divide-[#CCCCCC]">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h4 className="font-semibold">Oxford University</h4>
-                  <p className="text-gray-600 text-sm">MSc Computer Science</p>
-                </div>
-                <span className="bg-yellow-100 text-yellow-700 text-xs px-3 py-1 rounded font-medium">
-                  In Review
-                </span>
-              </div>
-
-              <div className="flex justify-between items-start pt-4">
-                <div>
-                  <h4 className="font-semibold">MIT</h4>
-                  <p className="text-gray-600 text-sm">
-                    PhD Artificial Intelligence
-                  </p>
-                </div>
-                <span className="bg-green-100 text-green-700 text-xs px-3 py-1 rounded font-medium">
-                  Accepted
-                </span>
-              </div>
-
-              <div className="flex justify-between items-start pt-4">
-                <div>
-                  <h4 className="font-semibold">Stanford University</h4>
-                  <p className="text-gray-600 text-sm">MSc Data Science</p>
-                </div>
-                <span className="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded font-medium">
-                  Submitted
-                </span>
-              </div>
+              {profile?.recent_applications?.length > 0 ? (
+                profile.recent_applications.map((app, index) => (
+                  <div key={app.id} className={`flex justify-between items-start ${index === 0 ? '' : 'pt-4'}`}>
+                    <div>
+                      <h4 className="font-semibold">{app.university_name}</h4>
+                      <p className="text-gray-600 text-sm">
+                        {new Date(app.created_at).toLocaleDateString("en-US", {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </p>
+                    </div>
+                    <span className={`text-xs px-3 py-1 rounded font-medium ${app.status?.toLowerCase() === 'accepted' ? 'bg-green-100 text-green-700' :
+                      app.status?.toLowerCase() === 'rejected' ? 'bg-red-100 text-red-700' :
+                        'bg-yellow-100 text-yellow-700'
+                      }`}>
+                      {app.status}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <div className="py-4 text-center text-gray-500">No recent applications found.</div>
+              )}
             </div>
           </div>
 
-        
+
         </div>
       </div>
       {isEditModalOpen && (

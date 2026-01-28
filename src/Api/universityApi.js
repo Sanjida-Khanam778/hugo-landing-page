@@ -72,9 +72,9 @@ export const authapi = api.injectEndpoints({
             providesTags: ["uni_users"],
         }),
 
-        getEventById: builder.query({
+        getEventRegistrations: builder.query({
             query: (id) => `/events/${id}/registrations/`,
-            providesTags: (result, error, id) => [{ type: "Program", id }],
+            providesTags: (result, error, id) => [{ type: "EventRegistrations", id }],
         }),
 
         deleteEvent: builder.mutation({
@@ -364,6 +364,14 @@ export const authapi = api.injectEndpoints({
                 body: data,
             }),
         }),
+        getRequestInformation: builder.query({
+            query: () => "/university/request/information/",
+            providesTags: ["RequestInformation"],
+        }),
+        getTestimonials: builder.query({
+            query: () => "/testimonials/",
+            providesTags: ["Testimonials"],
+        }),
     }),
 });
 
@@ -420,4 +428,7 @@ export const {
     useGetOnboardingListQuery,
     useManageOnboardingMutation,
     usePostRequestInfoMutation,
+    useGetRequestInformationQuery,
+    useGetTestimonialsQuery,
+    useGetEventRegistrationsQuery,
 } = authapi;

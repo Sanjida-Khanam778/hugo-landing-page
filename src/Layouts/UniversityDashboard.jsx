@@ -6,11 +6,12 @@ import events from "../assets/icons/events.png"
 import testimonials from "../assets/icons/testimonials.png"
 import applications from "../assets/icons/applications.png"
 import posting from "../assets/icons/posting.png"
-import { useGetDashboardStatsQuery } from "../Api/universityApi";
+import { useGetDashboardStatsQuery, useGetRequestInformationQuery } from "../Api/universityApi";
 import { useMemo } from "react";
 
 export default function UniversityDashboard() {
-  const { data: dashboardData, isLoading, error } = useGetDashboardStatsQuery();
+  const { data: dashboardData, isLoading: isStatsLoading, error: statsError } = useGetDashboardStatsQuery();
+  const { data: requestInfo, isLoading: isRequestsLoading } = useGetRequestInformationQuery();
 
   const stats = useMemo(() => {
     if (!dashboardData?.cards) return [];
@@ -61,8 +62,8 @@ export default function UniversityDashboard() {
     }));
   }, [dashboardData]);
 
-  if (isLoading) return <div className="p-8 text-center text-gray-500">Loading dashboard stats...</div>;
-  if (error) return <div className="p-8 text-center text-red-500">Error loading dashboard stats.</div>;
+  if (isStatsLoading) return <div className="p-8 text-center text-gray-500">Loading dashboard stats...</div>;
+  if (statsError) return <div className="p-8 text-center text-red-500">Error loading dashboard stats.</div>;
 
   return (
     <div className="p-8 min-h-screen bg-base">
@@ -83,6 +84,46 @@ export default function UniversityDashboard() {
         <EnrollmentChart data={chartData} />
       </div>
 
+      {/* Request Information Table */}
+      <div className="bg-white rounded-lg shadow-md p-6 overflow-hidden">
+        <h2 className="text-lg font-bold text-gray-900 mb-6">Request Information</h2>
+        {isRequestsLoading ? (
+          <div className="py-4 text-center text-gray-500">Loading requests...</div>
+        ) : requestInfo?.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-gray-50 border-b">
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Full Name</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Email</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Phone</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Program</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Message</th>
+                  <th className="px-4 py-3 text-sm font-semibold text-gray-600">Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {requestInfo.map((req) => (
+                  <tr key={req.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-4 py-4 text-sm text-gray-700 font-medium">{req.full_name}</td>
+                    <td className="px-4 py-4 text-sm text-gray-600">{req.email_address}</td>
+                    <td className="px-4 py-4 text-sm text-gray-600 whitespace-nowrap">{req.phone_number}</td>
+                    <td className="px-4 py-4 text-sm text-gray-600">{req.program_title}</td>
+                    <td className="px-4 py-4 text-sm text-gray-600">
+                      <p className="line-clamp-2 max-w-xs">{req.message}</p>
+                    </td>
+                    <td className="px-4 py-4 text-sm text-gray-600 whitespace-nowrap">
+                      {new Date(req.created_at).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="py-8 text-center text-gray-500">No information requests found.</div>
+        )}
+      </div>
     </div>
   );
 }

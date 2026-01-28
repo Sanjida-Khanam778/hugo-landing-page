@@ -377,9 +377,13 @@ export default function ProgramForm({ programId, onSave, onCancel, isEdit }) {
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue"
                   >
-                    <option>Bachelor</option>
-                    <option>Master</option>
-                    <option>PhD</option>
+                    <option value="all">All Levels</option>
+                    <option value="college">College</option>
+                    <option value="Master">Master</option>
+                    <option value="PhD">PhD</option>
+                    <option value="degree">Degree</option>
+                    <option value="online-courses">Online Courses</option>
+                    <option value="professional-formation">Professional Formation</option>
                   </select>
                 </div>
                 <div>

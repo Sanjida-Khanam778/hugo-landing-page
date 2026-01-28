@@ -129,7 +129,7 @@ export const authapi = api.injectEndpoints({
     }),
 
     getUserProfile: builder.query({
-      query: () => "/accounts/profile/",
+      query: () => "/student/profile/setup/",
       providesTags: ["user_profile"],
     }),
   }),
