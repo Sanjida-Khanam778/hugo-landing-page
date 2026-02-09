@@ -3,9 +3,7 @@ import banner from "../../assets/video/banner.mp4";
 import { useState } from "react";
 import {
   Search,
-  Info,
   BookOpen,
-  Calendar,
   ShieldPlus,
   MessageCircleMore,
   Bot,
@@ -44,6 +42,7 @@ export default function Hero() {
       },
     });
   };
+
   return (
     <div className="relative overflow-hidden h-screen">
       {/* Video Background Container */}
@@ -107,7 +106,7 @@ export default function Hero() {
                 <span>Orientator chat</span>
               </button>
             </Link> */}
-
+ 
             <button
               onClick={handleCompare}
               className="flex items-center justify-center gap-2 bg-white/10 text-white font-medium py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base"

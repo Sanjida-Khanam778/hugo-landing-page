@@ -110,7 +110,6 @@ export default function Chat() {
       ],
     },
   ]);
-
   const messagesEndRef = useRef(null);
 
   // Auto-scroll to latest message

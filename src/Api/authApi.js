@@ -1,6 +1,5 @@
 import { api } from "./api";
 import { setCredentials } from "../features/authSlice";
-import { CloudCog } from "lucide-react";
 
 export const authapi = api.injectEndpoints({
   endpoints: (builder) => ({
