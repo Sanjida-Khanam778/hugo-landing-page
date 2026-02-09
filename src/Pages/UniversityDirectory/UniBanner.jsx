@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { MapPin } from "lucide-react";
 import defaultLogo from "../../assets/icons/harvard.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useGetOrCreateRoomMutation } from "../../Api/chatApi";
 
 export default function UniBannerWrapper({ data, setShowApply }) {
   return (
@@ -13,6 +14,22 @@ export default function UniBannerWrapper({ data, setShowApply }) {
 
 // Split the component so we can use stateful wrapper while preserving original structure
 function UniBannerInner({ setShowApply, data }) {
+  const navigate = useNavigate();
+  const [getOrCreateRoom, { isLoading }] = useGetOrCreateRoomMutation();
+
+  const handleMessageClick = async () => {
+    try {
+      if (data?.id) {
+        await getOrCreateRoom(data.id).unwrap();
+        navigate("/message");
+      }
+    } catch (error) {
+      console.error("Failed to create or get chat room:", error);
+      // Even if it fails, maybe navigate anyway or show a toast
+      navigate("/message");
+    }
+  };
+
   const location = data?.locations?.[0];
   const locationString = location
     ? `${location.location_name}, ${location.address}`
@@ -74,9 +91,13 @@ function UniBannerInner({ setShowApply, data }) {
             >
               Apply Now
             </button>
-            <Link to="/message">
-              <button className="px-4 py-2 border rounded-md">Message</button>
-            </Link>
+            <button
+              onClick={handleMessageClick}
+              disabled={isLoading}
+              className={`px-4 py-2 border rounded-md ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {isLoading ? "Connecting..." : "Message"}
+            </button>
           </div>
         </div>
       </div>

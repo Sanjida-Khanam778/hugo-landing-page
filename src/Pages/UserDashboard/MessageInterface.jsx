@@ -7,9 +7,11 @@ export default function MessageInterface() {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [messageInput, setMessageInput] = useState("");
   const [conversations, setConversations] = useState([]);
-  const { data: conversationList, isLoading } = useGetConversationsQuery();
+  const [activeRoomMessages, setActiveRoomMessages] = useState([]);
+  const { data: conversationList, refetch: refetchConversations } = useGetConversationsQuery();
   const { data: historyData } = useGetChatHistoryQuery(selectedConversation, {
     skip: !selectedConversation,
+    refetchOnMountOrArgChange: true,
   });
 
   useEffect(() => {
@@ -32,7 +34,6 @@ export default function MessageInterface() {
           time: conv.last_message_time ? new Date(conv.last_message_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "",
           hasBlueIndicator: false,
           avatar: avatarText,
-          messages: [], // Initialize with empty messages for now
         };
       });
       setConversations(formattedConversations);
@@ -42,20 +43,15 @@ export default function MessageInterface() {
   // Handle history data
   useEffect(() => {
     if (historyData?.chat_history && selectedConversation) {
-      setConversations((prev) =>
-        prev.map((conv) => {
-          if (conv.id === selectedConversation) {
-            const historyMessages = historyData.chat_history.map((msg) => ({
-              id: msg.timestamp + msg.sender, // Use unique enough id
-              sender: msg.sender_role === "student" ? "me" : "them",
-              text: msg.text,
-              time: new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            }));
-            return { ...conv, messages: historyMessages };
-          }
-          return conv;
-        })
-      );
+      const historyMessages = historyData.chat_history.map((msg) => ({
+        id: msg.timestamp + msg.sender,
+        sender: msg.sender_role === "student" ? "me" : "them",
+        text: msg.text,
+        time: new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      }));
+      setActiveRoomMessages(historyMessages);
+    } else if (!selectedConversation) {
+      setActiveRoomMessages([]);
     }
   }, [historyData, selectedConversation]);
 
@@ -66,32 +62,7 @@ export default function MessageInterface() {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [selectedConversation, conversations]);
-
-  // Generate auto-response
-  const generateAutoResponse = (userMessage) => {
-    const responses = [
-      "Thank you for that information! I'll look into it and get back to you.",
-      "That's a great question. Let me find the details for you.",
-      "I appreciate you reaching out. Can you provide a bit more context?",
-      "Absolutely! I can help you with that. What specific details do you need?",
-      "Thanks for your message. I'll review this and respond shortly.",
-      "That sounds good. When would be a good time to discuss further?",
-      "I understand your concern. Let me gather the information and send it over.",
-      "Great! I'll make sure to get you the answers you need.",
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
-  };
-
-  // Format current time
-  const getCurrentTime = () => {
-    const now = new Date();
-    return now.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
+  }, [selectedConversation, activeRoomMessages]);
 
   const token = useSelector((state) => state.auth.accessToken);
   const socketRef = useRef(null);
@@ -109,26 +80,14 @@ export default function MessageInterface() {
       socketRef.current.onmessage = (event) => {
         const data = JSON.parse(event.data);
         if (data.type === "chat_message") {
-          setConversations((prev) =>
-            prev.map((conv) => {
-              if (conv.id === selectedConversation) {
-                const newMsg = {
-                  id: Date.now(),
-                  // role "student" -> "me", role "university" -> "them"
-                  sender: data.role === "student" ? "me" : "them",
-                  text: data.message,
-                  time: new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                };
-                return {
-                  ...conv,
-                  messages: [...conv.messages, newMsg],
-                  message: data.message,
-                  time: new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                };
-              }
-              return conv;
-            })
-          );
+          const newMsg = {
+            id: Date.now(),
+            sender: data.role === "student" ? "me" : "them",
+            text: data.message,
+            time: new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
+          setActiveRoomMessages(prev => [...prev, newMsg]);
+          refetchConversations();
         }
       };
 
@@ -162,7 +121,7 @@ export default function MessageInterface() {
           <h2 className="text-xl font-bold mb-4">Message</h2>
 
           {/* Search Bar */}
-          <div className="relative mb-4">
+          {/* <div className="relative mb-4">
             <input
               type="text"
               placeholder="Search conversations"
@@ -181,7 +140,7 @@ export default function MessageInterface() {
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-          </div>
+          </div> */}
 
           {/* Conversation List */}
           <div className="space-y-1">
@@ -193,7 +152,7 @@ export default function MessageInterface() {
                   }`}
               >
                 <div className="relative flex-shrink-0">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-sm font-medium">
+                  <div className="w-10 h-10 bg-sky rounded-full flex items-center justify-center text-blue-600 text-sm font-medium">
                     {conv.avatar}
                   </div>
                   {conv.hasBlueIndicator && (
@@ -269,46 +228,44 @@ export default function MessageInterface() {
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
               <div className="space-y-4 max-w-3xl mx-auto">
-                {conversations
-                  .find((c) => c.id === selectedConversation)
-                  ?.messages.map((msg) => (
+                {activeRoomMessages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={`flex ${msg.sender === "me" ? "justify-end" : "justify-start"
+                      }`}
+                  >
                     <div
-                      key={msg.id}
-                      className={`flex ${msg.sender === "me" ? "justify-end" : "justify-start"
+                      className={`flex gap-2 max-w-md ${msg.sender === "me" ? "flex-row-reverse" : "flex-row"
                         }`}
                     >
-                      <div
-                        className={`flex gap-2 max-w-md ${msg.sender === "me" ? "flex-row-reverse" : "flex-row"
-                          }`}
-                      >
-                        {msg.sender === "them" && (
-                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs font-medium flex-shrink-0">
-                            {
-                              conversations.find(
-                                (c) => c.id === selectedConversation
-                              )?.avatar
-                            }
-                          </div>
-                        )}
-                        <div>
-                          <div
-                            className={`px-4 py-2 rounded-2xl ${msg.sender === "me"
-                              ? "bg-blue text-white"
-                              : "bg-white text-gray-800"
-                              }`}
-                          >
-                            <p className="text-sm">{msg.text}</p>
-                          </div>
-                          <p
-                            className={`text-xs text-gray-500 mt-1 ${msg.sender === "me" ? "text-right" : "text-left"
-                              }`}
-                          >
-                            {msg.time}
-                          </p>
+                      {msg.sender === "them" && (
+                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs font-medium flex-shrink-0">
+                          {
+                            conversations.find(
+                              (c) => c.id === selectedConversation
+                            )?.avatar
+                          }
                         </div>
+                      )}
+                      <div>
+                        <div
+                          className={`px-4 py-2 rounded-2xl ${msg.sender === "me"
+                            ? "bg-blue text-white"
+                            : "bg-white text-gray-800"
+                            }`}
+                        >
+                          <p className="text-sm">{msg.text}</p>
+                        </div>
+                        <p
+                          className={`text-xs text-gray-500 mt-1 ${msg.sender === "me" ? "text-right" : "text-left"
+                            }`}
+                        >
+                          {msg.time}
+                        </p>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                ))}
                 <div ref={messagesEndRef} />
               </div>
             </div>

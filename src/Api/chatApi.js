@@ -10,7 +10,14 @@ export const chatApi = api.injectEndpoints({
             query: (id) => `/chat/history/${id}/`,
             providesTags: (result, error, id) => [{ type: "ChatHistory", id }],
         }),
+        getOrCreateRoom: builder.mutation({
+            query: (id) => ({
+                url: `/chat/get-or-create-room/${id}/`,
+                method: "POST",
+            }),
+            invalidatesTags: ["Conversations"],
+        }),
     }),
 });
 
-export const { useGetConversationsQuery, useGetChatHistoryQuery } = chatApi;
+export const { useGetConversationsQuery, useGetChatHistoryQuery, useGetOrCreateRoomMutation } = chatApi;
