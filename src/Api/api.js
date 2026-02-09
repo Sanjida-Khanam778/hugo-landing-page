@@ -28,6 +28,7 @@ const baseQuery = fetchBaseQuery({
         }
       }
     }
+    headers.set("ngrok-skip-browser-warning", "true");
     return headers;
   },
 });
