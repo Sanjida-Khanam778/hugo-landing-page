@@ -6,9 +6,16 @@ export const chatApi = api.injectEndpoints({
             query: () => "/conversations/list/",
             providesTags: ["Conversations"],
         }),
+        getAIChatHistory: builder.query({
+            query: () => "/chat-history-list/",
+            providesTags: ["AIChatHistory"],
+        }),
         getChatHistory: builder.query({
             query: (id) => `/chat/history/${id}/`,
             providesTags: (result, error, id) => [{ type: "ChatHistory", id }],
+        }),
+        getAISessionHistory: builder.query({
+            query: (id) => `/chat-history/${id}/`,
         }),
         getOrCreateRoom: builder.mutation({
             query: (id) => ({
@@ -20,4 +27,4 @@ export const chatApi = api.injectEndpoints({
     }),
 });
 
-export const { useGetConversationsQuery, useGetChatHistoryQuery, useGetOrCreateRoomMutation } = chatApi;
+export const { useGetConversationsQuery, useGetChatHistoryQuery, useGetOrCreateRoomMutation, useGetAIChatHistoryQuery, useGetAISessionHistoryQuery, useLazyGetAISessionHistoryQuery } = chatApi;

@@ -16,7 +16,10 @@ export const aiApi = api.injectEndpoints({
                 body: formData,
             }),
         }),
+        getChatHistory: builder.query({
+            query: () => "/ai/chat-history/",
+        }),
     }),
 });
 
-export const { useChatWithAIMutation, useVoiceChatAIMutation } = aiApi;
+export const { useChatWithAIMutation, useVoiceChatAIMutation, useGetChatHistoryQuery } = aiApi;

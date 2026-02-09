@@ -1,41 +1,39 @@
 "use client";
-import robot from "../../assets/images/robot.png";
 import { useState, useRef, useEffect } from "react";
 import { X, ChevronDown, Send, Edit, Mic, AudioLines } from "lucide-react";
 import { Link } from "react-router-dom";
 import Lottie from "lottie-react";
 import robotLottie from "../../assets/lottie/robot.json";
 import "regenerator-runtime/runtime";
-import { useChatWithAIMutation, useVoiceChatAIMutation } from "../../Api/aiApi";
+import { useChatWithAIMutation } from "../../Api/aiApi";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { useGetAIChatHistoryQuery, useLazyGetAISessionHistoryQuery } from "../../Api/chatApi";
 export default function AIAssistant() {
   const [currentChatId, setCurrentChatId] = useState(null);
-
-  const [chats, setChats] = useState([
-    { id: 1, title: "Career Resources", messages: [] },
-    { id: 2, title: "Discover scholarships", messages: [] },
-    { id: 3, title: "Find the perfect academic", messages: [] },
-    { id: 4, title: "Career Resources", messages: [] },
-    { id: 5, title: "Discover scholarships", messages: [] },
-  ]);
-
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-
   const [historyOpen, setHistoryOpen] = useState(true);
   const [chatWithAI, { isLoading: isChatLoading }] = useChatWithAIMutation();
+  const { data: historyData, refetch: refetchHistory } = useGetAIChatHistoryQuery();
+  const [triggerGetSessionHistory] = useLazyGetAISessionHistoryQuery();
   const {
     transcript,
     listening,
     resetTranscript,
     browserSupportsSpeechRecognition
-
   } = useSpeechRecognition();
-
   const initialInputRef = useRef(""); // To store input before starting speech
   const textareaRef = useRef(null); // Ref for auto-resizing textarea
+  const messagesEndRef = useRef(null);
+
+  // Auto-scroll to latest message or loading indicator
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, isChatLoading]);
 
   // Auto-resize textarea when input changes
   useEffect(() => {
@@ -54,22 +52,77 @@ export default function AIAssistant() {
   }, [transcript]);
 
   const handleNewChat = () => {
-    const newChatId = Math.max(...chats.map((c) => c.id), 0) + 1;
-    const newChat = {
-      id: newChatId,
-      title: "New Chat",
-      messages: [],
-    };
-    setChats([newChat, ...chats]);
-    setCurrentChatId(newChatId);
+    setCurrentChatId(null);
     setMessages([]);
   };
 
-  const handleSelectChat = (chatId) => {
-    setCurrentChatId(chatId);
-    const selectedChat = chats.find((c) => c.id === chatId);
-    setMessages(selectedChat?.messages || []);
+  const handleSelectChat = async (item) => {
+    setCurrentChatId(item.id);
+    try {
+      const response = await triggerGetSessionHistory(item.id).unwrap();
+      if (response?.chat_history) {
+        const fullHistory = response.chat_history.flatMap((msg) => [
+          {
+            id: `${msg.id}-user`,
+            text: msg.user_message,
+            sender: "user",
+            timestamp: new Date(msg.timestamp),
+          },
+          {
+            id: `${msg.id}-ai`,
+            text: msg.ai_response,
+            sender: "ai",
+            timestamp: new Date(msg.timestamp),
+          },
+        ]);
+        setMessages(fullHistory);
+      }
+    } catch (error) {
+      console.error("Failed to fetch session history:", error);
+    }
   };
+
+  const truncateTitle = (text) => {
+    if (!text) return "Untitled Chat";
+    const words = text.split(" ");
+    if (words.length <= 4) return text;
+    return words.slice(0, 4).join(" ") + "...";
+  };
+
+  const groupHistory = (items) => {
+    if (!items) return {};
+    const groups = {
+      Today: [],
+      Yesterday: [],
+      Earlier: [],
+    };
+
+    const now = new Date();
+    const todayStr = now.toDateString();
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    const yesterdayStr = yesterday.toDateString();
+
+    // Sort history by timestamp descending
+    const sortedItems = [...items].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    sortedItems.forEach((item) => {
+      const date = new Date(item.timestamp);
+      const dateStr = date.toDateString();
+
+      if (dateStr === todayStr) {
+        groups.Today.push(item);
+      } else if (dateStr === yesterdayStr) {
+        groups.Yesterday.push(item);
+      } else {
+        groups.Earlier.push(item);
+      }
+    });
+
+    return groups;
+  };
+
+  const groupedHistory = groupHistory(historyData?.sessions);
 
   const handleSendMessage = async () => {
     if (input.trim()) {
@@ -82,20 +135,16 @@ export default function AIAssistant() {
 
       setMessages([...messages, newMessage]);
 
-      // Update the chat with new message
-      setChats(
-        chats.map((chat) =>
-          chat.id === currentChatId
-            ? { ...chat, messages: [...chat.messages, newMessage] }
-            : chat
-        )
-      );
-
       const userInput = input;
       setInput("");
 
       try {
-        const response = await chatWithAI({ message: userInput }).unwrap();
+        const payload = { message: userInput };
+        if (currentChatId) {
+          payload.session_id = currentChatId;
+        }
+
+        const response = await chatWithAI(payload).unwrap();
 
         const aiMessage = {
           id: Date.now() + 1,
@@ -105,13 +154,12 @@ export default function AIAssistant() {
         };
 
         setMessages((prev) => [...prev, aiMessage]);
-        setChats(
-          chats.map((chat) =>
-            chat.id === currentChatId
-              ? { ...chat, messages: [...chat.messages, aiMessage] }
-              : chat
-          )
-        );
+        refetchHistory(); // Refresh sidebar history after new interaction
+
+        // If it was a new chat, the response might contain a new session_id
+        if (!currentChatId && response.session_id) {
+          setCurrentChatId(response.session_id);
+        }
       } catch (error) {
         console.error("Failed to stream chat:", error);
         const errorMessage = {
@@ -152,7 +200,6 @@ export default function AIAssistant() {
         <div className="bg-primary text-white px-6 py-4 flex items-center justify-between">
           <h1 className="text-lg font-semibold">AI Assistant</h1>
           <Link to={"/"}>
-            {" "}
             <button className="hover:bg-blue-800 p-1 rounded transition-colors">
               <X size={24} />
             </button>
@@ -165,7 +212,7 @@ export default function AIAssistant() {
             {/* New Chat Button */}
             <button
               onClick={handleNewChat}
-              className="m-4 mb-8 flex text-[#374151] items-center gap-2 px-4 py-3 rounded-lg transition-colors"
+              className="m-4 mb-8 flex text-[#374151] items-center gap-2 px-4 py-3 rounded-lg transition-colors border hover:bg-gray-50"
             >
               <Edit size={20} />
               <span className="font-medium">New Chat</span>
@@ -177,7 +224,7 @@ export default function AIAssistant() {
                 onClick={() => setHistoryOpen(!historyOpen)}
                 className="flex items-center gap-2 w-full mb-5 px-3 transition-colors text-[#374151]"
               >
-                <span className=" font-medium">Chat History</span>
+                <span className=" font-semibold">Chat History</span>
                 <ChevronDown
                   size={16}
                   style={{
@@ -188,17 +235,28 @@ export default function AIAssistant() {
               </button>
 
               {historyOpen && (
-                <div className="space-y-2">
-                  {chats.map((chat) => (
-                    <button
-                      key={chat.id}
-                      onClick={() => handleSelectChat(chat.id)}
-                      className={`w-full text-left px-3 py-2 rounded-lg  transition-colors truncate ${currentChatId === chat.id ? "bg-blue/10" : ""
-                        }`}
-                      title={chat.title}
-                    >
-                      {chat.title}
-                    </button>
+                <div className="space-y-6">
+                  {Object.entries(groupedHistory).map(([groupName, items]) => (
+                    items.length > 0 && (
+                      <div key={groupName}>
+                        <h3 className="text-xs font-bold text-gray-400 uppercase px-3 mb-2">
+                          {groupName}
+                        </h3>
+                        <div className="space-y-1">
+                          {items.map((item) => (
+                            <button
+                              key={item.id}
+                              onClick={() => handleSelectChat(item)}
+                              className={`w-full text-left px-3 py-2 rounded-lg transition-colors truncate text-sm ${currentChatId === item.id ? "bg-blue/10 text-blue font-semibold" : "text-[#374151]"
+                                }`}
+                              title={item.first_message}
+                            >
+                              {truncateTitle(item.first_message)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )
                   ))}
                 </div>
               )}
@@ -217,9 +275,8 @@ export default function AIAssistant() {
                       <Lottie animationData={robotLottie}></Lottie>
                     </div>
                     <div>
-                      {" "}
                       <p className="text-3xl lg:text-4xl font-semibold text-gray-900 my-4">
-                        Hi Hugo.
+                        Hi, I'm Hugo.
                       </p>
                       <p className="text-gray-600 text-xl">
                         What can I help with?
@@ -237,7 +294,7 @@ export default function AIAssistant() {
                     >
                       <div
                         className={`${msg.sender === "user" ? "hidden" : ""
-                          } w-12 h-12 flex text-white items-center justify-center bg-primary rounded-full font-medium text-lg`}
+                          } w-12 h-12 flex text-white items-center justify-center bg-primary rounded-full font-medium text-lg flex-shrink-0`}
                       >
                         <span>AI</span>
                       </div>
@@ -270,12 +327,30 @@ export default function AIAssistant() {
                       </div>
                       <div
                         className={`${msg.sender === "user" ? "" : "hidden"
-                          } w-12 h-12 flex text-blue items-center justify-center border text-lg border-blue rounded-full font-semibold`}
+                          } w-12 h-12 flex text-blue items-center justify-center border text-lg border-blue rounded-full font-semibold flex-shrink-0`}
                       >
                         <span>U</span>
                       </div>
                     </div>
                   ))}
+
+                  {/* Typing Indicator */}
+                  {isChatLoading && (
+                    <div className="flex gap-3 justify-start">
+                      <div className="w-12 h-12 flex text-white items-center justify-center bg-primary rounded-full font-medium text-lg flex-shrink-0">
+                        <span>AI</span>
+                      </div>
+                      <div className="px-4 py-3 bg-gray-200 text-gray-900 rounded-lg rounded-bl-none flex items-center">
+                        <div className="flex gap-1">
+                          <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                          <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                          <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div ref={messagesEndRef} />
                 </div>
               )}
             </div>
