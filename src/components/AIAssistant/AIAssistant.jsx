@@ -25,16 +25,26 @@ export default function AIAssistant() {
   const [input, setInput] = useState("");
 
   const [historyOpen, setHistoryOpen] = useState(true);
-  const [isListening, setIsListening] = useState(false);
   const [chatWithAI, { isLoading: isChatLoading }] = useChatWithAIMutation();
   const {
     transcript,
     listening,
     resetTranscript,
     browserSupportsSpeechRecognition
+
   } = useSpeechRecognition();
 
   const initialInputRef = useRef(""); // To store input before starting speech
+  const textareaRef = useRef(null); // Ref for auto-resizing textarea
+
+  // Auto-resize textarea when input changes
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [input]);
+
   useEffect(() => {
     if (transcript) {
       console.log("🎙 Live Transcript:", transcript);
@@ -273,13 +283,19 @@ export default function AIAssistant() {
             {/* Input Area */}
             <div className="p-8">
               <div className="flex border mx-auto max-w-4xl items-center bg-white rounded-lg border-gray-300">
-                <input
-                  type="text"
+                <textarea
+                  ref={textareaRef}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage();
+                    }
+                  }}
                   placeholder="Type your message..."
-                  className="flex-1 px-4 py-4 bg-transparent outline-none focus:outline-none transition-colors"
+                  rows={1}
+                  className="flex-1 px-4 py-4 bg-transparent outline-none focus:outline-none transition-colors resize-none overflow-y-auto max-h-56"
                 />
 
                 {/* Voice Input Button */}
