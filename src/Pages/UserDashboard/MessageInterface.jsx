@@ -1,115 +1,63 @@
 import React, { useState, useEffect, useRef } from "react";
 import { MessageSquare, Send, Paperclip, Smile } from "lucide-react";
+import { useGetConversationsQuery, useGetChatHistoryQuery } from "../../Api/chatApi";
+import { useSelector } from "react-redux";
 
 export default function MessageInterface() {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [messageInput, setMessageInput] = useState("");
-  const [conversations, setConversations] = useState([
-    {
-      id: 1,
-      name: "Sophia Williams",
-      message: "Can you provide more information abou...",
-      time: "11:48 AM",
-      hasBlueIndicator: true,
-      avatar: "SW",
-      messages: [
-        {
-          id: 1,
-          sender: "them",
-          text: "Hello! I wanted to ask about the Computer Science program requirements.",
-          time: "11:20 AM",
-        },
-        {
-          id: 2,
-          sender: "me",
-          text: "Hi Sophia! I'd be happy to help you with that. What specific information do you need?",
-          time: "11:25 AM",
-        },
-        {
-          id: 3,
-          sender: "them",
-          text: "Can you provide more information about the application deadline and required documents?",
-          time: "11:48 AM",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Ethan Johnson",
-      message: "Thanks you for the information about the...",
-      time: "9:32 AM",
-      hasBlueIndicator: false,
-      avatar: "EJ",
-      messages: [
-        {
-          id: 1,
-          sender: "them",
-          text: "Hi, I have a question about scholarships.",
-          time: "9:15 AM",
-        },
-        {
-          id: 2,
-          sender: "me",
-          text: "Sure! What would you like to know?",
-          time: "9:20 AM",
-        },
-        {
-          id: 3,
-          sender: "them",
-          text: "Thanks you for the information about the scholarship opportunities!",
-          time: "9:32 AM",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Olivia Martinez",
-      message: "When is the deadline for concordian s...",
-      time: "Yesterday",
-      hasBlueIndicator: true,
-      avatar: "OM",
-      messages: [
-        {
-          id: 1,
-          sender: "them",
-          text: "When is the deadline for concordian scholarship applications?",
-          time: "Yesterday",
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Noah Wilson",
-      message: "I have submitted all my documents. Wh...",
-      time: "Yesterday",
-      hasBlueIndicator: false,
-      avatar: "NW",
-      messages: [
-        {
-          id: 1,
-          sender: "them",
-          text: "I have submitted all my documents. What are the next steps?",
-          time: "Yesterday",
-        },
-      ],
-    },
-    {
-      id: 5,
-      name: "Ava Thomas",
-      message: "Do you offer classes teach for graduate...",
-      time: "2 days ago",
-      hasBlueIndicator: false,
-      avatar: "AT",
-      messages: [
-        {
-          id: 1,
-          sender: "them",
-          text: "Do you offer classes teach for graduate students in data science?",
-          time: "2 days ago",
-        },
-      ],
-    },
-  ]);
+  const [conversations, setConversations] = useState([]);
+  const { data: conversationList, isLoading } = useGetConversationsQuery();
+  const { data: historyData } = useGetChatHistoryQuery(selectedConversation, {
+    skip: !selectedConversation,
+  });
+
+  useEffect(() => {
+    if (conversationList) {
+      const formattedConversations = conversationList.map((conv) => {
+        const uniName = conv.other_user?.univ_name || "Unknown University";
+        const shortName = conv.other_user?.short_name;
+
+        let avatarText = "U";
+        if (shortName && shortName !== "N/A") {
+          avatarText = shortName;
+        } else {
+          avatarText = uniName.substring(0, 2).toUpperCase();
+        }
+
+        return {
+          id: conv.id,
+          name: uniName,
+          message: conv.last_message || "",
+          time: conv.last_message_time ? new Date(conv.last_message_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "",
+          hasBlueIndicator: false,
+          avatar: avatarText,
+          messages: [], // Initialize with empty messages for now
+        };
+      });
+      setConversations(formattedConversations);
+    }
+  }, [conversationList]);
+
+  // Handle history data
+  useEffect(() => {
+    if (historyData?.chat_history && selectedConversation) {
+      setConversations((prev) =>
+        prev.map((conv) => {
+          if (conv.id === selectedConversation) {
+            const historyMessages = historyData.chat_history.map((msg) => ({
+              id: msg.timestamp + msg.sender, // Use unique enough id
+              sender: msg.sender_role === "student" ? "me" : "them",
+              text: msg.text,
+              time: new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            }));
+            return { ...conv, messages: historyMessages };
+          }
+          return conv;
+        })
+      );
+    }
+  }, [historyData, selectedConversation]);
 
   const messagesEndRef = useRef(null);
 
@@ -145,60 +93,63 @@ export default function MessageInterface() {
     });
   };
 
+  const token = useSelector((state) => state.auth.accessToken);
+  const socketRef = useRef(null);
+
+  // WebSocket Connection
+  useEffect(() => {
+    if (selectedConversation && token) {
+      const wsUrl = `ws://10.10.13.20:8005/ws/chat/${selectedConversation}/?token=${token}`;
+      socketRef.current = new WebSocket(wsUrl);
+
+      socketRef.current.onopen = () => {
+        console.log("WebSocket Connected");
+      };
+
+      socketRef.current.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "chat_message") {
+          setConversations((prev) =>
+            prev.map((conv) => {
+              if (conv.id === selectedConversation) {
+                const newMsg = {
+                  id: Date.now(),
+                  // role "student" -> "me", role "university" -> "them"
+                  sender: data.role === "student" ? "me" : "them",
+                  text: data.message,
+                  time: new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                };
+                return {
+                  ...conv,
+                  messages: [...conv.messages, newMsg],
+                  message: data.message,
+                  time: new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                };
+              }
+              return conv;
+            })
+          );
+        }
+      };
+
+      socketRef.current.onclose = () => {
+        console.log("WebSocket Disconnected");
+      };
+
+      return () => {
+        if (socketRef.current) {
+          socketRef.current.close();
+        }
+      };
+    }
+  }, [selectedConversation, token]);
+
   const handleSendMessage = () => {
-    if (messageInput.trim() && selectedConversation) {
-      setConversations((prevConversations) =>
-        prevConversations.map((conv) => {
-          if (conv.id === selectedConversation) {
-            const newMessages = [...conv.messages];
-            const maxId = Math.max(...newMessages.map((m) => m.id), 0);
-
-            // Add user message
-            newMessages.push({
-              id: maxId + 1,
-              sender: "me",
-              text: messageInput,
-              time: getCurrentTime(),
-            });
-
-            // Add auto-response after a short delay
-            setTimeout(() => {
-              setConversations((prevConv) =>
-                prevConv.map((c) => {
-                  if (c.id === selectedConversation) {
-                    const updatedMessages = [...c.messages];
-                    const latestId = Math.max(
-                      ...updatedMessages.map((m) => m.id),
-                      0
-                    );
-                    updatedMessages.push({
-                      id: latestId + 1,
-                      sender: "them",
-                      text: generateAutoResponse(messageInput),
-                      time: getCurrentTime(),
-                    });
-                    return { ...c, messages: updatedMessages };
-                  }
-                  return c;
-                })
-              );
-            }, 800);
-
-            // Update preview message
-            return {
-              ...conv,
-              messages: newMessages,
-              message:
-                messageInput.length > 40
-                  ? messageInput.substring(0, 40) + "..."
-                  : messageInput,
-              time: "now",
-            };
-          }
-          return conv;
-        })
-      );
-
+    if (messageInput.trim() && selectedConversation && socketRef.current) {
+      const messagePayload = {
+        message: messageInput
+      };
+      socketRef.current.send(JSON.stringify(messagePayload));
       setMessageInput("");
     }
   };
@@ -238,9 +189,8 @@ export default function MessageInterface() {
               <div
                 key={conv.id}
                 onClick={() => setSelectedConversation(conv.id)}
-                className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gray-50 ${
-                  selectedConversation === conv.id ? "bg-blue-50" : ""
-                }`}
+                className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gray-50 ${selectedConversation === conv.id ? "bg-blue-50" : ""
+                  }`}
               >
                 <div className="relative flex-shrink-0">
                   <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-sm font-medium">
@@ -324,14 +274,12 @@ export default function MessageInterface() {
                   ?.messages.map((msg) => (
                     <div
                       key={msg.id}
-                      className={`flex ${
-                        msg.sender === "me" ? "justify-end" : "justify-start"
-                      }`}
+                      className={`flex ${msg.sender === "me" ? "justify-end" : "justify-start"
+                        }`}
                     >
                       <div
-                        className={`flex gap-2 max-w-md ${
-                          msg.sender === "me" ? "flex-row-reverse" : "flex-row"
-                        }`}
+                        className={`flex gap-2 max-w-md ${msg.sender === "me" ? "flex-row-reverse" : "flex-row"
+                          }`}
                       >
                         {msg.sender === "them" && (
                           <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xs font-medium flex-shrink-0">
@@ -344,18 +292,16 @@ export default function MessageInterface() {
                         )}
                         <div>
                           <div
-                            className={`px-4 py-2 rounded-2xl ${
-                              msg.sender === "me"
-                                ? "bg-blue text-white"
-                                : "bg-white text-gray-800"
-                            }`}
+                            className={`px-4 py-2 rounded-2xl ${msg.sender === "me"
+                              ? "bg-blue text-white"
+                              : "bg-white text-gray-800"
+                              }`}
                           >
                             <p className="text-sm">{msg.text}</p>
                           </div>
                           <p
-                            className={`text-xs text-gray-500 mt-1 ${
-                              msg.sender === "me" ? "text-right" : "text-left"
-                            }`}
+                            className={`text-xs text-gray-500 mt-1 ${msg.sender === "me" ? "text-right" : "text-left"
+                              }`}
                           >
                             {msg.time}
                           </p>

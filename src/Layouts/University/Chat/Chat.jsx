@@ -1,115 +1,39 @@
 import React, { useState, useEffect, useRef } from "react";
 import { MessageSquare, Send, Paperclip, Smile } from "lucide-react";
+import { useGetConversationsQuery } from "../../../Api/chatApi";
 
 export default function Chat() {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [messageInput, setMessageInput] = useState("");
-  const [conversations, setConversations] = useState([
-    {
-      id: 1,
-      name: "Sophia Williams",
-      message: "Can you provide more information abou...",
-      time: "11:48 AM",
-      hasBlueIndicator: true,
-      avatar: "SW",
-      messages: [
-        {
-          id: 1,
-          sender: "them",
-          text: "Hello! I wanted to ask about the Computer Science program requirements.",
-          time: "11:20 AM",
-        },
-        {
-          id: 2,
-          sender: "me",
-          text: "Hi Sophia! I'd be happy to help you with that. What specific information do you need?",
-          time: "11:25 AM",
-        },
-        {
-          id: 3,
-          sender: "them",
-          text: "Can you provide more information about the application deadline and required documents?",
-          time: "11:48 AM",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Ethan Johnson",
-      message: "Thanks you for the information about the...",
-      time: "9:32 AM",
-      hasBlueIndicator: false,
-      avatar: "EJ",
-      messages: [
-        {
-          id: 1,
-          sender: "them",
-          text: "Hi, I have a question about scholarships.",
-          time: "9:15 AM",
-        },
-        {
-          id: 2,
-          sender: "me",
-          text: "Sure! What would you like to know?",
-          time: "9:20 AM",
-        },
-        {
-          id: 3,
-          sender: "them",
-          text: "Thanks you for the information about the scholarship opportunities!",
-          time: "9:32 AM",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Olivia Martinez",
-      message: "When is the deadline for concordian s...",
-      time: "Yesterday",
-      hasBlueIndicator: true,
-      avatar: "OM",
-      messages: [
-        {
-          id: 1,
-          sender: "them",
-          text: "When is the deadline for concordian scholarship applications?",
-          time: "Yesterday",
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Noah Wilson",
-      message: "I have submitted all my documents. Wh...",
-      time: "Yesterday",
-      hasBlueIndicator: false,
-      avatar: "NW",
-      messages: [
-        {
-          id: 1,
-          sender: "them",
-          text: "I have submitted all my documents. What are the next steps?",
-          time: "Yesterday",
-        },
-      ],
-    },
-    {
-      id: 5,
-      name: "Ava Thomas",
-      message: "Do you offer classes teach for graduate...",
-      time: "2 days ago",
-      hasBlueIndicator: false,
-      avatar: "AT",
-      messages: [
-        {
-          id: 1,
-          sender: "them",
-          text: "Do you offer classes teach for graduate students in data science?",
-          time: "2 days ago",
-        },
-      ],
-    },
-  ]);
+  const [conversations, setConversations] = useState([]);
+  const { data: conversationList, isLoading } = useGetConversationsQuery();
+  console.log(conversationList)
+  useEffect(() => {
+    if (conversationList) {
+      const formattedConversations = conversationList?.map((conv) => {
+        const uniName = conv.other_user?.univ_name || "Unknown University";
+        const shortName = conv.other_user?.short_name;
+
+        let avatarText = "U";
+        if (shortName && shortName !== "N/A") {
+          avatarText = shortName;
+        } else {
+          avatarText = uniName.substring(0, 2).toUpperCase();
+        }
+
+        return {
+          id: conv.id,
+          name: uniName,
+          message: conv.last_message || "",
+          time: conv.last_message_time ? new Date(conv.last_message_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "",
+          hasBlueIndicator: false,
+          avatar: avatarText,
+          messages: [], // Initialize with empty messages for now
+        };
+      });
+      setConversations(formattedConversations);
+    }
+  }, [conversationList]);
   const messagesEndRef = useRef(null);
 
   // Auto-scroll to latest message
@@ -207,7 +131,6 @@ export default function Chat() {
       {/* Left Sidebar - Conversation List */}
       <h2 className="text-xl font-bold mb-4">Chat Management</h2>
       <div className="flex h-[90vh] bg-white">
-        {" "}
         <div className="w-80 border-r flex flex-col">
           <div className="p-4 flex-1 overflow-y-auto">
             {/* Search Bar */}
@@ -238,9 +161,8 @@ export default function Chat() {
                 <div
                   key={conv.id}
                   onClick={() => setSelectedConversation(conv.id)}
-                  className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gray-50 ${
-                    selectedConversation === conv.id ? "bg-blue-50" : ""
-                  }`}
+                  className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gray-50 ${selectedConversation === conv.id ? "bg-blue-50" : ""
+                    }`}
                 >
                   <div className="relative flex-shrink-0">
                     <div className="w-10 h-10 bg-sky rounded-full flex items-center justify-center text-blue-600 text-sm font-medium">
@@ -323,16 +245,14 @@ export default function Chat() {
                     ?.messages.map((msg) => (
                       <div
                         key={msg.id}
-                        className={`flex ${
-                          msg.sender === "me" ? "justify-end" : "justify-start"
-                        }`}
+                        className={`flex ${msg.sender === "me" ? "justify-end" : "justify-start"
+                          }`}
                       >
                         <div
-                          className={`flex gap-2 max-w-md ${
-                            msg.sender === "me"
-                              ? "flex-row-reverse"
-                              : "flex-row"
-                          }`}
+                          className={`flex gap-2 max-w-md ${msg.sender === "me"
+                            ? "flex-row-reverse"
+                            : "flex-row"
+                            }`}
                         >
                           {msg.sender === "them" && (
                             <div className="w-8 h-8 bg-sky rounded-full flex items-center justify-center text-blue-600 text-xs font-medium flex-shrink-0">
@@ -345,18 +265,16 @@ export default function Chat() {
                           )}
                           <div>
                             <div
-                              className={`px-4 py-2 rounded-2xl ${
-                                msg.sender === "me"
-                                  ? "bg-blue text-white"
-                                  : "bg-white text-gray-800"
-                              }`}
+                              className={`px-4 py-2 rounded-2xl ${msg.sender === "me"
+                                ? "bg-blue text-white"
+                                : "bg-white text-gray-800"
+                                }`}
                             >
                               <p className="text-sm">{msg.text}</p>
                             </div>
                             <p
-                              className={`text-xs text-gray-500 mt-1 ${
-                                msg.sender === "me" ? "text-right" : "text-left"
-                              }`}
+                              className={`text-xs text-gray-500 mt-1 ${msg.sender === "me" ? "text-right" : "text-left"
+                                }`}
                             >
                               {msg.time}
                             </p>
