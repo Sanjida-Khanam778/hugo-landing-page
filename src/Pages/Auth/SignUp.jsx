@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import background from "../../assets/images/uniBanner.png";
 import signupImg from "../../assets/images/signup.png";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useSignupMutation } from "../../Api/authapi";
+import { AuthContext } from "../../Provider/AuthProvider";
 
 export default function SignUp() {
   const [fullName, setFullName] = useState("");
@@ -11,7 +12,8 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
+  const { handleGoogleLogin } = useContext(AuthContext);
   const [signup, { isLoading }] = useSignupMutation();
 
   const handleSubmit = async (e) => {
@@ -21,7 +23,7 @@ export default function SignUp() {
       try {
         const res = await signup({
           full_name: fullName,
-          phone,
+          // phone,
           email,
           password,
           role: "student",
@@ -38,6 +40,30 @@ export default function SignUp() {
     }
   };
 
+  const handleSocialLogin = () => {
+    setLoading(true)
+    handleGoogleLogin()
+      .then(async (res) => {
+        console.log(res)
+        const data = {
+          full_name: res.user?.displayName,
+          email: res.user?.email,
+          password: res.user?.uid, // Using uid as password for social login
+          role: "student",
+        };
+        const response = await signup(data).unwrap();
+        setLoading(false);
+        toast.success("Successfully logged in.");
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err)
+        toast.error(err.data?.error?.[0], {
+          position: "bottom-center",
+        });
+        setLoading(false);
+      });
+  };
   return (
     <div className="bg-base pb-16">
       {/* Header Section */}
@@ -114,7 +140,7 @@ export default function SignUp() {
                   <span className="px-4  text-gray-500">
                     or sign up with
                   </span>
-                  <button className="w-12 h-12 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                  <button disabled={loading} onClick={handleSocialLogin} className="w-12 h-12 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 transition-colors">
                     <svg className="w-6 h-6" viewBox="0 0 24 24">
                       <path
                         fill="#4285F4"

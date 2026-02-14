@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import background from "../../assets/images/uniBanner.png";
 import signin from "../../assets/images/signin.png";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useLoginMutation } from "../../Api/authapi";
+import { AuthContext } from "../../Provider/AuthProvider";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
+  const { handleGoogleLogin } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +22,7 @@ export default function SignIn() {
         console.log("Login successful", res);
         navigate("/");
       } catch (err) {
-        console.error( err.data.error[0]);
+        console.error(err.data.error[0]);
         toast.error(err.data?.error?.[0], {
           position: "bottom-center",
         });
@@ -27,6 +30,28 @@ export default function SignIn() {
     }
   };
 
+  const handleSocialLogin = () => {
+    setLoading(true)
+    handleGoogleLogin()
+      .then(async (res) => {
+        const data = {
+          email: res.user?.email,
+          password: res.user?.uid, // Using uid as password for social login
+          role: "student",
+        };
+        const response = await login(data).unwrap();
+        setLoading(false);
+        toast.success("Successfully logged in.");
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err)
+        toast.error(err.data?.error?.[0], {
+          position: "bottom-center",
+        });
+        setLoading(false);
+      });
+  };
   return (
     <div className="bg-base pb-16">
       {/* Header Section */}
@@ -94,7 +119,7 @@ export default function SignIn() {
 
                 <div className="flex gap-4 justify-center items-center">
                   <span className="px-4 text-gray-500">or sign up with</span>
-                  <button className="w-12 h-12 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 transition-colors">
+                  <button disabled={loading} onClick={handleSocialLogin} className="w-12 h-12 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-50 transition-colors">
                     <svg className="w-6 h-6" viewBox="0 0 24 24">
                       <path
                         fill="#4285F4"

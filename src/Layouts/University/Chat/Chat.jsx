@@ -63,9 +63,9 @@ export default function Chat() {
   // Auto-scroll to latest message
   useEffect(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      messagesEndRef.current.scrollIntoView({ behavior: "auto" });
     }
-  }, [selectedConversation, conversations]);
+  }, [selectedConversation, activeRoomMessages]);
 
   const token = useSelector((state) => state.auth.accessToken);
   const socketRef = useRef(null);
@@ -107,6 +107,16 @@ export default function Chat() {
     }
   }, [selectedConversation, token]);
 
+  const textareaRef = useRef(null);
+
+  // Auto-resize textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 150)}px`;
+    }
+  }, [messageInput]);
+
   const handleSendMessage = () => {
     if (messageInput.trim() && selectedConversation && socketRef.current) {
       const messagePayload = {
@@ -114,6 +124,18 @@ export default function Chat() {
       };
       socketRef.current.send(JSON.stringify(messagePayload));
       setMessageInput("");
+
+      // Reset textarea height
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "40px";
+      }
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
     }
   };
 
@@ -258,18 +280,19 @@ export default function Chat() {
 
               {/* Message Input */}
               <div className="bg-white border-t border-gray-200 p-4">
-                <div className="max-w-3xl mx-auto flex items-center gap-2">
-                  <input
-                    type="text"
+                <div className="max-w-3xl mx-auto flex items-end gap-2">
+                  <textarea
+                    ref={textareaRef}
                     value={messageInput}
                     onChange={(e) => setMessageInput(e.target.value)}
-                    onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                    onKeyDown={handleKeyPress}
                     placeholder="Type your message..."
-                    className="flex-1 px-4 py-2 border border-gray rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    rows="1"
+                    className="flex-1 px-4 py-2 border border-gray rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-y-auto min-h-10 max-h-56 leading-relaxed"
                   />
                   <button
                     onClick={handleSendMessage}
-                    className="p-2 bg-blue text-white rounded-full hover:bg-blue-700"
+                    className="p-2 mb-0.5 bg-blue text-white rounded-full hover:bg-blue-700 flex-shrink-0"
                   >
                     <Send className="w-5 h-5" />
                   </button>
@@ -281,4 +304,4 @@ export default function Chat() {
       </div>
     </div>
   );
-}
+}   
