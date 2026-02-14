@@ -10,11 +10,13 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 export default function Hero() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  console.log(isAuthenticated);
   const handleSearch = () => {
     if (searchQuery.trim()) {
       navigate(`/universities?search=${encodeURIComponent(searchQuery.trim())}`);
@@ -100,13 +102,6 @@ export default function Hero() {
           </p>
           {/* Action Buttons */}
           <div className="grid grid-cols-3 gap-3 sm:gap-4">
-            {/* <Link to={"/ai-assistant"}>
-              <button className="flex items-center justify-center gap-2 w-full bg-white/20 hover:bg-white/30 text-white font-medium py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base">
-                <Info className="w-5 h-5" />
-                <span>Orientator chat</span>
-              </button>
-            </Link> */}
- 
             <button
               onClick={handleCompare}
               className="flex items-center justify-center gap-2 bg-white/10 text-white font-medium py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base"
@@ -121,8 +116,8 @@ export default function Hero() {
               <MessageCircleMore className="w-5 h-5" />
               <span>Vocational orientator</span>
             </button>
-            <Link to={"/ai-assistant"}>
-              <button className="flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 text-white font-medium w-full py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base">
+            <Link>
+              <button onClick={() => isAuthenticated ? navigate("/ai-assistant") : toast.error("Please login to continue", { icon: "❌", position: "bottom-center", style: { borderRadius: "10px", background: "#002B5B", color: "#fff" } }) } className="flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 text-white font-medium w-full py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base">
                 <Bot className="w-6 h-6" />
                 <span>Talk to Robot Hugo</span>
               </button>
