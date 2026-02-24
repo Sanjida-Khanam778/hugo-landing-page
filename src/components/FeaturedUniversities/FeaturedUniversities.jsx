@@ -62,43 +62,43 @@ export default function FeaturedUniversities() {
   );
 
   return (
-    <section className="w-full bg-[#F3F4F6] pt-10 md:pt-16 rounded-t-3xl relative -top-6">
-      <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="w-full bg-[#F3F4F6] pt-10 lg:pt-16 rounded-t-3xl relative -top-6">
+      <div className="w-11/12 mx-auto px-0 sm:px-6 lg:px-8">
         {/* Header with Navigation */}
-        <div className="flex items-center justify-between mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
+        <div className="flex items-center justify-between mb-6 lg:mb-12">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900">
             Featured Universities
           </h2>
 
           {/* Navigation Arrows */}
           {/* View All Button */}
-          <div className="flex items-center gap-8">
-            <Link to={"/universities"} className="flex justify-center">
-              <button className="px-8 py-3 hover:shadow-lg hover:scale-105 transition-transform border-2 border-blue text-blue font-semibold rounded-lg duration-200">
+          <div className="flex items-center gap-4 lg:gap-8">
+            <Link to={"/universities"} className="flex justify-center hidden md:block">
+              <button className="px-4 lg:px-8 py-2 md:py-3 hover:shadow-lg hover:scale-105 transition-transform border-2 border-blue text-blue font-semibold rounded-lg duration-200">
                 View All Universities
               </button>
             </Link>
-            <div className="flex gap-2">
+            <div className="flex gap-1 md:gap-2">
               <button
                 onClick={handlePrevious}
                 className="p-2 rounded-full border border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200"
                 aria-label="Previous universities"
               >
-                <ChevronLeft className="w-5 h-5 text-gray-600 hover:text-blue-600" />
+                <ChevronLeft className="md:w-5 md:h-5 w-4 h-4 text-gray-600 hover:text-blue-600" />
               </button>
               <button
                 onClick={handleNext}
                 className="p-2 rounded-full border border-gray-300 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200"
                 aria-label="Next universities"
               >
-                <ChevronRight className="w-5 h-5 text-gray-600 hover:text-blue-600" />
+                <ChevronRight className="md:w-5 md:h-5 w-4 h-4 text-gray-600 hover:text-blue-600" />
               </button>
             </div>
           </div>
         </div>
 
         {/* University Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6 md:mb-0 lg:mb-12">
           {isLoading ? (
             <div className="col-span-full flex justify-center py-10">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
@@ -150,6 +150,11 @@ export default function FeaturedUniversities() {
             ))
           )}
         </div>
+         <Link to={"/universities"} className="flex justify-center md:hidden">
+              <button className="px-4 md:px-8 py-1 md:py-3 hover:shadow-lg hover:scale-105 transition-transform border-2 border-blue text-blue font-semibold rounded-lg duration-200">
+                View All Universities
+              </button>
+            </Link>
       </div>
     </section>
   );

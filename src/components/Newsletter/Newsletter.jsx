@@ -15,17 +15,17 @@ export default function Newsletter() {
   }
 
   return (
-    <section className="w-full bg-[#002B5B] py-16 md:py-24 bg-cover bg-center z-0" >
+    <section className="w-full bg-[#002B5B] py-10 md:py-16 lg:py-24 bg-cover bg-center z-0" >
       <div className="max-w-4xl mx-auto px-4 md:px-6">
         {/* Content Container */}
         <div className="text-center">
           {/* Title */}
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
             Stay Updated with Educational Opportunities
           </h2>
 
           {/* Subtitle */}
-          <p className="text-[#BFDBFE] text-base md:text-lg mb-8 max-w-2xl mx-auto">
+          <p className="text-[#BFDBFE] text-base md:text-lg mb-6 md:mb-8 max-w-2xl mx-auto">
             Subscribe to our newsletter and receive the latest news about universities, scholarships, and exclusive
             events directly to your inbox.
           </p>

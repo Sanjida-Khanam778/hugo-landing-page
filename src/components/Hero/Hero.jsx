@@ -66,7 +66,7 @@ export default function Hero() {
       <div className="relative z-10 h-full flex items-center justify-start w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-3xl border border-white border-opacity-40 bg-primary p-4 md:p-6 lg:p-10 rounded-lg transition-colors backdrop-blur-md">
           {/* Heading */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 lg:mb-8 leading-tight text-balance">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 lg:mb-8 leading-tight text-balance">
             Find Your Perfect University & Program
           </h1>
 
@@ -101,7 +101,7 @@ export default function Hero() {
             Check out these tools.
           </p>
           {/* Action Buttons */}
-          <div className="grid grid-cols-3 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
             <button
               onClick={handleCompare}
               className="flex items-center justify-center gap-2 bg-white/10 text-white font-medium py-3 rounded-lg transition-colors backdrop-blur-sm text-sm sm:text-base"

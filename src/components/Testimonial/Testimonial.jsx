@@ -43,13 +43,13 @@ export default function Testimonial() {
 
   return (
     <section
-      className="w-full py-10 md:py-20 bg-contain bg-center relative -top-6 z-40 rounded-t-3xl bg-[#F3F4F6]"
+      className="w-full pt-6 pb-2 md:pt-10 md:pb-0 lg:py-10 lg:py-20 bg-contain bg-center relative -top-6 z-40 rounded-t-3xl bg-[#F3F4F6]"
       style={{ backgroundImage: `url(${background})` }}
     >
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+        <div className="text-center mb-6 lg:mb-12">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 md:mb-3">
             Student Success Stories
           </h2>
           <p className="text-gray-600 text-lg">
@@ -59,7 +59,7 @@ export default function Testimonial() {
         </div>
 
         {/* Testimonial Card */}
-        <div className="bg-white rounded-lg shadow-lg p-8 md:p-12 xl:px-16 mb-8 relative min-h-[300px] flex items-center">
+        <div className="bg-white rounded-lg shadow-lg p-8 md:p-12 xl:px-16 md:mb-8 relative min-h-[300px] flex items-center">
           <div className="flex flex-col w-full">
             {/* Quote Section */}
             <div className="absolute left-2 top-2 sm:top-4">
