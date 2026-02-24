@@ -8,8 +8,8 @@ export default function Overview({ data }) {
   };
   return (
     <div>
-      <div className="flex gap-6">
-        <div className="w-1/2 h-auto">
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="w-full md:w-1/2 h-auto">
           <video
             autoPlay
             muted
@@ -21,7 +21,7 @@ export default function Overview({ data }) {
             <source src={getFullUrl(data?.banner_video)} type="video/mp4" />
           </video>
         </div>
-        <div className="w-1/2 h-full">
+        <div className="w-full md:w-1/2 h-full">
           {/* About Section */}
           <div className="bg-white rounded-lg p-6 shadow-sm">
             <h2 className="text-2xl font-bold mb-4">

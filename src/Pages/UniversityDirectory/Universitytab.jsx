@@ -81,10 +81,10 @@ export default function UniversityTab({ data, setShowApply }) {
       {/* Navigation Tabs */}
       <div className="">
         <div className="max-w-7xl mx-auto px-8">
-          <div className="flex gap-8">
+          <div className="flex flex-wrap gap-4 md:gap-8">
             <button
               onClick={() => setActiveTab("overview")}
-              className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "overview"
+              className={`py-0 md:py-4 font-medium border-b-2 transition-colors ${activeTab === "overview"
                 ? "border-blue text-blue"
                 : "border-transparent text-gray-600 hover:text-gray-900"
                 }`}
@@ -147,10 +147,10 @@ export default function UniversityTab({ data, setShowApply }) {
       </div>
 
       {/* Main Content */}
-      <div className="w-10/12 mx-auto px-8 py-8">
-        <div className="grid grid-cols-3 gap-8">
+      <div className="md:w-10/12 mx-auto px-4 md:px-8 py-4 md:py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
           {/* Left Content - Tabs */}
-          <div className="col-span-2 space-y-6">
+          <div className="col-span-1 md:col-span-2 space-y-6">
             {activeTab === "overview" && <Overview data={data} />}
 
             {activeTab === "programs" && (

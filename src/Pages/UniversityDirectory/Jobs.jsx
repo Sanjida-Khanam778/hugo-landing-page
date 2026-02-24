@@ -59,7 +59,7 @@ export default function Jobs({ data: universityData }) {
             key={job.id}
             className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
           >
-            <div className="flex items-start justify-between mb-3">
+            <div className="flex flex-col md:flex-row items-start justify-between mb-3">
               <div className="flex items-start gap-3">
                 <div className="w-12 h-12 rounded-lg flex-shrink-0 overflow-hidden">
                   <img src={job.univ_logo || logoPlaceholder} alt="" className="w-full h-full object-cover" />
@@ -68,20 +68,20 @@ export default function Jobs({ data: universityData }) {
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="text-lg font-semibold">{job.title}</h3>
                   </div>
-                  <p className=" text-gray-600 flex items-center gap-2">
+                  <p className="text-gray-600 flex items-center gap-2">
                     <GraduationCap strokeWidth={3.0} size={18} />
                     {job.company_name}
                   </p>
                 </div>
               </div>
               <span
-                className={` px-3 py-1 rounded-md ${getBadgeColor(job.job_type)}`}
+                className={`px-3 py-1 mt-4 md:mt-0 rounded-md ${getBadgeColor(job.job_type)}`}
               >
                 {job.job_type}
               </span>
             </div>
 
-            <div className="flex items-center gap-4 text-gray-600 mb-3">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-4 text-gray-600 mb-3">
               <span className="flex items-center text-sm">
                 <GrLocation className="mr-1 text-dark text-lg" />
                 {job.location}
@@ -98,7 +98,7 @@ export default function Jobs({ data: universityData }) {
 
             <p className=" text-gray-700 mb-4 line-clamp-2">{job.description}</p>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-0 items-center justify-between">
               <div className="space-x-4">
                 <span className="bg-base p-2 rounded-lg text-sm text-gray-700">
                   {job.category}

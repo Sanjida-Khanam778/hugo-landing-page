@@ -41,22 +41,22 @@ export default function JobDetails({ jobId, onBackClick, all = false }) {
   return (
     <div className="min-h-screen bg-base font-inter">
       {/* Header */}
-      <div className="bg-primary h-[50vh] text-white py-12 px-8 relative overflow-hidden flex items-center justify-center">
-        <div className="w-11/12 mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
+      <div className="bg-primary h-[35vh] md:h-[50vh] text-white py-12 px-8 relative overflow-hidden flex items-center justify-center">
+        <div className="md:w-11/12 mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
           <button
             onClick={onBackClick}
-            className="mb-10 text-white/80 hover:text-white text-sm flex items-center gap-1"
+            className="mb-4 md:mb-10 text-white/80 hover:text-white text-sm flex items-center gap-1"
           >
             ← Back to Jobs
           </button>
-          <h1 className="text-3xl font-bold mb-6">{job.title}</h1>
-          <div className="flex items-center gap-8 text-sm text-sky">
+          <h1 className="text-xl md:text-3xl font-bold mb-3 md:mb-6">{job.title}</h1>
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-8 text-sm text-sky">
             <span className="flex items-center">
               <Building size={22} className="mr-2" />
               {job.company_name}
             </span>
             <span className="flex items-center">
-              <GraduationCap size={22} className="mr-2" />
+              <GraduationCap md:size={22} className="mr-2" />
               {job.university_name}
             </span>
             <span className="flex items-center">

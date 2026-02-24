@@ -95,8 +95,8 @@ export default function TestimonialTab({ data: universityData }) {
     <div>
       {/* Testimonials Section */}
       <div className="bg-white rounded-lg p-6 shadow-sm mb-4">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold">Student Testimonials</h2>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold mb-2 md:mb-0">Student Testimonials</h2>
           <div className="flex items-center gap-3">
             <label className="text-sm text-gray-600">Sort:</label>
             <select
@@ -118,7 +118,7 @@ export default function TestimonialTab({ data: universityData }) {
           <div className="space-y-6">
             {sorted.map((t) => (
               <div key={t.id} className="bg-base p-4 rounded-lg">
-                <div className="flex gap-4 mb-4">
+                <div className="flex flex-col md:flex-row gap-4 mb-4">
                   <div>
                     {/* author avatar */}
                     <img
@@ -128,7 +128,7 @@ export default function TestimonialTab({ data: universityData }) {
                     />
                   </div>
                   <div className="flex-1">
-                    <div className="flex gap-4">
+                    <div className="flex flex-col md:flex-row gap-4">
                       <p className="text-gray-700 text-base">{t.content}</p>
                       {t.photo && (
                         <button
@@ -144,12 +144,12 @@ export default function TestimonialTab({ data: universityData }) {
                         </button>
                       )}
                     </div>
-                    <div className="mt-3 flex items-center gap-3">
+                    <div className="mt-3 flex flex-col md:flex-row items-start md:items-center gap-3">
                       <div>
                         <p className="font-semibold text-sm">{t.student_name}</p>
                         <p className="text-sm text-gray-600">{t.student_title}</p>
                       </div>
-                      <div className="ml-auto text-sm text-gray-500">
+                      <div className="md:ml-auto text-sm text-gray-500">
                         {new Date(t.created_at).toLocaleDateString()}
                       </div>
                     </div>
@@ -162,7 +162,7 @@ export default function TestimonialTab({ data: universityData }) {
       </div>
 
       {/* Add Testimonial Button */}
-      <div className="flex justify-end my-4">
+      <div className="flex md:justify-end my-4">
         <div className="text-primary text-xl font-medium transition-colors">
           Add your Testimonials
         </div>

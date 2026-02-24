@@ -26,36 +26,36 @@ export default function UniDashboard() {
     <div className="bg-base min-h-screen">
       <UniBanner data={uniData} setShowApply={setShowApply} />
       {/* Tabs */}
-      <div className="bg-white rounded-t-3xl relative -top-6 p-6 shadow-lg z-10">
+      <div className="bg-white rounded-t-3xl relative -top-6 md:p-6 py-4 shadow-lg z-10">
         <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between gap-8">
+          <div className="flex flex-wrap md:justify-between gap-8">
             <div className="grid place-items-center gap-2">
               <div className="flex items-center gap-3">
                 <Calendar size={22} className="text-blue" />
-                <p className="text-dark font-medium text-lg">Founded</p>
+                <p className="text-dark font-medium md:text-lg">Founded</p>
               </div>
-              <p className=" text-[#374151]">{uniData?.year_founded || "N/A"}</p>
+              <p className="text-sm md:text-base text-[#374151]">{uniData?.year_founded || "N/A"}</p>
             </div>
             <div className="grid place-items-center gap-2">
               <div className="flex items-center gap-3">
                 <Building size={22} className="text-blue" />
-                <p className="text-dark font-medium text-lg">Campuses</p>
+                <p className="text-dark font-medium md:text-lg">Campuses</p>
               </div>
-              <p className=" text-[#374151]">{uniData?.total_campuses || "0"}</p>
+              <p className="text-sm md:text-base text-[#374151]">{uniData?.total_campuses || "0"}</p>
             </div>
             <div className="grid place-items-center gap-2">
               <div className="flex items-center gap-3">
                 <Users size={22} className="text-blue" />
-                <p className="text-dark font-medium text-lg">Students</p>
+                <p className="text-dark font-medium md:text-lg">Students</p>
               </div>
-              <p className=" text-[#374151]">{uniData?.total_students || "0"}</p>
+              <p className="text-sm md:text-base text-[#374151]">{uniData?.total_students || "0"}</p>
             </div>
             <div className="grid place-items-center gap-2">
               <div className="flex items-center gap-3">
                 <Award size={22} className="text-blue" />
-                <p className="text-dark font-medium text-lg">Faculty</p>
+                <p className="text-dark font-medium md:text-lg">Faculty</p>
               </div>
-              <p className=" text-[#374151]">{uniData?.total_faculty || "0"}</p>
+              <p className="text-sm md:text-base text-[#374151]">{uniData?.total_faculty || "0"}</p>
             </div>
           </div>
         </div>

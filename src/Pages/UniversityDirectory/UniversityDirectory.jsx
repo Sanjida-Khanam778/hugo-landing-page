@@ -76,8 +76,8 @@ export default function UniversityDirectory() {
       </div>
 
       {/* Main Content */}
-      <div className="w-11/12 mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row gap-8">
+      <div className="w-11/12 mx-auto px-0 md:px-6 lg:px-8 py-8">
+        <div className="flex flex-col md:flex-row gap-4 lg:gap-8">
           {/* Mobile: filter toggle (visible on small screens) */}
           <div className="md:hidden w-full mb-4 flex items-center justify-between">
             <button
@@ -190,7 +190,7 @@ export default function UniversityDirectory() {
 
             {/* Load More Button */}
             <div className="mt-8 text-center">
-              <button className="px-6 py-3 text-lg border-2 border-blue text-blue rounded-md font-medium hover:bg-blue-50 transition-colors inline-flex items-center">
+              <button className="px-6 py-1 md:py-3 md:text-lg text-sm border-2 border-blue text-blue rounded-md font-medium hover:bg-blue-50 transition-colors inline-flex items-center">
                 Load More
                 <ChevronDown size={16} className="ml-2" />
               </button>

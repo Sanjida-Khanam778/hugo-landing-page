@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { useGetProgramsByUniIdQuery } from "../../Api/universityApi";
 
 export default function Program({ data, onViewDetails }) {
@@ -33,7 +33,7 @@ export default function Program({ data, onViewDetails }) {
       {/* Programs Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3">
         <h2 className="text-2xl font-bold">Programs</h2>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col md:flex-row items-center gap-3">
           <input
             type="search"
             placeholder="Search programs..."

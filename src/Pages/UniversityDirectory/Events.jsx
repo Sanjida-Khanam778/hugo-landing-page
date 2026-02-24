@@ -24,9 +24,9 @@ console.log(eventsData);
       </div>
 
       {eventsData.map((event, index) => (
-        <div key={event.id} className={`rounded-lg shadow-sm overflow-hidden mb-4 flex ${index % 2 === 0 ? "bg-[#EEEAE6]" : "bg-[#DFF0EC]"}`}>
+        <div key={event.id} className={`rounded-lg shadow-sm overflow-hidden mb-4 flex flex-col md:flex-row ${index % 2 === 0 ? "bg-[#EEEAE6]" : "bg-[#DFF0EC]"}`}>
           {/* Event Image */}
-          <div className="flex-shrink-0 w-1/3 h-auto">
+          <div className="flex-shrink-0 w-full md:w-1/3 h-auto">
             <img
               src={event.image ? getFullUrl(event.image) : eventPlaceholder}
               alt={event.title}

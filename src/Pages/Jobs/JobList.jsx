@@ -15,12 +15,14 @@ export default function JobList({ onViewDetails }) {
   const [postedWithin, setPostedWithin] = useState("Any Time");
 
   const queryParams = useMemo(() => {
+
     const params = {};
     if (selectedCategory !== "All Categories") params.category = selectedCategory;
     if (selectedType !== "All Types") params.job_type = selectedType;
     if (postedWithin !== "Any Time") params.posted_within = postedWithin;
     if (searchTerm) params.search = searchTerm;
     return params;
+    
   }, [selectedCategory, selectedType, postedWithin, searchTerm]);
 
   const { data: jobsData, isLoading, error } = useGetDiscoveryJobsQuery(queryParams);

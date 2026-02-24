@@ -38,8 +38,8 @@ export default function UniProgramDetails({ UniData, programId, onBack }) {
                 </button>
                 <div className="flex justify-between items-center">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">{data?.title || "Program Details"}</h1>
-                        <p className="text-gray-500 mt-1">{data?.university_name}</p>
+                        <h1 className="text-xl md:text-3xl font-bold text-gray-900">{data?.title || "Program Details"}</h1>
+                        <p className="text-gray-500 mt-1 text-sm md:text-base">{data?.university_name}</p>
                     </div>
                 </div>
             </div>
@@ -47,10 +47,10 @@ export default function UniProgramDetails({ UniData, programId, onBack }) {
             {/* Navigation Tabs */}
             <div className="bg-white border-b border-gray-200">
                 <div className="px-6">
-                    <div className="flex gap-8">
+                    <div className="flex flex-col md:flex-row gap-1 md:gap-8">
                         <button
                             onClick={() => setActiveTab("overview")}
-                            className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "overview"
+                            className={`py-2 md:py-4 font-medium border-b-2 transition-colors ${activeTab === "overview"
                                 ? "border-blue text-blue"
                                 : "border-transparent text-gray hover:text-gray-900"
                                 }`}
@@ -59,7 +59,7 @@ export default function UniProgramDetails({ UniData, programId, onBack }) {
                         </button>
                         <button
                             onClick={() => setActiveTab("admission")}
-                            className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "admission"
+                            className={`py-2 md:py-4 font-medium border-b-2 transition-colors ${activeTab === "admission"
                                 ? "border-blue text-blue"
                                 : "border-transparent text-gray hover:text-gray-900"
                                 }`}
@@ -68,7 +68,7 @@ export default function UniProgramDetails({ UniData, programId, onBack }) {
                         </button>
                         <button
                             onClick={() => setActiveTab("fees")}
-                            className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "fees"
+                            className={`py-2 md:py-4 font-medium border-b-2 transition-colors ${activeTab === "fees"
                                 ? "border-blue text-blue"
                                 : "border-transparent text-gray hover:text-gray-900"
                                 }`}
@@ -77,7 +77,7 @@ export default function UniProgramDetails({ UniData, programId, onBack }) {
                         </button>
                         <button
                             onClick={() => setActiveTab("careers")}
-                            className={`py-4 font-medium border-b-2 transition-colors ${activeTab === "careers"
+                            className={`py-2 md:py-4 font-medium border-b-2 transition-colors ${activeTab === "careers"
                                 ? "border-blue text-blue"
                                 : "border-transparent text-gray hover:text-gray-900"
                                 }`}
@@ -89,24 +89,24 @@ export default function UniProgramDetails({ UniData, programId, onBack }) {
             </div>
 
             {/* Main Content */}
-            <div className="py-8">
-                <div className="grid grid-cols-3 gap-8">
+            <div className="py-4 md:py-8">
+                <div className="grid md:grid-cols-3 gap-4 md:gap-8">
                     {/* Left Content */}
                     <div className="col-span-2 space-y-6">
                         {activeTab === "overview" && (
                             <>
                                 {/* Program Overview */}
-                                <div className="bg-white rounded-lg p-6 ">
-                                    <h2 className="text-2xl font-bold mb-4">Program Overview</h2>
-                                    <p className="text-gray-700 leading-relaxed mb-6">
+                                <div className="bg-white rounded-lg p-6">
+                                    <h2 className="text-2xl font-bold mb-2 md:mb-4">Program Overview</h2>
+                                    <p className="text-gray-700 leading-relaxed mb-2 md:mb-6">
                                         {data?.description || "No description available."}
                                     </p>
 
                                     {/* Learning Outcomes */}
                                     {data?.learning_outcomes?.length > 0 && (
                                         <>
-                                            <h3 className="text-lg font-bold mb-4">Learning Outcomes</h3>
-                                            <div className="space-y-3 mb-6">
+                                            <h3 className="text-lg font-bold mb-2 md:mb-4">Learning Outcomes</h3>
+                                            <div className="space-y-3 mb-2 md:mb-6">
                                                 {data.learning_outcomes.map((outcome) => (
                                                     <div key={outcome.id} className="flex items-start gap-3">
                                                         <CheckCircle
@@ -126,8 +126,8 @@ export default function UniProgramDetails({ UniData, programId, onBack }) {
                                     {/* Key Faculty */}
                                     {data?.faculties?.length > 0 && (
                                         <>
-                                            <h3 className="text-lg font-bold mb-4">Key Faculty</h3>
-                                            <div className="grid grid-cols-2 gap-4">
+                                            <h3 className="text-lg font-bold mb-2 md:mb-4">Key Faculty</h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 {data.faculties.map((faculty, index) => (
                                                     <div key={index} className="flex items-center gap-3">
                                                         <div className="bg-blue/10 rounded-full w-16 h-16 flex items-center justify-center text-blue font-bold text-xl uppercase">
@@ -149,17 +149,17 @@ export default function UniProgramDetails({ UniData, programId, onBack }) {
 
                                 {/* Program Curriculum */}
                                 <div className="bg-white rounded-lg p-6 ">
-                                    <h2 className="text-2xl font-bold mb-4">
+                                    <h2 className="text-2xl font-bold mb-2 md:mb-4">
                                         Program Curriculum
                                     </h2>
-                                    <p className="text-gray-700 leading-relaxed mb-6">
+                                    <p className="text-gray-700 leading-relaxed mb-2 md:mb-6">
                                         {data?.curriculum_overview || "The curriculum is designed to provide a comprehensive understanding of the subjects."}
                                     </p>
 
-                                    <div className="grid grid-cols-2 gap-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {/* First Year */}
                                         <div className="border border-blue-200 rounded-lg p-5 bg-blue-50">
-                                            <h4 className="font-bold text-base mb-4 text-gray-900">
+                                            <h4 className="font-bold text-base mb-2 md:mb-4 text-gray-900">
                                                 First Year
                                             </h4>
                                             <div className="space-y-2">
@@ -178,7 +178,7 @@ export default function UniProgramDetails({ UniData, programId, onBack }) {
 
                                         {/* Second Year */}
                                         <div className="border border-blue-200 rounded-lg p-5 bg-blue-50">
-                                            <h4 className="font-bold text-base mb-4 text-gray-900">
+                                            <h4 className="font-bold text-base mb-2 md:mb-4 text-gray-900">
                                                 Second Year
                                             </h4>
                                             <div className="space-y-2">
@@ -197,7 +197,7 @@ export default function UniProgramDetails({ UniData, programId, onBack }) {
 
                                         {/* Third Year */}
                                         <div className="border border-blue-200 rounded-lg p-5 bg-blue-50">
-                                            <h4 className="font-bold text-base mb-4 text-gray-900">
+                                            <h4 className="font-bold text-base mb-2 md:mb-4 text-gray-900">
                                                 Third Year
                                             </h4>
                                             <div className="space-y-2">
@@ -216,7 +216,7 @@ export default function UniProgramDetails({ UniData, programId, onBack }) {
 
                                         {/* Fourth Year */}
                                         <div className="border border-blue-200 rounded-lg p-5 bg-blue-50">
-                                            <h4 className="font-bold text-base mb-4 text-gray-900">
+                                            <h4 className="font-bold text-base mb-2 md:mb-4 text-gray-900">
                                                 Fourth Year
                                             </h4>
                                             <div className="space-y-2">
