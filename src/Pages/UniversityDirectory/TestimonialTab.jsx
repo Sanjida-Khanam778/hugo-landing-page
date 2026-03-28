@@ -1,7 +1,5 @@
 import React, { useState, useRef } from "react";
 import comment from "../../assets/images/comment.png";
-import profile1 from "../../assets/images/profile1.png";
-import profile2 from "../../assets/images/profile2.png";
 import { useAddTestimonialMutation, useGetTestimonialsByUniIdQuery } from "../../Api/universityApi";
 import { toast } from "react-hot-toast";
 
@@ -15,7 +13,7 @@ export default function TestimonialTab({ data: universityData }) {
 
   const [newText, setNewText] = useState("");
   const [studentTitle, setStudentTitle] = useState("");
-  const [newPhoto, setNewPhoto] = useState(null); // review image
+  const [newPhoto, setNewPhoto] = useState(null);
   const [preview, setPreview] = useState(null);
   const fileRef = useRef();
   const [lightbox, setLightbox] = useState(null);

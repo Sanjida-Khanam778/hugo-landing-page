@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "/api/v1",
+  baseUrl: "https://clasia.io/api/v1/",
   prepareHeaders: (headers, { getState, endpoint }) => {
     // Skip auth token for public endpoints
     const publicEndpoints = ["signup", "universitySignup", "login", "forgetPass", "verifyOtp", "resetPassword"];
