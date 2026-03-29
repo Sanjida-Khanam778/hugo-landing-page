@@ -115,13 +115,11 @@ Hugo is a comprehensive web platform designed to connect students, universities,
 - **React Hot Toast** - Toast notifications
 - **React Speech Recognition** - Speech-to-text functionality
 - **Recharts** - Composable charting library
-- **LocalForage** - Improved storage layer
 - **Match Sorter** - Simple, expected, and deterministic best-match sorting
 
 ### Development Tools
 
 - **ESLint** - JavaScript linting utility
-- **TypeScript** - Type definitions for React
 
 ## Getting Started
 
