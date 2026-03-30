@@ -2,9 +2,13 @@ import bannerVideo from "../../assets/video/banner.mp4";
 
 export default function Overview({ data }) {
   console.log(data);
-   const getFullUrl = (path) => {
+  const getFullUrl = (path) => {
+    console.log("getFullUrl called with path:", path);
     if (!path) return "";
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) {
+      return path;
+    }
+    return `https://api.clasia.io${path}`;
   };
   return (
     <div>
@@ -97,7 +101,9 @@ export default function Overview({ data }) {
                 className="flex justify-between items-center py-2 border-b border-[#CCCCCC] last:border-0"
               >
                 <span className="text-gray-700">{rank.rank_title}</span>
-                <span className="text-blue font-semibold">#{rank.rank} (Year: {rank.year})</span>
+                <span className="text-blue font-semibold">
+                  #{rank.rank} (Year: {rank.year})
+                </span>
               </div>
             ))}
           </div>

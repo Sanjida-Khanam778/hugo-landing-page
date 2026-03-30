@@ -6,11 +6,15 @@ import AddRankingModal from "../Modal/AddRankingModal";
 import AddLocationModal from "../Modal/AddLocationModal";
 import AddAccreditationModal from "../Modal/AddAccreditationModal";
 import TextEditor from "../../../editor";
-import { useGetUniversityProfileQuery, useSetupProfileMutation } from "../../../Api/universityApi";
+import {
+  useGetUniversityProfileQuery,
+  useSetupProfileMutation,
+} from "../../../Api/universityApi";
 import { toast } from "react-hot-toast";
 
 export default function UniversityProfile() {
-  const { data: profileResponse, isLoading: profileLoading } = useGetUniversityProfileQuery();
+  const { data: profileResponse, isLoading: profileLoading } =
+    useGetUniversityProfileQuery();
   console.log(profileResponse);
   const profile = profileResponse;
   const [setupProfile, { isLoading: isUpdating }] = useSetupProfileMutation();
@@ -18,7 +22,10 @@ export default function UniversityProfile() {
   const [editorContent, setEditorContent] = useState("");
   const [logo, setLogo] = useState({ preview: null, file: null });
   const [banner, setBanner] = useState({ preview: null, file: null });
-  const [sectionVideo, setSectionVideo] = useState({ preview: null, file: null });
+  const [sectionVideo, setSectionVideo] = useState({
+    preview: null,
+    file: null,
+  });
   const [bannerVideo, setBannerVideo] = useState({ preview: null, file: null });
 
   const [basicInfo, setBasicInfo] = useState({
@@ -60,14 +67,16 @@ export default function UniversityProfile() {
         total_programs: profile.total_programs || "",
       });
       // Map 'title' from backend to 'org' for local state/modals if needed
-      setRankings(profile.rankings?.map(r => ({ ...r, org: r.title })) || []);
+      setRankings(profile.rankings?.map((r) => ({ ...r, org: r.title })) || []);
       setLocations(profile.locations || []);
       setAccreditations(profile.accreditations || []);
       setEditorContent(profile.what_makes_us_different || "");
       if (profile.logo) setLogo({ preview: profile.logo, file: null });
       if (profile.picture) setBanner({ preview: profile.picture, file: null });
-      if (profile.section_video) setSectionVideo({ preview: profile.section_video, file: null });
-      if (profile.banner_video) setBannerVideo({ preview: profile.banner_video, file: null });
+      if (profile.section_video)
+        setSectionVideo({ preview: profile.section_video, file: null });
+      if (profile.banner_video)
+        setBannerVideo({ preview: profile.banner_video, file: null });
     }
   }, [profile]);
 
@@ -101,7 +110,10 @@ export default function UniversityProfile() {
   // File upload handlers
   const handleLogoUpload = (e) => {
     const file = e.target.files[0];
-    if (file && (file.type.startsWith("image/") || file.type.startsWith("video/"))) {
+    if (
+      file &&
+      (file.type.startsWith("image/") || file.type.startsWith("video/"))
+    ) {
       setLogo({
         preview: URL.createObjectURL(file),
         file: file,
@@ -111,7 +123,10 @@ export default function UniversityProfile() {
 
   const handleBannerUpload = (e) => {
     const file = e.target.files[0];
-    if (file && (file.type.startsWith("image/") || file.type.startsWith("video/"))) {
+    if (
+      file &&
+      (file.type.startsWith("image/") || file.type.startsWith("video/"))
+    ) {
       setBanner({
         preview: URL.createObjectURL(file),
         file: file,
@@ -164,7 +179,12 @@ export default function UniversityProfile() {
 
     // 1. Basic Info - Send all fields as strings (ensure empty strings instead of skipping)
     Object.keys(basicInfo).forEach((key) => {
-      fd.append(key, basicInfo[key] !== null && basicInfo[key] !== undefined ? String(basicInfo[key]) : "");
+      fd.append(
+        key,
+        basicInfo[key] !== null && basicInfo[key] !== undefined
+          ? String(basicInfo[key])
+          : "",
+      );
     });
 
     // 2. Editor Content
@@ -213,7 +233,9 @@ export default function UniversityProfile() {
     console.log("--- SUBMITTING PROFILE DATA ---");
     for (const [key, value] of fd.entries()) {
       if (value instanceof File) {
-        console.log(`${key}: [File] ${value.name} (${value.size} bytes, ${value.type})`);
+        console.log(
+          `${key}: [File] ${value.name} (${value.size} bytes, ${value.type})`,
+        );
       } else {
         console.log(`${key}:`, value);
       }
@@ -249,11 +271,13 @@ export default function UniversityProfile() {
       if (bannerInputRef.current) bannerInputRef.current.value = "";
       if (sectionVideoInputRef.current) sectionVideoInputRef.current.value = "";
       if (bannerVideoInputRef.current) bannerVideoInputRef.current.value = "";
-
     } catch (err) {
       console.error("Profile update error detail:", err);
       // Detailed error for 500 parsing error or other server issues
-      const errorMessage = err?.data?.message || err?.data?.detail || "Server Error (500). Please check console for payload data.";
+      const errorMessage =
+        err?.data?.message ||
+        err?.data?.detail ||
+        "Server Error (500). Please check console for payload data.";
       toast.error(errorMessage);
     }
   };
@@ -262,8 +286,10 @@ export default function UniversityProfile() {
 
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) {
+      return path;
+    }
+    return `https://api.clasia.io${path}`;
   };
 
   return (
@@ -585,7 +611,9 @@ export default function UniversityProfile() {
               >
                 <div>
                   <p className="font-medium text-gray-800">{acc.name}</p>
-                  <p className="text-sm text-grey">Valid until {acc.valid_until || "N/A"}</p>
+                  <p className="text-sm text-grey">
+                    Valid until {acc.valid_until || "N/A"}
+                  </p>
                 </div>
                 <div>
                   <button
@@ -601,10 +629,16 @@ export default function UniversityProfile() {
           </div>
         </div>
         <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">What makes us different</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-4">
+            What makes us different
+          </h2>
 
           <div className="col-span-2">
-            <TextEditor htmlElement={editorContent} onChange={(value) => setEditorContent(value)} isEditable={true} />
+            <TextEditor
+              htmlElement={editorContent}
+              onChange={(value) => setEditorContent(value)}
+              isEditable={true}
+            />
           </div>
         </div>
 
@@ -628,8 +662,12 @@ export default function UniversityProfile() {
                 className="flex justify-between items-center p-4 border rounded-lg"
               >
                 <div>
-                  <p className="font-medium text-gray-800">{rank.org || rank.title}</p>
-                  <p className="text-sm text-gray-600">Rank: {rank.rank} ({rank.year})</p>
+                  <p className="font-medium text-gray-800">
+                    {rank.org || rank.title}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Rank: {rank.rank} ({rank.year})
+                  </p>
                 </div>
                 <div>
                   <button

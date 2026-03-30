@@ -30,13 +30,28 @@ export default function JobDetails({ jobId, onBackClick, all = false }) {
     }
   }, [job?.deadline]);
 
-  if (isLoading) return <div className="min-h-screen bg-base p-8 text-center text-gray-500">Loading job details...</div>;
-  if (error) return <div className="min-h-screen bg-base p-8 text-center text-red-500">Error loading job details.</div>;
-  if (!job) return <div className="min-h-screen bg-base p-8 text-center text-gray-500">Job not found.</div>;
+  if (isLoading)
+    return (
+      <div className="min-h-screen bg-base p-8 text-center text-gray-500">
+        Loading job details...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="min-h-screen bg-base p-8 text-center text-red-500">
+        Error loading job details.
+      </div>
+    );
+  if (!job)
+    return (
+      <div className="min-h-screen bg-base p-8 text-center text-gray-500">
+        Job not found.
+      </div>
+    );
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) return path;
+    return `https://api.clasia.io${path}`;
   };
   return (
     <div className="min-h-screen bg-base font-inter">
@@ -49,7 +64,9 @@ export default function JobDetails({ jobId, onBackClick, all = false }) {
           >
             ← Back to Jobs
           </button>
-          <h1 className="text-xl md:text-3xl font-bold mb-3 md:mb-6">{job.title}</h1>
+          <h1 className="text-xl md:text-3xl font-bold mb-3 md:mb-6">
+            {job.title}
+          </h1>
           <div className="flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-8 text-sm text-sky">
             <span className="flex items-center">
               <Building size={22} className="mr-2" />
@@ -82,7 +99,9 @@ export default function JobDetails({ jobId, onBackClick, all = false }) {
             {/* Job Description */}
             <div className="">
               <h2 className="text-lg font-bold mb-4">Job Description</h2>
-              <p className="text-gray-700 mb-6 leading-relaxed">{job.description}</p>
+              <p className="text-gray-700 mb-6 leading-relaxed">
+                {job.description}
+              </p>
 
               {job.responsibilities && job.responsibilities.length > 0 && (
                 <div className="mb-6">
@@ -125,9 +144,7 @@ export default function JobDetails({ jobId, onBackClick, all = false }) {
             {/* Qualifications */}
             {job.qualifications && job.qualifications.length > 0 && (
               <div className="bg-white rounded-lg">
-                <h2 className="text-lg font-bold mb-4">
-                  Qualifications
-                </h2>
+                <h2 className="text-lg font-bold mb-4">Qualifications</h2>
                 <div className="space-y-3">
                   {job.qualifications.map((item, index) => (
                     <div key={index} className="flex items-start gap-3">
@@ -198,31 +215,47 @@ export default function JobDetails({ jobId, onBackClick, all = false }) {
             <div className="bg-white rounded-lg p-6 sticky top-8 shadow-sm">
               {/* Job Details Sidebar */}
               <div className="mb-6">
-                <h3 className="font-bold mb-6 text-gray-900 border-b pb-2">Job Details Summary</h3>
+                <h3 className="font-bold mb-6 text-gray-900 border-b pb-2">
+                  Job Details Summary
+                </h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-500 font-medium">Job Type</span>
-                    <span className="font-bold text-gray-900">{job.job_type}</span>
+                    <span className="font-bold text-gray-900">
+                      {job.job_type}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-500 font-medium">Category</span>
-                    <span className="font-bold text-gray-900">{job.category}</span>
+                    <span className="font-bold text-gray-900">
+                      {job.category}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-500 font-medium">Department</span>
-                    <span className="font-bold text-gray-900">{job.department}</span>
+                    <span className="text-gray-500 font-medium">
+                      Department
+                    </span>
+                    <span className="font-bold text-gray-900">
+                      {job.department}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-500 font-medium">Salary</span>
-                    <span className="font-bold text-gray-900 text-green">{job.salary || "Not Specified"}</span>
+                    <span className="font-bold text-gray-900 text-green">
+                      {job.salary || "Not Specified"}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-500 font-medium">Posted</span>
-                    <span className="font-bold text-gray-900">{job.posted_date}</span>
+                    <span className="font-bold text-gray-900">
+                      {job.posted_date}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-500 font-medium">Deadline</span>
-                    <span className={`font-bold ${isExpired ? 'text-red' : 'text-gray-900'}`}>
+                    <span
+                      className={`font-bold ${isExpired ? "text-red" : "text-gray-900"}`}
+                    >
                       {job.deadline}
                     </span>
                   </div>
@@ -236,7 +269,9 @@ export default function JobDetails({ jobId, onBackClick, all = false }) {
                     <div className="bg-red-50 p-2 mx-auto mb-4 h-12 w-12 text-red rounded-full flex items-center justify-center">
                       <Calendar size={24} />
                     </div>
-                    <h3 className="font-bold text-gray-900 mb-1">Application Closed</h3>
+                    <h3 className="font-bold text-gray-900 mb-1">
+                      Application Closed
+                    </h3>
                     <p className="text-xs text-gray-500 mb-4 px-2">
                       The deadline for this position has passed.
                     </p>
@@ -267,9 +302,15 @@ export default function JobDetails({ jobId, onBackClick, all = false }) {
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 rounded-xl bg-gray-50 p-1 flex-shrink-0 border border-gray-100 overflow-hidden">
-                  <img src={job.univ_logo} alt="University Logo" className="w-full h-full object-contain" />
+                  <img
+                    src={job.univ_logo}
+                    alt="University Logo"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-                <h3 className="font-bold text-gray-900 leading-tight">{job.university_name}</h3>
+                <h3 className="font-bold text-gray-900 leading-tight">
+                  {job.university_name}
+                </h3>
               </div>
               <p className="text-sm text-gray-600 leading-relaxed mb-6">
                 This position is posted through {job.university_name}'s career
@@ -288,10 +329,7 @@ export default function JobDetails({ jobId, onBackClick, all = false }) {
 
       {/* Application Modal */}
       {isApplyModalOpen && (
-        <ApplyJobModal
-          job={job}
-          onClose={() => setIsApplyModalOpen(false)}
-        />
+        <ApplyJobModal job={job} onClose={() => setIsApplyModalOpen(false)} />
       )}
     </div>
   );

@@ -5,20 +5,25 @@ import { useState } from "react";
 import StudentApplicationDetailsModal from "../Modal/StudentApplicationDetailsModal";
 import {
   useGetUniversityApplicationsQuery,
-  useUpdateApplicationStatusMutation
+  useUpdateApplicationStatusMutation,
 } from "../../../Api/universityApi";
 import toast from "react-hot-toast";
 
 export default function StudentApprovals() {
-  const { data: applicationsResponse, isLoading, error } = useGetUniversityApplicationsQuery();
-  const [updateStatus, { isLoading: isUpdating }] = useUpdateApplicationStatusMutation();
+  const {
+    data: applicationsResponse,
+    isLoading,
+    error,
+  } = useGetUniversityApplicationsQuery();
+  const [updateStatus, { isLoading: isUpdating }] =
+    useUpdateApplicationStatusMutation();
 
   const [viewingApp, setViewingApp] = useState(null);
 
   const getFullUrl = (path) => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    return `https://api.clasia.io${path}`;
   };
 
   const formatDate = (dateString) => {
@@ -26,8 +31,18 @@ export default function StudentApprovals() {
     return new Date(dateString).toLocaleDateString();
   };
 
-  if (isLoading) return <div className="p-8 text-center text-gray-500">Loading applications...</div>;
-  if (error) return <div className="p-8 text-center text-red-500">Error loading applications.</div>;
+  if (isLoading)
+    return (
+      <div className="p-8 text-center text-gray-500">
+        Loading applications...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="p-8 text-center text-red-500">
+        Error loading applications.
+      </div>
+    );
 
   const applications = applicationsResponse?.pending_applications || [];
   const processedApplications = applicationsResponse?.recently_processed || [];
@@ -38,15 +53,23 @@ export default function StudentApprovals() {
       toast.success(`Application ${status.toLowerCase()} successfully!`);
     } catch (err) {
       console.error(err);
-      toast.error(err?.data?.error || `Failed to ${status.toLowerCase()} application`);
+      toast.error(
+        err?.data?.error || `Failed to ${status.toLowerCase()} application`,
+      );
     }
   };
 
   const getDocumentsList = (app) => {
     const docs = [];
-    if (app.id_photo_front) docs.push({ name: "ID Front", url: getFullUrl(app.id_photo_front) });
-    if (app.id_photo_back) docs.push({ name: "ID Back", url: getFullUrl(app.id_photo_back) });
-    if (app.supporting_documents) docs.push({ name: "Support Doc", url: getFullUrl(app.supporting_documents) });
+    if (app.id_photo_front)
+      docs.push({ name: "ID Front", url: getFullUrl(app.id_photo_front) });
+    if (app.id_photo_back)
+      docs.push({ name: "ID Back", url: getFullUrl(app.id_photo_back) });
+    if (app.supporting_documents)
+      docs.push({
+        name: "Support Doc",
+        url: getFullUrl(app.supporting_documents),
+      });
     return docs;
   };
 
@@ -63,7 +86,9 @@ export default function StudentApprovals() {
         </h2>
 
         {applications.length === 0 ? (
-          <p className="p-8 text-gray-500 text-center">No pending applications</p>
+          <p className="p-8 text-gray-500 text-center">
+            No pending applications
+          </p>
         ) : (
           <div className="divide-y-2">
             {applications.map((app) => (
@@ -85,11 +110,15 @@ export default function StudentApprovals() {
                   <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
                     <div>
                       <p className="text-gray-500">Applied Program</p>
-                      <p className="font-medium text-gray-900">{app.desired_program}</p>
+                      <p className="font-medium text-gray-900">
+                        {app.desired_program}
+                      </p>
                     </div>
                     <div>
                       <p className="text-gray-500">Nationality</p>
-                      <p className="font-medium text-gray-900">{app.nationality}</p>
+                      <p className="font-medium text-gray-900">
+                        {app.nationality}
+                      </p>
                     </div>
                     <div>
                       <p className="text-gray-500">Application Date</p>
@@ -196,21 +225,28 @@ export default function StudentApprovals() {
                   >
                     <td className="py-3 px-4">
                       <div>
-                        <p className="font-medium text-gray-900">{app.full_name}</p>
+                        <p className="font-medium text-gray-900">
+                          {app.full_name}
+                        </p>
                         <p className="text-gray-600 text-sm">{app.email}</p>
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-gray-900">{app.desired_program}</td>
-                    <td className="py-3 px-4 text-gray-900">{app.nationality}</td>
+                    <td className="py-3 px-4 text-gray-900">
+                      {app.desired_program}
+                    </td>
+                    <td className="py-3 px-4 text-gray-900">
+                      {app.nationality}
+                    </td>
                     <td className="py-3 px-4 text-gray-900">
                       {formatDate(app.created_at)}
                     </td>
                     <td className="py-3 px-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${app.status === "Approved"
-                          ? " bg-[#DCFCE7] text-[#15803D] "
-                          : "bg-[#FEE2E2] text-[#B91C1C]"
-                          }`}
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          app.status === "Approved"
+                            ? " bg-[#DCFCE7] text-[#15803D] "
+                            : "bg-[#FEE2E2] text-[#B91C1C]"
+                        }`}
                       >
                         {app.status}
                       </span>

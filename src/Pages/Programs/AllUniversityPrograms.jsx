@@ -19,12 +19,17 @@ export default function AllUniversityPrograms() {
     const params = {};
     if (filters.univ_type !== "all") params.univ_type = filters.univ_type;
     if (filters.level !== "all") params.level = filters.level;
-    const effectiveTitle = searchTerm || (filters.field !== "all" ? filters.field : "");
+    const effectiveTitle =
+      searchTerm || (filters.field !== "all" ? filters.field : "");
     if (effectiveTitle) params.title = effectiveTitle;
     return params;
   }, [filters, searchTerm]);
 
-  const { data: programsData, isLoading, error } = useGetDiscoveryProgramsQuery(queryParams);
+  const {
+    data: programsData,
+    isLoading,
+    error,
+  } = useGetDiscoveryProgramsQuery(queryParams);
   const handleFilterChange = (name, value) => {
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
@@ -33,11 +38,16 @@ export default function AllUniversityPrograms() {
 
   const getFullUrl = (path) => {
     if (!path) return programPlaceholder;
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) return path;
+    return `https://api.clasia.io${path}`;
   };
 
-  if (error) return <div className="p-8 text-center text-red-500">Error loading programs.</div>;
+  if (error)
+    return (
+      <div className="p-8 text-center text-red-500">
+        Error loading programs.
+      </div>
+    );
 
   return (
     <div className="min-h-screen bg-[#F2F2F2] font-inter">
@@ -79,13 +89,19 @@ export default function AllUniversityPrograms() {
               Filters
             </button>
             <div>
-              <p className="text-sm text-gray-600">Showing {programs.length} programs</p>
+              <p className="text-sm text-gray-600">
+                Showing {programs.length} programs
+              </p>
             </div>
           </div>
 
           {/* Desktop sidebar */}
           <div className="w-68 flex-shrink-0 hidden lg:block">
-            <FiltersContent isLocation={false} filters={filters} onFilterChange={handleFilterChange} />
+            <FiltersContent
+              isLocation={false}
+              filters={filters}
+              onFilterChange={handleFilterChange}
+            />
           </div>
 
           {/* Mobile filter panel */}
@@ -101,7 +117,11 @@ export default function AllUniversityPrograms() {
                     <X />
                   </button>
                 </div>
-                <FiltersContent isLocation={false} filters={filters} onFilterChange={handleFilterChange} />
+                <FiltersContent
+                  isLocation={false}
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
+                />
               </div>
             </>
           )}
@@ -109,13 +129,19 @@ export default function AllUniversityPrograms() {
           {/* Program Grid */}
           <div className="flex-1 p-4 md:p-7 bg-[#ECF5FF]">
             <div className="mb-4">
-              <p className="text-sm text-gray-600">Showing {programs.length} programs</p>
+              <p className="text-sm text-gray-600">
+                Showing {programs.length} programs
+              </p>
             </div>
 
             {isLoading ? (
-              <div className="p-8 text-center text-gray-500">Loading programs...</div>
+              <div className="p-8 text-center text-gray-500">
+                Loading programs...
+              </div>
             ) : programs.length === 0 ? (
-              <div className="p-8 text-center text-gray-500">No programs found.</div>
+              <div className="p-8 text-center text-gray-500">
+                No programs found.
+              </div>
             ) : (
               <div className="border p-6 bg-white rounded-xl">
                 {/* Program Cards */}
@@ -139,24 +165,42 @@ export default function AllUniversityPrograms() {
                         />
                       </div>
                       <div className="flex-1">
-                        <p className="text-gray-700 mb-6 line-clamp-3">{p.description}</p>
+                        <p className="text-gray-700 mb-6 line-clamp-3">
+                          {p.description}
+                        </p>
 
                         <div className="grid grid-cols-2 gap-4 md:gap-6 mb-6">
                           <div>
-                            <p className="text-gray-500 text-xs uppercase font-semibold mb-1">Duration</p>
-                            <p className="font-semibold text-sm">{p.duration}</p>
+                            <p className="text-gray-500 text-xs uppercase font-semibold mb-1">
+                              Duration
+                            </p>
+                            <p className="font-semibold text-sm">
+                              {p.duration}
+                            </p>
                           </div>
                           <div>
-                            <p className="text-gray-500 text-xs uppercase font-semibold mb-1">Language</p>
-                            <p className="font-semibold text-sm">{p.language}</p>
+                            <p className="text-gray-500 text-xs uppercase font-semibold mb-1">
+                              Language
+                            </p>
+                            <p className="font-semibold text-sm">
+                              {p.language}
+                            </p>
                           </div>
                           <div>
-                            <p className="text-gray-500 text-xs uppercase font-semibold mb-1">Start Date</p>
-                            <p className="font-semibold text-sm">{p.start_date}</p>
+                            <p className="text-gray-500 text-xs uppercase font-semibold mb-1">
+                              Start Date
+                            </p>
+                            <p className="font-semibold text-sm">
+                              {p.start_date}
+                            </p>
                           </div>
                           <div>
-                            <p className="text-gray-500 text-xs uppercase font-semibold mb-1">International Tuition</p>
-                            <p className="font-semibold text-sm text-green-600">${p.international_tuition}</p>
+                            <p className="text-gray-500 text-xs uppercase font-semibold mb-1">
+                              International Tuition
+                            </p>
+                            <p className="font-semibold text-sm text-green-600">
+                              ${p.international_tuition}
+                            </p>
                           </div>
                         </div>
 

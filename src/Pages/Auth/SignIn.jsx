@@ -32,8 +32,10 @@ export default function SignIn() {
 
   const handleSocialLogin = () => {
     setLoading(true)
+    console.log("Initiating Google login...")
     handleGoogleLogin()
       .then(async (res) => {
+        console.log("ressssssss",res)
         const data = {
           email: res.user?.email,
           password: res.user?.uid, // Using uid as password for social login

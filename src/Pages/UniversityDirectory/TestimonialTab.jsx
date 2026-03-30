@@ -1,13 +1,18 @@
 import React, { useState, useRef } from "react";
 import comment from "../../assets/images/comment.png";
-import { useAddTestimonialMutation, useGetTestimonialsByUniIdQuery } from "../../Api/universityApi";
+import {
+  useAddTestimonialMutation,
+  useGetTestimonialsByUniIdQuery,
+} from "../../Api/universityApi";
 import { toast } from "react-hot-toast";
 
 export default function TestimonialTab({ data: universityData }) {
-  const [addTestimonial, { isLoading: isSubmitting }] = useAddTestimonialMutation();
-  const { data: testimonialsData, isLoading: isFetching } = useGetTestimonialsByUniIdQuery(universityData?.id, {
-    skip: !universityData?.id
-  });
+  const [addTestimonial, { isLoading: isSubmitting }] =
+    useAddTestimonialMutation();
+  const { data: testimonialsData, isLoading: isFetching } =
+    useGetTestimonialsByUniIdQuery(universityData?.id, {
+      skip: !universityData?.id,
+    });
 
   const [sortOrder, setSortOrder] = useState("newest"); // newest or oldest
 
@@ -20,8 +25,8 @@ export default function TestimonialTab({ data: universityData }) {
 
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) return path;
+    return `https://api.clasia.io${path}`;
   };
 
   function handlePhotoChange(e) {
@@ -38,12 +43,16 @@ export default function TestimonialTab({ data: universityData }) {
       return;
     }
     if (!studentTitle) {
-      toast.error("Please enter your title (e.g., Computer Science, Class of 2024).");
+      toast.error(
+        "Please enter your title (e.g., Computer Science, Class of 2024).",
+      );
       return;
     }
 
     if (!universityData?.id) {
-      toast.error("University information is missing. Please refresh and try again.");
+      toast.error(
+        "University information is missing. Please refresh and try again.",
+      );
       return;
     }
 
@@ -70,7 +79,11 @@ export default function TestimonialTab({ data: universityData }) {
       if (fileRef.current) fileRef.current.value = null;
     } catch (err) {
       console.error("Submission error:", err);
-      const errorMessage = err?.data?.non_field_errors?.[0] || err?.data?.error || err?.error || "Failed to submit testimonial.";
+      const errorMessage =
+        err?.data?.non_field_errors?.[0] ||
+        err?.data?.error ||
+        err?.error ||
+        "Failed to submit testimonial.";
       toast.error(errorMessage, {
         position: "bottom-center",
       });
@@ -85,7 +98,8 @@ export default function TestimonialTab({ data: universityData }) {
   const testimonials = testimonialsData || [];
 
   const sorted = [...testimonials].sort((a, b) => {
-    if (sortOrder === "newest") return new Date(b.created_at) - new Date(a.created_at);
+    if (sortOrder === "newest")
+      return new Date(b.created_at) - new Date(a.created_at);
     return new Date(a.created_at) - new Date(b.created_at);
   });
 
@@ -94,7 +108,9 @@ export default function TestimonialTab({ data: universityData }) {
       {/* Testimonials Section */}
       <div className="bg-white rounded-lg p-6 shadow-sm mb-4">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold mb-2 md:mb-0">Student Testimonials</h2>
+          <h2 className="text-2xl font-bold mb-2 md:mb-0">
+            Student Testimonials
+          </h2>
           <div className="flex items-center gap-3">
             <label className="text-sm text-gray-600">Sort:</label>
             <select
@@ -109,9 +125,13 @@ export default function TestimonialTab({ data: universityData }) {
         </div>
 
         {isFetching ? (
-          <div className="py-10 text-center text-gray-500">Loading testimonials...</div>
+          <div className="py-10 text-center text-gray-500">
+            Loading testimonials...
+          </div>
         ) : sorted.length === 0 ? (
-          <div className="py-10 text-center text-gray-500">No testimonials found.</div>
+          <div className="py-10 text-center text-gray-500">
+            No testimonials found.
+          </div>
         ) : (
           <div className="space-y-6">
             {sorted.map((t) => (
@@ -144,8 +164,12 @@ export default function TestimonialTab({ data: universityData }) {
                     </div>
                     <div className="mt-3 flex flex-col md:flex-row items-start md:items-center gap-3">
                       <div>
-                        <p className="font-semibold text-sm">{t.student_name}</p>
-                        <p className="text-sm text-gray-600">{t.student_title}</p>
+                        <p className="font-semibold text-sm">
+                          {t.student_name}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {t.student_title}
+                        </p>
                       </div>
                       <div className="md:ml-auto text-sm text-gray-500">
                         {new Date(t.created_at).toLocaleDateString()}

@@ -32,7 +32,8 @@ export default function UniversityDirectory() {
     search: searchQuery,
   };
 
-  const { data: universitiesData, isLoading } = useGetAllUniversitiesQuery(apiParams);
+  const { data: universitiesData, isLoading } =
+    useGetAllUniversitiesQuery(apiParams);
 
   const universities = universitiesData || [];
 
@@ -42,8 +43,8 @@ export default function UniversityDirectory() {
 
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) return path;
+    return `https://api.clasia.io${path}`;
   };
 
   return (
@@ -95,7 +96,10 @@ export default function UniversityDirectory() {
 
           {/* Desktop sidebar (hidden on small) */}
           <div className="w-68 flex-shrink-0 hidden md:block">
-            <FiltersContent filters={filters} onFilterChange={handleFilterChange} />
+            <FiltersContent
+              filters={filters}
+              onFilterChange={handleFilterChange}
+            />
           </div>
 
           {/* Mobile filter panel (overlay) */}
@@ -112,7 +116,10 @@ export default function UniversityDirectory() {
                     <X />
                   </button>
                 </div>
-                <FiltersContent filters={filters} onFilterChange={handleFilterChange} />
+                <FiltersContent
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
+                />
               </div>
             </>
           )}
@@ -120,7 +127,9 @@ export default function UniversityDirectory() {
           {/* University Grid */}
           <div className="flex-1 p-4 md:p-7 bg-[#ECF5FF]">
             <div className="mb-4">
-              <p className="text-sm text-gray-600">Showing {universities.length} universities</p>
+              <p className="text-sm text-gray-600">
+                Showing {universities.length} universities
+              </p>
             </div>
 
             {isLoading ? (
@@ -146,10 +155,17 @@ export default function UniversityDirectory() {
                     </div>
                     <div className="flex bg-[#374151] items-center gap-4 px-4 py-2">
                       <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden">
-                        {uni.logo && <img src={getFullUrl(uni?.logo)}
-                          alt={uni.univ_name} className="w-full h-full object-contain" />}
+                        {uni.logo && (
+                          <img
+                            src={getFullUrl(uni?.logo)}
+                            alt={uni.univ_name}
+                            className="w-full h-full object-contain"
+                          />
+                        )}
                       </div>
-                      <h3 className="font-semibold text-white truncate">{uni.univ_name}</h3>
+                      <h3 className="font-semibold text-white truncate">
+                        {uni.univ_name}
+                      </h3>
                     </div>
 
                     {/* Card Content */}

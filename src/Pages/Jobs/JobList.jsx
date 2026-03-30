@@ -1,6 +1,4 @@
-import {
-  GraduationCap,
-} from "lucide-react";
+import { GraduationCap } from "lucide-react";
 import { useState, useMemo } from "react";
 import { BiDollarCircle } from "react-icons/bi";
 import { GrLocation } from "react-icons/gr";
@@ -15,22 +13,25 @@ export default function JobList({ onViewDetails }) {
   const [postedWithin, setPostedWithin] = useState("Any Time");
 
   const queryParams = useMemo(() => {
-
     const params = {};
-    if (selectedCategory !== "All Categories") params.category = selectedCategory;
+    if (selectedCategory !== "All Categories")
+      params.category = selectedCategory;
     if (selectedType !== "All Types") params.job_type = selectedType;
     if (postedWithin !== "Any Time") params.posted_within = postedWithin;
     if (searchTerm) params.search = searchTerm;
     return params;
-    
   }, [selectedCategory, selectedType, postedWithin, searchTerm]);
 
-  const { data: jobsData, isLoading, error } = useGetDiscoveryJobsQuery(queryParams);
+  const {
+    data: jobsData,
+    isLoading,
+    error,
+  } = useGetDiscoveryJobsQuery(queryParams);
 
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) return path;
+    return `https://api.clasia.io${path}`;
   };
 
   const getBadgeColor = (type) => {
@@ -46,8 +47,18 @@ export default function JobList({ onViewDetails }) {
     }
   };
 
-  if (isLoading) return <div className="min-h-screen bg-base p-8 text-center text-gray-500">Loading jobs...</div>;
-  if (error) return <div className="min-h-screen bg-base p-8 text-center text-red-500">Error loading jobs.</div>;
+  if (isLoading)
+    return (
+      <div className="min-h-screen bg-base p-8 text-center text-gray-500">
+        Loading jobs...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="min-h-screen bg-base p-8 text-center text-red-500">
+        Error loading jobs.
+      </div>
+    );
 
   const jobs = jobsData || [];
 
@@ -103,8 +114,17 @@ export default function JobList({ onViewDetails }) {
                     />
                     <span>All Types</span>
                   </label>
-                  {["Full Time", "Part Time", "Internship", "Research", "PhD Positions"].map(type => (
-                    <label key={type} className="flex items-center  text-gray-700">
+                  {[
+                    "Full Time",
+                    "Part Time",
+                    "Internship",
+                    "Research",
+                    "PhD Positions",
+                  ].map((type) => (
+                    <label
+                      key={type}
+                      className="flex items-center  text-gray-700"
+                    >
                       <input
                         type="radio"
                         name="jobType"
@@ -134,8 +154,19 @@ export default function JobList({ onViewDetails }) {
                     />
                     <span>All Categories</span>
                   </label>
-                  {["Technology", "Business", "Healthcare", "Natural Sciences", "Humanities", "Education", "Legal"].map(cat => (
-                    <label key={cat} className="flex items-center  text-gray-700">
+                  {[
+                    "Technology",
+                    "Business",
+                    "Healthcare",
+                    "Natural Sciences",
+                    "Humanities",
+                    "Education",
+                    "Legal",
+                  ].map((cat) => (
+                    <label
+                      key={cat}
+                      className="flex items-center  text-gray-700"
+                    >
                       <input
                         type="radio"
                         name="category"
@@ -205,7 +236,11 @@ export default function JobList({ onViewDetails }) {
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 rounded-lg flex-shrink-0 bg-base p-1 border">
-                        <img src={getFullUrl(job.univ_logo) || logoPlaceholder} alt="logo" className="w-full h-full object-contain" />
+                        <img
+                          src={getFullUrl(job.univ_logo) || logoPlaceholder}
+                          alt="logo"
+                          className="w-full h-full object-contain"
+                        />
                       </div>
                       <div>
                         <div className="flex items-center gap-2 mb-1">
@@ -219,7 +254,7 @@ export default function JobList({ onViewDetails }) {
                     </div>
                     <span
                       className={` px-3 py-1 rounded-md text-sm font-medium ${getBadgeColor(
-                        job.job_type
+                        job.job_type,
                       )}`}
                     >
                       {job.job_type}
@@ -241,14 +276,18 @@ export default function JobList({ onViewDetails }) {
                     </span>
                   </div>
 
-                  <p className=" text-gray-700 mb-6 line-clamp-2 leading-relaxed">{job.description}</p>
+                  <p className=" text-gray-700 mb-6 line-clamp-2 leading-relaxed">
+                    {job.description}
+                  </p>
 
                   <div className="flex items-center justify-between pt-4 border-t border-gray-50">
                     <div className="flex items-center gap-4">
                       <span className="bg-base px-3 py-1 rounded-full text-sm text-gray-600 border border-gray-100">
                         {job.category}
                       </span>
-                      <span className="text-gray-500">Posted: {job.posted_date}</span>
+                      <span className="text-gray-500">
+                        Posted: {job.posted_date}
+                      </span>
                     </div>
                     <div className="flex items-center gap-4">
                       <span className="text-gray-500">

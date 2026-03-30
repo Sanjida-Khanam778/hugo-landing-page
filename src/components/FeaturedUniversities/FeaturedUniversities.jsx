@@ -22,8 +22,10 @@ export default function FeaturedUniversities() {
   const [itemsPerPage, setItemsPerPage] = useState(() => getItemsPerPage());
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+       if (path.startsWith("https") || path.startsWith("blob:")) {
+      return path;
+    }
+    return `https://api.clasia.io${path}`;
   };
 
   useEffect(() => {
@@ -37,28 +39,27 @@ export default function FeaturedUniversities() {
   // ensure currentIndex remains valid if itemsPerPage changes
   useEffect(() => {
     setCurrentIndex((prev) =>
-      Math.min(
-        prev,
-        Math.max(0, universitiesList.length - itemsPerPage)
-      )
+      Math.min(prev, Math.max(0, universitiesList.length - itemsPerPage)),
     );
   }, [itemsPerPage, universitiesList.length]);
 
   const handlePrevious = () => {
     setCurrentIndex((prev) =>
-      prev === 0 ? Math.max(0, universitiesList.length - itemsPerPage) : prev - 1
+      prev === 0
+        ? Math.max(0, universitiesList.length - itemsPerPage)
+        : prev - 1,
     );
   };
 
   const handleNext = () => {
     setCurrentIndex((prev) =>
-      prev >= universitiesList.length - itemsPerPage ? 0 : prev + 1
+      prev >= universitiesList.length - itemsPerPage ? 0 : prev + 1,
     );
   };
 
   const visibleUniversities = universitiesList.slice(
     currentIndex,
-    currentIndex + itemsPerPage
+    currentIndex + itemsPerPage,
   );
 
   return (
@@ -73,7 +74,10 @@ export default function FeaturedUniversities() {
           {/* Navigation Arrows */}
           {/* View All Button */}
           <div className="flex items-center gap-4 lg:gap-8">
-            <Link to={"/universities"} className="flex justify-center hidden md:block">
+            <Link
+              to={"/universities"}
+              className="flex justify-center hidden md:block"
+            >
               <button className="px-4 lg:px-8 py-2 md:py-3 hover:shadow-lg hover:scale-105 transition-transform border-2 border-blue text-blue font-semibold rounded-lg duration-200">
                 View All Universities
               </button>
@@ -112,8 +116,7 @@ export default function FeaturedUniversities() {
                 {/* University Image */}
                 <div className="relative w-full h-48 bg-gray-200 overflow-hidden">
                   <img
-                    src={getFullUrl(uni?.picture) || uni_default }
-
+                    src={getFullUrl(uni?.picture) || uni_default}
                     alt={uni.univ_name}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   />
@@ -130,8 +133,11 @@ export default function FeaturedUniversities() {
                         {uni.address || "Location not specified"}
                       </p>
                     </div>
-                    <img src={getFullUrl(uni.logo)}
-                      alt="" className="w-10 h-10 rounded-full object-contain ml-2 flex-shrink-0" />
+                    <img
+                      src={getFullUrl(uni.logo)}
+                      alt=""
+                      className="w-10 h-10 rounded-full object-contain ml-2 flex-shrink-0"
+                    />
                   </div>
                   {/* Programs and Rating */}
                   <div className="flex items-center justify-between">
@@ -150,11 +156,11 @@ export default function FeaturedUniversities() {
             ))
           )}
         </div>
-         <Link to={"/universities"} className="flex justify-center md:hidden">
-              <button className="px-4 md:px-8 py-1 md:py-3 hover:shadow-lg hover:scale-105 transition-transform border-2 border-blue text-blue font-semibold rounded-lg duration-200">
-                View All Universities
-              </button>
-            </Link>
+        <Link to={"/universities"} className="flex justify-center md:hidden">
+          <button className="px-4 md:px-8 py-1 md:py-3 hover:shadow-lg hover:scale-105 transition-transform border-2 border-blue text-blue font-semibold rounded-lg duration-200">
+            View All Universities
+          </button>
+        </Link>
       </div>
     </section>
   );

@@ -11,11 +11,12 @@ export default function UserDashboard() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) return path;
+    return `https://api.clasia.io${path}`;
   };
 
-  if (isLoading) return <div className="p-8 text-center">Loading dashboard...</div>;
+  if (isLoading)
+    return <div className="p-8 text-center">Loading dashboard...</div>;
 
   return (
     <div className="min-h-screen bg-base p-8 xl:pt-24">
@@ -30,16 +31,26 @@ export default function UserDashboard() {
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 bg-[#BFDBFE] rounded-full flex items-center justify-center text-blue font-semibold overflow-hidden border-2 border-white shadow-sm">
                   {profile?.image ? (
-                    <img src={getFullUrl(profile.image)} alt={profile.full_name} className="w-full h-full object-cover" />
+                    <img
+                      src={getFullUrl(profile.image)}
+                      alt={profile.full_name}
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     <span className="text-xl font-bold">
-                      {profile?.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || "JD"}
+                      {profile?.full_name
+                        ?.split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase() || "JD"}
                     </span>
                   )}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="font-semibold text-lg">{profile?.full_name}</h2>
+                    <h2 className="font-semibold text-lg">
+                      {profile?.full_name}
+                    </h2>
                     <button
                       onClick={() => setIsEditModalOpen(true)}
                       className="p-1 hover:bg-gray-100 rounded-full transition-colors text-blue"
@@ -51,9 +62,7 @@ export default function UserDashboard() {
                   <p className="text-gray-600 text-sm">
                     {profile?.role || "Student"}
                   </p>
-                  <p className="text-gray-400 text-xs mt-1">
-                    {profile?.email}
-                  </p>
+                  <p className="text-gray-400 text-xs mt-1">{profile?.email}</p>
                 </div>
               </div>
               <div className="flex gap-3">
@@ -72,15 +81,21 @@ export default function UserDashboard() {
             <div className="grid grid-cols-3 gap-4">
               <div className="bg-base rounded-lg  p-4">
                 <p className="text-gray-600 text-sm mb-1"> Applied Program</p>
-                <p className="text-blue  text-2xl font-bold">{profile?.applied_program_count || 0}</p>
+                <p className="text-blue  text-2xl font-bold">
+                  {profile?.applied_program_count || 0}
+                </p>
               </div>
               <div className="bg-base rounded-lg  p-4">
                 <p className="text-gray-600 text-sm mb-1"> Applied Job</p>
-                <p className="text-blue  text-2xl font-bold">{profile?.applied_job_count || 0}</p>
+                <p className="text-blue  text-2xl font-bold">
+                  {profile?.applied_job_count || 0}
+                </p>
               </div>
               <div className="bg-base rounded-lg  p-4">
                 <p className="text-gray-600 text-sm mb-1">Event Registered</p>
-                <p className="text-blue  text-2xl font-bold">{profile?.event_registered_count || 0}</p>
+                <p className="text-blue  text-2xl font-bold">
+                  {profile?.event_registered_count || 0}
+                </p>
               </div>
             </div>
           </div>
@@ -93,33 +108,41 @@ export default function UserDashboard() {
             <div className="space-y-4 divide-y-2 divide-[#CCCCCC]">
               {profile?.recent_applications?.length > 0 ? (
                 profile.recent_applications.map((app, index) => (
-                  <div key={app.id} className={`flex justify-between items-start ${index === 0 ? '' : 'pt-4'}`}>
+                  <div
+                    key={app.id}
+                    className={`flex justify-between items-start ${index === 0 ? "" : "pt-4"}`}
+                  >
                     <div>
                       <h4 className="text-lg">{app?.desired_program}</h4>
                       <h4 className="font-semibold">{app?.university_name}</h4>
                       <p className="text-gray-600 text-sm">
                         {new Date(app.created_at).toLocaleDateString("en-US", {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
                         })}
                       </p>
                     </div>
-                    <span className={`text-xs px-3 py-1 rounded font-medium ${app.status?.toLowerCase() === 'accepted' ? 'bg-green-100 text-green-700' :
-                      app.status?.toLowerCase() === 'rejected' ? 'bg-red-100 text-red-700' :
-                        'bg-yellow-100 text-yellow-700'
-                      }`}>
+                    <span
+                      className={`text-xs px-3 py-1 rounded font-medium ${
+                        app.status?.toLowerCase() === "accepted"
+                          ? "bg-green-100 text-green-700"
+                          : app.status?.toLowerCase() === "rejected"
+                            ? "bg-red-100 text-red-700"
+                            : "bg-yellow-100 text-yellow-700"
+                      }`}
+                    >
                       {app.status}
                     </span>
                   </div>
                 ))
               ) : (
-                <div className="py-4 text-center text-gray-500">No recent applications found.</div>
+                <div className="py-4 text-center text-gray-500">
+                  No recent applications found.
+                </div>
               )}
             </div>
           </div>
-
-
         </div>
       </div>
       {isEditModalOpen && (

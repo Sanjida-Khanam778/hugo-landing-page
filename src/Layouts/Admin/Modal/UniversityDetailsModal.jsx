@@ -14,8 +14,8 @@ export default function UniversityDetailsModal({
 
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) return path;
+    return `https://api.clasia.io${path}`;
   };
 
   return (
@@ -33,16 +33,19 @@ export default function UniversityDetailsModal({
               <h2 className="text-xl font-bold text-gray-900">
                 {university.univ_name}
               </h2>
-              <span className="text-grey">{university.location || "No address provided"}</span>
+              <span className="text-grey">
+                {university.location || "No address provided"}
+              </span>
             </div>
           </div>
           <span
-            className={`inline-block px-3 py-1 rounded-full font-medium ${university.status?.toLowerCase() === "approved"
-              ? "bg-[#DCFCE7] text-[#166534]"
-              : university.status?.toLowerCase() === "rejected"
-                ? "bg-[#FEE2E2] text-[#991B1B]"
-                : "bg-[#FEF9C3] text-[#854D0E]"
-              }`}
+            className={`inline-block px-3 py-1 rounded-full font-medium ${
+              university.status?.toLowerCase() === "approved"
+                ? "bg-[#DCFCE7] text-[#166534]"
+                : university.status?.toLowerCase() === "rejected"
+                  ? "bg-[#FEE2E2] text-[#991B1B]"
+                  : "bg-[#FEF9C3] text-[#854D0E]"
+            }`}
           >
             {university.status?.charAt(0).toUpperCase() +
               university.status?.slice(1)}
@@ -68,7 +71,9 @@ export default function UniversityDetailsModal({
             </div>
             <div>
               <p className=" text-gray-500 font-medium">Profile Status</p>
-              <p className="text-gray-900">{university.is_profile_complete ? "Complete" : "Incomplete"}</p>
+              <p className="text-gray-900">
+                {university.is_profile_complete ? "Complete" : "Incomplete"}
+              </p>
             </div>
           </div>
         </div>

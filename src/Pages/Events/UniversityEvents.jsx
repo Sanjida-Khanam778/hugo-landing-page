@@ -2,15 +2,13 @@ import { useState } from "react";
 import speakerImg from "../../assets/images/speaker.png";
 import eventPlaceholder from "../../assets/icons/event.png";
 import uni_logo_placeholder from "../../assets/icons/uni_logo.png";
-import { useGetDiscoveryEventsQuery, useRegisterForEventMutation } from "../../Api/universityApi";
+import {
+  useGetDiscoveryEventsQuery,
+  useRegisterForEventMutation,
+} from "../../Api/universityApi";
 import { toast } from "react-hot-toast";
 
-import {
-  MapPin,
-  Calendar,
-  Users,
-  Clock,
-} from "lucide-react";
+import { MapPin, Calendar, Users, Clock } from "lucide-react";
 import background from "../../assets/images/uniBanner.png";
 import { useMemo } from "react";
 
@@ -31,12 +29,16 @@ export default function UniversityEvents() {
     return params;
   }, [eventFormat, eventType, eventDate]);
 
-  const { data: eventsData, isLoading, error } = useGetDiscoveryEventsQuery(queryParams);
+  const {
+    data: eventsData,
+    isLoading,
+    error,
+  } = useGetDiscoveryEventsQuery(queryParams);
   console.log(eventsData);
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) return path;
+    return `https://api.clasia.io${path}`;
   };
 
   const isPastEvent = (eventDate) => {
@@ -52,7 +54,8 @@ export default function UniversityEvents() {
     setView("detail");
   };
 
-  const [registerForEvent, { isLoading: isRegistering }] = useRegisterForEventMutation();
+  const [registerForEvent, { isLoading: isRegistering }] =
+    useRegisterForEventMutation();
 
   const handleRegister = async (eventId) => {
     try {
@@ -62,7 +65,10 @@ export default function UniversityEvents() {
       });
     } catch (err) {
       console.error("Registration error:", err);
-      const msg = err?.data?.message || err?.data?.error || "Failed to register for event.";
+      const msg =
+        err?.data?.message ||
+        err?.data?.error ||
+        "Failed to register for event.";
       toast.error(msg, {
         position: "bottom-center",
       });
@@ -74,8 +80,18 @@ export default function UniversityEvents() {
     setSelectedEvent(null);
   };
 
-  if (isLoading) return <div className="min-h-screen bg-base p-8 text-center text-gray-500">Loading events...</div>;
-  if (error) return <div className="min-h-screen bg-base p-8 text-center text-red-500">Error loading events.</div>;
+  if (isLoading)
+    return (
+      <div className="min-h-screen bg-base p-8 text-center text-gray-500">
+        Loading events...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="min-h-screen bg-base p-8 text-center text-red-500">
+        Error loading events.
+      </div>
+    );
 
   const events = eventsData || [];
 
@@ -84,7 +100,9 @@ export default function UniversityEvents() {
       <div className="min-h-screen bg-base">
         {/* Header */}
         <div
-          style={{ backgroundImage: `url(${getFullUrl(selectedEvent.image) || background})` }}
+          style={{
+            backgroundImage: `url(${getFullUrl(selectedEvent.image) || background})`,
+          }}
           className="bg-cover bg-no-repeat h-[50vh] text-white py-12 px-8 relative overflow-hidden flex items-center justify-center"
         >
           <div className="absolute inset-0 bg-black/40" />
@@ -97,7 +115,13 @@ export default function UniversityEvents() {
             </button>
             <div className="flex items-center gap-4">
               <div className="w-20 h-20 bg-white rounded-full flex-shrink-0 flex items-center justify-center p-2">
-                <img src={getFullUrl(selectedEvent.univ_logo) || uni_logo_placeholder} alt="uni logo" className="max-h-full" />
+                <img
+                  src={
+                    getFullUrl(selectedEvent.univ_logo) || uni_logo_placeholder
+                  }
+                  alt="uni logo"
+                  className="max-h-full"
+                />
               </div>
               <div>
                 <h1 className="text-3xl xl:text-5xl  mb-2">
@@ -129,21 +153,27 @@ export default function UniversityEvents() {
                     <Calendar className="text-blue mt-1" size={20} />
                     <div>
                       <p className=" text-grey text-xs">Date</p>
-                      <p className=" font-medium text-sm">{selectedEvent.date}</p>
+                      <p className=" font-medium text-sm">
+                        {selectedEvent.date}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 bg-[#EFF6FF] p-4 rounded-lg">
                     <Clock className="text-blue mt-1" size={20} />
                     <div>
                       <p className=" text-grey text-xs">Time</p>
-                      <p className=" font-medium text-sm">{selectedEvent.time}</p>
+                      <p className=" font-medium text-sm">
+                        {selectedEvent.time}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3 bg-[#EFF6FF] p-4 rounded-lg">
                     <Users className="text-blue mt-1" size={20} />
                     <div>
                       <p className=" text-grey text-xs">Category</p>
-                      <p className=" font-medium text-sm">{selectedEvent.category || "General Event"}</p>
+                      <p className=" font-medium text-sm">
+                        {selectedEvent.category || "General Event"}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -161,7 +191,6 @@ export default function UniversityEvents() {
                         </p>
                         <div className="flex gap-4 border-l-[3px] border-sky ml-2">
                           <div className="pl-6 pb-2">
-
                             <p className=" text-[#111827] font-medium text-lg">
                               {item.task_title}
                             </p>
@@ -179,9 +208,7 @@ export default function UniversityEvents() {
               {/* Additional Information */}
               {selectedEvent.additional_info && (
                 <div className="bg-white rounded-lg p-6 shadow-sm">
-                  <h2 className="text-xl  mb-4">
-                    Additional Information
-                  </h2>
+                  <h2 className="text-xl  mb-4">Additional Information</h2>
                   <p className=" text-gray-700 leading-relaxed italic">
                     {selectedEvent.additional_info}
                   </p>
@@ -195,7 +222,9 @@ export default function UniversityEvents() {
               <div className="bg-white rounded-lg p-6 shadow-sm text-center">
                 {!isPastEvent(selectedEvent.date) ? (
                   <>
-                    <h3 className=" mb-4 tracking-widest text-gray-500 text-sm uppercase">Status</h3>
+                    <h3 className=" mb-4 tracking-widest text-gray-500 text-sm uppercase">
+                      Status
+                    </h3>
                     <div className="inline-block px-4 py-2 bg-blue/10 text-blue rounded-full mb-4">
                       {selectedEvent.status}
                     </div>
@@ -203,7 +232,9 @@ export default function UniversityEvents() {
                       {selectedEvent.registration_count} Students Registered
                     </p>
                     <button
-                      disabled={selectedEvent.status === "Cancelled" || isRegistering}
+                      disabled={
+                        selectedEvent.status === "Cancelled" || isRegistering
+                      }
                       onClick={() => handleRegister(selectedEvent.id)}
                       className="w-full bg-blue text-white py-3 rounded-lg shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -212,13 +243,16 @@ export default function UniversityEvents() {
                   </>
                 ) : (
                   <div className="text-center">
-                    <h3 className="text-lg font-semibold mb-6 text-left">Event Registration</h3>
+                    <h3 className="text-lg font-semibold mb-6 text-left">
+                      Event Registration
+                    </h3>
                     <div className="w-16 h-16 bg-[#F3F4F6] rounded-full flex items-center justify-center mx-auto mb-4">
                       <Calendar size={24} className="text-[#1F2937]" />
                     </div>
                     <p className="font-medium text-lg mb-2">Event Ended</p>
                     <p className="text-gray-600 text-sm mb-6">
-                      This event has already taken place. Check out our upcoming events.
+                      This event has already taken place. Check out our upcoming
+                      events.
                     </p>
                     <button
                       onClick={handleBackToList}
@@ -235,14 +269,22 @@ export default function UniversityEvents() {
                 <h3 className=" mb-4">About the Host</h3>
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 flex-shrink-0 bg-base rounded-md p-1 border">
-                    <img src={getFullUrl(selectedEvent.univ_logo) || uni_logo_placeholder} className="h-full w-full object-contain" alt="" />
+                    <img
+                      src={
+                        getFullUrl(selectedEvent.univ_logo) ||
+                        uni_logo_placeholder
+                      }
+                      className="h-full w-full object-contain"
+                      alt=""
+                    />
                   </div>
                   <div>
                     <p className="">{selectedEvent.univ_name}</p>
                   </div>
                 </div>
                 <p className=" text-gray-700 text-sm leading-relaxed mb-6">
-                  Learn more about programs, admissions, and life as a student at {selectedEvent.univ_name}.
+                  Learn more about programs, admissions, and life as a student
+                  at {selectedEvent.univ_name}.
                 </p>
                 <button className="text-blue  bg-base w-full py-3 rounded-lg hover:bg-gray-100 transition-colors">
                   Visit University Profile
@@ -258,15 +300,12 @@ export default function UniversityEvents() {
   return (
     <div className="min-h-screen bg-base">
       {/* Header */}
-      <div
-        className="bg-primary h-[50vh] text-white py-12 px-8 relative overflow-hidden flex items-center justify-center font-inter"
-      >
+      <div className="bg-primary h-[50vh] text-white py-12 px-8 relative overflow-hidden flex items-center justify-center font-inter">
         <div className="w-11/12 mx-auto relative z-10 px-4 sm:px-6 lg:px-8 text-center sm:text-left">
-          <h1 className="text-4xl xl:text-6xl  mb-4">
-            University Events
-          </h1>
+          <h1 className="text-4xl xl:text-6xl  mb-4">University Events</h1>
           <p className="text-sky xl:text-xl max-w-2xl font-light">
-            Stay updated with the latest webinars, open days, and workshops from top universities around the globe.
+            Stay updated with the latest webinars, open days, and workshops from
+            top universities around the globe.
           </p>
         </div>
       </div>
@@ -289,30 +328,54 @@ export default function UniversityEvents() {
                     { id: "In-Person", label: "In-Person" },
                     { id: "Online", label: "Online" },
                   ].map((fm) => (
-                    <label key={fm.id} className="flex items-center cursor-pointer group">
+                    <label
+                      key={fm.id}
+                      className="flex items-center cursor-pointer group"
+                    >
                       <input
                         type="radio"
                         name="eventFormat"
                         className="w-4 h-4 text-blue border-gray-300 focus:ring-blue"
-                        checked={(eventFormat === "all" && fm.id === "all") || eventFormat === fm.id}
+                        checked={
+                          (eventFormat === "all" && fm.id === "all") ||
+                          eventFormat === fm.id
+                        }
                         onChange={() => setEventFormat(fm.id)}
                       />
-                      <span className="ml-2 text-sm text-gray-600 group-hover:text-blue transition-colors">{fm.label}</span>
+                      <span className="ml-2 text-sm text-gray-600 group-hover:text-blue transition-colors">
+                        {fm.label}
+                      </span>
                     </label>
                   ))}
                 </div>
               </div>
 
               <div className="mb-6">
-                <h4 className="  mb-3 text-gray-900 text-sm tracking-wider">Event Type</h4>
+                <h4 className="  mb-3 text-gray-900 text-sm tracking-wider">
+                  Event Type
+                </h4>
                 <div className="space-y-2">
-                  {["all", "Open Day", "Webinar", "Info Session", "Workshop", "Conference", "Bootcamp"].map((type) => (
-                    <label key={type} className="flex items-center cursor-pointer group">
+                  {[
+                    "all",
+                    "Open Day",
+                    "Webinar",
+                    "Info Session",
+                    "Workshop",
+                    "Conference",
+                    "Bootcamp",
+                  ].map((type) => (
+                    <label
+                      key={type}
+                      className="flex items-center cursor-pointer group"
+                    >
                       <input
                         type="radio"
                         name="eventType"
                         className="w-4 h-4 text-blue border-gray-300 focus:ring-blue"
-                        checked={(eventType === "all" && type === "all") || eventType === type}
+                        checked={
+                          (eventType === "all" && type === "all") ||
+                          eventType === type
+                        }
                         onChange={() => setEventType(type)}
                       />
                       <span className="ml-2 text-sm text-gray-600 group-hover:text-blue transition-colors">
@@ -324,7 +387,9 @@ export default function UniversityEvents() {
               </div>
 
               <div>
-                <h4 className="  mb-3 text-gray-900 text-sm tracking-wider">Date</h4>
+                <h4 className="  mb-3 text-gray-900 text-sm tracking-wider">
+                  Date
+                </h4>
                 <input
                   type="date"
                   value={eventDate}
@@ -351,8 +416,9 @@ export default function UniversityEvents() {
                 events.map((event, idx) => (
                   <div
                     key={event.id}
-                    className={`${idx % 2 === 0 ? "bg-[#EEEAE6]" : "bg-[#DFF0EC]"
-                      } rounded-2xl overflow-hidden flex flex-col md:flex-row hover:shadow-xl transition-all group`}
+                    className={`${
+                      idx % 2 === 0 ? "bg-[#EEEAE6]" : "bg-[#DFF0EC]"
+                    } rounded-2xl overflow-hidden flex flex-col md:flex-row hover:shadow-xl transition-all group`}
                   >
                     {/* Image */}
                     <div className="md:w-72 h-48 md:h-auto flex-shrink-0 relative overflow-hidden">
@@ -370,7 +436,14 @@ export default function UniversityEvents() {
                           <div>
                             <div className="flex items-center gap-2 mb-2">
                               <div className="w-10 h-10 bg-white rounded-full p-0.5 border">
-                                <img src={getFullUrl(event.univ_logo) || uni_logo_placeholder} alt="uni logo" className="w-full h-full object-contain" />
+                                <img
+                                  src={
+                                    getFullUrl(event.univ_logo) ||
+                                    uni_logo_placeholder
+                                  }
+                                  alt="uni logo"
+                                  className="w-full h-full object-contain"
+                                />
                               </div>
                               <span className="text-gray-500 tracking-wide">
                                 {event.univ_name}
@@ -382,12 +455,17 @@ export default function UniversityEvents() {
                           </div>
                           {event.event_type && (
                             <span
-                              className={` px-3 py-1 rounded-full text-sm tracking-widest ${event.event_type === "In-Person" || event.event_type === "Person"
-                                ? "bg-sky text-blue"
-                                : "bg-green text-white"
-                                }`}
+                              className={` px-3 py-1 rounded-full text-sm tracking-widest ${
+                                event.event_type === "In-Person" ||
+                                event.event_type === "Person"
+                                  ? "bg-sky text-blue"
+                                  : "bg-green text-white"
+                              }`}
                             >
-                              {event.event_type === "Person" || event.event_type === "In-Person" ? "In-Person" : "Online"}
+                              {event.event_type === "Person" ||
+                              event.event_type === "In-Person"
+                                ? "In-Person"
+                                : "Online"}
                             </span>
                           )}
                         </div>
@@ -407,7 +485,9 @@ export default function UniversityEvents() {
                           {event.address}
                         </div>
 
-                        <p className=" text-gray-600 text-sm line-clamp-2 leading-relaxed font-inter">{event.description}</p>
+                        <p className=" text-gray-600 text-sm line-clamp-2 leading-relaxed font-inter">
+                          {event.description}
+                        </p>
                       </div>
 
                       <div className="flex items-center justify-between mt-6 pt-6 border-t border-black/5">

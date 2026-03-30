@@ -3,7 +3,10 @@
 import { useState } from "react";
 import UniversityDetailsModal from "../Modal/UniversityDetailsModal";
 import uni_logo from "../../../assets/icons/uni_logo.png";
-import { useGetOnboardingListQuery, useManageOnboardingMutation } from "../../../Api/universityApi";
+import {
+  useGetOnboardingListQuery,
+  useManageOnboardingMutation,
+} from "../../../Api/universityApi";
 import toast from "react-hot-toast";
 
 const getStatusBadgeColor = (status) => {
@@ -20,27 +23,43 @@ const getStatusBadgeColor = (status) => {
 };
 
 export default function Universities() {
-  const { data: universitiesData = [], isLoading, error } = useGetOnboardingListQuery();
-  const [manageOnboarding, { isLoading: isManaging }] = useManageOnboardingMutation();
+  const {
+    data: universitiesData = [],
+    isLoading,
+    error,
+  } = useGetOnboardingListQuery();
+  const [manageOnboarding, { isLoading: isManaging }] =
+    useManageOnboardingMutation();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUniversity, setSelectedUniversity] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  if (isLoading) return <div className="p-8 text-center text-gray-500">Loading onboardings...</div>;
-  if (error) return <div className="p-8 text-center text-red-500">Error loading onboarding list.</div>;
+  if (isLoading)
+    return (
+      <div className="p-8 text-center text-gray-500">
+        Loading onboardings...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="p-8 text-center text-red-500">
+        Error loading onboarding list.
+      </div>
+    );
 
-  const filteredUniversities = universitiesData.filter((uni) =>
-    uni.univ_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    uni.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredUniversities = universitiesData.filter(
+    (uni) =>
+      uni.univ_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      uni.email?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const totalPages = Math.ceil(filteredUniversities.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedUniversities = filteredUniversities.slice(
     startIndex,
-    startIndex + itemsPerPage
+    startIndex + itemsPerPage,
   );
 
   const handleViewUniversity = (university) => {
@@ -51,17 +70,21 @@ export default function Universities() {
   const handleAction = async (id, action) => {
     try {
       const res = await manageOnboarding({ id, action }).unwrap();
-      toast.success(res.message || `University ${action}ed successfully`, { position: "bottom-center" });
+      toast.success(res.message || `University ${action}ed successfully`, {
+        position: "bottom-center",
+      });
       setShowModal(false);
     } catch (err) {
-      toast.error(err?.data?.message || `Failed to ${action} university`, { position: "bottom-center" });
+      toast.error(err?.data?.message || `Failed to ${action} university`, {
+        position: "bottom-center",
+      });
     }
   };
 
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) return path;
+    return `https://api.clasia.io${path}`;
   };
 
   return (
@@ -100,7 +123,9 @@ export default function Universities() {
               <div className="flex items-center gap-4 flex-1">
                 <div className="w-12 h-12 rounded-lg bg-gray-50 flex items-center justify-center overflow-hidden border border-gray-100">
                   <img
-                    src={university?.logo ? getFullUrl(university.logo) : uni_logo}
+                    src={
+                      university?.logo ? getFullUrl(university.logo) : uni_logo
+                    }
                     alt={university.univ_name}
                     className="w-full h-full object-contain p-1"
                   />
@@ -109,14 +134,16 @@ export default function Universities() {
                   <h3 className="text-lg font-semibold text-gray-900">
                     {university.univ_name}
                   </h3>
-                  <p className="text-gray-500 text-sm">{university.location || "No address provided"}</p>
+                  <p className="text-gray-500 text-sm">
+                    {university.location || "No address provided"}
+                  </p>
                 </div>
               </div>
 
               <div className="flex items-center flex-wrap gap-4 w-full md:w-auto justify-between md:justify-end">
                 <span
                   className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${getStatusBadgeColor(
-                    university.status
+                    university.status,
                   )}`}
                 >
                   {university.status}
@@ -135,7 +162,9 @@ export default function Universities() {
           ))
         ) : (
           <div className="bg-white p-12 text-center rounded-lg border border-dashed border-gray-300">
-            <p className="text-gray-500">No universities found matching your search.</p>
+            <p className="text-gray-500">
+              No universities found matching your search.
+            </p>
           </div>
         )}
       </div>
@@ -155,17 +184,20 @@ export default function Universities() {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`w-10 h-10 flex items-center justify-center rounded-lg border transition-all ${currentPage === page
+                className={`w-10 h-10 flex items-center justify-center rounded-lg border transition-all ${
+                  currentPage === page
                     ? "bg-blue border-blue text-white shadow-md shadow-blue/20"
                     : "border-gray-300 hover:border-blue hover:text-blue"
-                  }`}
+                }`}
               >
                 {page}
               </button>
             ))}
           </div>
           <button
-            onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+            onClick={() =>
+              setCurrentPage(Math.min(totalPages, currentPage + 1))
+            }
             disabled={currentPage === totalPages}
             className="p-2 border border-gray-300 rounded-lg disabled:opacity-50 hover:bg-gray-50 transition-colors"
           >

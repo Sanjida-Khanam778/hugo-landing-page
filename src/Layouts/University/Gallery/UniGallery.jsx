@@ -18,14 +18,19 @@ import { useSelector } from "react-redux";
 import {
   useGetUniversityMediaQuery,
   useUploadUniversityMediaMutation,
-  useDeleteUniversityMediaMutation
+  useDeleteUniversityMediaMutation,
 } from "../../../Api/universityApi";
 import toast from "react-hot-toast";
 
 export default function UniGallery() {
-  const { data: mediaResponse, isLoading, error } = useGetUniversityMediaQuery();
+  const {
+    data: mediaResponse,
+    isLoading,
+    error,
+  } = useGetUniversityMediaQuery();
   const [uploadMedia] = useUploadUniversityMediaMutation();
-  const [deleteMedia, { isLoading: isDeleting }] = useDeleteUniversityMediaMutation();
+  const [deleteMedia, { isLoading: isDeleting }] =
+    useDeleteUniversityMediaMutation();
 
   const [activeTab, setActiveTab] = useState("all");
   const [showUploadModal, setShowUploadModal] = useState(false);
@@ -36,7 +41,7 @@ export default function UniGallery() {
   const getFullUrl = (path) => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    return `https://api.clasia.io${path}`;
   };
 
   const getFilteredMedia = () => {
@@ -54,7 +59,7 @@ export default function UniGallery() {
     // Apply search filter
     if (searchTerm) {
       files = files.filter((m) =>
-        m.title.toLowerCase().includes(searchTerm.toLowerCase())
+        m.title.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
@@ -104,8 +109,16 @@ export default function UniGallery() {
     }
   };
 
-  if (isLoading) return <div className="p-8 text-center text-gray-500">Loading gallery...</div>;
-  if (error) return <div className="p-8 text-center text-red-500">Error loading media gallery.</div>;
+  if (isLoading)
+    return (
+      <div className="p-8 text-center text-gray-500">Loading gallery...</div>
+    );
+  if (error)
+    return (
+      <div className="p-8 text-center text-red-500">
+        Error loading media gallery.
+      </div>
+    );
 
   return (
     <div className="p-6">
@@ -136,16 +149,19 @@ export default function UniGallery() {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 transition-all whitespace-nowrap font-medium flex items-center gap-2 rounded-lg ${activeTab === tab
-              ? "text-blue bg-blue/10 shadow-sm"
-              : "text-gray-600 hover:bg-gray-100"
-              }`}
+            className={`px-4 py-2 transition-all whitespace-nowrap font-medium flex items-center gap-2 rounded-lg ${
+              activeTab === tab
+                ? "text-blue bg-blue/10 shadow-sm"
+                : "text-gray-600 hover:bg-gray-100"
+            }`}
           >
             {tab === "all" && <Folder className="w-4 h-4" />}
             {tab === "images" && <Image className="w-4 h-4" />}
             {tab === "videos" && <Video className="w-4 h-4" />}
             {tab === "documents" && <FileText className="w-4 h-4" />}
-            <span className="capitalize">{tab === 'all' ? 'All Media' : tab}</span>
+            <span className="capitalize">
+              {tab === "all" ? "All Media" : tab}
+            </span>
           </button>
         ))}
       </div>
@@ -155,7 +171,9 @@ export default function UniGallery() {
         {filteredMedia.length === 0 ? (
           <div className="col-span-full py-20 text-center bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
             <Layers className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No media files found in this category.</p>
+            <p className="text-gray-500">
+              No media files found in this category.
+            </p>
           </div>
         ) : (
           filteredMedia.map((media) => (
@@ -180,16 +198,14 @@ export default function UniGallery() {
                   />
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 group-hover:bg-gray-100 transition-colors">
-                    {media.file?.toLowerCase().endsWith('.pdf') ? (
+                    {media.file?.toLowerCase().endsWith(".pdf") ? (
                       <iframe
                         src={`${getFullUrl(media.file)}#toolbar=0&navpanes=0&scrollbar=0`}
                         className="w-full h-full border-none pointer-events-none opacity-60 scale-90 group-hover:scale-100 transition-transform"
                         title={media.title}
                       />
                     ) : (
-                      <div className="text-5xl text-blue-300">
-                        📄
-                      </div>
+                      <div className="text-5xl text-blue-300">📄</div>
                     )}
                   </div>
                 )}
@@ -216,9 +232,14 @@ export default function UniGallery() {
               {/* File Info */}
               <div className="p-4 border-t">
                 <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 mt-1">{getIconForType(media.media_type)}</span>
+                  <span className="flex-shrink-0 mt-1">
+                    {getIconForType(media.media_type)}
+                  </span>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-gray-900 truncate" title={media.title}>
+                    <p
+                      className="font-bold text-gray-900 truncate"
+                      title={media.title}
+                    >
                       {media.title}
                     </p>
                     <p className="text-[10px] text-gray-400 mt-1 font-medium flex items-center gap-1">

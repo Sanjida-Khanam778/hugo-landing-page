@@ -5,13 +5,18 @@ import TestimonialDetailsModal from "../Modal/TestimonialDetailsModal";
 import { ArrowLeft, CircleCheckBig, CirclePlus, Star } from "lucide-react";
 import {
   useGetUniversityTestimonialsQuery,
-  useUpdateTestimonialStatusMutation
+  useUpdateTestimonialStatusMutation,
 } from "../../../Api/universityApi";
 import toast from "react-hot-toast";
 
 export default function Testimonials() {
-  const { data: testimonialsData, isLoading, error } = useGetUniversityTestimonialsQuery();
-  const [updateStatus, { isLoading: isUpdating }] = useUpdateTestimonialStatusMutation();
+  const {
+    data: testimonialsData,
+    isLoading,
+    error,
+  } = useGetUniversityTestimonialsQuery();
+  const [updateStatus, { isLoading: isUpdating }] =
+    useUpdateTestimonialStatusMutation();
 
   const [viewingTestimonial, setViewingTestimonial] = useState(null);
   const [showAllTestimonials, setShowAllTestimonials] = useState(false);
@@ -19,7 +24,7 @@ export default function Testimonials() {
   const getFullUrl = (path) => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    return `https://api.clasia.io${path}`;
   };
 
   const formatDate = (dateString) => {
@@ -27,7 +32,7 @@ export default function Testimonials() {
     return new Date(dateString).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
-      year: "numeric"
+      year: "numeric",
     });
   };
 
@@ -43,26 +48,49 @@ export default function Testimonials() {
   const handleStatusUpdate = async (id, action) => {
     try {
       await updateStatus({ id, action }).unwrap();
-      toast.success(`Testimonial ${action === "approve" ? "approved" : "rejected"} successfully!`);
+      toast.success(
+        `Testimonial ${action === "approve" ? "approved" : "rejected"} successfully!`,
+      );
     } catch (err) {
       console.error(err);
       toast.error(err?.data?.error || `Failed to ${action} testimonial`);
     }
   };
 
-  if (isLoading) return <div className="p-8 text-center text-gray-500">Loading testimonials...</div>;
-  if (error) return <div className="p-8 text-center text-red-500">Error loading testimonials.</div>;
+  if (isLoading)
+    return (
+      <div className="p-8 text-center text-gray-500">
+        Loading testimonials...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="p-8 text-center text-red-500">
+        Error loading testimonials.
+      </div>
+    );
 
   const allTestimonials = (testimonialsData || []).map(mapTestimonial);
-  const pendingTestimonials = allTestimonials.filter(t => t.status === "pending");
-  const processedTestimonials = allTestimonials.filter(t => t.status !== "pending");
+  const pendingTestimonials = allTestimonials.filter(
+    (t) => t.status === "pending",
+  );
+  const processedTestimonials = allTestimonials.filter(
+    (t) => t.status !== "pending",
+  );
 
   const renderStars = (rating) => {
-    return <div className="flex gap-1">
-      {[...Array(5)].map((_, i) => (
-        <Star key={i} size={14} fill={i < rating ? "#EAB308" : "none"} color={i < rating ? "#EAB308" : "#9CA3AF"} />
-      ))}
-    </div>;
+    return (
+      <div className="flex gap-1">
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            size={14}
+            fill={i < rating ? "#EAB308" : "none"}
+            color={i < rating ? "#EAB308" : "#9CA3AF"}
+          />
+        ))}
+      </div>
+    );
   };
 
   const getStatusColor = (status) => {
@@ -103,28 +131,32 @@ export default function Testimonials() {
               <div className="flex justify-between items-start mb-3">
                 <div className="flex gap-4 items-center">
                   {testimonial.photo && (
-                    <img src={getFullUrl(testimonial.photo)} alt={testimonial.author} className="w-12 h-12 rounded-full object-cover border" />
+                    <img
+                      src={getFullUrl(testimonial.photo)}
+                      alt={testimonial.author}
+                      className="w-12 h-12 rounded-full object-cover border"
+                    />
                   )}
                   <div>
                     <h3 className="font-bold text-gray-900">
                       {testimonial.author}
                     </h3>
                     <p className="text-gray-600">{testimonial.date}</p>
-                    <p className="text-gray-600 font-medium">{testimonial.program}</p>
+                    <p className="text-gray-600 font-medium">
+                      {testimonial.program}
+                    </p>
                   </div>
                 </div>
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                    testimonial.status
+                    testimonial.status,
                   )}`}
                 >
                   {getStatusText(testimonial.status)}
                 </span>
               </div>
 
-              <div className="mb-2">
-                {renderStars(testimonial.rating)}
-              </div>
+              <div className="mb-2">{renderStars(testimonial.rating)}</div>
 
               <p className="text-gray-600 mb-4 line-clamp-2">
                 {testimonial.content}
@@ -169,7 +201,10 @@ export default function Testimonials() {
       {/* Pending Review Section */}
       <div className="mb-12 border p-6 bg-white rounded-xl shadow-sm">
         <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-          Pending Review <span className="bg-blue/10 text-blue px-2 py-0.5 rounded text-sm">{pendingTestimonials.length}</span>
+          Pending Review{" "}
+          <span className="bg-blue/10 text-blue px-2 py-0.5 rounded text-sm">
+            {pendingTestimonials.length}
+          </span>
         </h2>
 
         <div className="space-y-4">
@@ -182,7 +217,11 @@ export default function Testimonials() {
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex gap-4">
                     {testimonial.photo && (
-                      <img src={getFullUrl(testimonial.photo)} alt={testimonial.author} className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm" />
+                      <img
+                        src={getFullUrl(testimonial.photo)}
+                        alt={testimonial.author}
+                        className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
+                      />
                     )}
                     <div>
                       <h3 className="font-bold text-gray-900 text-lg">
@@ -193,24 +232,35 @@ export default function Testimonials() {
                       </p>
                       <div className="flex items-center gap-3">
                         {renderStars(testimonial.rating)}
-                        <span className="text-xs text-gray-400 font-medium">Submitted: {testimonial.date}</span>
+                        <span className="text-xs text-gray-400 font-medium">
+                          Submitted: {testimonial.date}
+                        </span>
                       </div>
                     </div>
                   </div>
                   <div className="flex gap-3">
                     <button
-                      onClick={() => handleStatusUpdate(testimonial.id, "approve")}
+                      onClick={() =>
+                        handleStatusUpdate(testimonial.id, "approve")
+                      }
                       disabled={isUpdating}
                       className="bg-[#DCFCE7] text-[#15803D] px-4 py-2 rounded-lg transition-all flex items-center gap-2 hover:bg-[#bbf7d0] disabled:opacity-50"
                     >
                       <CircleCheckBig size={18} strokeWidth={2.75} /> Approve
                     </button>
                     <button
-                      onClick={() => handleStatusUpdate(testimonial.id, "reject")}
+                      onClick={() =>
+                        handleStatusUpdate(testimonial.id, "reject")
+                      }
                       disabled={isUpdating}
                       className="bg-[#FEE2E2] text-[#B91C1C] px-4 py-2 rounded-lg transition-all flex items-center gap-2 hover:bg-[#fecaca] disabled:opacity-50"
                     >
-                      <CirclePlus size={18} strokeWidth={2.75} className="rotate-45" /> Reject
+                      <CirclePlus
+                        size={18}
+                        strokeWidth={2.75}
+                        className="rotate-45"
+                      />{" "}
+                      Reject
                     </button>
                   </div>
                 </div>
@@ -231,7 +281,9 @@ export default function Testimonials() {
             ))
           ) : (
             <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed">
-              <p className="text-gray-400 font-medium">No pending testimonials to review.</p>
+              <p className="text-gray-400 font-medium">
+                No pending testimonials to review.
+              </p>
             </div>
           )}
         </div>
@@ -248,15 +300,20 @@ export default function Testimonials() {
             processedTestimonials.map((testimonial) => (
               <div
                 key={testimonial.id}
-                className={`rounded-xl p-5 shadow-sm border transition-all ${testimonial.status === "approved"
-                  ? "bg-[#F0FDF4] border-green-100 hover:border-green-300"
-                  : "bg-[#FEF2F2] border-red-100 hover:border-red-300"
-                  }`}
+                className={`rounded-xl p-5 shadow-sm border transition-all ${
+                  testimonial.status === "approved"
+                    ? "bg-[#F0FDF4] border-green-100 hover:border-green-300"
+                    : "bg-[#FEF2F2] border-red-100 hover:border-red-300"
+                }`}
               >
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex gap-3 items-center">
                     {testimonial.photo && (
-                      <img src={getFullUrl(testimonial.photo)} alt={testimonial.author} className="w-12 h-12 rounded-full object-cover border bg-white" />
+                      <img
+                        src={getFullUrl(testimonial.photo)}
+                        alt={testimonial.author}
+                        className="w-12 h-12 rounded-full object-cover border bg-white"
+                      />
                     )}
                     <div>
                       <h3 className="font-bold text-gray-900">
@@ -269,16 +326,15 @@ export default function Testimonials() {
                   </div>
                   <span
                     className={` py-1 flex items-center gap-1.5 rounded-full ${getStatusColor(
-                      testimonial.status
+                      testimonial.status,
                     )}`}
                   >
-                    <CircleCheckBig size={18} strokeWidth={3} /> {getStatusText(testimonial.status)}
+                    <CircleCheckBig size={18} strokeWidth={3} />{" "}
+                    {getStatusText(testimonial.status)}
                   </span>
                 </div>
 
-                <div className="mb-3">
-                  {renderStars(testimonial.rating)}
-                </div>
+                <div className="mb-3">{renderStars(testimonial.rating)}</div>
 
                 <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
                   {testimonial.content}

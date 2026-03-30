@@ -6,7 +6,6 @@ import OurServices from "../../components/OurServices/OurServices";
 import Newsletter from "../../components/Newsletter/Newsletter";
 import Testimonial from "../../components/Testimonial/Testimonial";
 import Footer from "../../components/Footer/Footer";
-import ChatButton from "../../components/ChatButton/ChatButton";
 
 export default function Home() {
   return (
@@ -17,7 +16,7 @@ export default function Home() {
       <Newsletter />
       <Testimonial />
       <Footer />
-      {/* <ChatButton /> */}
+   
     </div>
   );
 }

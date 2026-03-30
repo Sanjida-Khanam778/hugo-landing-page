@@ -1,11 +1,8 @@
 import banner from "../../assets/video/login.mp4";
-
-import { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import { Link } from "react-router-dom";
 
 export default function LoginPage() {
-  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <div className="relative overflow-hidden md:h-screen text-white">

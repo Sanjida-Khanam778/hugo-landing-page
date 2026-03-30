@@ -10,8 +10,8 @@ export default function Testimonial() {
 
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) return path;
+    return `https://api.clasia.io${path}`;
   };
 
   // Auto-play carousel
@@ -36,7 +36,12 @@ export default function Testimonial() {
     setCurrentSlide(index);
   };
 
-  if (isLoading) return <div className="py-20 text-center text-gray-500">Loading success stories...</div>;
+  if (isLoading)
+    return (
+      <div className="py-20 text-center text-gray-500">
+        Loading success stories...
+      </div>
+    );
   if (stories.length === 0) return null;
 
   const story = stories[currentSlide];
@@ -144,8 +149,9 @@ export default function Testimonial() {
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all ${index === currentSlide ? "bg-blue w-8" : "bg-gray-300"
-                  }`}
+                className={`w-3 h-3 rounded-full transition-all ${
+                  index === currentSlide ? "bg-blue w-8" : "bg-gray-300"
+                }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}

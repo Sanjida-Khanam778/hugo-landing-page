@@ -11,10 +11,14 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
 
   const getFullImageUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:") || path.startsWith("data:")) {
+    if (
+      path.startsWith("http") ||
+      path.startsWith("blob:") ||
+      path.startsWith("data:")
+    ) {
       return path;
     }
-    return `http://10.10.13.20:8005${path}`;
+    return `https://api.clasia.io${path}`;
   };
 
   const [formData, setFormData] = useState({
@@ -33,13 +37,19 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
     if (event) {
       setFormData({
         ...event,
-        agenda: event.agendas?.map(a => ({
-          time: a.time_slot,
-          title: a.task_title,
-          subtitle: a.description
-        })) || event.agenda || [],
-        type: (event.event_type === "In-Person" || event.event_type === "Campus") ? "Person" : (event.event_type || event.type || "Online"),
-        additional: event.additional_info || event.additional || ""
+        agenda:
+          event.agendas?.map((a) => ({
+            time: a.time_slot,
+            title: a.task_title,
+            subtitle: a.description,
+          })) ||
+          event.agenda ||
+          [],
+        type:
+          event.event_type === "In-Person" || event.event_type === "Campus"
+            ? "Person"
+            : event.event_type || event.type || "Online",
+        additional: event.additional_info || event.additional || "",
       });
       if (event.image) setImagePreview(event.image);
     }
@@ -104,10 +114,10 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
     fd.append("additional_info", formData.additional);
 
     // Map agenda to backend format and stringify
-    const agendas = (formData.agenda || []).map(item => ({
+    const agendas = (formData.agenda || []).map((item) => ({
       time_slot: item.time,
       task_title: item.title,
-      description: item.subtitle
+      description: item.subtitle,
     }));
     fd.append("agendas", JSON.stringify(agendas));
 
@@ -160,7 +170,9 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
                 className="flex flex-col items-center justify-center border-2 mx-6 border-dashed border-gray-300 rounded-lg p-8 hover:border-blue-500 transition-colors cursor-pointer h-48"
               >
                 <Upload size={24} className="text-gray-400 mb-2" />
-                <span className="text-sm text-gray-600">Upload Event Image</span>
+                <span className="text-sm text-gray-600">
+                  Upload Event Image
+                </span>
                 <span className="text-xs text-gray-400 mt-1">
                   Recommended: 400x400px
                 </span>
@@ -218,7 +230,7 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
                 required
               />
             </div>
-            <div >
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Time
               </label>
@@ -281,7 +293,9 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
             />
           </div>
           <div className="px-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4">Event Agenda</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">
+              Event Agenda
+            </h3>
 
             <div className="space-y-4 mb-6">
               {formData.agenda?.map((item, index) => (
@@ -291,7 +305,9 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
                   </div>
                   <div className="flex-1 border-l-2 border-blue-100 pl-4 py-1">
                     <p className="font-bold text-gray-900">{item.title}</p>
-                    <p className="text-sm text-gray-600 mt-1">{item.subtitle}</p>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {item.subtitle}
+                    </p>
                   </div>
                   <button
                     type="button"
@@ -305,26 +321,34 @@ export default function EventFormModal({ event, onSave, onClose, isEdit }) {
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg border border-dashed border-gray-300">
-              <p className="text-xs font-bold text-gray-500 uppercase mb-3 text-center">Add Agenda Item</p>
+              <p className="text-xs font-bold text-gray-500 uppercase mb-3 text-center">
+                Add Agenda Item
+              </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <input
                   type="text"
                   placeholder="Time (e.g. 09:00 AM - 10:30 AM)"
                   value={newAgenda.time}
-                  onChange={(e) => setNewAgenda({ ...newAgenda, time: e.target.value })}
+                  onChange={(e) =>
+                    setNewAgenda({ ...newAgenda, time: e.target.value })
+                  }
                   className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                 />
                 <input
                   type="text"
                   placeholder="Task Title (e.g. Introduction)"
                   value={newAgenda.title}
-                  onChange={(e) => setNewAgenda({ ...newAgenda, title: e.target.value })}
+                  onChange={(e) =>
+                    setNewAgenda({ ...newAgenda, title: e.target.value })
+                  }
                   className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                 />
                 <textarea
                   placeholder="Subtitle/Description (Optional)"
                   value={newAgenda.subtitle}
-                  onChange={(e) => setNewAgenda({ ...newAgenda, subtitle: e.target.value })}
+                  onChange={(e) =>
+                    setNewAgenda({ ...newAgenda, subtitle: e.target.value })
+                  }
                   className="md:col-span-2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none"
                   rows="2"
                 />

@@ -7,22 +7,39 @@ import { useGetProgramDetailsQuery } from "../../Api/universityApi";
 export default function ProgramDetails() {
   const { id } = useParams();
   const { data: program, isLoading, error } = useGetProgramDetailsQuery(id);
-console.log(program)
+  console.log(program);
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) return path;
+    return `https://api.clasia.io${path}`;
   };
 
-  if (isLoading) return <div className="min-h-screen bg-base p-8 text-center text-gray-500 font-inter">Loading program details...</div>;
-  if (error) return <div className="min-h-screen bg-base p-8 text-center text-red-500 font-inter">Error loading program details.</div>;
-  if (!program) return <div className="min-h-screen bg-base p-8 text-center text-gray-500 font-inter">Program not found.</div>;
+  if (isLoading)
+    return (
+      <div className="min-h-screen bg-base p-8 text-center text-gray-500 font-inter">
+        Loading program details...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="min-h-screen bg-base p-8 text-center text-red-500 font-inter">
+        Error loading program details.
+      </div>
+    );
+  if (!program)
+    return (
+      <div className="min-h-screen bg-base p-8 text-center text-gray-500 font-inter">
+        Program not found.
+      </div>
+    );
 
   return (
     <div className="font-inter">
       {/* Header */}
       <div
-        style={{ backgroundImage: `url(${getFullUrl(program.image) || backgroundPlaceholder})` }}
+        style={{
+          backgroundImage: `url(${getFullUrl(program.image) || backgroundPlaceholder})`,
+        }}
         className="bg-cover bg-no-repeat h-[50vh] text-white py-12 px-8 relative overflow-hidden flex items-center justify-center"
       >
         <div className="absolute inset-0 bg-black/40" />
@@ -30,7 +47,9 @@ console.log(program)
           <div className="flex items-center gap-6">
             <div className="w-24 h-24 bg-white rounded-full flex-shrink-0 flex items-center justify-center p-2 shadow-lg">
               {/* Fallback for university icon if needed, for now using a placeholder or initials */}
-              <span className="text-blue-900 font-bold text-2xl">{program.university_name?.charAt(0)}</span>
+              <span className="text-blue-900 font-bold text-2xl">
+                {program.university_name?.charAt(0)}
+              </span>
             </div>
             <div>
               <h1 className="text-3xl xl:text-5xl font-bold mb-3 drop-shadow-md">

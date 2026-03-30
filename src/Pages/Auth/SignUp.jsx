@@ -32,8 +32,11 @@ export default function SignUp() {
         navigate("/");
         // window.location.reload(); // Removed reload to allow SPA navigation
       } catch (err) {
-        console.error("Sign up failed:", err);
-        toast.error(err.data.phone[0], {
+        console.error("Sign up failed:", err.data.email[0]);
+        // toast.error(err.data.phone[0], {
+        //   position: "bottom-center"
+        // })
+        toast.error(err.data.email[0], {
           position: "bottom-center"
         })
       }

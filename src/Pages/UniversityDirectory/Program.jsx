@@ -4,21 +4,27 @@ import { useGetProgramsByUniIdQuery } from "../../Api/universityApi";
 
 export default function Program({ data, onViewDetails }) {
   const { id } = useParams();
-  const { data: programsData, isLoading, error } = useGetProgramsByUniIdQuery(id);
+  const {
+    data: programsData,
+    isLoading,
+    error,
+  } = useGetProgramsByUniIdQuery(id);
   console.log(programsData);
   const [levelFilter, setLevelFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) return path;
+    return `https://api.clasia.io${path}`;
   };
 
   const programs = programsData || [];
 
   const filtered = programs.filter((p) => {
-    const matchesLevel = levelFilter === "all" || p.level.toLowerCase() === levelFilter.toLowerCase();
+    const matchesLevel =
+      levelFilter === "all" ||
+      p.level.toLowerCase() === levelFilter.toLowerCase();
     const matchesSearch = p.title
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
@@ -52,7 +58,9 @@ export default function Program({ data, onViewDetails }) {
             <option value="PhD">PhD</option>
             <option value="degree">Degree</option>
             <option value="online-courses">Online Courses</option>
-            <option value="professional-formation">Professional Formation</option>
+            <option value="professional-formation">
+              Professional Formation
+            </option>
           </select>
         </div>
       </div>
@@ -60,7 +68,10 @@ export default function Program({ data, onViewDetails }) {
       {/* Program Cards (rendered from data) */}
       {filtered.length > 0 ? (
         filtered.map((p) => (
-          <div key={p.id} className="bg-white rounded-lg shadow-sm mb-4 border overflow-hidden">
+          <div
+            key={p.id}
+            className="bg-white rounded-lg shadow-sm mb-4 border overflow-hidden"
+          >
             <div className="flex justify-between items-start bg-gradient-to-r from-[#F5E7E4] to-[#DEF0EC] p-4">
               <h3 className="text-xl font-bold">{p.title}</h3>
               <span className="bg-sky text-[#1E40AF] text-xs font-semibold px-3 py-1 rounded-full uppercase">
@@ -70,20 +81,30 @@ export default function Program({ data, onViewDetails }) {
             <div className="flex flex-col md:flex-row gap-6 p-6">
               {p.image && (
                 <div className="h-48 md:w-1/3 flex-shrink-0">
-                  <img className="rounded-lg w-full h-full object-cover" src={getFullUrl(p.image)} alt={p.title} />
+                  <img
+                    className="rounded-lg w-full h-full object-cover"
+                    src={getFullUrl(p.image)}
+                    alt={p.title}
+                  />
                 </div>
               )}
               <div className="flex-grow">
-                <p className="text-gray-700 mb-6 line-clamp-3">{p.description}</p>
+                <p className="text-gray-700 mb-6 line-clamp-3">
+                  {p.description}
+                </p>
 
                 <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
                   <div>
                     <p className=" text-gray-400 mb-1">Duration</p>
-                    <p className=" font-semibold text-dark">{p.duration || "N/A"}</p>
+                    <p className=" font-semibold text-dark">
+                      {p.duration || "N/A"}
+                    </p>
                   </div>
                   <div>
                     <p className=" text-gray-400 mb-1">Language</p>
-                    <p className=" font-semibold text-dark">{p.language || "N/A"}</p>
+                    <p className=" font-semibold text-dark">
+                      {p.language || "N/A"}
+                    </p>
                   </div>
                   <div>
                     <p className=" text-gray-400 mb-1"> Tution</p>
@@ -93,28 +114,26 @@ export default function Program({ data, onViewDetails }) {
                   </div>
                   <div>
                     <p className=" text-gray-400 mb-1">Last updated</p>
-                    <p className=" font-semibold text-dark">
-                      {p.updated_at}
-                    </p>
+                    <p className=" font-semibold text-dark">{p.updated_at}</p>
                   </div>
                 </div>
 
                 <div className="flex justify-end items-center">
-
                   <button
                     onClick={() => onViewDetails && onViewDetails(p.id)}
                     className="bg-blue hover:shadow-lg hover:scale-105 transition-transform text-white px-6 py-2 rounded-lg text-sm font-medium"
                   >
                     View Details
                   </button>
-
                 </div>
               </div>
             </div>
           </div>
         ))
       ) : (
-        <div className="text-center py-12 text-gray-500">No programs found matching your criteria.</div>
+        <div className="text-center py-12 text-gray-500">
+          No programs found matching your criteria.
+        </div>
       )}
     </div>
   );

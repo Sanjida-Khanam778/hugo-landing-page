@@ -36,15 +36,14 @@ function UniBannerInner({ setShowApply, data }) {
     : "Location not available";
   const getFullUrl = (path) => {
     if (!path) return "";
-    if (path.startsWith("http") || path.startsWith("blob:")) return path;
-    return `http://10.10.13.20:8005${path}`;
+    if (path.startsWith("https") || path.startsWith("blob:")) return path;
+    return `https://api.clasia.io${path}`;
   };
   return (
     <div className="">
       <div className="relative overflow-hidden md:h-[50vh] h-[25vh]">
         {/* Background Container */}
         <div className="absolute inset-0 w-full h-full">
-
           <video
             autoPlay
             muted
@@ -79,7 +78,11 @@ function UniBannerInner({ setShowApply, data }) {
 
               {/* Subtitle */}
               <p className="md:text-lg text-sm break-words">
-                <MapPin className="inline mb-1 md:mr-2 mr-1" md:size={20} size={16} />
+                <MapPin
+                  className="inline mb-1 md:mr-2 mr-1"
+                  md:size={20}
+                  size={16}
+                />
                 {locationString}
               </p>
             </div>
@@ -94,7 +97,7 @@ function UniBannerInner({ setShowApply, data }) {
             <button
               onClick={handleMessageClick}
               disabled={isLoading}
-              className={`px-4 py-1 md:py-2 text-sm md:text-base border rounded-md ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`px-4 py-1 md:py-2 text-sm md:text-base border rounded-md ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               {isLoading ? "Connecting..." : "Message"}
             </button>
