@@ -73,7 +73,7 @@ export default function Chat() {
   // WebSocket Connection
   useEffect(() => {
     if (selectedConversation && token) {
-      const wsUrl = `ws://10.10.13.20:8005/ws/chat/${selectedConversation}/?token=${token}`;
+      const wsUrl = `wss://api.clasia.io/ws/chat/${selectedConversation}/?token=${token}`;
       socketRef.current = new WebSocket(wsUrl);
 
       socketRef.current.onopen = () => {
