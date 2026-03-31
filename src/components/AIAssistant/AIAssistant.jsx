@@ -1,6 +1,14 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { X, ChevronDown, Send, Edit, Mic, AudioLines, Trash2 } from "lucide-react";
+import {
+  X,
+  ChevronDown,
+  Send,
+  Edit,
+  Mic,
+  AudioLines,
+  Trash2,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import Lottie from "lottie-react";
 import robotLottie from "../../assets/lottie/robot.json";
@@ -8,24 +16,33 @@ import "regenerator-runtime/runtime";
 import { useChatWithAIMutation } from "../../Api/aiApi";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-import { useGetAIChatHistoryQuery, useLazyGetAISessionHistoryQuery, useDeleteAIChatSessionMutation } from "../../Api/chatApi";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
+import {
+  useGetAIChatHistoryQuery,
+  useLazyGetAISessionHistoryQuery,
+  useDeleteAIChatSessionMutation,
+} from "../../Api/chatApi";
 import toast from "react-hot-toast";
 
 export default function AIAssistant() {
   const [currentChatId, setCurrentChatId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [voiceStatus, setVoiceStatus] = useState("idle"); // idle | listening | error | unsupported
   const [historyOpen, setHistoryOpen] = useState(true);
   const [chatWithAI, { isLoading: isChatLoading }] = useChatWithAIMutation();
-  const { data: historyData, refetch: refetchHistory } = useGetAIChatHistoryQuery();
+  const { data: historyData, refetch: refetchHistory } =
+    useGetAIChatHistoryQuery();
   const [triggerGetSessionHistory] = useLazyGetAISessionHistoryQuery();
   const [deleteChatSession] = useDeleteAIChatSessionMutation();
   const {
     transcript,
     listening,
     resetTranscript,
-    browserSupportsSpeechRecognition
+    browserSupportsSpeechRecognition,
+    isMicrophoneAvailable,
   } = useSpeechRecognition();
   const initialInputRef = useRef(""); // To store input before starting speech
   const textareaRef = useRef(null); // Ref for auto-resizing textarea
@@ -38,6 +55,16 @@ export default function AIAssistant() {
     }
   }, [messages, isChatLoading]);
 
+  // Handle microphone permission denial
+  useEffect(() => {
+    if (isMicrophoneAvailable === false) {
+      setVoiceStatus("error");
+      toast.error(
+        "Microphone access was denied. Please allow it in your browser address bar.",
+      );
+    }
+  }, [isMicrophoneAvailable]);
+
   // Auto-resize textarea when input changes
   useEffect(() => {
     if (textareaRef.current) {
@@ -49,7 +76,11 @@ export default function AIAssistant() {
   useEffect(() => {
     if (transcript) {
       console.log("🎙 Live Transcript:", transcript);
-      const combinedInput = (initialInputRef.current + " " + transcript).trimStart();
+      const combinedInput = (
+        initialInputRef.current +
+        " " +
+        transcript
+      ).trimStart();
       setInput(combinedInput);
     }
   }, [transcript]);
@@ -112,11 +143,19 @@ export default function AIAssistant() {
     lastMonth.setMonth(today.getMonth() - 1);
 
     // Sort history by timestamp descending
-    const sortedItems = [...items].sort((a, b) => new Date(b.created_at || b.timestamp) - new Date(a.created_at || a.timestamp));
+    const sortedItems = [...items].sort(
+      (a, b) =>
+        new Date(b.created_at || b.timestamp) -
+        new Date(a.created_at || a.timestamp),
+    );
 
     sortedItems.forEach((item) => {
       const date = new Date(item.created_at || item.timestamp);
-      const itemDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const itemDate = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+      );
 
       if (itemDate >= today) {
         groups.Today.push(item);
@@ -201,22 +240,47 @@ export default function AIAssistant() {
 
   const handleVoiceInput = () => {
     if (!browserSupportsSpeechRecognition) {
-      alert("Browser does not support Speech Recognition");
+      setVoiceStatus("unsupported");
+      toast.error("Speech recognition not supported in this browser");
+      return;
+    }
+
+    // Checking if the application is accessed over a secure context (HTTPS)
+    if (window.isSecureContext === false) {
+      setVoiceStatus("error");
+      toast.error(
+        "Microphone access requires a secure connection (HTTPS). Please ensure your live link uses HTTPS.",
+      );
+      return;
+    }
+
+    if (isMicrophoneAvailable === false) {
+      setVoiceStatus("error");
+      toast.error(
+        "Microphone access is blocked! Please click the lock icon in the URL bar to allow microphone permissions.",
+      );
       return;
     }
 
     if (listening) {
       SpeechRecognition.stopListening();
+      setVoiceStatus("idle");
       console.log("✅ Recording Stopped. Final Transcript:", transcript);
-    } else {
-      initialInputRef.current = input;
-      resetTranscript();
-      SpeechRecognition.startListening({
-        continuous: true,
-        language: "en-US",
-      });
-      console.log("🎤 Listening started...");
+      return;
     }
+
+    initialInputRef.current = input;
+    resetTranscript();
+
+    // Set listening status manually since react-speech-recognition doesn't support onStart inside the options
+    setVoiceStatus("listening");
+    console.log("🎤 Listening started...");
+
+    SpeechRecognition.startListening({
+      continuous: true,
+      language: "en-US",
+      interimResults: true,
+    });
   };
 
   return (
@@ -262,42 +326,56 @@ export default function AIAssistant() {
 
               {historyOpen && (
                 <div className="space-y-6">
-                  {Object.entries(groupedHistory).map(([groupName, items]) => (
-                    items.length > 0 && (
-                      <div key={groupName}>
-                        <h3 className="text-xs font-bold text-gray-400 uppercase px-3 mb-2">
-                          {groupName}
-                        </h3>
-                        <div className="space-y-1">
-                          {items.map((item) => (
-                            <div
-                              key={item.id}
-                              onClick={() => handleSelectChat(item)}
-                              className={`group relative flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${currentChatId === item.id ? "bg-blue/10 text-blue font-semibold" : "text-[#374151] hover:bg-gray-50"
+                  {Object.entries(groupedHistory).map(
+                    ([groupName, items]) =>
+                      items.length > 0 && (
+                        <div key={groupName}>
+                          <h3 className="text-xs font-bold text-gray-400 uppercase px-3 mb-2">
+                            {groupName}
+                          </h3>
+                          <div className="space-y-1">
+                            {items.map((item) => (
+                              <div
+                                key={item.id}
+                                onClick={() => handleSelectChat(item)}
+                                className={`group relative flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors ${
+                                  currentChatId === item.id
+                                    ? "bg-blue/10 text-blue font-semibold"
+                                    : "text-[#374151] hover:bg-gray-50"
                                 }`}
-                            >
-                              <div className="flex-1 min-w-0 pr-2">
-                                <div className="flex items-center justify-between gap-2 overflow-hidden">
-                                  <span className="truncate text-sm" title={item.first_message}>
-                                    {truncateTitle(item.first_message)}
-                                  </span>
-                                  <span className="text-[10px] text-gray-400 flex-shrink-0">
-                                    {new Date(item.created_at || item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                  </span>
-                                </div>
-                              </div>
-                              <button
-                                onClick={(e) => handleDeleteSession(e, item.id)}
-                                className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-500 transition-all"
                               >
-                                <Trash2 size={14} />
-                              </button>
-                            </div>
-                          ))}
+                                <div className="flex-1 min-w-0 pr-2">
+                                  <div className="flex items-center justify-between gap-2 overflow-hidden">
+                                    <span
+                                      className="truncate text-sm"
+                                      title={item.first_message}
+                                    >
+                                      {truncateTitle(item.first_message)}
+                                    </span>
+                                    <span className="text-[10px] text-gray-400 flex-shrink-0">
+                                      {new Date(
+                                        item.created_at || item.timestamp,
+                                      ).toLocaleTimeString([], {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      })}
+                                    </span>
+                                  </div>
+                                </div>
+                                <button
+                                  onClick={(e) =>
+                                    handleDeleteSession(e, item.id)
+                                  }
+                                  className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-500 transition-all"
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    )
-                  ))}
+                      ),
+                  )}
                 </div>
               )}
             </div>
@@ -335,26 +413,62 @@ export default function AIAssistant() {
                           <span>AI</span>
                         </div>
                       )}
-                      <div className={`flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"}`}>
+                      <div
+                        className={`flex flex-col ${msg.sender === "user" ? "items-end" : "items-start"}`}
+                      >
                         <div
-                          className={`max-w-xs lg:max-w-md xl:max-w-2xl px-4 py-2 rounded-lg ${msg.sender === "user"
-                            ? "bg-blue text-white rounded-br-none"
-                            : "bg-gray-200 text-gray-900 rounded-bl-none"
-                            }`}
+                          className={`max-w-xs lg:max-w-md xl:max-w-2xl px-4 py-2 rounded-lg ${
+                            msg.sender === "user"
+                              ? "bg-blue text-white rounded-br-none"
+                              : "bg-gray-200 text-gray-900 rounded-bl-none"
+                          }`}
                         >
                           {msg.sender === "ai" ? (
                             <ReactMarkdown
                               remarkPlugins={[remarkGfm]}
                               components={{
-                                p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />,
-                                ul: ({ node, ...props }) => <ul className="list-disc ml-4 mb-2" {...props} />,
-                                ol: ({ node, ...props }) => <ol className="list-decimal ml-4 mb-2" {...props} />,
-                                li: ({ node, ...props }) => <li className="mb-1" {...props} />,
-                                h1: ({ node, ...props }) => <h1 className="text-xl font-bold mb-2 mt-4" {...props} />,
-                                h2: ({ node, ...props }) => <h2 className="text-lg font-bold mb-2 mt-3" {...props} />,
-                                h3: ({ node, ...props }) => <h3 className="text-md font-bold mb-2 mt-2" {...props} />,
-                                strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
-                                em: ({ node, ...props }) => <em className="italic" {...props} />,
+                                p: ({ node, ...props }) => (
+                                  <p className="mb-2 last:mb-0" {...props} />
+                                ),
+                                ul: ({ node, ...props }) => (
+                                  <ul
+                                    className="list-disc ml-4 mb-2"
+                                    {...props}
+                                  />
+                                ),
+                                ol: ({ node, ...props }) => (
+                                  <ol
+                                    className="list-decimal ml-4 mb-2"
+                                    {...props}
+                                  />
+                                ),
+                                li: ({ node, ...props }) => (
+                                  <li className="mb-1" {...props} />
+                                ),
+                                h1: ({ node, ...props }) => (
+                                  <h1
+                                    className="text-xl font-bold mb-2 mt-4"
+                                    {...props}
+                                  />
+                                ),
+                                h2: ({ node, ...props }) => (
+                                  <h2
+                                    className="text-lg font-bold mb-2 mt-3"
+                                    {...props}
+                                  />
+                                ),
+                                h3: ({ node, ...props }) => (
+                                  <h3
+                                    className="text-md font-bold mb-2 mt-2"
+                                    {...props}
+                                  />
+                                ),
+                                strong: ({ node, ...props }) => (
+                                  <strong className="font-bold" {...props} />
+                                ),
+                                em: ({ node, ...props }) => (
+                                  <em className="italic" {...props} />
+                                ),
                               }}
                             >
                               {msg.text}
@@ -364,7 +478,12 @@ export default function AIAssistant() {
                           )}
                         </div>
                         <p className={`text-[10px] text-gray-400 mt-1`}>
-                          {msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
+                          {msg.timestamp
+                            ? new Date(msg.timestamp).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                            : ""}
                         </p>
                       </div>
                       {msg.sender === "user" && (
@@ -417,10 +536,11 @@ export default function AIAssistant() {
                 {/* Voice Input Button */}
                 <button
                   onClick={handleVoiceInput}
-                  className={`p-2 mr-2 rounded-full transition-all duration-200 flex items-center justify-center ${listening
-                    ? "text-primary"
-                    : "text-grayText hover:text-primary"
-                    }`}
+                  className={`p-2 mr-2 rounded-full transition-all duration-200 flex items-center justify-center ${
+                    listening
+                      ? "text-primary"
+                      : "text-grayText hover:text-primary"
+                  }`}
                   title="Speak"
                 >
                   {listening ? (
@@ -429,6 +549,14 @@ export default function AIAssistant() {
                     <Mic size={20} />
                   )}
                 </button>
+                <span className="text-xs text-gray-500 mr-4 min-w-[140px]">
+                  {voiceStatus === "starting" && "Starting microphone..."}
+                  {voiceStatus === "listening" && "Listening"}
+                  {voiceStatus === "idle" && "Click mic to speak"}
+                  {voiceStatus === "unsupported" &&
+                    "Speech recognition unsupported"}
+                  {voiceStatus === "error" && "Speech recognition error"}
+                </span>
 
                 <button
                   onClick={handleSendMessage}
