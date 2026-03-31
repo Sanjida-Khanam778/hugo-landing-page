@@ -36,6 +36,9 @@ export default function AIAssistant() {
 
   // Native SpeechRecognition ref — no library needed
   const recognitionRef = useRef(null);
+  const shouldKeepListeningRef = useRef(false);
+  const speechBaseInputRef = useRef("");
+  const savedTranscriptRef = useRef("");
   const textareaRef = useRef(null);
   const messagesEndRef = useRef(null);
 
@@ -49,14 +52,19 @@ export default function AIAssistant() {
   // Auto-resize textarea
   useEffect(() => {
     if (textareaRef.current) {
+      const maxHeight = 224;
       textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      const nextHeight = Math.min(textareaRef.current.scrollHeight, maxHeight);
+      textareaRef.current.style.height = `${nextHeight}px`;
+      textareaRef.current.style.overflowY =
+        textareaRef.current.scrollHeight > maxHeight ? "auto" : "hidden";
     }
   }, [input]);
 
   // Cleanup recognition on unmount
   useEffect(() => {
     return () => {
+      shouldKeepListeningRef.current = false;
       if (recognitionRef.current) {
         recognitionRef.current.abort();
       }
@@ -214,7 +222,7 @@ export default function AIAssistant() {
     }
   };
 
-  // ✅ Native Web Speech API — works reliably in production
+  // ✅ Native Web Speech API — keeps listening until the user stops it
   const handleVoiceInput = () => {
     const SpeechRecognitionAPI =
       window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -225,8 +233,9 @@ export default function AIAssistant() {
       return;
     }
 
-    // If already listening, stop
+    // User manually stops the mic
     if (voiceStatus === "listening") {
+      shouldKeepListeningRef.current = false;
       recognitionRef.current?.stop();
       setVoiceStatus("idle");
       return;
@@ -234,12 +243,13 @@ export default function AIAssistant() {
 
     const recognition = new SpeechRecognitionAPI();
     recognitionRef.current = recognition;
+    shouldKeepListeningRef.current = true;
+    speechBaseInputRef.current = input.trim();
+    savedTranscriptRef.current = "";
 
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = "en-US";
-
-    const baseInput = input; // capture current input before speaking
 
     recognition.onstart = () => {
       setVoiceStatus("listening");
@@ -247,31 +257,72 @@ export default function AIAssistant() {
     };
 
     recognition.onresult = (event) => {
-      let transcript = "";
-      for (let i = 0; i < event.results.length; i++) {
-        transcript += event.results[i][0].transcript;
+      let interimTranscript = "";
+
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcriptPiece = event.results[i][0].transcript;
+
+        if (event.results[i].isFinal) {
+          savedTranscriptRef.current =
+            `${savedTranscriptRef.current} ${transcriptPiece}`.trim();
+        } else {
+          interimTranscript += transcriptPiece;
+        }
       }
-      setInput(baseInput ? `${baseInput} ${transcript}` : transcript);
-      console.log("📝 Transcript:", transcript);
+
+      const nextInput = [
+        speechBaseInputRef.current,
+        savedTranscriptRef.current,
+        interimTranscript.trim(),
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      setInput(nextInput);
+      console.log("📝 Transcript:", nextInput);
     };
 
     recognition.onerror = (event) => {
       console.error("❌ Speech error:", event.error);
-      setVoiceStatus("idle");
-      if (event.error === "not-allowed") {
-        toast.error("Microphone access denied. Please allow it in browser settings.");
-      } else if (event.error === "network") {
+
+      if (
+        event.error === "not-allowed" ||
+        event.error === "service-not-allowed"
+      ) {
+        shouldKeepListeningRef.current = false;
+        setVoiceStatus("error");
+        toast.error(
+          "Microphone access denied. Please allow it in browser settings.",
+        );
+        return;
+      }
+
+      if (event.error === "network") {
+        shouldKeepListeningRef.current = false;
+        setVoiceStatus("error");
         toast.error("Network error with speech recognition.");
-      } else if (event.error === "no-speech") {
-        toast.error("No speech detected. Please try again.");
-      } else {
+        return;
+      }
+
+      if (event.error !== "no-speech" && event.error !== "aborted") {
         toast.error(`Speech error: ${event.error}`);
       }
     };
 
     recognition.onend = () => {
-      setVoiceStatus("idle");
-      console.log("⏹ Listening ended");
+      if (shouldKeepListeningRef.current) {
+        try {
+          recognition.start();
+          console.log("🔁 Listening restarted automatically");
+        } catch (error) {
+          console.error("Failed to restart listening:", error);
+          shouldKeepListeningRef.current = false;
+          setVoiceStatus("idle");
+        }
+      } else {
+        setVoiceStatus("idle");
+        console.log("⏹ Listening stopped by user");
+      }
     };
 
     recognition.start();
@@ -423,22 +474,37 @@ export default function AIAssistant() {
                                   <p className="mb-2 last:mb-0" {...props} />
                                 ),
                                 ul: ({ node, ...props }) => (
-                                  <ul className="list-disc ml-4 mb-2" {...props} />
+                                  <ul
+                                    className="list-disc ml-4 mb-2"
+                                    {...props}
+                                  />
                                 ),
                                 ol: ({ node, ...props }) => (
-                                  <ol className="list-decimal ml-4 mb-2" {...props} />
+                                  <ol
+                                    className="list-decimal ml-4 mb-2"
+                                    {...props}
+                                  />
                                 ),
                                 li: ({ node, ...props }) => (
                                   <li className="mb-1" {...props} />
                                 ),
                                 h1: ({ node, ...props }) => (
-                                  <h1 className="text-xl font-bold mb-2 mt-4" {...props} />
+                                  <h1
+                                    className="text-xl font-bold mb-2 mt-4"
+                                    {...props}
+                                  />
                                 ),
                                 h2: ({ node, ...props }) => (
-                                  <h2 className="text-lg font-bold mb-2 mt-3" {...props} />
+                                  <h2
+                                    className="text-lg font-bold mb-2 mt-3"
+                                    {...props}
+                                  />
                                 ),
                                 h3: ({ node, ...props }) => (
-                                  <h3 className="text-md font-bold mb-2 mt-2" {...props} />
+                                  <h3
+                                    className="text-md font-bold mb-2 mt-2"
+                                    {...props}
+                                  />
                                 ),
                                 strong: ({ node, ...props }) => (
                                   <strong className="font-bold" {...props} />
@@ -507,13 +573,13 @@ export default function AIAssistant() {
                   }}
                   placeholder="Type your message..."
                   rows={1}
-                  className="flex-1 px-4 py-4 bg-transparent outline-none focus:outline-none transition-colors resize-none overflow-y-auto max-h-56"
+                  className="flex-1 px-4 py-4 bg-transparent outline-none focus:outline-none transition-colors resize-none overflow-y-hidden max-h-56"
                 />
 
                 {/* Voice Input Button */}
                 <button
                   onClick={handleVoiceInput}
-                  className={`p-2 mr-2 rounded-full transition-all duration-200 flex items-center justify-center ${
+                  className={`self-center p-2 mr-2 rounded-full transition-all duration-200 flex items-center justify-center ${
                     voiceStatus === "listening"
                       ? "text-primary"
                       : "text-grayText hover:text-primary"
