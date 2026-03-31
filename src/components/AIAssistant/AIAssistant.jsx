@@ -238,6 +238,17 @@ export default function AIAssistant() {
     }
   };
 
+  // Sync voiceStatus UI with the actual library state
+  useEffect(() => {
+    if (listening) {
+      setVoiceStatus("listening");
+      console.log("🎤 Actual internal state: LISTENING is TRUE");
+    } else {
+      setVoiceStatus("idle");
+      console.log("⏸ Actual internal state: LISTENING is FALSE");
+    }
+  }, [listening]);
+
   const handleVoiceInput = () => {
     if (!browserSupportsSpeechRecognition) {
       setVoiceStatus("unsupported");
@@ -245,7 +256,6 @@ export default function AIAssistant() {
       return;
     }
 
-    // Checking if the application is accessed over a secure context (HTTPS)
     if (window.isSecureContext === false) {
       setVoiceStatus("error");
       toast.error(
@@ -264,7 +274,6 @@ export default function AIAssistant() {
 
     if (listening) {
       SpeechRecognition.stopListening();
-      setVoiceStatus("idle");
       console.log("✅ Recording Stopped. Final Transcript:", transcript);
       return;
     }
@@ -272,12 +281,12 @@ export default function AIAssistant() {
     initialInputRef.current = input;
     resetTranscript();
 
-    // Set listening status manually since react-speech-recognition doesn't support onStart inside the options
-    setVoiceStatus("listening");
-    console.log("🎤 Listening started...");
+    console.log("🎤 startListening() called...");
 
+    // Continuous mode often completely blocks SpeechRecognition on mobile browsers
+    // and some live production environments. Trying without it to ensure reliability.
     SpeechRecognition.startListening({
-      continuous: true,
+      continuous: false,
       language: "en-US",
       interimResults: true,
     });
@@ -549,14 +558,7 @@ export default function AIAssistant() {
                     <Mic size={20} />
                   )}
                 </button>
-                <span className="text-xs text-gray-500 mr-4 min-w-[140px]">
-                  {voiceStatus === "starting" && "Starting microphone..."}
-                  {voiceStatus === "listening" && "Listening"}
-                  {voiceStatus === "idle" && "Click mic to speak"}
-                  {voiceStatus === "unsupported" &&
-                    "Speech recognition unsupported"}
-                  {voiceStatus === "error" && "Speech recognition error"}
-                </span>
+              
 
                 <button
                   onClick={handleSendMessage}
